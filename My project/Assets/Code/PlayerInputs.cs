@@ -33,6 +33,10 @@ public class PlayerInputs : MonoBehaviour
     public Input backward;
     public Input right;
     public Input left;
+    public Input up;
+
+    
+
 
 
     public int MoveAxisForward
@@ -48,7 +52,6 @@ public class PlayerInputs : MonoBehaviour
         }
 
     }
-
     public int MoveAxisRight
     {
         get
@@ -60,15 +63,26 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-
-
+    public int MoveAxisUp
+    {
+        get
+        {
+            if(up.Pressed()) { return 1; }
+            else { return 0; }
+        }
+    }
+    
     public const string MouseX = "Mouse X";
     public const string MouseY = "Mouse Y";
     public const string MouseScroll = "Mouse ScrollWheel";
+    public const string Jump = "Jump";
+
 
     public static float mouseX  { get => UnityEngine.Input.GetAxis(MouseX); }
     public static float mouseY { get => UnityEngine.Input.GetAxis(MouseY); }
-    public static float mouseScroll { get => UnityEngine.Input.GetAxis(MouseScroll); }
+    public static float mouseScroll { get => UnityEngine.Input.GetAxis(MouseScroll); }    
+    public static float jump { get => UnityEngine.Input.GetAxis(Jump); }
+
 
 
 
