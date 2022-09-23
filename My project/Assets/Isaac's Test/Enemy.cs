@@ -10,6 +10,13 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent navMeshAge;
 
     public float attackRange;
+    public float attackSpeed;
+    public float attackLife;
+    
+    public GameObject attackHitbox;
+    private float attackLifetime;
+    private float attackCooldown;
+    public bool isAttacking;
     public float sightRange;
     public float distanceFromPlayer;
 
@@ -20,6 +27,8 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         navMeshAge = GetComponent<NavMeshAgent>();
+        isAttacking = false;
+        attackCooldown = attackSpeed;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         StartCoroutine(FindRandomWaypoint());
     }
@@ -29,11 +38,27 @@ public class Enemy : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
 
         
-        if(distanceFromPlayer < attackRange)
+        if(distanceFromPlayer <= attackRange)
         {
             //if the enemy is in attack range do this
             navMeshAge.destination = this.transform.position;
-
+            attackCooldown -= Time.deltaTime;
+            if(isAttacking)
+            {
+                attackLifetime -= Time.deltaTime;
+                if(attackLifetime <= 0)
+                {
+                    isAttacking = false;
+                    attackHitbox.SetActive(false);
+                }
+            }
+            if(attackCooldown <= 0)
+            {
+                attackHitbox.SetActive(true);
+                isAttacking = true;
+                attackLifetime = attackLife;
+                attackCooldown = attackSpeed;
+            }
         }
         else if(distanceFromPlayer < sightRange)
         {
