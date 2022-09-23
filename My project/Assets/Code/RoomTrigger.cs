@@ -8,9 +8,6 @@ public class RoomTrigger : MonoBehaviour
     private CameraController cam;
     [SerializeField] GameObject player;
 
-
-    private int priority;
-
     private void Start()
     {
         cam = player.GetComponent<CameraController>();

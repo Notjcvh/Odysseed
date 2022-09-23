@@ -8,6 +8,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Camera cam = null;
     [SerializeField] private Transform followObj = null;
 
+   
+
   
 
     [Header("XRotations")]
@@ -39,12 +41,13 @@ public class CameraController : MonoBehaviour
     private float targetDistance;
     private Vector3 newPosition;
     private Quaternion newRotation;
-    private Vector3 worldPosition;
+ 
         
 
     [Header("Combat Cam")]
     [SerializeField] private float newMaxDistance;
     [SerializeField] private float newVerticalAngle;
+   
 
 
 
@@ -57,9 +60,7 @@ public class CameraController : MonoBehaviour
 
         targetDistance = defeaultDistance;
 
-       Cursor.lockState = CursorLockMode.Locked;
-
-      
+        Cursor.lockState = CursorLockMode.Locked;
 
     }
 
@@ -70,8 +71,7 @@ public class CameraController : MonoBehaviour
        if (Cursor.lockState != CursorLockMode.Locked)
            return;
 
-       
-
+   
 
         if (camPriority == 0)
         {
@@ -80,19 +80,14 @@ public class CameraController : MonoBehaviour
 
         else if (camPriority == 1)
         {
-         CombatCam();
-          
-            
-           // targetDistance = defeaultDistance;
+            CombatCam();
+         
         }
         else
         {
             camPriority = 0;
         }
 
-
-       
-       
     }
 
 
@@ -124,7 +119,7 @@ public class CameraController : MonoBehaviour
       
     }
     
-    //
+ 
     public void CombatCam()
     {
 
