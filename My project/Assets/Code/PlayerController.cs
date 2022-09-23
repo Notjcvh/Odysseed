@@ -5,68 +5,82 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("References for used Components")] // reference the animator here
-    private PlayerInputs inputs;
+ 
     private CameraController cam;
+    private Rigidbody playerBody;
 
     [Header("Movement")]
 
     [SerializeField] private float runSpeed;
     private float targetSpeed;
-   
     private Vector3 newVelocity;
     private Quaternion targetRotation;
 
-    [SerializeField] private float jumpHieght;
-    private float jumpPressesd;
-    Vector3 newJump;
-    // we want to make a bool to control how many times the player can jump
+    [Header("Jumping")]
+    public LayerMask Ground;
+    [SerializeField] float verticalVelocity = 10;
+    [SerializeField] float rayLength;
+
+    [Header("Player Stats")]
+    public int maxHealth = 10;
+    int currentHealth;
+   
 
 
 
     private void Start()
     {
-        inputs = GetComponent<PlayerInputs>();
-        cam = GetComponent<CameraController>(); 
+        cam = GetComponent<CameraController>();
+        playerBody = GetComponent<Rigidbody>();
+        currentHealth = maxHealth;
     }
 
     private void Update()
     {
-        
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+   
+        Vector3 movementVector = new Vector3(horizontal, 0, vertical).normalized;
 
-        float jump = PlayerInputs.jump * jumpHieght;
-        Vector3 movementVector = new Vector3(inputs.MoveAxisRight, 0 , inputs.MoveAxisForward).normalized;
-        Vector3 jumpVecotr = new Vector3(0, jump, 0).normalized;
         Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
         Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
-
-
-        Debug.DrawLine(transform.position, transform.position + movementVector, Color.green);
-
-
-
-        //Aligning movemnt in relation to the camera
+        //Aligning movement in relation to the camera
         movementVector = cameraPlannerRotation * movementVector;
-        Debug.DrawLine(transform.position, transform.position + movementVector, Color.red);
-
        // checking for inputs from Player
-
         targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
-        jumpPressesd = jumpVecotr != Vector3.zero ? jumpHieght : 0;
- 
-
+        
         newVelocity = movementVector * targetSpeed;
-        newJump = jumpVecotr * jumpHieght;
+        
         transform.Translate(newVelocity * Time.deltaTime, Space.World);
-        transform.Translate(newJump * Time.deltaTime, Space.World);
-
-        Debug.Log(newJump);
-
+             
         if (targetSpeed != 0)
         {
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
         }  
+
+        if( IsGrounded() && Input.GetButtonDown("Jump"))
+        {
+            //playerBody.velocity = Vector3.up * verticalVelocity;
+            playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
+        }
+        
+        if(Input.GetMouseButtonDown(0))
+        {
+            TakeDamage(5);
+            Debug.Log(currentHealth);
+        }
+
     }
 
+   private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, rayLength, Ground);
+    }
+
+   public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+    }
 
 }
