@@ -9,12 +9,17 @@ public class PlayerController : MonoBehaviour
     private CameraController cam;
     private Rigidbody playerBody;
 
+
     [Header("Movement")]
 
     [SerializeField] private float runSpeed;
     private float targetSpeed;
     private Vector3 newVelocity;
     private Quaternion targetRotation;
+    [Range(1, -1)] private float hor;
+    [Range(1, -1)] private float vert;
+    public bool isMoving = false;
+
 
     [Header("Jumping")]
     public LayerMask Ground;
@@ -25,8 +30,6 @@ public class PlayerController : MonoBehaviour
     public int maxHealth = 10;
     int currentHealth;
    
-
-
 
     private void Start()
     {
@@ -39,26 +42,23 @@ public class PlayerController : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-   
-        Vector3 movementVector = new Vector3(horizontal, 0, vertical).normalized;
+        hor = horizontal;
+        vert = vertical;
 
-        Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
-        Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
-        //Aligning movement in relation to the camera
-        movementVector = cameraPlannerRotation * movementVector;
-       // checking for inputs from Player
-        targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
         
-        newVelocity = movementVector * targetSpeed;
-        
-        transform.Translate(newVelocity * Time.deltaTime, Space.World);
-             
-        if (targetSpeed != 0)
+       int movingHorizontal = hor != 0 ? 1 : 0;
+       int movingVertical = vert != 0 ? 1 : 0;
+
+
+        if( movingHorizontal > 0 || movingVertical > 0 )
         {
-            targetRotation = Quaternion.LookRotation(movementVector);
-            transform.rotation = targetRotation;
-        }  
-
+            MoveNow();
+            isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
+        }
         if( IsGrounded() && Input.GetButtonDown("Jump"))
         {
             //playerBody.velocity = Vector3.up * verticalVelocity;
@@ -71,6 +71,40 @@ public class PlayerController : MonoBehaviour
             Debug.Log(currentHealth);
         }
 
+        //turn into for loop
+        if(cam.camPriority == 1)
+        {
+        
+            RotateTowards();
+            
+        }
+
+    }
+    public void MoveNow()
+    {
+        // if we have input that is either vertical or horizontal then is moving is true, stop roating toawrds camera 
+
+        Vector3 movementVector = new Vector3(hor, 0, vert).normalized;
+
+        Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
+        Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
+        //Aligning movement in relation to the camera
+        movementVector = cameraPlannerRotation * movementVector;
+        // checking for inputs from Player
+        targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
+
+        newVelocity = movementVector * targetSpeed;
+
+        transform.Translate(newVelocity * Time.deltaTime, Space.World);
+
+        if (targetSpeed != 0)
+        {
+            targetRotation = Quaternion.LookRotation(movementVector);
+            transform.rotation = targetRotation;
+        }
+
+
+
     }
 
    private bool IsGrounded()
@@ -81,6 +115,13 @@ public class PlayerController : MonoBehaviour
    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+    }
+
+   void RotateTowards()
+    {
+        
+      
+       
     }
 
 }

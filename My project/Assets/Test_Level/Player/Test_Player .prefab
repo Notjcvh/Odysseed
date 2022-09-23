@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4100166254625961981}
   - component: {fileID: 4100166254625961976}
   - component: {fileID: 4100166254625961977}
-  - component: {fileID: 4100166254625961863}
   - component: {fileID: 4100166254625961862}
   - component: {fileID: 4100166254625961860}
   m_Layer: 0
@@ -120,26 +119,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4100166254625961863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4100166254625961982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed5f76569adf07b498b374da04063ce9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forward:
-    primary: 119
-  backward:
-    primary: 115
-  right:
-    primary: 100
-  left:
-    primary: 97
 --- !u!114 &4100166254625961862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,11 +135,14 @@ MonoBehaviour:
   followObj: {fileID: 4100166255457262375}
   minVerticalAngle: -90
   maxVerticalAngle: 90
+  camPriority: 0
   defeaultDistance: 5
   minDistance: 3
   maxDistance: 10
   zoomSpeed: 5
   rotationSharpness: 25
+  newMaxDistance: 0
+  newVerticalAngle: 0
 --- !u!114 &4100166254625961860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +155,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5480514506a5a443b8167d58e6aff91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCam: {fileID: 0}
   runSpeed: 10
+  isMoving: 0
+  Ground:
+    serializedVersion: 2
+    m_Bits: 0
+  verticalVelocity: 10
+  rayLength: 0
+  maxHealth: 10
 --- !u!1 &4100166254705167441
 GameObject:
   m_ObjectHideFlags: 0
