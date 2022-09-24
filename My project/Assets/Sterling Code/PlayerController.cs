@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")] 
     private CameraController cam;
-    private Rigidbody playerBody;
+    [SerializeField] private Rigidbody playerBody;
 
 
     [Header("Movement")]
@@ -28,8 +28,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<CameraController>();
-        playerBody = GetComponent<Rigidbody>();
-        
+        playerBody = GetComponentInChildren<Rigidbody>();
     }
 
     private void Update()
@@ -55,8 +54,7 @@ public class PlayerController : MonoBehaviour
         }
         if( IsGrounded() && Input.GetButtonDown("Jump"))
         {
-            //playerBody.velocity = Vector3.up * verticalVelocity;
-            playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
+           playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
         }
 
     }
