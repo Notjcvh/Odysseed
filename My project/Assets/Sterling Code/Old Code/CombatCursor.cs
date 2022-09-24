@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CombatCursor : MonoBehaviour
 {
-    [Header("Refrenceing")]
+   /*[Header("Refrenceing")]
 
     private CameraController cam;
     [SerializeField] GameObject player;
@@ -13,7 +13,7 @@ public class CombatCursor : MonoBehaviour
 
 
     bool isActive = false;
-    float turnspeed = 1f;
+    
     Transform playerTrans;
     Vector3 worldPosition;
     public float planeDistanceZ;
@@ -24,7 +24,6 @@ public class CombatCursor : MonoBehaviour
     {
         cam = player.gameObject.GetComponent<CameraController>();
         playerTrans = player.gameObject.transform;
-        
         sphere.gameObject.SetActive(false);
        
     }
@@ -65,6 +64,6 @@ public class CombatCursor : MonoBehaviour
         worldPosition.y = 1.95f;
         gameObject.transform.position = worldPosition;
         Debug.Log(worldPosition);
-    }
+    }*/
     
 }

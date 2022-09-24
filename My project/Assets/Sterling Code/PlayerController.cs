@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("References for used Components")] // reference the animator here
- 
+    [Header("References")] 
     private CameraController cam;
     private Rigidbody playerBody;
 
 
     [Header("Movement")]
-
     [SerializeField] private float runSpeed;
     private float targetSpeed;
     private Vector3 newVelocity;
@@ -22,20 +20,16 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Jumping")]
+
     public LayerMask Ground;
     [SerializeField] float verticalVelocity = 10;
     [SerializeField] float rayLength;
-
-    [Header("Player Stats")]
-    public int maxHealth = 10;
-    int currentHealth;
-   
 
     private void Start()
     {
         cam = GetComponent<CameraController>();
         playerBody = GetComponent<Rigidbody>();
-        currentHealth = maxHealth;
+        
     }
 
     private void Update()
@@ -63,20 +57,6 @@ public class PlayerController : MonoBehaviour
         {
             //playerBody.velocity = Vector3.up * verticalVelocity;
             playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
-        }
-        
-        if(Input.GetMouseButtonDown(0))
-        {
-            TakeDamage(5);
-            Debug.Log(currentHealth);
-        }
-
-        //turn into for loop
-        if(cam.camPriority == 1)
-        {
-        
-            RotateTowards();
-            
         }
 
     }
@@ -112,16 +92,6 @@ public class PlayerController : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, rayLength, Ground);
     }
 
-   public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-    }
-
-   void RotateTowards()
-    {
-        
-      
-       
-    }
+  
 
 }
