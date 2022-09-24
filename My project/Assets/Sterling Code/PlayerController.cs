@@ -33,25 +33,22 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
         hor = horizontal;
         vert = vertical;
 
         
-       int movingHorizontal = hor != 0 ? 1 : 0;
-       int movingVertical = vert != 0 ? 1 : 0;
+         int movingHorizontal = hor != 0 ? 1 : 0;
+         int movingVertical = vert != 0 ? 1 : 0;
 
-
-        if( movingHorizontal > 0 || movingVertical > 0 )
+        if (movingHorizontal > 0 || movingVertical > 0)
         {
             MoveNow();
-            isMoving = true;
         }
         else
-        {
-            isMoving = false;
-        }
+            return;
+
         if( IsGrounded() && Input.GetButtonDown("Jump"))
         {
            playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
@@ -80,9 +77,6 @@ public class PlayerController : MonoBehaviour
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
         }
-
-
-
     }
 
    private bool IsGrounded()

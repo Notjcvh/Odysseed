@@ -8,8 +8,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] GameObject player;
 
     //variables
-    public int maxHealth = 3;
-    int currentHealth;
+    int maxHealth = 3;
+    public int currentHealth;
     int checkvalue;
     
     void Start()
