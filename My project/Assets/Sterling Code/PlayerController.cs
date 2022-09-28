@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Range(1, -1)] private float hor;
     [Range(1, -1)] private float vert;
     public bool isMoving = false;
+    public bool isTalking = false;
 
 
     [Header("Jumping")]
