@@ -18,13 +18,19 @@ public class PlayerController : MonoBehaviour
     [Range(1, -1)] private float vert;
     public bool isMoving = false;
     public bool isTalking = false;
+    public bool isRestricted = false;
+    public LayerMask Player;
 
 
     [Header("Jumping")]
 
     public LayerMask Ground;
+    public LayerMask Wall;
     [SerializeField] float verticalVelocity = 10;
     [SerializeField] float rayLength;
+
+    // [Header("Ledge Grabbing")]
+  //  public Vector3 MovementVector { get => movementVector; }
 
     private void Start()
     {
@@ -45,14 +51,16 @@ public class PlayerController : MonoBehaviour
 
         if (movingHorizontal > 0 || movingVertical > 0)
         {
-            MoveNow();
+            if(isRestricted == false) MoveNow();
         }
         else
             return;
 
         if( IsGrounded() && Input.GetButtonDown("Jump"))
         {
-           playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
+           
+                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
+                            
         }
 
     }
