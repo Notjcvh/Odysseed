@@ -38,6 +38,11 @@ public class CameraController : MonoBehaviour
     private Vector3 newPosition;
     private Quaternion newRotation;
 
+
+    [SerializeField] private float newMaxDistance;
+    private float targetHorizontalAngle;
+    [SerializeField] [Range(0, 360)] private float minHorizontalAngle;
+    [SerializeField] [Range(0, 360)] private float maxHorizontalAngle; 
     public Vector3 CameraPlannerDirection { get => plannerDirection; }
 
     private void Start()
@@ -57,11 +62,10 @@ public class CameraController : MonoBehaviour
        if (Cursor.lockState != CursorLockMode.Locked)
            return;
 
-        if (camPriority == 0)
-        {
-            MovementCam();
-        }
+        if (camPriority == 0)  MovementCam();
 
+
+        if (camPriority == 1) LedgeClimbingCam();
         
 
     }
@@ -85,5 +89,16 @@ public class CameraController : MonoBehaviour
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
 
+    }
+    public void LedgeClimbingCam()
+    {
+        targetDistance = Mathf.Clamp(newMaxDistance, newMaxDistance, newMaxDistance);
+        plannerDirection = Quaternion.Euler(0, 90, 0) * plannerDirection;
+        targetHorizontalAngle = Mathf.Clamp(targetHorizontalAngle,minHorizontalAngle, maxHorizontalAngle);
+        newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
+        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
+        cam.transform.position = newPosition;
+
+       //Find a way for the camera to rotate directyl behind the player! 
     }
 }

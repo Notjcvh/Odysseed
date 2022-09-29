@@ -9,7 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody playerBody;
 
 
+    public int movementPriority = 0;
+
     [Header("Movement")]
+    
     [SerializeField] private float runSpeed;
     private float targetSpeed;
     private Vector3 newVelocity;
@@ -25,7 +28,6 @@ public class PlayerController : MonoBehaviour
     [Header("Jumping")]
 
     public LayerMask Ground;
-    public LayerMask Wall;
     [SerializeField] float verticalVelocity = 10;
     [SerializeField] float rayLength;
 
@@ -49,22 +51,25 @@ public class PlayerController : MonoBehaviour
          int movingHorizontal = hor != 0 ? 1 : 0;
          int movingVertical = vert != 0 ? 1 : 0;
 
-        if (movingHorizontal > 0 || movingVertical > 0)
+        if ((movingHorizontal > 0 || movingVertical > 0) && isRestricted == false)
         {
-            if(isRestricted == false) MoveNow();
+
+            if (IsGrounded() && Input.GetButtonDown("Jump"))
+            {
+
+                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
+
+            }
+            if (movementPriority == 0) MoveNow();
         }
+        else if (movementPriority == 1) ClimbNow();
         else
             return;
 
-        if( IsGrounded() && Input.GetButtonDown("Jump"))
-        {
-           
-                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
-                            
-        }
+
 
     }
-    public void MoveNow()
+    private  void MoveNow()
     {
         // if we have input that is either vertical or horizontal then is moving is true, stop roating toawrds camera 
 
@@ -87,7 +92,24 @@ public class PlayerController : MonoBehaviour
             transform.rotation = targetRotation;
         }
     }
+    private void ClimbNow()
+    {
+        Vector3 movementVector = new Vector3(hor, 0, 0).normalized;
+        
+        // checking for inputs from Player
+        targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
 
+        newVelocity = movementVector * targetSpeed;
+
+        transform.Translate(newVelocity * Time.deltaTime, Space.World);
+
+        if (targetSpeed != 0)
+        {
+            targetRotation = Quaternion.LookRotation(movementVector);
+            transform.rotation = targetRotation;
+        }
+
+    }
    private bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, rayLength, Ground);

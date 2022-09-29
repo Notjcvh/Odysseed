@@ -33,12 +33,15 @@ public class LedgeGrabbing : MonoBehaviour
 
     [Header("Debugging")]
     public GameObject ledge;
+    public GameObject wall;
 
 
     private void Start()
     {
         player = GetComponent<PlayerController>();
         cam = GetComponent<CameraController>();
+
+
     }
 
     private void Update()
@@ -52,7 +55,7 @@ public class LedgeGrabbing : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        bool anyKeyPressed = horizontalInput != 0 || verticalInput != 0;
+        bool anyKeyPressed =  verticalInput != 0;
 
         // Holding onto Ledge 
         if(holding)
@@ -112,18 +115,25 @@ public class LedgeGrabbing : MonoBehaviour
         if(distanceToLedge > 1f)
         {       
             if (rb.velocity.magnitude < moveToLedgeSpeed)
-                rb.AddForce(directionToLedge.normalized * moveToLedgeSpeed * Time.deltaTime);
+                rb.AddForce(directionToLedge.normalized * moveToLedgeSpeed * 100f * Time.deltaTime);
                 player.isRestricted = true;
-            Debug.Log("Move to Ledge");
+                player.movementPriority = 1;
+                cam.camPriority = 1;
         }
+
+        if (distanceToLedge > maxLedgeGrabDistacne) ExitLedgeHold();
 
     }
 
     private void ExitLedgeHold()
     {
-      //  player.isRestricted
+        holding = false;
+        timeOnLedge = 0f;
+        player.movementPriority = 0;
+        cam.camPriority = 0;
+        player.isRestricted = false;
+
+        rb.useGravity = true;
     }
-
-
 
 }
