@@ -225,23 +225,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8947386970401465206, guid: 7762111d37cf6514db5a4d185435bdf0, type: 3}
   m_PrefabInstance: {fileID: 1280897628}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &408774894 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8505489057541427265, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
-  m_PrefabInstance: {fileID: 3452119869291133176}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &408774899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 408774894}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 114f492768056a645aea75275d4b0dd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &818060199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -408,31 +391,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867136482}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &896918785 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3963487848152117538, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
-  m_PrefabInstance: {fileID: 3452119869291133176}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &896918790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 896918785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e2df8e768698504b92bd877655bf11c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerWeight: 5
-  whatIsObjectsWeight: 0
-  activateObject: 0
-  onUnlock:
-    m_PersistentCalls:
-      m_Calls:
-      - {m_Target: {fileID: 11500000, guid: 0e2df8e768698504b92bd877655bf11c, type: 3}, m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine, m_MethodName: , m_Mode: 1, m_Arguments: {m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: , m_BoolArgument: 0}, m_CallState: 2}
-    m_CallsDirty: 1
 --- !u!1 &953976201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,6 +1022,39 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320963886}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2063731819 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3963487848152117538, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
+  m_PrefabInstance: {fileID: 3452119869291133176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2063731824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063731819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27da2529823a4ba4fa24691e8f8a412c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnUnlock:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2063731824}
+        m_TargetAssemblyTypeName: TriggerEvents, Assembly-CSharp
+        m_MethodName: TestUnlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  trigger: {fileID: 11400000, guid: 5ca1805fd847ff947a67b6877977e65c, type: 2}
 --- !u!1001 &3452119869291133176
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1071,6 +1062,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4016612743410457197, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a54b7ad866d3a9b47bbf3b53baa0acc4, type: 2}
+    - target: {fileID: 7563686886772562124, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4f4b900f9c6aa844c9b9fc7a9d6d3ab3, type: 2}
     - target: {fileID: 8942730058852928304, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
       propertyPath: m_Name
       value: Puzzle Test 1
