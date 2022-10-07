@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
  
 
     [Header("Smooth/Sharp")]
-    [SerializeField] private float zoomSpeed;
+   
     [SerializeField] private float rotationSharpness;
     
 
@@ -75,7 +75,7 @@ public class CameraController : MonoBehaviour
     {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
-        float zoom = Input.GetAxisRaw("Mouse ScrollWheel") * zoomSpeed;
+        float zoom = Input.GetAxisRaw("Mouse ScrollWheel");
 
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);

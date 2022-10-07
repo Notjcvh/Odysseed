@@ -15,6 +15,7 @@ public class LedgeGrabbing : MonoBehaviour
     [SerializeField] private float ledgeDetectionLegnth;
     [SerializeField] private float ledgeSphereCastRadius;
     public LayerMask whatIsLedge;
+  
 
     [Header("Ledge Grabbing")]
     [SerializeField] private float moveToLedgeSpeed;
@@ -22,19 +23,23 @@ public class LedgeGrabbing : MonoBehaviour
 
     public float minTimeOnLedge;
     private float timeOnLedge;
-    
     public bool holding;
+    public bool canDetect;
     
+
+    [Header("Ledge Jumping")]
+    KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] float ledgeJumpVerticalVelocity = 10;
+
+    [Header("Exiting")]
+    public bool exitingLedge;
+    public float exitLedgeTime;
+    private float exitLedgeTimer;
 
     //Variables
     private Transform lastLedge;
     private Transform currentLedge;
     private RaycastHit ledgeHit;
-
-    [Header("Debugging")]
-    public GameObject ledge;
-    public GameObject wall;
-
 
     private void Start()
     {
@@ -47,13 +52,14 @@ public class LedgeGrabbing : MonoBehaviour
     private void Update()
     {
 
-        LedgeDetection();
+        
+        CheckingDetectLedge();
         SubStateMachine();
     }
 
     private void SubStateMachine()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+       
         float verticalInput = Input.GetAxis("Vertical");
         bool anyKeyPressed =  verticalInput != 0;
 
@@ -64,13 +70,24 @@ public class LedgeGrabbing : MonoBehaviour
 
             timeOnLedge += Time.deltaTime;
 
-            if (timeOnLedge > minTimeOnLedge && anyKeyPressed) ExitLedgeHold();
-      
+            if (timeOnLedge > minTimeOnLedge && anyKeyPressed)
+            {
+                ExitLedgeHold();
+
+            }
+            if (Input.GetKeyDown(jumpKey)) LedgeJump();
         }
     }
 
+    void CheckingDetectLedge()
+    {
+        if (exitingLedge == true)
+            Debug.Log("let go");
 
 
+        else if(exitingLedge == false)
+            LedgeDetection();
+    }
     private void LedgeDetection()
     {
        
@@ -79,10 +96,7 @@ public class LedgeGrabbing : MonoBehaviour
         if (!ledgeDetected) return;
         float distanceToLedge = Vector3.Distance(transform.position, ledgeHit.transform.position);
 
-
-        if (ledgeHit.transform == lastLedge) return;
         if(distanceToLedge < maxLedgeGrabDistacne && !holding) EnterLedgeHold();
-
     }
 
 
@@ -96,11 +110,6 @@ public class LedgeGrabbing : MonoBehaviour
 
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
-
-        //Debugging
-        Debug.Log("Entered Ledge Hold");
-        Renderer renderer = ledge.GetComponent<Renderer>();
-        renderer.material.color = Color.blue;
     }
     
     private void FreezeRigidbodyOnLedge()
@@ -125,15 +134,43 @@ public class LedgeGrabbing : MonoBehaviour
 
     }
 
+    private void LedgeJump()
+    {
+        ExitLedgeHold();
+        rb.AddForce(Vector3.up * ledgeJumpVerticalVelocity, ForceMode.Impulse);
+    }
+
     private void ExitLedgeHold()
     {
+        exitingLedge = true;
         holding = false;
-        timeOnLedge = 0f;
+
+        if(exitingLedge)
+        {
+            if (exitLedgeTimer > 0)
+            {
+                exitLedgeTimer = exitLedgeTime;
+                exitLedgeTimer -= Time.deltaTime;
+            }
+            else if (exitLedgeTimer < 0)
+            {
+                exitingLedge = false;
+            }
+        }
+
+        timeOnLedge = 0f;     
+        player.isRestricted = false;
         player.movementPriority = 0;
         cam.camPriority = 0;
-        player.isRestricted = false;
-
         rb.useGravity = true;
+    }
+
+  
+
+    private void ExitClimbState()
+    {
+     
+       
     }
 
 }
