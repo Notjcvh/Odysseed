@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
     [Header("Refrenceing")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private Transform followObj = null;
+    private PlayerController player;
 
     [Header("XRotations")]
     //turning down and moving the camera up
@@ -45,8 +46,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] [Range(0, 360)] private float maxHorizontalAngle; 
     public Vector3 CameraPlannerDirection { get => plannerDirection; }
 
+
+
     private void Start()
     {
+        player = GetComponent<PlayerController>();
         //Important
         plannerDirection = followObj.forward;
 
@@ -77,11 +81,10 @@ public class CameraController : MonoBehaviour
     {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
-        float zoom = Input.GetAxisRaw("Mouse ScrollWheel");
 
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
-        targetDistance = Mathf.Clamp(targetDistance + zoom, minDistance, maxDistance);
+        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
         targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
@@ -94,13 +97,28 @@ public class CameraController : MonoBehaviour
     }
     public void LedgeClimbingCam()
     {
+        
         targetDistance = Mathf.Clamp(newMaxDistance, newMaxDistance, newMaxDistance);
-        plannerDirection = Quaternion.Euler(0, 90, 0) * plannerDirection;
+      
         targetHorizontalAngle = Mathf.Clamp(targetHorizontalAngle,minHorizontalAngle, maxHorizontalAngle);
+
+        targetPosition = (followObj.position) - (targetRotation * Vector3.forward) * targetDistance;
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
-        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
         cam.transform.position = newPosition;
 
-       //Find a way for the camera to rotate directyl behind the player! 
+        //Find a way for the camera to rotate directyl behind the player! 
+        plannerDirection = Quaternion.Euler(0, 90, 0) * plannerDirection;
+
+        // here we're playing with direction so get the test playeer's movement vector 
+        //
+        Vector3 movementVector = player.MovementVector;
+
+        /* this is basically from the player controller we want to grab the last direction the player was facing 
+         * and make the camera face the same way
+         * Quaternion cameraPlannerRotation = Quaternion.LookRotation(plannerDirection);
+            movementVector = cameraPlannerRotation * movementVector;
+            targetRotation = Quaternion.LookRotation(movementVector);
+            transform.rotation = targetRotation;
+        */
     }
 }

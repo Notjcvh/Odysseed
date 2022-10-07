@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     public int movementPriority = 0;
 
     [Header("Movement")]
-    
+
+    private Vector3 movementVector;    
     [SerializeField] private float runSpeed;
     private float targetSpeed;
     private Vector3 newVelocity;
@@ -33,20 +34,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float rayLength;
 
    
+    public Vector3 MovementVector { get => movementVector;  }
+
     private void Awake()
     {
         cam = GetComponent<CameraController>();
         playerBody = GetComponentInChildren<Rigidbody>();
     }
 
-    private void Start()
-    {
-        
-    }
 
     private void Update()
     {
-        Debug.Log(stats.playerweight);
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         hor = horizontal;
@@ -72,7 +70,7 @@ public class PlayerController : MonoBehaviour
     }
     private  void MoveNow()
     {
-        // if we have input that is either vertical or horizontal then is moving is true, stop roating toawrds camera 
+        // if we have input that is either vertical or horizontal then is moving is true, stop roating 
 
         Vector3 movementVector = new Vector3(hor, 0, vert).normalized;
 
