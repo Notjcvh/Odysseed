@@ -6,6 +6,7 @@ public class LedgeGrabbing : MonoBehaviour
 {
     [Header("Refrences")]
 
+    public GameObject ledgeGrabPosition;
     private PlayerController player;
     [SerializeField] private Transform orientation;
     private CameraController cam;
@@ -40,19 +41,16 @@ public class LedgeGrabbing : MonoBehaviour
     private Transform lastLedge;
     private Transform currentLedge;
     private RaycastHit ledgeHit;
+    public float distance = 1;
 
     private void Start()
     {
         player = GetComponent<PlayerController>();
         cam = GetComponent<CameraController>();
-
-
     }
 
     private void Update()
     {
-
-        
         CheckingDetectLedge();
         SubStateMachine();
     }
@@ -81,12 +79,19 @@ public class LedgeGrabbing : MonoBehaviour
 
     void CheckingDetectLedge()
     {
+
         if (exitingLedge == true)
-            Debug.Log("let go");
-
-
-        else if(exitingLedge == false)
+        {
+            StartCoroutine(Blackhole());
+            exitingLedge = false;
+        }
+        else
             LedgeDetection();
+        IEnumerator Blackhole()
+        {
+            yield return new WaitForSeconds(exitLedgeTime); // waits before continuing in seconds
+                              
+        }
     }
     private void LedgeDetection()
     {
@@ -102,26 +107,27 @@ public class LedgeGrabbing : MonoBehaviour
 
     private void EnterLedgeHold()
     {
-        holding = true;
         
 
         currentLedge = ledgeHit.transform;
         lastLedge = ledgeHit.transform;
 
         rb.useGravity = false;
-        rb.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;      
+
+        holding = true;
+
     }
-    
+
     private void FreezeRigidbodyOnLedge()
     {
         rb.useGravity = false;
-        
 
-        Vector3 directionToLedge = currentLedge.position - transform.position;
-        float distanceToLedge = Vector3.Distance(transform.position, currentLedge.position);
+        Vector3 directionToLedge =  (currentLedge.position - transform.position);
+        float distanceToLedge =  Vector3.Distance(transform.position, currentLedge.position);
 
         // Move player to Ledge
-        if(distanceToLedge > 1f)
+        if (distanceToLedge > 1f)
         {       
             if (rb.velocity.magnitude < moveToLedgeSpeed)
                 rb.AddForce(directionToLedge.normalized * moveToLedgeSpeed * 100f * Time.deltaTime);
@@ -144,20 +150,6 @@ public class LedgeGrabbing : MonoBehaviour
     {
         exitingLedge = true;
         holding = false;
-
-        if(exitingLedge)
-        {
-            if (exitLedgeTimer > 0)
-            {
-                exitLedgeTimer = exitLedgeTime;
-                exitLedgeTimer -= Time.deltaTime;
-            }
-            else if (exitLedgeTimer < 0)
-            {
-                exitingLedge = false;
-            }
-        }
-
         timeOnLedge = 0f;     
         player.isRestricted = false;
         player.movementPriority = 0;
@@ -169,8 +161,8 @@ public class LedgeGrabbing : MonoBehaviour
 
     private void ExitClimbState()
     {
-     
-       
+
+        
     }
 
 }
