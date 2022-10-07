@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 94823457}
   - component: {fileID: 94823456}
   - component: {fileID: 94823455}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2654,7 +2654,7 @@ GameObject:
   - component: {fileID: 752441724}
   - component: {fileID: 752441723}
   - component: {fileID: 752441722}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2751,7 +2751,7 @@ GameObject:
   - component: {fileID: 770614480}
   - component: {fileID: 770614479}
   - component: {fileID: 770614478}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3907,6 +3907,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 849749339bf2b0b44aecb288c037dbed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ledgeGrabPosition: {fileID: 0}
   orientation: {fileID: 0}
   rb: {fileID: 1096046719}
   ledgeDetectionLegnth: 3
@@ -3918,8 +3919,11 @@ MonoBehaviour:
   maxLedgeGrabDistacne: 5
   minTimeOnLedge: 1
   holding: 0
-  ledge: {fileID: 0}
-  wall: {fileID: 0}
+  canDetect: 0
+  ledgeJumpVerticalVelocity: 10
+  exitingLedge: 0
+  exitLedgeTime: 0
+  distance: 1
 --- !u!54 &1096046719 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 247802868, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
@@ -4228,7 +4232,7 @@ GameObject:
   - component: {fileID: 1201266242}
   - component: {fileID: 1201266241}
   - component: {fileID: 1201266240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5198,7 +5202,7 @@ GameObject:
   - component: {fileID: 1382284625}
   - component: {fileID: 1382284624}
   - component: {fileID: 1382284623}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5295,7 +5299,7 @@ GameObject:
   - component: {fileID: 1429163030}
   - component: {fileID: 1429163029}
   - component: {fileID: 1429163028}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5489,7 +5493,7 @@ GameObject:
   - component: {fileID: 1461449998}
   - component: {fileID: 1461449997}
   - component: {fileID: 1461449996}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5780,7 +5784,7 @@ GameObject:
   - component: {fileID: 1523362516}
   - component: {fileID: 1523362515}
   - component: {fileID: 1523362514}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6738,7 +6742,7 @@ GameObject:
   - component: {fileID: 1758579945}
   - component: {fileID: 1758579944}
   - component: {fileID: 1758579943}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

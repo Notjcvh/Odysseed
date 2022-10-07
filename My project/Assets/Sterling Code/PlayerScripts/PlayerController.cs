@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public bool isMoving = false;
     public bool isTalking = false;
     public bool isRestricted = false;
-    public LayerMask Player;
+  
 
 
     [Header("Jumping")]

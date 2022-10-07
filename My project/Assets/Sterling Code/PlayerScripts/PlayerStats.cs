@@ -5,8 +5,6 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "PlayerStats")]
 public class PlayerStats: ScriptableObject
 {
-    
-
     //health
     public int maxHealth = 3;
     int currentHealth;
