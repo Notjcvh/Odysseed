@@ -66,6 +66,8 @@ public class CameraController : MonoBehaviour
 
 
         if (camPriority == 1) LedgeClimbingCam();
+
+
         
 
     }
