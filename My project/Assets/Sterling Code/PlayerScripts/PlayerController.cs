@@ -49,9 +49,16 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         hor = horizontal;
         vert = vertical;
+        if(isTalking)
+        {
+            movementPriority = 1;
+        }
+        if (!isTalking)
+        {
+            movementPriority = 0;
+        }
 
-        
-         int movingHorizontal = hor != 0 ? 1 : 0;
+        int movingHorizontal = hor != 0 ? 1 : 0;
          int movingVertical = vert != 0 ? 1 : 0;
 
         if ((movingHorizontal > 0 || movingVertical > 0) && isRestricted == false)

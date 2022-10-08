@@ -12,13 +12,18 @@ public class Enemy : MonoBehaviour
     public float attackRange;
     public float attackSpeed;
     public float attackLife;
-    
+    public Transform currentAttackPos;
+    public Transform[] attackPoints;
+    public float attackPosChangeTimer;
+    public int attackPointer = 0;
+
+    public float deaggroRange;
+    public float aggroRange;
+    private float distanceFromPlayer;
+
     public GameObject attackHitbox;
     private float attackLifetime;
     private float attackCooldown;
-    public bool isAttacking;
-    public float sightRange;
-    public float distanceFromPlayer;
 
     public float idleDelay;
     public Transform currentWaypoint;
@@ -26,49 +31,54 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
         navMeshAge = GetComponent<NavMeshAgent>();
-        isAttacking = false;
+        currentAttackPos = attackPoints[0];
         attackCooldown = attackSpeed;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         StartCoroutine(FindRandomWaypoint());
+        StartCoroutine(FindAttackWaypoint());
     }
 
     private void Update()
     {
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
-
-        
-        if(distanceFromPlayer <= attackRange)
+        attackCooldown -= Time.deltaTime;
+        attackLifetime -= Time.deltaTime;
+        if (attackPointer == 5)
+        {
+            attackPointer = 0;
+        }
+        if (attackLifetime <= 0)
+        {
+            attackHitbox.SetActive(false);
+        }
+        if (distanceFromPlayer <= attackRange)
         {
             //if the enemy is in attack range do this
-            navMeshAge.destination = this.transform.position;
-            attackCooldown -= Time.deltaTime;
-            if(isAttacking)
-            {
-                attackLifetime -= Time.deltaTime;
-                if(attackLifetime <= 0)
-                {
-                    isAttacking = false;
-                    attackHitbox.SetActive(false);
-                }
-            }
+            navMeshAge.speed = 3;
+            transform.LookAt(player);
+            navMeshAge.destination = currentAttackPos.position;
             if(attackCooldown <= 0)
             {
                 attackHitbox.SetActive(true);
-                isAttacking = true;
+                
                 attackLifetime = attackLife;
                 attackCooldown = attackSpeed;
             }
         }
-        else if(distanceFromPlayer < sightRange)
+        else if(distanceFromPlayer < aggroRange)
         {
             //if the enemy sees the player but is not in attack range
-            navMeshAge.destination = player.position;
+            aggroRange = deaggroRange;
+            navMeshAge.speed = 10;
+            navMeshAge.destination = currentAttackPos.position;
         }
         else
         {
             //if enemy does not see the player do this
             navMeshAge.destination = currentWaypoint.position;
+            navMeshAge.speed = 1;
         }
 
     }
@@ -78,5 +88,11 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(idleDelay);
         currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
         StartCoroutine(FindRandomWaypoint());
+    }
+    IEnumerator FindAttackWaypoint()
+    {
+        yield return new WaitForSeconds(attackPosChangeTimer);
+        currentAttackPos = attackPoints[Random.Range(0, attackPoints.Length)];
+        StartCoroutine(FindAttackWaypoint());
     }
 }

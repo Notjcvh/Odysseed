@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+using TMPro;
 
 public class NPC : MonoBehaviour
 {
     [SerializeField] private Transform player;
     private PlayerController playerController;
     private NavMeshAgent navMeshAge;
-    public GameObject Dialogue;
+    private bool isTalking;
+    private int dialoguePointer;
+    public GameObject dialogue;
+    public TextMeshProUGUI myDialouge;
+    public string[] dialogueList;
 
     public float distanceFromPlayer;
     public float talkRange;
@@ -18,16 +22,30 @@ public class NPC : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        Dialogue.SetActive(false);
+        isTalking = false;
+        
         playerController = player.GetComponent<PlayerController>();
     }
     void Update()
     {
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
-
+        dialogue.SetActive(isTalking);
+        playerController.isTalking = isTalking;
         if (Input.GetKeyDown(KeyCode.E) && distanceFromPlayer < talkRange)
         {
-            StartDialouge();
+            if (!isTalking)
+            {
+                StartDialouge();
+            }
+            else
+            {
+                dialoguePointer++;
+                if (dialoguePointer == dialogueList.Length)
+                {
+                    EndDialouge();
+                }
+                myDialouge.text = dialogueList[dialoguePointer];
+            }
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
@@ -36,13 +54,12 @@ public class NPC : MonoBehaviour
     }
     public void StartDialouge()
     {
-        playerController.isTalking = true;
-        Dialogue.SetActive(true);
+        isTalking = true;
     }
     public void EndDialouge()
     {
-        playerController.isTalking = false;
-        Dialogue.SetActive(false);
+        isTalking = false;
+        dialoguePointer = 0;
     }
 
 
