@@ -7,12 +7,14 @@ public class PlayerController : MonoBehaviour
     [Header("References")] 
     private CameraController cam;
     [SerializeField] private Rigidbody playerBody;
+    public PlayerStats stats;
 
 
     public int movementPriority = 0;
 
     [Header("Movement")]
-    
+
+    private Vector3 movementVector;    
     [SerializeField] private float runSpeed;
     private float targetSpeed;
     private Vector3 newVelocity;
@@ -22,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public bool isMoving = false;
     public bool isTalking = false;
     public bool isRestricted = false;
-    public LayerMask Player;
+  
 
 
     [Header("Jumping")]
@@ -31,14 +33,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float verticalVelocity = 10;
     [SerializeField] float rayLength;
 
-    // [Header("Ledge Grabbing")]
-  //  public Vector3 MovementVector { get => movementVector; }
+   
+    public Vector3 MovementVector { get => movementVector;  }
 
-    private void Start()
+    private void Awake()
     {
         cam = GetComponent<CameraController>();
         playerBody = GetComponentInChildren<Rigidbody>();
     }
+
 
     private void Update()
     {
@@ -62,16 +65,12 @@ public class PlayerController : MonoBehaviour
             }
             if (movementPriority == 0) MoveNow();
         }
-        else if (movementPriority == 1) ClimbNow();
         else
             return;
-
-
-
     }
     private  void MoveNow()
     {
-        // if we have input that is either vertical or horizontal then is moving is true, stop roating toawrds camera 
+        // if we have input that is either vertical or horizontal then is moving is true, stop roating 
 
         Vector3 movementVector = new Vector3(hor, 0, vert).normalized;
 
@@ -91,24 +90,6 @@ public class PlayerController : MonoBehaviour
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
         }
-    }
-    private void ClimbNow()
-    {
-        Vector3 movementVector = new Vector3(hor, 0, 0).normalized;
-        
-        // checking for inputs from Player
-        targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
-
-        newVelocity = movementVector * targetSpeed;
-
-        transform.Translate(newVelocity * Time.deltaTime, Space.World);
-
-        if (targetSpeed != 0)
-        {
-            targetRotation = Quaternion.LookRotation(movementVector);
-            transform.rotation = targetRotation;
-        }
-
     }
    private bool IsGrounded()
     {

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4100166254625961979}
   - component: {fileID: 4100166254625961862}
   - component: {fileID: 4100166254625961860}
-  - component: {fileID: 247802864}
   - component: {fileID: 247802868}
   - component: {fileID: 247802869}
+  - component: {fileID: 247802875}
   m_Layer: 0
   m_Name: 'Test_Player '
   m_TagString: Untagged
@@ -57,8 +57,10 @@ MonoBehaviour:
   defeaultDistance: 5
   minDistance: 3
   maxDistance: 10
-  zoomSpeed: 5
   rotationSharpness: 25
+  newMaxDistance: 15
+  minHorizontalAngle: 121
+  maxHorizontalAngle: 210
 --- !u!114 &4100166254625961860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,32 +73,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5480514506a5a443b8167d58e6aff91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBody: {fileID: 0}
+  playerBody: {fileID: 247802868}
+  stats: {fileID: 11400000, guid: 61a4eb993a70e834f8663ef018a8a3b9, type: 2}
+  movementPriority: 0
   runSpeed: 10
   isMoving: 0
   isTalking: 0
+  isRestricted: 0
+  Player:
+    serializedVersion: 2
+    m_Bits: 256
   Ground:
     serializedVersion: 2
-    m_Bits: 8
-  Wall:
-    serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   verticalVelocity: 5
   rayLength: 10
---- !u!114 &247802864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4100166254625961982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a9535abf42bc124e8c211596dbf770f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 4100166254625961982}
-  currentHealth: 0
 --- !u!54 &247802868
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -127,6 +118,35 @@ CapsuleCollider:
   m_Height: 2.1989942
   m_Direction: 1
   m_Center: {x: 0.01053834, y: 0.037316322, z: 0}
+--- !u!114 &247802875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4100166254625961982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849749339bf2b0b44aecb288c037dbed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ledgeGrabPosition: {fileID: 0}
+  orientation: {fileID: 0}
+  rb: {fileID: 247802868}
+  ledgeDetectionLegnth: 3
+  ledgeSphereCastRadius: 1
+  whatIsLedge:
+    serializedVersion: 2
+    m_Bits: 128
+  moveToLedgeSpeed: 8
+  maxLedgeGrabDistacne: 7
+  minTimeOnLedge: 2
+  holding: 0
+  canDetect: 0
+  ledgeJumpVerticalVelocity: 10
+  exitingLedge: 0
+  exitLedgeTime: 1
+  distance: 2
 --- !u!1 &4100166254705167441
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4100166255457262375}
   m_Layer: 0
-  m_Name: CameraTarget
+  m_Name: MovementTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
