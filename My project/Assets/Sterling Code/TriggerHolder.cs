@@ -30,32 +30,10 @@ public class TriggerHolder : MonoBehaviour
         foreach (Transform child in transform)
         {
             //print("Foreach loop: " + child);
-            if (gameObject.transform.parent != null)
-                AssignValuesToTriggers();    
+            if (gameObject.transform.parent != null) return;
         }   
     }
 
-    public void AssignValuesToTriggers()
-    {
-        for (int i = 0; i <triggers.Length; i++)
-        {
-            if (i == 0)
-               triggerValues.SetValue(key1.value, 0);
-            if (i == 1)
-                triggerValues.SetValue(key2.value, 1);
-        }
-    }
-
-    public void CompareValuesOfKeysNTriggers(GameObject other)
-    {
-
-        if (triggerValues[0] == key1.value)
-            //if (gameObject.name == key1.matchingTriggerName)
-                print("key and trigger match");
-       else if(triggerValues[0] != key1.value)
-           print("key and trigger don't match");
-
-
-    }
+   
 
 }

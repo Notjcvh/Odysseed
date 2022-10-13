@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "Trigger Properties")]
+[CreateAssetMenu(menuName = "Puzzles/Triggers")]
 
 public class TriggerSettings : ScriptableObject
 {
-    public float weight;
+    public string keyName;
     
 }
