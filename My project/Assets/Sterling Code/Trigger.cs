@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trigger : TriggerHolder
+public class Trigger : MonoBehaviour
 {
+    [Header("Refrencing")]
+    
+    public TriggerHolder triggerHolder;
+    public string[] tags = { "Player", "Key" };
+
+    private void Start()
+    {
+        triggerHolder = GameObject.Find("Trigger Holder").GetComponent<TriggerHolder>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,10 +23,12 @@ public class Trigger : TriggerHolder
             {
                // Debug.Log("this is Player");
             }
+
+            //beacause this runs twice 
             if (other.CompareTag(tags[1]))
             {
+                triggerHolder.CompareValuesOfKeysNTriggers(this.gameObject);
                 //Debug.Log("this is a key");
-                CheckValuesOfKeys(gameObject);
                 // function that checks for a specifc int value 
             }
         }

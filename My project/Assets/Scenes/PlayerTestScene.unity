@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 192056616}
   - component: {fileID: 192056615}
   - component: {fileID: 192056614}
+  - component: {fileID: 192056618}
   m_Layer: 0
   m_Name: Box (2)
   m_TagString: Key
@@ -248,7 +249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192056612}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.2, y: 10.3, z: 0.7}
+  m_LocalPosition: {x: 17.2, y: 12.6, z: -9.7}
   m_LocalScale: {x: 3.9910293, y: 3.9910293, z: 3.9910293}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -334,6 +335,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192056612}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &192056618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192056612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88830c099d50efa47b1f0b8ee65ed998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyScript: {fileID: 11400000, guid: 40c812aeec0447b4c9b1999017693e5d, type: 2}
+  value: 0
+  matchingTriggerName: 
 --- !u!1 &332819934
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,6 +362,7 @@ GameObject:
   - component: {fileID: 332819940}
   - component: {fileID: 332819939}
   - component: {fileID: 332819938}
+  - component: {fileID: 332819941}
   m_Layer: 0
   m_Name: Trigger (1)
   m_TagString: Untagged
@@ -431,6 +448,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 332819934}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &332819941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332819934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00ed1eb6469e1ad48b9792eeb7887eaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerHolder: {fileID: 360339736}
+  tags:
+  - Player
+  - Key
 --- !u!1 &360339734
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,11 +510,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3231cec70794814fb65f86c637dacbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: {fileID: 0}
+  key1: {fileID: 1226858923}
+  key2: {fileID: 192056618}
+  keysInPuzzle:
+  - {fileID: 1226858917}
+  - {fileID: 192056612}
   triggers: []
-  tags:
-  - Player
-  - Key
+  triggerValues: 0000000000000000
 --- !u!4 &389946504 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8947386970401465206, guid: 7762111d37cf6514db5a4d185435bdf0, type: 3}
@@ -780,8 +815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ed1eb6469e1ad48b9792eeb7887eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: {fileID: 0}
-  triggers: []
+  triggerHolder: {fileID: 360339736}
   tags:
   - Player
   - Key
@@ -895,6 +929,7 @@ GameObject:
   - component: {fileID: 1226858920}
   - component: {fileID: 1226858919}
   - component: {fileID: 1226858922}
+  - component: {fileID: 1226858923}
   m_Layer: 0
   m_Name: Box (1)
   m_TagString: Key
@@ -910,7 +945,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1226858917}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.2, y: 10.3, z: -9.3}
+  m_LocalPosition: {x: 17.2, y: 11.8, z: 3.4}
   m_LocalScale: {x: 3.9910293, y: 3.9910293, z: 3.9910293}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -996,6 +1031,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1226858923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226858917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88830c099d50efa47b1f0b8ee65ed998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyScript: {fileID: 11400000, guid: f7b33ecd949d2314c92c04eb2477cb0b, type: 2}
+  value: 0
+  matchingTriggerName: 
 --- !u!1001 &1280897628
 PrefabInstance:
   m_ObjectHideFlags: 0

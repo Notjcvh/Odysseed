@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu (menuName = "PlayerStats")]
+[CreateAssetMenu (menuName = "Player/PlayerStats")]
 public class PlayerStats: ScriptableObject
 {
     //health
