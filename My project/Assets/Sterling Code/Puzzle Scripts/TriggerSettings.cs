@@ -8,5 +8,5 @@ using UnityEngine;
 public class TriggerSettings : ScriptableObject
 {
     public string keyName;
-    
+    public bool doTheyMatch;
 }
