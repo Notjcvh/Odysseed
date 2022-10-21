@@ -1,0 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+
+public class SpecialEnemy : MonoBehaviour
+{
+    [SerializeField] private Transform player;
+    private NavMeshAgent navMeshAge;
+
+    public float explodeRange;
+    public float deaggroRange;
+    public float aggroRange;
+    private float distanceFromPlayer;
+
+    public float idleDelay;
+    public Transform currentWaypoint;
+    public Transform[] patrolPoints;
+
+    private void Awake()
+    {
+        currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        navMeshAge = GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        StartCoroutine(FindRandomWaypoint());
+    }
+
+    private void Update()
+    {
+        distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
+        if (distanceFromPlayer <= explodeRange)
+        {
+            transform.LookAt(player);
+            navMeshAge.destination = player.position;
+        }
+        else if(distanceFromPlayer < aggroRange)
+        {
+            //if the enemy sees the player but is not in attack range
+            aggroRange = deaggroRange;
+            navMeshAge.speed = 10;
+            navMeshAge.destination = player.position;
+        }
+        else
+        {
+            //if enemy does not see the player do this
+            navMeshAge.destination = currentWaypoint.position;
+            navMeshAge.speed = 1;
+        }
+
+    }
+
+    IEnumerator FindRandomWaypoint()
+    {
+        yield return new WaitForSeconds(idleDelay);
+        currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        StartCoroutine(FindRandomWaypoint());
+    }
+}
