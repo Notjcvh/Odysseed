@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 247802869}
   - component: {fileID: 1337696722}
   - component: {fileID: 1332694899}
+  - component: {fileID: 1498420144}
   m_Layer: 0
   m_Name: 'Test_Player '
   m_TagString: Player
@@ -203,7 +204,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 247802868}
-  stats: {fileID: 11400000, guid: 61a4eb993a70e834f8663ef018a8a3b9, type: 2}
   movementPriority: 0
   runSpeed: 10
   isMoving: 0
@@ -278,6 +278,20 @@ MonoBehaviour:
   CanPickUp:
     serializedVersion: 2
     m_Bits: 512
+--- !u!114 &1498420144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4100166254625961982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db34a3a09ad3f7044a9ddc535a67de86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: 61a4eb993a70e834f8663ef018a8a3b9, type: 2}
+  element: 0
 --- !u!1 &4100166254705167441
 GameObject:
   m_ObjectHideFlags: 0

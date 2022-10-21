@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [Header("References")] 
     private CameraController cam;
     [SerializeField] private Rigidbody playerBody;
-    public PlayerStats stats;
+  
 
 
     public int movementPriority = 0;

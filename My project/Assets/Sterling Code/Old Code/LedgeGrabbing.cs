@@ -7,7 +7,7 @@ public class LedgeGrabbing : MonoBehaviour
     [Header("Refrences")]
 
     public GameObject ledgeGrabPosition;
-    private PlayerController player;
+    private PlayerMovement player;
     [SerializeField] private Transform orientation;
     private CameraController cam;
     [SerializeField] private Rigidbody rb;
@@ -45,7 +45,7 @@ public class LedgeGrabbing : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponent<PlayerController>();
+        player = GetComponent<PlayerMovement>();
         cam = GetComponent<CameraController>();
     }
 

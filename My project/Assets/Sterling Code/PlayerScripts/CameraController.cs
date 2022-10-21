@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     [Header("Refrenceing")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private Transform followObj = null;
-    private PlayerController player;
+    private PlayerMovement player;
 
     [Header("XRotations")]
     //turning down and moving the camera up
@@ -50,7 +50,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponent<PlayerController>();
+        player = GetComponent<PlayerMovement>();
         //Important
         plannerDirection = followObj.forward;
 

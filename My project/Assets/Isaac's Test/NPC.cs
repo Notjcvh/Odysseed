@@ -7,7 +7,7 @@ using TMPro;
 public class NPC : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    private PlayerController playerController;
+    private PlayerMovement playerController;
     private NavMeshAgent navMeshAge;
     private bool isTalking;
     private int dialoguePointer;
@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         isTalking = false;
         
-        playerController = player.GetComponent<PlayerController>();
+        playerController = player.GetComponent<PlayerMovement>();
     }
     void Update()
     {

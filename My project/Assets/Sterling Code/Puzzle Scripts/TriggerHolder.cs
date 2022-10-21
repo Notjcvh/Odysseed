@@ -19,17 +19,18 @@ public class TriggerHolder : MonoBehaviour
 
 
     public string doorOpen = "Door Open";
-    int count = 0;
+    public int count = 0;
 
 
     public int needMatchesToSolvePuzzle;
     private void Start()
     {
         
-      needMatchesToSolvePuzzle = whichPuzzle.keywords.Length * 2;
+      needMatchesToSolvePuzzle = whichPuzzle.keywords.Length;
         doorValues = new int [whichPuzzle.keywords.Length];
 
     }
+
    public  void IsPuzzleComplete()
     {
      
@@ -48,15 +49,7 @@ public class TriggerHolder : MonoBehaviour
 
     public void GetTriggeredValue(int number)
     {
-
         print(number);
-        if(count < doorValues.Length)
-        {
-            doorValues.SetValue(number, count);
-            count++;
-        }
-           
-
     }
  
    

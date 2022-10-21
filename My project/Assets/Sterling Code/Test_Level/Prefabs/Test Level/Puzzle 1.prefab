@@ -242,9 +242,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerHolder: {fileID: 360339736}
   triggerSettings: {fileID: 11400000, guid: 567173dab8463af41ad5eb3c8ef731c7, type: 2}
+  whichPuzzle: {fileID: 11400000, guid: 5fc694219c215c142a5f34e8748d197f, type: 2}
   tags:
   - Player
   - Key
+  keyNoLongerOnTrigger: 0
 --- !u!1 &360339734
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,12 +293,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3231cec70794814fb65f86c637dacbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   whichPuzzle: {fileID: 11400000, guid: 5fc694219c215c142a5f34e8748d197f, type: 2}
-  keysInPuzzle:
-  - {fileID: 1226858917}
-  - {fileID: 192056612}
-  triggers: []
-  numberOfCorrectMatchesInPuzzle: 0
+  trigger: {fileID: 0}
+  myDoor: {fileID: 873308302}
+  doorValues: 0000000000000000
+  doorOpen: Door Open
+  count: 0
   needMatchesToSolvePuzzle: 0
 --- !u!1 &1087671508
 GameObject:
@@ -410,9 +413,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerHolder: {fileID: 360339736}
   triggerSettings: {fileID: 11400000, guid: 148d767c192b2a84f9cc59ff540d3e45, type: 2}
+  whichPuzzle: {fileID: 11400000, guid: 5fc694219c215c142a5f34e8748d197f, type: 2}
   tags:
   - Player
   - Key
+  keyNoLongerOnTrigger: 0
 --- !u!1 &1226858917
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +560,7 @@ GameObject:
   - component: {fileID: 2941494224763616426}
   - component: {fileID: 7563686886772562124}
   - component: {fileID: 358114714799107062}
+  - component: {fileID: 873308302}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -640,6 +646,26 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &873308302
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505489057541427265}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5657b3a4e9da5de41a0fd7b1a8fef041, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8828907644129604814
 GameObject:
   m_ObjectHideFlags: 0
