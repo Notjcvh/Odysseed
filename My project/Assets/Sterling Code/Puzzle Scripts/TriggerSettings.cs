@@ -7,5 +7,5 @@ using UnityEngine;
 
 public class TriggerSettings : ScriptableObject
 {
-    public Animator myDoor = null;
+    public string doorName;
 }

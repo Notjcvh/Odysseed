@@ -8,7 +8,10 @@ public class Trigger : MonoBehaviour
     
     public TriggerHolder triggerHolder;
     public TriggerSettings triggerSettings;
+    public PuzzleDataManager whichPuzzle;
     public string[] tags = { "Player", "Key" };
+
+    public int numberOfCorrectMatchesInPuzzle;
 
     private void Start()
     {
@@ -29,8 +32,9 @@ public class Trigger : MonoBehaviour
 
             if (other.CompareTag(tags[1]))
             {
-
-                triggerHolder.CompareCollisionStrings(this.gameObject.name, other.name);
+                
+              CompareCollisionStrings(this.gameObject.name, other.name);
+               
             }
         }
     }
@@ -47,13 +51,36 @@ public class Trigger : MonoBehaviour
 
             if (other.CompareTag(tags[1]))
             {
-                if (triggerHolder.numberOfCorrectMatchesInPuzzle < 0)
-                    triggerHolder.numberOfCorrectMatchesInPuzzle -= 1;
+                if (numberOfCorrectMatchesInPuzzle < 0)
+                {
+                    numberOfCorrectMatchesInPuzzle -= 1;
+                    triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
+                }
                 else
-                    triggerHolder.numberOfCorrectMatchesInPuzzle = 0;
+                    numberOfCorrectMatchesInPuzzle = 0;
+                    triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
 
             }
         }
     }
+
+    public void CompareCollisionStrings(string trigger, string key)
+    {
+        string givenKeyword = trigger + key;
+
+
+        foreach (string part in whichPuzzle.keywords)
+        {
+
+            if (string.Equals(part, givenKeyword))
+            {
+               
+                numberOfCorrectMatchesInPuzzle += 1;
+                if(numberOfCorrectMatchesInPuzzle != 1)
+                    triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
+            }
+        }
+    }
+
 
 }

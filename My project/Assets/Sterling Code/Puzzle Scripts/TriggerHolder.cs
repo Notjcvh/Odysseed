@@ -8,30 +8,33 @@ public class TriggerHolder : MonoBehaviour
     [Header("Refrencing")]
     public GameObject player;
     public PuzzleDataManager whichPuzzle;
-    public GameObject[] keysInPuzzle;
+    public Trigger trigger;
+
 
     public Animator myDoor = null;
 
-    public Transform[] triggers = null;
+
+    public int[] doorValues = null;
     
 
 
     public string doorOpen = "Door Open";
+    int count = 0;
 
 
-
-
-    public int numberOfCorrectMatchesInPuzzle;
     public int needMatchesToSolvePuzzle;
     private void Start()
     {
         
-       needMatchesToSolvePuzzle = whichPuzzle.keywords.Length * 2;
+      needMatchesToSolvePuzzle = whichPuzzle.keywords.Length * 2;
+        doorValues = new int [whichPuzzle.keywords.Length];
 
     }
-    void IsPuzzleComplete()
+   public  void IsPuzzleComplete()
     {
-        if (needMatchesToSolvePuzzle == numberOfCorrectMatchesInPuzzle)
+     
+        /*
+        if (needMatchesToSolvePuzzle == number)
         {
             myDoor.Play(doorOpen, 0, 0);
             Debug.Log("Door Open");
@@ -40,26 +43,23 @@ public class TriggerHolder : MonoBehaviour
         {
             
             Destroy(player);
+        }*/
+    }
+
+    public void GetTriggeredValue(int number)
+    {
+
+        print(number);
+        if(count < doorValues.Length)
+        {
+            doorValues.SetValue(number, count);
+            count++;
         }
+           
+
     }
  
-    public void CompareCollisionStrings(string trigger, string key)
-    {
-        string givenKeyword = trigger + key;
-
-
-        foreach (string part in whichPuzzle.keywords)
-        {
-
-            if (string.Equals(part, givenKeyword))
-            {
-                print("Match");
-                numberOfCorrectMatchesInPuzzle += 1;
-                IsPuzzleComplete();
-            }               
-        }
-    }
-
+   
 
 
  
