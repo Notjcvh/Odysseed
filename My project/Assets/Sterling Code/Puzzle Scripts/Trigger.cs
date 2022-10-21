@@ -10,15 +10,10 @@ public class Trigger : MonoBehaviour
     public TriggerSettings triggerSettings;
     public string[] tags = { "Player", "Key" };
 
-
-    public string keyName;
-
-
     private void Start()
     {
         triggerHolder = GameObject.Find("Trigger Holder").GetComponent<TriggerHolder>();
-        keyName = triggerSettings.keyName;
-     
+
     }
     
 

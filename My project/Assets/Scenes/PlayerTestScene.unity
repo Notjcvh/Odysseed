@@ -281,6 +281,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
+--- !u!1 &873308297 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8505489057541427265, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
+  m_PrefabInstance: {fileID: 3452119869291133176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &873308302
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873308297}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5657b3a4e9da5de41a0fd7b1a8fef041, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1010873437
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +649,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 360339736, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
+      propertyPath: myDoor
+      value: 
+      objectReference: {fileID: 873308302}
     - target: {fileID: 8942730058852928304, guid: d8c482c919ebb8c4d874db21e920c597, type: 3}
       propertyPath: m_Name
       value: Puzzle Test 1

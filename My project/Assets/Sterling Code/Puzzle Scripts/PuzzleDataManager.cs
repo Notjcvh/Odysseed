@@ -9,6 +9,7 @@ public class PuzzleDataManager : ScriptableObject
 
 
     public string[] keywords;
-
-    
+  
+ 
 }
+

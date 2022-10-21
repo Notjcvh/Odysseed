@@ -245,7 +245,6 @@ MonoBehaviour:
   tags:
   - Player
   - Key
-  keyName: 
 --- !u!1 &360339734
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,8 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3231cec70794814fb65f86c637dacbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key1: {fileID: 1226858923}
-  key2: {fileID: 192056618}
   whichPuzzle: {fileID: 11400000, guid: 5fc694219c215c142a5f34e8748d197f, type: 2}
   keysInPuzzle:
   - {fileID: 1226858917}
@@ -416,7 +413,6 @@ MonoBehaviour:
   tags:
   - Player
   - Key
-  keyName: 
 --- !u!1 &1226858917
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,7 +575,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8942730058852928308}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2941494224763616426
 MeshFilter:
@@ -776,7 +772,7 @@ Transform:
   - {fileID: 8828907644129604815}
   - {fileID: 8828907645972694666}
   m_Father: {fileID: 8942730058852928308}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8828907644792860417
 GameObject:
@@ -1295,7 +1291,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8942730058852928308}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0.811, y: 0.586, z: 0.717}
 --- !u!33 &8828907646024663177
 MeshFilter:
@@ -1388,9 +1384,9 @@ Transform:
   m_LocalScale: {x: 1.0265, y: 1.0265, z: 1.0265}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1484895779388162630}
   - {fileID: 8828907644665197170}
   - {fileID: 8828907646024663182}
-  - {fileID: 1484895779388162630}
   - {fileID: 360339735}
   - {fileID: 1226858918}
   - {fileID: 192056613}

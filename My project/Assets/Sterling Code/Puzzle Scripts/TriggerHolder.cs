@@ -6,11 +6,18 @@ public class TriggerHolder : MonoBehaviour
 {
 
     [Header("Refrencing")]
-    public keyValue key1;
-    public keyValue key2;
+    public GameObject player;
     public PuzzleDataManager whichPuzzle;
     public GameObject[] keysInPuzzle;
+
+    public Animator myDoor = null;
+
     public Transform[] triggers = null;
+    
+
+
+    public string doorOpen = "Door Open";
+
 
 
 
@@ -19,19 +26,20 @@ public class TriggerHolder : MonoBehaviour
     private void Start()
     {
         
-        key1 = GameObject.Find("Box (1)").GetComponent<keyValue>();
-        key2 = GameObject.Find("Box (2)").GetComponent<keyValue>();
+       needMatchesToSolvePuzzle = whichPuzzle.keywords.Length * 2;
 
-        needMatchesToSolvePuzzle = whichPuzzle.keywords.Length * 2;
     }
-
-
- 
     void IsPuzzleComplete()
     {
         if (needMatchesToSolvePuzzle == numberOfCorrectMatchesInPuzzle)
         {
-            print("Puzzle is Solved");
+            myDoor.Play(doorOpen, 0, 0);
+            Debug.Log("Door Open");
+        }
+        else
+        {
+            
+            Destroy(player);
         }
     }
  
@@ -54,4 +62,5 @@ public class TriggerHolder : MonoBehaviour
 
 
 
+ 
 }
