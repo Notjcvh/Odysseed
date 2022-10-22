@@ -9,6 +9,8 @@ public class PuzzleDataManager : ScriptableObject
 
 
     public string[] keywords;
+    public GameObject puzzle;
+    public Animator doorAnim;
   
  
 }

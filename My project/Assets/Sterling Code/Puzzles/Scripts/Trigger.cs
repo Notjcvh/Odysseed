@@ -7,7 +7,7 @@ public class Trigger : MonoBehaviour
     [Header("Refrencing")]
     
     public TriggerHolder triggerHolder;
-    public TriggerSettings triggerSettings;
+    //public TriggerSettings triggerSettings;
     public PuzzleDataManager whichPuzzle;
 
     public string[] tags = { "Player", "Key" };
@@ -57,10 +57,8 @@ public class Trigger : MonoBehaviour
             if (other.CompareTag(tags[1]))
             {
                
-                numberOfCorrectMatchesInPuzzle = 0;
-               
+                numberOfCorrectMatchesInPuzzle = - 1;
                 triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
-
             }
       
     }
@@ -76,7 +74,7 @@ public class Trigger : MonoBehaviour
             if (string.Equals(part, givenKeyword))
             {
                
-                numberOfCorrectMatchesInPuzzle += 1;
+                numberOfCorrectMatchesInPuzzle = 1;
                 triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
             }
         }
