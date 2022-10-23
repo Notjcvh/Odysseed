@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 837d275ebc84f4a4d82bdbc91d742a02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
 --- !u!1 &4805589847024103410
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,6 +160,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  maxHealth: 3
+  currentHealth: 0
   attackRange: 2
   attackSpeed: 1
   attackLife: 0.5
@@ -168,7 +171,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  attackPosChangeTimer: 1
+  attackPosChangeTimer: 0.5
   attackPointer: 0
   deaggroRange: 10
   aggroRange: 5

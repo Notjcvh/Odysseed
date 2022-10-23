@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
+    public GameObject impactEffect;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("ouch");
+            GameObject effectIns = (GameObject)Instantiate(impactEffect, transform.position, transform.rotation);
+            Destroy(effectIns, 2f);
         }
     }
 }

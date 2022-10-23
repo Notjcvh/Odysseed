@@ -9,6 +9,7 @@ public class SpecialEnemy : MonoBehaviour
     [SerializeField] private Transform player;
     private NavMeshAgent navMeshAge;
 
+    public GameObject impactEffect;
     public float explodeRange;
     public float deaggroRange;
     public float aggroRange;
@@ -65,7 +66,8 @@ public class SpecialEnemy : MonoBehaviour
 
     public void Explode()
     {
-        Debug.Log("Exploded");
+        GameObject effectIns = (GameObject)Instantiate(impactEffect, transform.position, transform.rotation);
+        Destroy(effectIns, 2f);
         exploded = true;
     }
 

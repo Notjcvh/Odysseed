@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed;
     public float attackLife;
     public Transform currentAttackPos;
-    public Transform[] attackPoints;
+    public GameObject[] attackPoints;
     public float attackPosChangeTimer;
     public int attackPointer = 0;
 
@@ -44,9 +44,10 @@ public class Enemy : MonoBehaviour
         }
         currentHealth = maxHealth;
         navMeshAge = GetComponent<NavMeshAgent>();
-        currentAttackPos = attackPoints[0];
         attackCooldown = attackSpeed;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        attackPoints = GameObject.FindGameObjectsWithTag("AttackPoints");
+        currentAttackPos = attackPoints[0].GetComponent<Transform>();
         StartCoroutine(FindRandomWaypoint());
         StartCoroutine(FindAttackWaypoint());
     }
@@ -114,7 +115,7 @@ public class Enemy : MonoBehaviour
     IEnumerator FindAttackWaypoint()
     {
         yield return new WaitForSeconds(attackPosChangeTimer);
-        currentAttackPos = attackPoints[Random.Range(0, attackPoints.Length)];
+        currentAttackPos = attackPoints[Random.Range(0, attackPoints.Length)].GetComponent<Transform>();
         StartCoroutine(FindAttackWaypoint());
     }
 }
