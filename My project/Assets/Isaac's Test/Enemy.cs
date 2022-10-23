@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform player;
     private NavMeshAgent navMeshAge;
 
+    public int maxHealth = 3;
+    public int currentHealth;
+
     public float attackRange;
     public float attackSpeed;
     public float attackLife;
@@ -39,6 +42,7 @@ public class Enemy : MonoBehaviour
         {
             currentWaypoint = this.transform;
         }
+        currentHealth = maxHealth;
         navMeshAge = GetComponent<NavMeshAgent>();
         currentAttackPos = attackPoints[0];
         attackCooldown = attackSpeed;
@@ -87,9 +91,20 @@ public class Enemy : MonoBehaviour
             navMeshAge.destination = currentWaypoint.position;
             navMeshAge.speed = 1;
         }
-
+        if(currentHealth == 0)
+        {
+            Death();
+        }
     }
 
+    public void Death()
+    {
+        Destroy(this.gameObject);
+    }
+    public void Stun(float stunDuration)
+    {
+        Debug.Log("Stun for" + stunDuration);
+    }
     IEnumerator FindRandomWaypoint()
     {
         yield return new WaitForSeconds(idleDelay);
