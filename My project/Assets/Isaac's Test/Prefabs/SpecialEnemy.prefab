@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 7294921534545110807}
   - component: {fileID: 7294921534545110806}
   - component: {fileID: 7294921534545110801}
-  - component: {fileID: 7294921534545110802}
+  - component: {fileID: 1529849135464841902}
   - component: {fileID: 7294921534545110800}
   - component: {fileID: 7294921534545110803}
   m_Layer: 0
@@ -185,7 +185,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7294921534545110802
+--- !u!114 &1529849135464841902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,25 +194,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7294921534545110797}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1986e8c424c04a24ab7f9d5de3696ecd, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a1b9736130f25041acb6113edde0af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  attackRange: 2
-  attackSpeed: 1
-  attackLife: 0.5
-  currentAttackPos: {fileID: 0}
-  attackPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  attackPosChangeTimer: 1
-  attackPointer: 0
-  deaggroRange: 10
-  aggroRange: 5
-  attackHitbox: {fileID: 7294921534635383799}
-  idleDelay: 0.5
+  explodeRange: 0
+  deaggroRange: 0
+  aggroRange: 0
+  exploded: 0
+  idleDelay: 0
   currentWaypoint: {fileID: 0}
   patrolPoints:
   - {fileID: 0}

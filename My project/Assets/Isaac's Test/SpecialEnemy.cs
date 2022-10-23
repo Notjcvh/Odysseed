@@ -14,13 +14,22 @@ public class SpecialEnemy : MonoBehaviour
     public float aggroRange;
     private float distanceFromPlayer;
 
+    public bool exploded;
+
     public float idleDelay;
     public Transform currentWaypoint;
     public Transform[] patrolPoints;
 
     private void Awake()
     {
-        currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        if (patrolPoints.Length != 0)
+        {
+            currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        }
+        else
+        {
+            currentWaypoint = this.transform;
+        }
         navMeshAge = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         StartCoroutine(FindRandomWaypoint());
@@ -33,6 +42,10 @@ public class SpecialEnemy : MonoBehaviour
         {
             transform.LookAt(player);
             navMeshAge.destination = player.position;
+            if(!exploded)
+            {
+                Explode();
+            }
         }
         else if(distanceFromPlayer < aggroRange)
         {
@@ -48,6 +61,12 @@ public class SpecialEnemy : MonoBehaviour
             navMeshAge.speed = 1;
         }
 
+    }
+
+    public void Explode()
+    {
+        Debug.Log("Exploded");
+        exploded = true;
     }
 
     IEnumerator FindRandomWaypoint()

@@ -12,18 +12,18 @@ public class NPC : MonoBehaviour
     private bool isTalking;
     private int dialoguePointer;
     public GameObject dialogue;
-    public TextMeshProUGUI myDialouge;
+    private TextMeshProUGUI myDialouge;
     public string[] dialogueList;
 
     public float distanceFromPlayer;
     public float talkRange;
-    public bool isFollowing;
+
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         isTalking = false;
-        
+        myDialouge = dialogue.GetComponentInChildren<TextMeshProUGUI>();
         playerController = player.GetComponent<PlayerMovement>();
     }
     void Update()

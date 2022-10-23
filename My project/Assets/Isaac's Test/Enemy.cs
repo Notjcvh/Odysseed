@@ -31,7 +31,14 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        if (patrolPoints.Length != 0)
+        {
+            currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        }
+        else
+        {
+            currentWaypoint = this.transform;
+        }
         navMeshAge = GetComponent<NavMeshAgent>();
         currentAttackPos = attackPoints[0];
         attackCooldown = attackSpeed;
