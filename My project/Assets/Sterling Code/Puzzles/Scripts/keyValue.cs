@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class keyValue : MonoBehaviour
 {
-    public Key keyScript;
+   /* public Key keyScript;
 
     public int value;
     public string matchingTriggerName;
@@ -16,7 +16,7 @@ public class keyValue : MonoBehaviour
     }
 
 
-
+    */
 }
 
 
