@@ -14,10 +14,6 @@ public class Trigger : MonoBehaviour
 
     public bool keyNoLongerOnTrigger = false;
 
-
-    private HashSet<GameObject> takenDamageFrom = new HashSet<GameObject>();
-
-
      int numberOfCorrectMatchesInPuzzle;
 
     private void Start()
@@ -37,7 +33,7 @@ public class Trigger : MonoBehaviour
 
             if (other.CompareTag(tags[1]))
             {
-                takenDamageFrom.Add(other.gameObject);
+                
                 CompareCollisionStrings(this.gameObject.name, other.name);
                
             }

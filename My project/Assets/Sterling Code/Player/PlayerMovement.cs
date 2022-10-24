@@ -7,7 +7,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")] 
     private CameraController cam;
     [SerializeField] private Rigidbody playerBody;
-  
+    
+    [SerializeField] private Transform camTarget;
+    [SerializeField] private Transform distanceToGround;
+
 
 
     public int movementPriority = 0;
@@ -59,10 +62,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         int movingHorizontal = hor != 0 ? 1 : 0;
-         int movingVertical = vert != 0 ? 1 : 0;
+        int movingVertical = vert != 0 ? 1 : 0;
 
-        if ((movingHorizontal > 0 || movingVertical > 0) && isRestricted == false)
+        if ( isRestricted == false && movementPriority == 0)
         {
+            if(IsGrounded())
+            {
+                print("Hello");
+            }
 
             if (IsGrounded() && Input.GetButtonDown("Jump"))
             {
@@ -100,9 +107,19 @@ public class PlayerMovement : MonoBehaviour
     }
    private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, rayLength, Ground);
+
+       return Physics.Raycast(camTarget.position,distanceToGround.position, rayLength, Ground);
+       
+       
     }
 
-  
+
+    private void OnDrawGizmos()
+    {
+
+        Gizmos.DrawLine(camTarget.position, distanceToGround.position);
+    }
+
+
 
 }

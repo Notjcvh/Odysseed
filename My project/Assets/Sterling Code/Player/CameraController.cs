@@ -20,10 +20,7 @@ public class CameraController : MonoBehaviour
 
     [Header("Distance")]
     [SerializeField] private float defeaultDistance;
-    [SerializeField] private float minDistance;
-    [SerializeField] private float maxDistance;
  
-
     [Header("Smooth/Sharp")]
    
     [SerializeField] private float rotationSharpness;
@@ -41,9 +38,7 @@ public class CameraController : MonoBehaviour
 
 
     [SerializeField] private float newMaxDistance;
-    private float targetHorizontalAngle;
-    [SerializeField] [Range(0, 360)] private float minHorizontalAngle;
-    [SerializeField] [Range(0, 360)] private float maxHorizontalAngle; 
+  
     public Vector3 CameraPlannerDirection { get => plannerDirection; }
 
 
@@ -54,7 +49,6 @@ public class CameraController : MonoBehaviour
         //Important
         plannerDirection = followObj.forward;
 
-        targetDistance = defeaultDistance;
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -72,6 +66,7 @@ public class CameraController : MonoBehaviour
         if (camPriority == 1) LedgeClimbingCam();
 
 
+
         
 
     }
@@ -84,7 +79,8 @@ public class CameraController : MonoBehaviour
 
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
-        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
+        targetDistance = defeaultDistance;
+        //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
         targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
@@ -100,7 +96,7 @@ public class CameraController : MonoBehaviour
         
         targetDistance = Mathf.Clamp(newMaxDistance, newMaxDistance, newMaxDistance);
       
-        targetHorizontalAngle = Mathf.Clamp(targetHorizontalAngle,minHorizontalAngle, maxHorizontalAngle);
+      //targetHorizontalAngle = Mathf.Clamp(targetHorizontalAngle,minHorizontalAngle, maxHorizontalAngle);
 
         targetPosition = (followObj.position) - (targetRotation * Vector3.forward) * targetDistance;
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
