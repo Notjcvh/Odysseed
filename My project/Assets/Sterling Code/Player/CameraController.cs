@@ -14,7 +14,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] [Range(-90, 90)] private float minVerticalAngle = -90;
     [SerializeField] [Range(-90, 90)] private float maxVerticalAngle = 90;
 
-   
+    [SerializeField] [Range(13, 90)] private float combatMinVerticalAngle = 13;
+    [SerializeField] [Range(13, 90)] private float combatMaxVerticalAngle = 90;
+
+
     [Header("Priority")]
     public int camPriority = 0;
 
@@ -61,13 +64,11 @@ public class CameraController : MonoBehaviour
            return;
 
         if (camPriority == 0)  MovementCam();
+        if (camPriority == 1) CombatCam();
 
+        if (camPriority == 2) LedgeClimbingCam();
 
-        if (camPriority == 1) LedgeClimbingCam();
-
-
-
-        
+        print(camPriority);
 
     }
 
@@ -85,15 +86,14 @@ public class CameraController : MonoBehaviour
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
         targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
         cam.transform.position = newPosition;
-        
+
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
-
     }
     public void LedgeClimbingCam()
     {
-        
+       /* 
         targetDistance = Mathf.Clamp(newMaxDistance, newMaxDistance, newMaxDistance);
       
       //targetHorizontalAngle = Mathf.Clamp(targetHorizontalAngle,minHorizontalAngle, maxHorizontalAngle);
@@ -117,4 +117,28 @@ public class CameraController : MonoBehaviour
             transform.rotation = targetRotation;
         */
     }
+
+    public void CombatCam()
+    {
+
+        float mouseX = Input.GetAxisRaw("Mouse X");
+        float mouseY = Input.GetAxisRaw("Mouse Y");
+
+        plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, combatMinVerticalAngle, combatMaxVerticalAngle);
+        targetDistance = defeaultDistance;
+        //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
+
+        newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
+        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
+        cam.transform.position = newPosition;
+
+        newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
+        targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
+        cam.transform.rotation = newRotation;
+
+
+
+    }
+
 }

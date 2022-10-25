@@ -33,7 +33,13 @@ public class CombatRoom : MonoBehaviour
 
         if (other.CompareTag(tags[0]))
         {
-            Debug.Log("Player has enetered the room, enter combat mode");
+            if(cam != null)
+            {
+                Debug.Log("Player has enetered the room, enter combat mode");
+
+                cam.camPriority = 1;
+            }
+           
         }
     }
 
@@ -44,6 +50,7 @@ public class CombatRoom : MonoBehaviour
         if (other.CompareTag(tags[0]))
         {
             Debug.Log("Player has exited the room, return to exploration mode");
+            cam.camPriority = 0;
         }
     }
 

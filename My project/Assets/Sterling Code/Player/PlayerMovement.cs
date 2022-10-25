@@ -29,15 +29,14 @@ public class PlayerMovement : MonoBehaviour
     public bool isRestricted = false;
   
 
-
     [Header("Jumping")]
 
     public LayerMask Ground;
-    [SerializeField] float verticalVelocity = 10;
-    [SerializeField] float rayLength;
+    [SerializeField] float verticalVelocity;
+    [SerializeField] float distanceToCheckForGround;
 
    
-    public Vector3 MovementVector { get => movementVector;  }
+    public Vector3 MovementVector { get => movementVector;}
 
     private void Awake()
     {
@@ -64,19 +63,11 @@ public class PlayerMovement : MonoBehaviour
         int movingHorizontal = hor != 0 ? 1 : 0;
         int movingVertical = vert != 0 ? 1 : 0;
 
-        if ( isRestricted == false && movementPriority == 0)
+        if (movementPriority == 0 )
         {
-            if(IsGrounded())
-            {
-                print("Hello");
-            }
-
-            if (IsGrounded() && Input.GetButtonDown("Jump"))
-            {
-
-                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
-
-            }
+            if(IsGrounded() && Input.GetButtonDown("Jump"))
+           
+                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);                     
             if (movementPriority == 0) MoveNow();
         }
         else
@@ -107,19 +98,8 @@ public class PlayerMovement : MonoBehaviour
     }
    private bool IsGrounded()
     {
-
-       return Physics.Raycast(camTarget.position,distanceToGround.position, rayLength, Ground);
-       
-       
+        Vector3 direction = new Vector3(0, -camTarget.position.y , 0);
+        RaycastHit hit;
+        return Physics.Raycast(camTarget.position, direction.normalized, out hit,distanceToCheckForGround, Ground);      
     }
-
-
-    private void OnDrawGizmos()
-    {
-
-        Gizmos.DrawLine(camTarget.position, distanceToGround.position);
-    }
-
-
-
 }
