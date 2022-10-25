@@ -74,7 +74,6 @@ public class Enemy : MonoBehaviour
             if(attackCooldown <= 0)
             {
                 attackHitbox.SetActive(true);
-                
                 attackLifetime = attackLife;
                 attackCooldown = attackSpeed;
             }
