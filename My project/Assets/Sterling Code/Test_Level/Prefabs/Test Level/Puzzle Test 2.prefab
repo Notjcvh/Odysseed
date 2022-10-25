@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26363053}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.01, y: -18.3, z: 0.89}
+  m_LocalPosition: {x: -3.5430236, y: -18.3, z: 0.8899998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -144,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1292432275}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.14, y: -16.8, z: -1.83}
+  m_LocalPosition: {x: -3.6730232, y: -16.799997, z: -1.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1269,7 +1269,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6238253411508594093}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -16.470482, z: 1.12}
+  m_LocalPosition: {x: 3.4669771, y: -16.470482, z: 1.1200002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1512,7 +1512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6238253412263412903}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -14.8, z: -1.99}
+  m_LocalPosition: {x: 3.4669771, y: -14.799998, z: -1.9900001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1610,6 +1610,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6238253412358058094}
   - component: {fileID: 6238253412358058081}
+  - component: {fileID: 869963459}
   m_Layer: 0
   m_Name: Trigger Holder
   m_TagString: Untagged
@@ -1625,7 +1626,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6238253412358058095}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 16.544191, y: 4.04, z: 4.82}
+  m_LocalPosition: {x: -0.2, y: 4.04, z: 4.82}
   m_LocalScale: {x: 4.8007793, y: 0.203926, z: 8.392207}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1653,8 +1654,24 @@ MonoBehaviour:
   doorAnim: {fileID: 0}
   whichPuzzle: {fileID: 11400000, guid: edd8b70d1c3ecca4e9d56b692060fc47, type: 2}
   trigger: {fileID: 0}
+  tags:
+  - Player
+  - Ally
   needMatchesToSolvePuzzle: 0
   totalvalue: 0
+--- !u!65 &869963459
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6238253412358058095}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6238253412659536989
 GameObject:
   m_ObjectHideFlags: 0

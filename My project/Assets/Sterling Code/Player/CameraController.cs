@@ -67,9 +67,6 @@ public class CameraController : MonoBehaviour
         if (camPriority == 1) CombatCam();
 
         if (camPriority == 2) LedgeClimbingCam();
-
-        print(camPriority);
-
     }
 
 
@@ -136,9 +133,6 @@ public class CameraController : MonoBehaviour
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
-
-
-
     }
 
 }

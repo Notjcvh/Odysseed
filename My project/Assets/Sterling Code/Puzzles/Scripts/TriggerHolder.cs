@@ -12,6 +12,7 @@ public class TriggerHolder : MonoBehaviour
     public PuzzleDataManager whichPuzzle;
     public Trigger trigger;
 
+    public string[] tags = { "Player", "Ally"};
 
     [Header("Animations")]
    
@@ -30,7 +31,7 @@ public class TriggerHolder : MonoBehaviour
         doorAnim = door.GetComponent<Animation>();
     }
 
-   public  void IsPuzzleComplete()
+    public  void IsPuzzleComplete()
    {
      if(Input.GetKey(KeyCode.Y))
         {
@@ -53,6 +54,8 @@ public class TriggerHolder : MonoBehaviour
         print(number);
         totalvalue += number;
     }
+
+
 
     // Might want to switch this to a coroutine that begins when the puzzle starts and ends when the puzzle is finished
 
