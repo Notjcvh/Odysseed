@@ -7,7 +7,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")] 
     private CameraController cam;
     [SerializeField] private Rigidbody playerBody;
-  
+    
+    [SerializeField] private Transform camTarget;
+    [SerializeField] private Transform distanceToGround;
+
 
 
     public int movementPriority = 0;
@@ -26,15 +29,14 @@ public class PlayerMovement : MonoBehaviour
     public bool isRestricted = false;
   
 
-
     [Header("Jumping")]
 
     public LayerMask Ground;
-    [SerializeField] float verticalVelocity = 10;
-    [SerializeField] float rayLength;
+    [SerializeField] float verticalVelocity;
+    [SerializeField] float distanceToCheckForGround;
 
    
-    public Vector3 MovementVector { get => movementVector;  }
+    public Vector3 MovementVector { get => movementVector;}
 
     private void Awake()
     {
@@ -59,17 +61,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         int movingHorizontal = hor != 0 ? 1 : 0;
-         int movingVertical = vert != 0 ? 1 : 0;
+        int movingVertical = vert != 0 ? 1 : 0;
 
-        if ((movingHorizontal > 0 || movingVertical > 0) && isRestricted == false)
+        if (movementPriority == 0 )
         {
-
-            if (IsGrounded() && Input.GetButtonDown("Jump"))
-            {
-
-                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);
-
-            }
+            if(IsGrounded() && Input.GetButtonDown("Jump"))
+           
+                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);                     
             if (movementPriority == 0) MoveNow();
         }
         else
@@ -100,9 +98,8 @@ public class PlayerMovement : MonoBehaviour
     }
    private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, rayLength, Ground);
+        Vector3 direction = new Vector3(0, -camTarget.position.y , 0);
+        RaycastHit hit;
+        return Physics.Raycast(camTarget.position, direction.normalized, out hit,distanceToCheckForGround, Ground);      
     }
-
-  
-
 }

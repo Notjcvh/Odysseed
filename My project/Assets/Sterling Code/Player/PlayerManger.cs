@@ -12,10 +12,8 @@ public class PlayerManger : MonoBehaviour
    
     int elementSwitchvalue = 0;
 
-    private void Start()
-    {
-        
-    }
+    
+    
 
  
 
