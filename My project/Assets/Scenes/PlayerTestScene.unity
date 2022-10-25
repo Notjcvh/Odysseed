@@ -162,6 +162,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7189a76d8ba5bd64d89f76204661a87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startTimeBetweenAttacks: 1
+  attackPosition: {fileID: 376657697}
+  whatIsHittable:
+    serializedVersion: 2
+    m_Bits: 0
+  attackRadius: 0.8
+--- !u!4 &376657697 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2783995615036915873, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
+  m_PrefabInstance: {fileID: 818060199}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &634399601 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4347908309887837004, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
@@ -710,7 +721,7 @@ MonoBehaviour:
   tags:
   - Player
   - Enemy
-  player: {fileID: 0}
+  player: {fileID: 114128822}
   cam: {fileID: 114128829}
   playerMovement: {fileID: 114128828}
 --- !u!1001 &6599227446802602984
@@ -771,6 +782,10 @@ PrefabInstance:
     - target: {fileID: 1586565347788462171, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
       propertyPath: m_Name
       value: Enemy_Sterling
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462171, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
