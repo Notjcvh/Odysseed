@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    public int movementPriority = 0;
+    public int movementPriority;
 
     [Header("Movement")]
 
@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
     private Quaternion targetRotation;
     [Range(1, -1)] private float hor;
     [Range(1, -1)] private float vert;
-    public bool isMoving = false;
+    public bool stopMovement = false;
+
     public bool isTalking = false;
     public bool isRestricted = false;
   
@@ -44,38 +45,43 @@ public class PlayerMovement : MonoBehaviour
         playerBody = GetComponentInChildren<Rigidbody>();
     }
 
-
     private void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         hor = horizontal;
         vert = vertical;
-        if(isTalking)
-        {
-            movementPriority = 1;
-        }
+
+
+        /*  if(isTalking)
+         {
+             movementPriority = 1;
+         }
+
         if (!isTalking)
-        {
-            movementPriority = 0;
-        }
+         {
+             movementPriority = 0;
+         }*/
 
         int movingHorizontal = hor != 0 ? 1 : 0;
         int movingVertical = vert != 0 ? 1 : 0;
 
-        if (movementPriority == 0 )
+        if (stopMovement == false)
         {
-            if(IsGrounded() && Input.GetButtonDown("Jump"))
-           
-                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);                     
-            if (movementPriority == 0) MoveNow();
+            MoveNow();
+            if (IsGrounded() && Input.GetButtonDown("Jump"))
+               playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);                     
+            
         }
-        else
-            return;
+        else if(stopMovement == true)
+        {
+            StopMoving();
+        }
+
     }
     private  void MoveNow()
     {
-        // if we have input that is either vertical or horizontal then is moving is true, stop roating 
+        // if we have input that is either vertical or horizontal then is moving is true 
 
         Vector3 movementVector = new Vector3(hor, 0, vert).normalized;
 
@@ -96,10 +102,16 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = targetRotation;
         }
     }
-   private bool IsGrounded()
+    private bool IsGrounded()
     {
         Vector3 direction = new Vector3(0, -camTarget.position.y , 0);
         RaycastHit hit;
         return Physics.Raycast(camTarget.position, direction.normalized, out hit,distanceToCheckForGround, Ground);      
+    }
+
+    private void StopMoving()
+    {
+       
+      
     }
 }

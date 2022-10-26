@@ -30,7 +30,8 @@ public class NPC : MonoBehaviour
     {
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
         dialogue.SetActive(isTalking);
-        playerController.isTalking = isTalking;
+        playerController.stopMovement = true;
+        //playerController.isTalking = isTalking;
         if (Input.GetKeyDown(KeyCode.E) && distanceFromPlayer < talkRange)
         {
             if (!isTalking)
