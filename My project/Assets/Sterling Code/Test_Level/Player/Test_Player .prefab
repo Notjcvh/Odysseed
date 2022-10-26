@@ -238,7 +238,7 @@ MonoBehaviour:
   distanceToGround: {fileID: 907359974}
   movementPriority: 0
   runSpeed: 10
-  isMoving: 0
+  stopMovement: 0
   isTalking: 0
   isRestricted: 0
   Ground:
@@ -336,12 +336,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7189a76d8ba5bd64d89f76204661a87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTimeBetweenAttacks: 1
+  playerMovement: {fileID: 4100166254625961860}
+  startTimerAtThisValue: 0.25
+  timeScalar: 40
   attackPosition: {fileID: 2783995615036915873}
   whatIsHittable:
     serializedVersion: 2
-    m_Bits: 0
-  attackRadius: 0.8
+    m_Bits: 128
+  attackRadius: 1
 --- !u!1 &4100166254705167441
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,50 +4,62 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-    private float timeBetweenAttacks;
-    public float startTimeBetweenAttacks;
+    public PlayerMovement playerMovement; 
+
+    private float timer;
+    public float startTimerAtThisValue;
+    public float timeScalar;
 
 
     public Transform attackPosition;
 
     public LayerMask whatIsHittable;
     public float attackRadius;
+    private bool isAttacking = false;
+
+    private void Start()
+    {
+        playerMovement = playerMovement.GetComponent<PlayerMovement>();
+    }
+
+
 
     // Update is called once per frame
     void Update()
     {
-
-
-        if (timeBetweenAttacks <= 0)
+        
+        if(isAttacking == false)
         {
-
             if (Input.GetKey(KeyCode.Mouse0))
             {
                 Debug.Log("Attack Button Pressed");
-                //  Collider[] enemiestoDamage = Physics.OverlapSphere(attackPosition.position, attackRange, whatIsHittable);
-                timeBetweenAttacks = startTimeBetweenAttacks;
-                print("Stop Movemnt");
+                isAttacking = true;
+                Collider[] enemiestoDamage = Physics.OverlapSphere(attackPosition.position, attackRadius, whatIsHittable);
+               // print("Stop Movemnt");
+                playerMovement.stopMovement = true;
 
             }
-           
+
         }
 
-        else if (timeBetweenAttacks > 0)
+        if(isAttacking)
         {
-            timeBetweenAttacks -= Time.deltaTime;
-            print("Wait");
-        }
-        else if (timeBetweenAttacks <= 0)
-            print("Can  Move");
-           
+            timer = startTimerAtThisValue;
+            timer -=  Time.deltaTime * timeScalar;
 
-       
-        print(timeBetweenAttacks);
+            if(timer <= 0)
+            {
+                
+
+                timer = 0;
+                isAttacking = false;
+                //Debug.Log("Can Move Now");
+                playerMovement.stopMovement = false;
+            }
+
+        }
+
+
 
 
     }
@@ -57,6 +69,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(attackPosition.position, attackRadius);
+        
     }
 
 }
