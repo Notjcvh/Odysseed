@@ -20,6 +20,8 @@ public class PlayerAttack : MonoBehaviour
     public float attackRadius;
     private bool isAttacking = false;
 
+    int damage = 1;
+
     public float knockbackStrength;
 
     private void Start()
@@ -64,32 +66,32 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider attackArea)
     {       
- 
-        Collider[] objIsHit = Physics.OverlapSphere(attackPosition.position, attackRadius, whatIsHittable);
-        for (int i = 0; i < objIsHit.Length; i++)
+        
+        if(whatIsHittable == (whatIsHittable| (1 << attackArea.transform.gameObject.layer)))
         {
-            Rigidbody obj = objIsHit[i].GetComponent<Rigidbody>();
-            print(objIsHit[i]);
-
-                if (obj != null)
-                {   
-                    
-                    //attack
-
-                    
-
-
-                    
-                    //if three hits 
-                    //collision point to obj
-                    Vector3 direction = (obj.transform.position - attackPosition.position).normalized;
-                    direction.y = 0;
-
-                    obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
-                    print("KnockBack");
-                }
-        }   
+            Rigidbody obj = attackArea.gameObject.GetComponent<Rigidbody>();
+            if (obj != null)
+            {
+                Vector3 direction = (obj.transform.position - attackPosition.position).normalized;
+                HitSomething(direction, obj);
+            }
+        }
     }
+
+    //Temporary
+    private void HitSomething(Vector3 direction, Rigidbody obj)
+    {
+        //timer here 
+        //if tag is enemy
+        direction.y = 0;
+        obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
+        print("KnockBack");
+
+        if (obj.tag == "Enemy")
+            obj.SendMessage("TakeDamage", damage);
+    }
+
+
 /*
     private void OnDrawGizmos()
     {

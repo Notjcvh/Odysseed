@@ -123,7 +123,7 @@ public class CameraController : MonoBehaviour
 
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, combatMinVerticalAngle, combatMaxVerticalAngle);
-        targetDistance = defeaultDistance;
+        targetDistance = 10;
         //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);

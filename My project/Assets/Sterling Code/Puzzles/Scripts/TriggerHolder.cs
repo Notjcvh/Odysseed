@@ -7,8 +7,11 @@ public class TriggerHolder : MonoBehaviour
 
     [Header("Refrencing")]
     public GameObject player;
-    public GameObject door;
-    public Animation doorAnim;
+
+    public Animator doorS = null;
+    
+    
+
     public PuzzleDataManager whichPuzzle;
     public Trigger trigger;
 
@@ -25,10 +28,7 @@ public class TriggerHolder : MonoBehaviour
     private void Start()
     {
         
-      needMatchesToSolvePuzzle = whichPuzzle.keywords.Length;
-      door = whichPuzzle.puzzle.transform.GetChild(0).gameObject;
-      door.SetActive(true);
-        doorAnim = door.GetComponent<Animation>();
+      needMatchesToSolvePuzzle = whichPuzzle.keywords.Length;   
     }
 
     public  void IsPuzzleComplete()
@@ -37,7 +37,7 @@ public class TriggerHolder : MonoBehaviour
         {
             if (needMatchesToSolvePuzzle == totalvalue)
             {
-                doorAnim.Play();
+                doorS.Play("Door Open ", 0, 0); 
 
             }
             else

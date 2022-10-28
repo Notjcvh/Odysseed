@@ -5,9 +5,19 @@ using UnityEngine;
 public class CombatRoom : MonoBehaviour
 {
     public string[] tags = { "Player", "Enemy" };
+    public Collider DoorCol;
+    public MeshRenderer DoorMesh;
+    public GameObject[] enemies = null;
+
+
+
+    
     [SerializeField] GameObject player;
     [SerializeField] CameraController cam;
     [SerializeField] PlayerMovement playerMovement;
+
+
+   public int lockNumber = 0;
 
      
 
@@ -18,12 +28,20 @@ public class CombatRoom : MonoBehaviour
         cam = player.GetComponent<CameraController>();
         playerMovement = player.GetComponent<PlayerMovement>();
 
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        enemies = GameObject.FindGameObjectsWithTag(tags[1]);
+        lockNumber = enemies.Length;
 
+
+        if(lockNumber == 0)
+        {
+            DoorCol.enabled = false;
+            DoorMesh.enabled = false;
+        }
     }
 
 
@@ -43,7 +61,6 @@ public class CombatRoom : MonoBehaviour
         }
     }
 
-
     private void OnTriggerExit(Collider other)
     {
        
@@ -52,6 +69,13 @@ public class CombatRoom : MonoBehaviour
             Debug.Log("Player has exited the room, return to exploration mode");
             cam.camPriority = 0;
         }
+
+
+        if (other.CompareTag(tags[1]))
+        {
+            lockNumber -= 1;
+        }
+
     }
 
 }

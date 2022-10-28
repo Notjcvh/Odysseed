@@ -26,14 +26,15 @@ public class PickUp : MonoBehaviour
 
 
     private void Pickup()
-    {     
+    { 
+  
       RaycastHit hit;
       if (Physics.Raycast(playerBody.transform.position, playerBody.transform.forward, out hit, 3, CanPickUp))
       {
            pickUpObject = hit.collider.gameObject;
            pickUpObject.GetComponent<Rigidbody>().useGravity = false;
            pickUpObject.transform.position = holdingPosition.position;
-           pickUpObject.transform.parent = GameObject.Find("HoldingDestination").transform;
+           pickUpObject.transform.parent = GameObject.Find(holdingPosition.gameObject.name).transform;
       }
     }
     private void Drop()
