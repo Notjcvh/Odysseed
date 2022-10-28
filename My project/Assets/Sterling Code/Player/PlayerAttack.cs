@@ -5,17 +5,18 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     public PlayerMovement playerMovement;
-
-
-    private float timer;
-    public float startTimerAtThisValue;
-    public float timeScalar;
-
+    public Collider attackArea;
 
     public Transform attackPosition;
     public Transform enmeyPosition;
 
     public LayerMask whatIsHittable;
+
+    private float timer;
+    public float startTimerAtThisValue;
+
+    public float timeScalar;
+
     public float attackRadius;
     private bool isAttacking = false;
 
@@ -24,18 +25,19 @@ public class PlayerAttack : MonoBehaviour
     private void Start()
     {
         playerMovement = playerMovement.GetComponent<PlayerMovement>();
+        attackArea.enabled = false;
+        
+        
     }
-
-
-
     // Update is called once per frame
     void Update()
     {
         if (isAttacking == false)
-        {
+        {           
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                Debug.Log("Step 1");
+                attackArea.enabled = true;
+                OnTriggerEnter(attackArea);
                 isAttacking = true;
                 playerMovement.stopMovement = true;
             }
@@ -51,37 +53,44 @@ public class PlayerAttack : MonoBehaviour
                 //Destroy Instance of the prefab
                 timer = 0;
                 isAttacking = false;
-                Debug.Log("Step three");
+                attackArea.enabled = false;
+                // Debug.Log("Step three");
                 //Debug.Log("Can Move Now");
                 playerMovement.stopMovement = false;
             }
-
         }
+        
     }
 
-
-    private void OnCollisionEnter(Collision collision)
-    {
-       
-            Collider[] objIsHit = Physics.OverlapSphere(attackPosition.position, attackRadius, whatIsHittable);
-            for (int i = 0; i < objIsHit.Length; i++)
-            {
-                Rigidbody obj = objIsHit[i].GetComponent<Rigidbody>();
+    private void OnTriggerEnter(Collider attackArea)
+    {       
+ 
+        Collider[] objIsHit = Physics.OverlapSphere(attackPosition.position, attackRadius, whatIsHittable);
+        for (int i = 0; i < objIsHit.Length; i++)
+        {
+            Rigidbody obj = objIsHit[i].GetComponent<Rigidbody>();
+            print(objIsHit[i]);
 
                 if (obj != null)
-                {
-                    Debug.Log("Step two");
+                {   
+                    
+                    //attack
+
+                    
+
+
+                    
+                    //if three hits 
                     //collision point to obj
-                    Vector3 direction = (attackPosition.position - collision.transform.position).normalized;
+                    Vector3 direction = (obj.transform.position - attackPosition.position).normalized;
                     direction.y = 0;
 
                     obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
                     print("KnockBack");
                 }
-            }
-        
+        }   
     }
-
+/*
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -90,6 +99,6 @@ public class PlayerAttack : MonoBehaviour
         Vector3 direction = enmeyPosition.position -attackPosition.position;
         Gizmos.DrawLine(attackPosition.position, direction.normalized + attackPosition.position);
         
-    }
+    }*/
 
 }
