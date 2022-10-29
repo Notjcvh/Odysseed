@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerAttack : MonoBehaviour
 {
-    public PlayerMovement playerMovement;
+
+     PlayerMovement playerMovement;
+    PlayerInput playerInput;
+
     public Collider attackArea;
 
     public Transform attackPosition;
@@ -14,37 +18,34 @@ public class PlayerAttack : MonoBehaviour
 
     private float timer;
     public float startTimerAtThisValue;
-
     public float timeScalar;
 
-    public float attackRadius;
     private bool isAttacking = false;
 
-    int damage = 1;
-
     public float knockbackStrength;
+    public int damage = 1;
 
-    private void Start()
+    private void Awake()
     {
-        playerMovement = playerMovement.GetComponent<PlayerMovement>();
-        attackArea.enabled = false;
-        
-        
+        playerMovement = GetComponent<PlayerMovement>();
+        playerInput = GetComponent<PlayerInput>();
+
+        attackArea.enabled = false;       
     }
     // Update is called once per frame
     void Update()
     {
         if (isAttacking == false)
         {           
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (playerInput.attack)
             {
+                Debug.Log("Player Attacked");
                 attackArea.enabled = true;
                 OnTriggerEnter(attackArea);
                 isAttacking = true;
-                playerMovement.stopMovement = true;
+                playerMovement.stopMovementEvent = true;
             }
         }
-
         if (isAttacking)
         {
             timer = startTimerAtThisValue;
@@ -56,17 +57,13 @@ public class PlayerAttack : MonoBehaviour
                 timer = 0;
                 isAttacking = false;
                 attackArea.enabled = false;
-                // Debug.Log("Step three");
-                //Debug.Log("Can Move Now");
-                playerMovement.stopMovement = false;
+                playerMovement.stopMovementEvent = false;
             }
         }
         
     }
-
     private void OnTriggerEnter(Collider attackArea)
     {       
-        
         if(whatIsHittable == (whatIsHittable| (1 << attackArea.transform.gameObject.layer)))
         {
             Rigidbody obj = attackArea.gameObject.GetComponent<Rigidbody>();
@@ -90,7 +87,6 @@ public class PlayerAttack : MonoBehaviour
         if (obj.tag == "Enemy")
             obj.SendMessage("TakeDamage", damage);
     }
-
 
 /*
     private void OnDrawGizmos()

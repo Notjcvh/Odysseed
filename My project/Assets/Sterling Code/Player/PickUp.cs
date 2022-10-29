@@ -2,32 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PickUp : MonoBehaviour
 {
+    private PlayerInput playerInput;
+
     public GameObject pickUpObject = null;
     public Transform holdingPosition;
     public Rigidbody playerBody;
     public LayerMask CanPickUp;
 
-    private void Update()
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse2))
-        {
-            Pickup();
-            
-        }
-
-        else if (Input.GetKeyUp(KeyCode.Mouse2))
-        {
-            Drop();
-        }
+        playerInput = GetComponent<PlayerInput>();
     }
 
-
-
+    private void Update()
+    {
+        if (playerInput.pickUp)
+            Pickup();
+        else if (playerInput.drop)       
+            Drop();
+    }
     private void Pickup()
     { 
-  
       RaycastHit hit;
       if (Physics.Raycast(playerBody.transform.position, playerBody.transform.forward, out hit, 3, CanPickUp))
       {

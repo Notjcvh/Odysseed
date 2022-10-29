@@ -132,7 +132,7 @@ public class LedgeGrabbing : MonoBehaviour
             if (rb.velocity.magnitude < moveToLedgeSpeed)
                 rb.AddForce(directionToLedge.normalized * moveToLedgeSpeed * 100f * Time.deltaTime);
                 player.isRestricted = true;
-                player.movementPriority = 1;
+              //  player.movementPriority = 1;
                 cam.camPriority = 1;
         }
 
@@ -152,7 +152,7 @@ public class LedgeGrabbing : MonoBehaviour
         holding = false;
         timeOnLedge = 0f;     
         player.isRestricted = false;
-        player.movementPriority = 0;
+      //  player.movementPriority = 0;
         cam.camPriority = 0;
         rb.useGravity = true;
     }

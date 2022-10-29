@@ -2,57 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")] 
     private CameraController cam;
+    private PlayerInput playerInput;
     [SerializeField] private Rigidbody playerBody;
-    
     [SerializeField] private Transform camTarget;
     [SerializeField] private Transform distanceToGround;
 
-
-
-    public int movementPriority;
-
     [Header("Movement")]
-
-    private Vector3 movementVector;    
-    [SerializeField] private float runSpeed;
-    private float targetSpeed;
     private Vector3 newVelocity;
+    private Vector3 movementVector;
     private Quaternion targetRotation;
-    [Range(1, -1)] private float hor;
-    [Range(1, -1)] private float vert;
-    public bool stopMovement = false;
 
+    private float targetSpeed;
+
+    public float runSpeed;
+    public bool stopMovementEvent = false;
     public bool isTalking = false;
     public bool isRestricted = false;
   
-
     [Header("Jumping")]
-
     public LayerMask Ground;
-    [SerializeField] float verticalVelocity;
-    [SerializeField] float distanceToCheckForGround;
-
-   
-    public Vector3 MovementVector { get => movementVector;}
+    public float verticalVelocity;
+    public float distanceToCheckForGround;
 
     private void Awake()
     {
         cam = GetComponent<CameraController>();
+        playerInput = GetComponent<PlayerInput>();
         playerBody = GetComponentInChildren<Rigidbody>();
     }
 
     private void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        hor = horizontal;
-        vert = vertical;
-
-
         /*  if(isTalking)
          {
              movementPriority = 1;
@@ -63,17 +49,13 @@ public class PlayerMovement : MonoBehaviour
              movementPriority = 0;
          }*/
 
-        int movingHorizontal = hor != 0 ? 1 : 0;
-        int movingVertical = vert != 0 ? 1 : 0;
-
-        if (stopMovement == false)
+        if (stopMovementEvent == false)
         {
             MoveNow();
-            if (IsGrounded() && Input.GetButtonDown("Jump"))
+            if (IsGrounded() && Jump())
                playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);                     
-            
         }
-        else if(stopMovement == true)
+        else if(stopMovementEvent == true)
         {
             StopMoving();
         }
@@ -82,20 +64,15 @@ public class PlayerMovement : MonoBehaviour
     private  void MoveNow()
     {
         // if we have input that is either vertical or horizontal then is moving is true 
-
-        Vector3 movementVector = new Vector3(hor, 0, vert).normalized;
-
+        movementVector = playerInput.movementInput;
         Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
         Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
         //Aligning movement in relation to the camera
         movementVector = cameraPlannerRotation * movementVector;
         // checking for inputs from Player
         targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
-
         newVelocity = movementVector * targetSpeed;
-
         transform.Translate(newVelocity * Time.deltaTime, Space.World);
-
         if (targetSpeed != 0)
         {
             targetRotation = Quaternion.LookRotation(movementVector);
@@ -108,10 +85,10 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         return Physics.Raycast(camTarget.position, direction.normalized, out hit,distanceToCheckForGround, Ground);      
     }
-
-    private void StopMoving()
+    private bool Jump()
     {
-       
-      
+        return playerInput.jumpInput;
     }
+    private void StopMoving()
+    {    }
 }
