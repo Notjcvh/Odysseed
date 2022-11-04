@@ -14,7 +14,7 @@ public class PlayerManger : MonoBehaviour
     [Header("Hearts Images")]
     public Image[] hearts;
     public Sprite fullHeart;
-    public Sprite emptyHeart; 
+    public Sprite emptyHeart;
 
     private void Update()
     {

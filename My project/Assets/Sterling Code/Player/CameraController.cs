@@ -91,9 +91,8 @@ public class CameraController : MonoBehaviour
         //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
 
         float rate = Smooth(cam.transform.position.y, targetPosition.y, smoothing, Time.deltaTime);
-        print(rate);
 
-        newPosition = Vector3.Lerp(cam.transform.position, targetPosition,  rotationSharpness * rate);
+        newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
        
 
 

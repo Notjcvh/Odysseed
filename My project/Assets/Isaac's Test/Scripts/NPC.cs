@@ -15,6 +15,8 @@ public class NPC : MonoBehaviour
     private TextMeshProUGUI myDialouge;
     public string[] dialogueList;
 
+    public bool person;
+    public bool puzzleCompleted;
     public float distanceFromPlayer;
     public float talkRange;
 
@@ -30,32 +32,36 @@ public class NPC : MonoBehaviour
     {
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
         dialogue.SetActive(isTalking);
-        playerController.stopMovementEvent = true;
         //playerController.isTalking = isTalking;
-        if (Input.GetKeyDown(KeyCode.E) && distanceFromPlayer < talkRange)
+        if (Input.GetKeyDown(KeyCode.T) && distanceFromPlayer < talkRange && !person)
         {
             if (!isTalking)
             {
                 StartDialouge();
             }
-            else
+
+        }
+        if (puzzleCompleted && distanceFromPlayer < talkRange)
+        {
+            if (!isTalking)
             {
-                dialoguePointer++;
-                if (dialoguePointer == dialogueList.Length)
-                {
-                    EndDialouge();
-                }
-                myDialouge.text = dialogueList[dialoguePointer];
+                StartDialouge();
             }
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(isTalking && Input.GetKeyDown(KeyCode.T))
         {
-            EndDialouge();
+            dialoguePointer++;
+            if (dialoguePointer == dialogueList.Length)
+            {
+                EndDialouge();
+            }
+            myDialouge.text = dialogueList[dialoguePointer];
         }
     }
     public void StartDialouge()
     {
         isTalking = true;
+        dialoguePointer = 0;
     }
     public void EndDialouge()
     {

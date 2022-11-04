@@ -22,8 +22,11 @@ public class PlayerAttack : MonoBehaviour
 
     private bool isAttacking = false;
 
+    public float knockbackTimer;
     public float knockbackStrength;
     public int damage = 1;
+    private Vector3 direction;
+    private Rigidbody obj;
 
     private void Awake()
     {
@@ -60,16 +63,20 @@ public class PlayerAttack : MonoBehaviour
                 playerMovement.stopMovementEvent = false;
             }
         }
-        
+        if(obj != null)
+        {
+            direction = (obj.transform.position - attackPosition.position).normalized;
+
+        }
     }
     private void OnTriggerEnter(Collider attackArea)
     {       
         if(whatIsHittable == (whatIsHittable| (1 << attackArea.transform.gameObject.layer)))
         {
-            Rigidbody obj = attackArea.gameObject.GetComponent<Rigidbody>();
+            obj = attackArea.gameObject.GetComponent<Rigidbody>();
             if (obj != null)
             {
-                Vector3 direction = (obj.transform.position - attackPosition.position).normalized;
+                
                 HitSomething(direction, obj);
             }
         }
@@ -80,14 +87,19 @@ public class PlayerAttack : MonoBehaviour
     {
         //timer here 
         //if tag is enemy
-        direction.y = 0;
-        obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
-        print("KnockBack");
+
+        Invoke("AddKnockback", knockbackTimer);
 
         if (obj.tag == "Enemy")
             obj.SendMessage("TakeDamage", damage);
     }
 
+    private void AddKnockback()
+    {
+        direction.y = 0;
+        obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
+        print("KnockBack");
+    }
 /*
     private void OnDrawGizmos()
     {

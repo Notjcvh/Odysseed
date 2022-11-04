@@ -8,7 +8,7 @@ public class TriggerHolder : MonoBehaviour
     [Header("Refrencing")]
     public GameObject player;
     public PuzzleDataManager whichPuzzle;
-   
+    public NPC puzzleDialouge;
 
     public string[] tags = { "Player", "Ally"};
 
@@ -32,7 +32,8 @@ public class TriggerHolder : MonoBehaviour
      {
             if (needMatchesToSolvePuzzle == totalvalue)
             {
-                door.Play("Door Open", 0, 0); 
+                puzzleDialouge.puzzleCompleted = true;
+                //door.Play("Door Open", 0, 0); 
 
             }
             else
