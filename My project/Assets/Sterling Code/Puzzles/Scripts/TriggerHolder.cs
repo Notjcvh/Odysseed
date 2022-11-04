@@ -7,37 +7,32 @@ public class TriggerHolder : MonoBehaviour
 
     [Header("Refrencing")]
     public GameObject player;
-
-    public Animator doorS = null;
-    
-    
-
     public PuzzleDataManager whichPuzzle;
-    public Trigger trigger;
+   
 
     public string[] tags = { "Player", "Ally"};
 
     [Header("Animations")]
-   
-    
-  
+
+    public Animator door = null;
+    public GameObject doorAniamtionTrigger;
 
     [Header("Variables")]
     public int needMatchesToSolvePuzzle;
     public int totalvalue;
     private void Start()
     {
-        
-      needMatchesToSolvePuzzle = whichPuzzle.keywords.Length;   
+        needMatchesToSolvePuzzle = whichPuzzle.keywords.Length;
+        door = doorAniamtionTrigger.GetComponent<Animator>();
     }
 
-    public  void IsPuzzleComplete()
+    public void IsPuzzleComplete()
    {
      if(Input.GetKey(KeyCode.Y))
-        {
+     {
             if (needMatchesToSolvePuzzle == totalvalue)
             {
-                doorS.Play("Door Open ", 0, 0); 
+                door.Play("Door Open", 0, 0); 
 
             }
             else
