@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HurtBox : MonoBehaviour
 {
-    int health = 10;
+    int health = 2;
 
 
     void TakeDamage(int number)

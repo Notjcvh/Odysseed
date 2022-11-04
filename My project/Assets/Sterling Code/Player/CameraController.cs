@@ -39,6 +39,10 @@ public class CameraController : MonoBehaviour
     private Vector3 newPosition;
     private Quaternion newRotation;
 
+    public float camRayLength = 5;
+    public LayerMask groundMask;
+    public GameObject camClippingSphere;
+
 
     [SerializeField] private float newMaxDistance;
   
@@ -67,7 +71,11 @@ public class CameraController : MonoBehaviour
         if (camPriority == 1) CombatCam();
 
         if (camPriority == 2) LedgeClimbingCam();
+
+        ScaleClipSphere();
+
     }
+
 
 
     public void MovementCam()
@@ -133,6 +141,33 @@ public class CameraController : MonoBehaviour
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
+
+        camRayLength = 9;
+    }
+
+    void ScaleClipSphere()
+    {
+        RaycastHit hit;
+        Vector3 objectScale = camClippingSphere.transform.localScale;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, camRayLength, groundMask))
+        {
+
+            if (hit.collider.gameObject.tag == "Wall")
+            {
+                objectScale.Set(6, 6, 6);
+                camClippingSphere.transform.localScale = objectScale;
+                Debug.Log("Hello");
+            }
+            
+
+        }
+        else
+        {
+            objectScale.Set(0, 0, 0);
+            camClippingSphere.transform.localScale = objectScale;
+            Debug.Log("Goodbye");
+        }
+
     }
 
 }
