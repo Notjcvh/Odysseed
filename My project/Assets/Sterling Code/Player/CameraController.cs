@@ -39,6 +39,8 @@ public class CameraController : MonoBehaviour
     private Vector3 newPosition;
     private Quaternion newRotation;
 
+    [Range(0, 1)] float smoothing = 0.5f;
+
     public float camRayLength = 5;
     public LayerMask groundMask;
     public GameObject camClippingSphere;
@@ -88,13 +90,20 @@ public class CameraController : MonoBehaviour
         targetDistance = defeaultDistance;
         //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
 
-        newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
+        float rate = Smooth(cam.transform.position.y, targetPosition.y, smoothing, Time.deltaTime);
+        print(rate);
+
+        newPosition = Vector3.Lerp(cam.transform.position, targetPosition,  rotationSharpness * rate);
+       
+
+
         targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
         cam.transform.position = newPosition;
 
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
+
     }
     public void LedgeClimbingCam()
     {
@@ -143,6 +152,11 @@ public class CameraController : MonoBehaviour
         cam.transform.rotation = newRotation;
 
         camRayLength = 9;
+    }
+
+    public static float Smooth(float source, float target, float rate, float dt)
+    {
+        return Mathf.Lerp(source, target, 1 - Mathf.Pow(rate, dt));
     }
 
     void ScaleClipSphere()

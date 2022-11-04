@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
         {
             MoveNow();
             if (IsGrounded() && Jump())
-               playerBody.AddForce(Vector3.up * verticalVelocity, ForceMode.Impulse);                     
+                playerBody.velocity = Vector3.up * verticalVelocity ;                  
         }
         else if(stopMovementEvent == true)
         {
