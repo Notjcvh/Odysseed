@@ -154,7 +154,7 @@ public class CameraController : MonoBehaviour
 
             if (hit.collider.gameObject.tag == "Wall")
             {
-                objectScale.Set(4, 4, 4);
+                objectScale.Set(6, 6, 6);
                 camClippingSphere.transform.localScale = objectScale;
                 Debug.Log("Hello");
             }
