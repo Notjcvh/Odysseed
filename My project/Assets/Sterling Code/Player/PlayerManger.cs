@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManger : MonoBehaviour
 {
+    //Handling Functions related to the player States 
+    [Header("Refrences")]
     public PlayerStats stats;
-
     public ElementType element;
 
-    
-
+    //Heart Sprites
+    [Header("Hearts Images")]
+    public Image[] hearts;
+    public Sprite fullHeart;
+    public Sprite emptyHeart; 
 
     private void Update()
     {
@@ -19,6 +24,24 @@ public class PlayerManger : MonoBehaviour
             WeaponStateForward(element);
         }
 
+        // Making sure our health equals the number of hearts 
+        if(stats.health > stats.numberOfHearts)
+            stats.health = stats.numberOfHearts;
+
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            //Handling visually representing players health in realtion to number of hearts  
+            if (i < stats.health)
+                hearts[i].sprite = fullHeart;
+            else
+                hearts[i].sprite = emptyHeart;
+
+            //This is for creating our final health bar, change number of hearts to make amount visible in game 
+            if (i < stats.numberOfHearts)
+                hearts[i].enabled = true;
+            else
+                hearts[i].enabled = false;
+        }
     }
 
     void WeaponStateForward(ElementType state)

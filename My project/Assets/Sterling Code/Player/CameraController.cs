@@ -142,7 +142,7 @@ public class CameraController : MonoBehaviour
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
 
-        camRayLength = 5;
+        camRayLength = 9;
     }
 
     void ScaleClipSphere()
