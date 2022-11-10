@@ -7,6 +7,8 @@ public class EnemyStats: MonoBehaviour
 {
     public int maxHealth = 100;
     public int currentHealth;
+    public Material myMaterial;
+    
 
 
     public event System.Action<float> OnHealthPercentChange = delegate { };
@@ -14,6 +16,7 @@ public class EnemyStats: MonoBehaviour
     private void OnEnable()
     {
         currentHealth = maxHealth;
+       
     }
 
     public void ModifiyHealth(int amount)
@@ -29,9 +32,22 @@ public class EnemyStats: MonoBehaviour
         // the start
        if (Input.GetKeyDown(KeyCode.P))
         {
-            ModifiyHealth(-10);
+            ModifiyHealth(-20);
+            StartCoroutine(VisualIndicator(Color.white));
         }
     }
+
+
+    //Damage visual Indicator 
+    private  IEnumerator VisualIndicator(Color color)
+    {
+        myMaterial.color = color;
+        yield return new WaitForSeconds(0.15f);
+        myMaterial.color = Color.red;
+
+    }
+
+
 
 
     /*
