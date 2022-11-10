@@ -169,7 +169,7 @@ public class CameraController : MonoBehaviour
             {
                 objectScale.Set(6, 6, 6);
                 camClippingSphere.transform.localScale = objectScale;
-                Debug.Log("Hello");
+               
             }
             
 
@@ -178,7 +178,7 @@ public class CameraController : MonoBehaviour
         {
             objectScale.Set(0, 0, 0);
             camClippingSphere.transform.localScale = objectScale;
-            Debug.Log("Goodbye");
+           
         }
 
     }

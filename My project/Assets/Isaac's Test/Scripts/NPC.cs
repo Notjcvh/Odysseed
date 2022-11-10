@@ -39,7 +39,6 @@ public class NPC : MonoBehaviour
             {
                 StartDialouge();
             }
-
         }
         if (puzzleCompleted && distanceFromPlayer < talkRange)
         {

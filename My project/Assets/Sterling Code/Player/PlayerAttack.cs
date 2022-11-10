@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
 
-     PlayerMovement playerMovement;
+    PlayerMovement playerMovement;
     PlayerInput playerInput;
 
     public Collider attackArea;
@@ -70,13 +70,13 @@ public class PlayerAttack : MonoBehaviour
         }
     }
     private void OnTriggerEnter(Collider attackArea)
-    {       
-        if(whatIsHittable == (whatIsHittable| (1 << attackArea.transform.gameObject.layer)))
+    {
+       
+        if(whatIsHittable == (whatIsHittable | (1 << attackArea.transform.gameObject.layer)))
         {
             obj = attackArea.gameObject.GetComponent<Rigidbody>();
             if (obj != null)
             {
-                
                 HitSomething(direction, obj);
             }
         }
@@ -87,7 +87,6 @@ public class PlayerAttack : MonoBehaviour
     {
         //timer here 
         //if tag is enemy
-
         Invoke("AddKnockback", knockbackTimer);
 
         if (obj.tag == "Enemy")
