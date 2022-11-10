@@ -79,6 +79,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 HitSomething(direction, obj);
             }
+            else
+                return;
         }
     }
 
