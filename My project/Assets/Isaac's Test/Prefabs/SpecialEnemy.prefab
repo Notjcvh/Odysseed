@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 7294921534545110803}
   m_Layer: 0
   m_Name: SpecialEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -204,7 +204,10 @@ MonoBehaviour:
   exploded: 0
   idleDelay: 1
   currentWaypoint: {fileID: 0}
-  patrolPoints: []
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!136 &7294921534545110800
 CapsuleCollider:
   m_ObjectHideFlags: 0
