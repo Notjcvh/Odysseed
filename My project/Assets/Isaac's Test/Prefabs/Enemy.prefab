@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4805589847024103404}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   maxHealth: 3
   currentHealth: 0
   attackRange: 2
-  attackSpeed: 1
+  attackSpeed: 0.5
   attackLife: 0.5
   currentAttackPos: {fileID: 0}
   attackPoints:
@@ -178,7 +178,10 @@ MonoBehaviour:
   attackHitbox: {fileID: 4805589846665646856}
   idleDelay: 0.5
   currentWaypoint: {fileID: 0}
-  patrolPoints: []
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!136 &4805589847024103407
 CapsuleCollider:
   m_ObjectHideFlags: 0
