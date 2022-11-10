@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
 
     public int maxHealth = 3;
     public int currentHealth;
-
+    public float stunDuration = 1f;
     public float attackRange;
     public float attackSpeed;
     public float attackLife;
@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
         attackCooldown = attackSpeed;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         attackPoints = GameObject.FindGameObjectsWithTag("AttackPoints");
-        currentAttackPos = attackPoints[0].GetComponent<Transform>();
+        currentAttackPos = attackPoints[0].GetComponent<Transform>();   
         StartCoroutine(FindRandomWaypoint());
         StartCoroutine(FindAttackWaypoint());
     }
@@ -101,9 +101,21 @@ public class Enemy : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
-    public void Stun(float stunDuration)
+
+    public void TakeDamage(int damage)
     {
-        Debug.Log("Stun for" + stunDuration);
+        this.currentHealth -= damage;
+    }
+
+    public void DisableAI()
+    {
+        this.navMeshAge.enabled = false;
+        Invoke("EnableAI", stunDuration);
+    }
+
+    public void EnableAI()
+    {
+        this.navMeshAge.enabled = true;
     }
     IEnumerator FindRandomWaypoint()
     {

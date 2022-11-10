@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 357541052}
   m_Layer: 0
   m_Name: Patrol (3)
-  m_TagString: Untagged
+  m_TagString: AttackPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 669089774}
   m_Layer: 0
   m_Name: Patrol
-  m_TagString: Untagged
+  m_TagString: AttackPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 1001841975}
   m_Layer: 0
   m_Name: Patrol (1)
-  m_TagString: Untagged
+  m_TagString: AttackPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 1713242104}
   m_Layer: 0
   m_Name: Patrol (2)
-  m_TagString: Untagged
+  m_TagString: AttackPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -533,6 +533,7 @@ MonoBehaviour:
     m_Bits: 128
   startTimerAtThisValue: 0.25
   timeScalar: 40
+  knockbackTimer: 0
   knockbackStrength: 3
   damage: 1
 --- !u!1 &4100166254705167441

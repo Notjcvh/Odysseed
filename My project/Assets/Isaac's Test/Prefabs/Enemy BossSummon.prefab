@@ -71,12 +71,14 @@ GameObject:
   - component: {fileID: 4805589847024103400}
   - component: {fileID: 4805589847024103401}
   - component: {fileID: 4805589847024103406}
+  - component: {fileID: 5539790709947064243}
   - component: {fileID: 4805589847024103405}
   - component: {fileID: 4805589847024103407}
   - component: {fileID: 4805589847024103404}
-  - component: {fileID: 3830625602090113758}
+  - component: {fileID: 1575024025}
+  - component: {fileID: 4489760557420859330}
   m_Layer: 7
-  m_Name: Enemy
+  m_Name: Enemy BossSummon
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,6 +151,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5539790709947064243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805589847024103410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879deb36f7210b44c8eb8bff974b5dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nma: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &4805589847024103405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,8 +192,8 @@ MonoBehaviour:
   - {fileID: 0}
   attackPosChangeTimer: 0.5
   attackPointer: 0
-  deaggroRange: 10
-  aggroRange: 5
+  deaggroRange: 1000
+  aggroRange: 1000
   attackHitbox: {fileID: 4805589846665646856}
   idleDelay: 0.5
   currentWaypoint: {fileID: 0}
@@ -218,7 +234,27 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
---- !u!54 &3830625602090113758
+--- !u!95 &1575024025
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805589847024103410}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 33550c91256ea94409006758cf80ae63, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!54 &4489760557420859330
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

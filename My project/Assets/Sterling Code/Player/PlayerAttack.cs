@@ -90,7 +90,10 @@ public class PlayerAttack : MonoBehaviour
         Invoke("AddKnockback", knockbackTimer);
 
         if (obj.tag == "Enemy")
+        {
+            obj.SendMessage("DisableAI");
             obj.SendMessage("TakeDamage", damage);
+        }
     }
 
     private void AddKnockback()
