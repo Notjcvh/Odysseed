@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform camTarget;
     [SerializeField] private Transform distanceToGround;
 
+    public VectorValue startingPosition;
+
     [Header("Movement")]
     private Vector3 newVelocity;
     private Vector3 movementVector;
@@ -30,11 +32,16 @@ public class PlayerMovement : MonoBehaviour
     public float verticalVelocity;
     public float distanceToCheckForGround;
 
+    private void Start()
+    {
+        //for loading up the scene
+        transform.position = startingPosition.initialStartValue;
+    }
     private void Awake()
     {
         cam = GetComponent<CameraController>();
         playerInput = GetComponent<PlayerInput>();
-        playerBody = GetComponentInChildren<Rigidbody>();
+        playerBody = GetComponentInChildren<Rigidbody>(); 
     }
 
     private void Update()

@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
-   
-    void  Update()
+
+    private void Start()
     {
-        if(Input.GetKeyDown(KeyCode.V))
-            DamagePopUp.Create(transform.position, 200);
-            
+        //Instantiate(GameAssets.i.playerUI);
     }
 
 }

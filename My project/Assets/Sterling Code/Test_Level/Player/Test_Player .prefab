@@ -347,8 +347,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4100166254625961982}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.02, y: 1.9, z: 0.08}
+  m_LocalRotation: {x: -0, y: -0, z: -0.004926152, w: 0.9999879}
+  m_LocalPosition: {x: 0, y: 2.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -360,7 +360,7 @@ Transform:
   - {fileID: 1384111319}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.564}
 --- !u!114 &4100166254625961862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,6 +486,7 @@ MonoBehaviour:
   playerBody: {fileID: 247802868}
   camTarget: {fileID: 4100166255457262375}
   distanceToGround: {fileID: 907359974}
+  startingPosition: {fileID: 0}
   runSpeed: 10
   stopMovementEvent: 0
   isTalking: 0
@@ -531,11 +532,11 @@ MonoBehaviour:
   whatIsHittable:
     serializedVersion: 2
     m_Bits: 128
-  startTimerAtThisValue: 0.25
+  startTimerAtThisValue: 0.3
   timeScalar: 40
-  knockbackTimer: 0
-  knockbackStrength: 3
-  damage: 1
+  knockbackTimer: 1
+  knockbackStrength: 7
+  damage: -10
 --- !u!1 &4100166254705167441
 GameObject:
   m_ObjectHideFlags: 0

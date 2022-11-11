@@ -96,11 +96,10 @@ public class PlayerAttack : MonoBehaviour
         {
             DamagePopUp.Create(obj.transform.position, damage);
             //obj.SendMessage("DisableAI");
+
             obj.gameObject.GetComponent<EnemyStats>().ModifiyHealth(damage);
             obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-            //  obj.SendMessage("ModifyHealth", damage, SendMessageOptions.DontRequireReceiver);
-            //obj.GetComponent<EnemyStats>().ModifiyHealth(damage);
-
+           
         }
     }
 
