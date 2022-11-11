@@ -314,6 +314,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &253125032 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1586565347788462171, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+  m_PrefabInstance: {fileID: 1726461790}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &253125033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253125032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133acceaca804254386041f91644a351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 'Grunt '
+  maxHealth: 50
+  currentHealth: 0
+  myMaterial: {fileID: 2100000, guid: 16d88eec6721c854195d32a49496dd1c, type: 2}
 --- !u!1 &526214212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1538,6 +1559,64 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594582176}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1726461790
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -45.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462145, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586565347788462171, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
+      propertyPath: m_Name
+      value: Enemy_Sterling (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
 --- !u!222 &1888042267
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2835,8 +2914,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6090167372890116968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.3, y: 5.95, z: -45.024}
-  m_LocalScale: {x: 2.644, y: 2.644, z: 2.644}
+  m_LocalPosition: {x: -3.3, y: 6.547, z: -34.001}
+  m_LocalScale: {x: 1.7325604, y: 1.7325604, z: 1.7325604}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6090167371444095885}
