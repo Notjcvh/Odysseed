@@ -95,11 +95,11 @@ public class PlayerAttack : MonoBehaviour
         if (obj.tag == "Enemy")
         {
             DamagePopUp.Create(obj.transform.position, damage);
-            //obj.SendMessage("DisableAI");
-
-            obj.gameObject.GetComponent<EnemyStats>().ModifiyHealth(damage);
+            obj.SendMessage("DisableAI");
+            obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage);
             obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-           
+            obj.SendMessage("TakeDamage", damage * -1 / 10);
+
         }
     }
 

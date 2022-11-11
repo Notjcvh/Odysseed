@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Transform player;
+    [SerializeField] private GameObject player;
     private NavMeshAgent navMeshAge;
 
     public int maxHealth = 3;
@@ -32,6 +32,9 @@ public class Enemy : MonoBehaviour
     public Transform currentWaypoint;
     public Transform[] patrolPoints;
 
+    public event System.Action<float> OnHealthPercentChange = delegate { };
+
+
     private void Awake()
     {
         if (patrolPoints.Length != 0)
@@ -45,7 +48,7 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
         navMeshAge = GetComponent<NavMeshAgent>();
         attackCooldown = attackSpeed;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        player = GameObject.FindGameObjectWithTag("Player");
         attackPoints = GameObject.FindGameObjectsWithTag("AttackPoints");
         currentAttackPos = attackPoints[0].GetComponent<Transform>();   
         StartCoroutine(FindRandomWaypoint());
@@ -54,7 +57,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
+        distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
         attackCooldown -= Time.deltaTime;
         attackLifetime -= Time.deltaTime;
         if (attackPointer == 5)
@@ -69,7 +72,7 @@ public class Enemy : MonoBehaviour
         {
             //if the enemy is in attack range do this
             navMeshAge.speed = 3;
-            transform.LookAt(player);
+            transform.LookAt(player.transform);
             navMeshAge.destination = currentAttackPos.position;
             if(attackCooldown <= 0)
             {
@@ -96,6 +99,13 @@ public class Enemy : MonoBehaviour
             Death();
         }
     }
+    public void ModifiyHealth(int amount)
+    {
+        currentHealth += amount;
+        float currentHealthPercent = (float)currentHealth / (float)maxHealth;
+        OnHealthPercentChange(currentHealthPercent);
+    }
+
 
     public void Death()
     {
@@ -110,7 +120,7 @@ public class Enemy : MonoBehaviour
     public void DisableAI()
     {
         this.navMeshAge.enabled = false;
-        Invoke("EnableAI", stunDuration);
+        Invoke("EnableAI", player.GetComponent<PlayerAttack>().knockbackTimer + stunDuration);
     }
 
     public void EnableAI()

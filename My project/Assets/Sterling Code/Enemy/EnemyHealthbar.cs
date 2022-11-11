@@ -14,7 +14,7 @@ public class EnemyHealthbar : MonoBehaviour
 
     private void Awake()
     {
-        GetComponentInParent<EnemyStats>().OnHealthPercentChange += HandleHealthChange;
+        GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
     }
     
 

@@ -10,24 +10,20 @@ public class EnemyStats : MonoBehaviour
     public Material myMaterial;
 
 
-    public event System.Action<float> OnHealthPercentChange = delegate { };
+    //public event System.Action<float> OnHealthPercentChange = delegate { };
 
     private void OnEnable()
     {
         currentHealth = maxHealth;
     }
-
+    /*
     public void ModifiyHealth(int amount)
     {
         currentHealth += amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         OnHealthPercentChange(currentHealthPercent);
     }
-
-
-
-
-
+    */
 
     public void VisualizeDamage(Rigidbody obj)
     {
