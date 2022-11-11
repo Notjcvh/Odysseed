@@ -7,6 +7,7 @@ public class EnemyHealthbar : MonoBehaviour
 
     public Image foregroundImage;
     public Image middlegroundImage;
+    public EnemyStats enemy;
 
     public float updateSpeedInSeconds1 = 0.2f;
     public float updateSpeedInSeconds2 = 0.5f;
@@ -15,6 +16,7 @@ public class EnemyHealthbar : MonoBehaviour
     {
         GetComponentInParent<EnemyStats>().OnHealthPercentChange += HandleHealthChange;
     }
+    
 
     private void HandleHealthChange(float percent)
     {

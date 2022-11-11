@@ -9,7 +9,9 @@ public class PlayerAttack : MonoBehaviour
     PlayerMovement playerMovement;
     PlayerInput playerInput;
 
+
     public Collider attackArea;
+    
 
     public Transform attackPosition;
     public Transform enmeyPosition;
@@ -24,7 +26,7 @@ public class PlayerAttack : MonoBehaviour
 
     public float knockbackTimer;
     public float knockbackStrength;
-    public int damage = 1;
+    public int damage = 10;
     private Vector3 direction;
     private Rigidbody obj;
 
@@ -93,8 +95,9 @@ public class PlayerAttack : MonoBehaviour
 
         if (obj.tag == "Enemy")
         {
+            DamagePopUp.Create(obj.transform.position, damage);
             obj.SendMessage("DisableAI");
-            obj.SendMessage("TakeDamage", damage);
+            
         }
     }
 

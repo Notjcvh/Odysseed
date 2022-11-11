@@ -5,10 +5,11 @@ using UnityEngine;
 public class Testing : MonoBehaviour
 {
    
-    void Start()
+    void  Update()
     {
-
-        DamagePopUp.Create(transform.position, 200);
+        if(Input.GetKeyDown(KeyCode.V))
+            DamagePopUp.Create(transform.position, 200);
+            
     }
 
 }
