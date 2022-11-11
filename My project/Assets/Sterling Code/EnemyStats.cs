@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour
 {
+    //get a list of all enemies with spawner 
+    public List<Enemy> enemyList;
+
     public string type;
     public int maxHealth;
     public int currentHealth;
+    
+   
 
     public Material myMaterial;
 
@@ -25,19 +30,25 @@ public class EnemyStats : MonoBehaviour
         currentHealth += amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         OnHealthPercentChange(currentHealthPercent);
-        StartCoroutine(VisualIndicator(Color.white));
-
     }
 
+    public void VisualizeDamage(Rigidbody obj)
+    {
+       myMaterial = obj.gameObject.GetComponent<Renderer>().material;
+        Debug.Log(myMaterial);
 
+        StartCoroutine(VisualIndicator(Color.white));
+    }
+    
     //Damage visual Indicator 
     private IEnumerator VisualIndicator(Color color)
     {
         myMaterial.color = color;
-    yield return new WaitForSeconds(0.15f);
-    myMaterial.color = Color.red;
+        yield return new WaitForSeconds(0.15f);
+        myMaterial.color = Color.red;
 
     }
+
 
 
 }

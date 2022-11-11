@@ -25,7 +25,7 @@ public class PlayerInput : MonoBehaviour
         pickUp = Input.GetKeyDown(KeyCode.Mouse2);
         drop = Input.GetKeyUp(KeyCode.Mouse2);
 
-        attack = Input.GetKeyDown(KeyCode.Mouse0);
+        attack = Input.GetMouseButtonDown(0);
 
     }
 }

@@ -422,7 +422,6 @@ GameObject:
   - component: {fileID: 1586565347788462151}
   - component: {fileID: 1586565347788462150}
   - component: {fileID: -8746841855511071886}
-  - component: {fileID: 1336023735}
   m_Layer: 7
   m_Name: Enemy_Sterling
   m_TagString: Enemy
@@ -528,22 +527,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1336023735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586565347788462171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98b5d58ad0d366d438eafe847e6c31d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: Grunt
-  maxHealth: 100
-  currentHealth: 0
-  myMaterial: {fileID: 2100000, guid: 16d88eec6721c854195d32a49496dd1c, type: 2}
 --- !u!1 &1586565349161271485
 GameObject:
   m_ObjectHideFlags: 0

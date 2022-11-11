@@ -44,7 +44,6 @@ public class PlayerAttack : MonoBehaviour
         {           
             if (playerInput.attack)
             {
-                Debug.Log("Player Attacked");
                 attackArea.enabled = true;
                 OnTriggerEnter(attackArea);
                 isAttacking = true;
@@ -96,8 +95,12 @@ public class PlayerAttack : MonoBehaviour
         if (obj.tag == "Enemy")
         {
             DamagePopUp.Create(obj.transform.position, damage);
-            obj.SendMessage("DisableAI");
-            
+            //obj.SendMessage("DisableAI");
+            obj.gameObject.GetComponent<EnemyStats>().ModifiyHealth(damage);
+            obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
+            //  obj.SendMessage("ModifyHealth", damage, SendMessageOptions.DontRequireReceiver);
+            //obj.GetComponent<EnemyStats>().ModifiyHealth(damage);
+
         }
     }
 
