@@ -169,20 +169,16 @@ MonoBehaviour:
   attackRange: 2
   attackSpeed: 0.5
   attackLife: 0.5
-  currentAttackPos: {fileID: 0}
-  attackPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   attackPosChangeTimer: 0.5
-  attackPointer: 0
-  deaggroRange: 10
   aggroRange: 5
+  deaggroRange: 10
   attackHitbox: {fileID: 4805589846665646856}
+  movementSpeed: 20
+  attackMoveSpeed: 20
+  idleSpeed: 10
   idleDelay: 0.5
   currentWaypoint: {fileID: 0}
-  patrolPoints: []
+  patrolPoint: {fileID: 5167023446970086707, guid: 9b4ae491da83814489d0ef988fb5f145, type: 3}
 --- !u!136 &4805589847024103407
 CapsuleCollider:
   m_ObjectHideFlags: 0

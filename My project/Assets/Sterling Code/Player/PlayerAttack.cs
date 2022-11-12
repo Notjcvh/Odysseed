@@ -96,9 +96,19 @@ public class PlayerAttack : MonoBehaviour
         {
             DamagePopUp.Create(obj.transform.position, damage);
             obj.SendMessage("DisableAI");
-            obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage);
+            obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
             obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-            obj.SendMessage("TakeDamage", damage * -1 / 10);
+            obj.SendMessage("TakeDamage", damage / 10);
+
+        }
+        else if (obj.tag == "SpecialEnemy")
+        {
+            Debug.Log("Special hit");
+            DamagePopUp.Create(obj.transform.position, damage);
+            obj.SendMessage("DisableAI");
+            obj.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
+            obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
+            obj.SendMessage("TakeDamage", damage / 10);
 
         }
     }

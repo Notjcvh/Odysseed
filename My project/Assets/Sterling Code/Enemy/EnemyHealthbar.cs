@@ -7,20 +7,32 @@ public class EnemyHealthbar : MonoBehaviour
 
     public Image foregroundImage;
     public Image middlegroundImage;
-    public EnemyStats enemy;
+    public Enemy enemy;
+    public SpecialEnemy specialEnemy;
 
     public float updateSpeedInSeconds1 = 0.2f;
     public float updateSpeedInSeconds2 = 0.5f;
 
     private void Awake()
     {
-        GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
+        //GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
+        if (GetComponentInParent<Enemy>() != null)
+        {
+            enemy = GetComponentInParent<Enemy>();
+            GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
+        }
+        else
+        { 
+            specialEnemy = GetComponentInParent<SpecialEnemy>();
+            GetComponentInParent<SpecialEnemy>().OnHealthPercentChange += HandleHealthChange;
+        }
+            
+
     }
     
 
     private void HandleHealthChange(float percent)
     {
-       
         // using coroutine for smoothing 
         StartCoroutine(ChangeToPercent(percent));
     }

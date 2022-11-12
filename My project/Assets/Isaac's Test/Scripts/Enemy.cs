@@ -9,42 +9,38 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject player;
     private NavMeshAgent navMeshAge;
 
+    [Header("Health")]
     public int maxHealth = 3;
     public int currentHealth;
+    [Header("Combat")]
     public float stunDuration = 1f;
     public float attackRange;
     public float attackSpeed;
     public float attackLife;
-    public Transform currentAttackPos;
-    public GameObject[] attackPoints;
     public float attackPosChangeTimer;
-    public int attackPointer = 0;
-
-    public float deaggroRange;
+    private Transform currentAttackPos;
+    private GameObject[] attackPoints;
+    private int attackPointer = 0;
     public float aggroRange;
+    public float deaggroRange;
     private float distanceFromPlayer;
-
     public GameObject attackHitbox;
     private float attackLifetime;
     private float attackCooldown;
-
+    [Header("Movement")]
+    public float movementSpeed;
+    public float attackMoveSpeed;
+    public float idleSpeed;
     public float idleDelay;
     public Transform currentWaypoint;
-    public Transform[] patrolPoints;
+    public GameObject patrolPoint;
 
     public event System.Action<float> OnHealthPercentChange = delegate { };
 
 
     private void Awake()
     {
-        if (patrolPoints.Length != 0)
-        {
-            currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
-        }
-        else
-        {
-            currentWaypoint = this.transform;
-        }
+        currentWaypoint = this.transform;
         currentHealth = maxHealth;
         navMeshAge = GetComponent<NavMeshAgent>();
         attackCooldown = attackSpeed;
@@ -71,7 +67,7 @@ public class Enemy : MonoBehaviour
         if (distanceFromPlayer <= attackRange)
         {
             //if the enemy is in attack range do this
-            navMeshAge.speed = 3;
+            navMeshAge.speed = attackMoveSpeed;
             transform.LookAt(player.transform);
             navMeshAge.destination = currentAttackPos.position;
             if(attackCooldown <= 0)
@@ -85,14 +81,14 @@ public class Enemy : MonoBehaviour
         {
             //if the enemy sees the player but is not in attack range
             aggroRange = deaggroRange;
-            navMeshAge.speed = 10;
+            navMeshAge.speed = movementSpeed;
             navMeshAge.destination = currentAttackPos.position;
         }
         else
         {
             //if enemy does not see the player do this
             navMeshAge.destination = currentWaypoint.position;
-            navMeshAge.speed = 1;
+            navMeshAge.speed = idleSpeed;
         }
         if(currentHealth == 0)
         {
@@ -105,7 +101,6 @@ public class Enemy : MonoBehaviour
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         OnHealthPercentChange(currentHealthPercent);
     }
-
 
     public void Death()
     {
@@ -130,7 +125,10 @@ public class Enemy : MonoBehaviour
     IEnumerator FindRandomWaypoint()
     {
         yield return new WaitForSeconds(idleDelay);
-        currentWaypoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        Vector3 newPatrolPoint = Random.insideUnitCircle * 5;
+        GameObject newPatrolPointGO = Instantiate(patrolPoint, newPatrolPoint, transform.rotation);
+        currentWaypoint = newPatrolPointGO.transform;
+        Destroy(newPatrolPointGO, 5f);
         StartCoroutine(FindRandomWaypoint());
     }
     IEnumerator FindAttackWaypoint()
