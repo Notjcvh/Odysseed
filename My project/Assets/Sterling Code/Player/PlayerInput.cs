@@ -11,6 +11,8 @@ public class PlayerInput : MonoBehaviour
 
     public bool attack { get; private set; }
 
+    public bool changeWeaponState { get; private set; }
+
 
 
     private void Update()
@@ -18,14 +20,12 @@ public class PlayerInput : MonoBehaviour
  
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+
         movementInput = new Vector3(horizontal, 0, vertical).normalized;
-
         jumpInput = Input.GetButtonDown("Jump");
-
         pickUp = Input.GetKeyDown(KeyCode.Mouse2);
         drop = Input.GetKeyUp(KeyCode.Mouse2);
-
         attack = Input.GetMouseButtonDown(0);
-
+        changeWeaponState = Input.GetMouseButtonDown(1);
     }
 }

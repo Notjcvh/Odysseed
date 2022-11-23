@@ -5,72 +5,75 @@ using UnityEngine.UI;
 
 public class PlayerManger : MonoBehaviour
 {
-    //Handling Functions related to the player States 
+    // members
     [Header("Refrences")]
-    public PlayerStats stats;
+    public PlayerStats stats;    //Handling Functions related to the player stats scriptable obj
+    private PlayerInput playerInput; 
     public ElementType element;
 
-    //Heart Sprites
-    [Header("Hearts Images")]
-    public Image[] hearts;
+    [Header("Hearts Images")]     //Heart Sprites
+    public Image[] hearts; // the full array of hearts in the game
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    private void Update()
+    #region Unity Functions
+    private void Awake()
     {
-       
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            WeaponStateForward(element);
-        }
+        playerInput = GetComponent<PlayerInput>();
+    }
 
-        // Making sure our health equals the number of hearts 
-        if(stats.health > stats.numberOfHearts)
+
+    private void Update()
+    { 
+        if(playerInput.changeWeaponState) // calls the ChangeWeaponState Method
+           ChangeWeaponState(element);       
+
+        if(stats.health > stats.numberOfHearts)  // Making sure our health equals the number of hearts 
             stats.health = stats.numberOfHearts;
 
         for (int i = 0; i < hearts.Length; i++)
         {
-            //Handling visually representing players health in realtion to number of hearts  
-            if (i < stats.health)
+            if (i < stats.health) //Handling visually representing players health in realtion to number of hearts  
                 hearts[i].sprite = fullHeart;
             else
                 hearts[i].sprite = emptyHeart;
 
-            //This is for creating our final health bar, change number of hearts to make amount visible in game 
-            if (i < stats.numberOfHearts)
+            if (i < stats.numberOfHearts)  //This is for creating our final health bar, change number of hearts to make amount visible in game 
                 hearts[i].enabled = true;
             else
                 hearts[i].enabled = false;
         }
     }
+    #endregion
 
-    void WeaponStateForward(ElementType state)
-    {
-       
-        print(state);
+    #region Private Functions
+    private void ChangeWeaponState(ElementType state)
+    {  
+
         if(state == ElementType.Base)
         {
-            Debug.Log("Switch");
+            print(state);
             element = ElementType.Water;
+            Debug.Log("Switch to " + element);
         }
         if(state == ElementType.Water)
         {
-            Debug.Log("Switch");
             element = ElementType.Fire;
+            Debug.Log("Switch to " + element);
         }
         if (state == ElementType.Fire)
         {
-            Debug.Log("Switch");
             element = ElementType.Earth;
+            Debug.Log("Switch to " + element);
         }
         if(state == ElementType.Earth)
         {
-            Debug.Log("Switch");
+            print(state);
             element = ElementType.Base;
+            Debug.Log("Switch to " + element);
         }
-
     }
-
+    #endregion
 }
 
 
@@ -80,7 +83,7 @@ public enum ElementType
     Water = 1,
     Fire = 2,
     Earth = 3,
-    Air = 4
+   
 }
 
 
