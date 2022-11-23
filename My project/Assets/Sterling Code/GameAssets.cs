@@ -22,5 +22,6 @@ public class GameAssets : MonoBehaviour
     public Transform DamageTextHolder;
     public GameObject gruntEnemies;
     public GameObject playerUI;
+    public GameObject SceneTransitionCanvas;
 
 }

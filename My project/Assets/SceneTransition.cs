@@ -7,17 +7,25 @@ public class SceneTransition : MonoBehaviour
 {
     public string sceneToLoad;
     public Vector3 playerPosition;
-    public VectorValue playerStartStorage;
+    public VectorValue room;
+
+    private GameManager gameManager;
+
+    private void Awake()
+    {
+        gameManager = GetComponent<GameManager>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         
         if(other.CompareTag("Player") && !other.isTrigger)
         {
-            playerPosition = playerStartStorage.initialStartValue;
+            playerPosition = room.initialStartValue;
           //  playerStartStorage.initialStartValue = playerPosition;
             Debug.Log(playerPosition);
-            SceneManager.LoadScene(sceneToLoad);
+            gameManager.ChangeScene(room);
+            SceneManager.LoadScene(room.levelName);
         }
 
 

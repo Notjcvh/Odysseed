@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 [CreateAssetMenu(menuName ="Scenes/StartingPosition")]
 public class VectorValue : ScriptableObject
 {
 
     public string levelName;
+    [TextArea]
+    public string description;
     public Vector3 initialStartValue;
+    
+
 
 
 }
