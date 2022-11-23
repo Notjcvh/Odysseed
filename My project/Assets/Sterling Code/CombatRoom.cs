@@ -5,9 +5,12 @@ using UnityEngine;
 public class CombatRoom : MonoBehaviour
 {
     
-    public GameObject[] enemies = null;
+    public List<GameObject> enemies = null;
+    
     [SerializeField] GameObject player;
     [SerializeField] CameraController cam;
+    public AnimationClip[] clips;
+
 
     // Use this reference for dashing
     [SerializeField] PlayerMovement playerMovement;
@@ -31,15 +34,16 @@ public class CombatRoom : MonoBehaviour
 
     private void Update()
     {
-        enemies = GameObject.FindGameObjectsWithTag(tags[1]);
-        lockNumber = enemies.Length;
+       
+        lockNumber = enemies.Count;
     }
 
     private void UnlockDoor()
     {
+        
         if(lockNumber == 0)
         {
-            door.Play("Door Open", 0, 0);
+            door.Play(clips[0].name, 0, 0);
             allenemiesDefeated = true;
         }
     }
@@ -47,7 +51,7 @@ public class CombatRoom : MonoBehaviour
     {
        if(allenemiesDefeated == true)
         {
-            door.Play("Door Close", 0, 0);
+            door.Play(clips[1].name, 0, 0);
             allenemiesDefeated = false;
         }
         
@@ -65,6 +69,10 @@ public class CombatRoom : MonoBehaviour
             }
            
         }
+        if(other.CompareTag(tags[1]))
+        {
+            enemies.Add(other.gameObject);
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -78,6 +86,7 @@ public class CombatRoom : MonoBehaviour
         if (other.CompareTag(tags[1]))
         {
             lockNumber -= 1;
+            enemies.Remove(other.gameObject);
         }
 
     }

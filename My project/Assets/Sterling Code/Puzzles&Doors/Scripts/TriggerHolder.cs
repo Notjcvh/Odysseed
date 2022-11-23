@@ -8,6 +8,7 @@ public class TriggerHolder : MonoBehaviour
     [Header("Refrencing")]
     public GameObject player;
     public PuzzleDataManager whichPuzzle;
+    public AnimationClip[] clips;
   
     public NPC puzzleDialouge;
     public string[] tags = { "Player", "Ally"};
@@ -34,7 +35,7 @@ public class TriggerHolder : MonoBehaviour
         if (needMatchesToSolvePuzzle == totalvalue)
             {
                 puzzleDialouge.puzzleCompleted = true; 
-                door.Play("Door Open", 0, 0);
+                door.Play(clips[0].name, 0, 0);
 
             // I want this to be able to wait before activating the Door Open Animation 
 
@@ -56,7 +57,7 @@ public class TriggerHolder : MonoBehaviour
 
     private void CloseDoor()
     {
-      door.Play("Door Close", 0, 0);
+      door.Play(clips[1].name, 0, 0);
 
     }
     //Door Detector Reciver Functions
