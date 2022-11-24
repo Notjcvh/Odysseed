@@ -21,7 +21,7 @@ public class TriggerHolder : MonoBehaviour
     public int needMatchesToSolvePuzzle;
     public int totalvalue;
 
-    public Collider trigger;
+
 
     private void Start()
     {

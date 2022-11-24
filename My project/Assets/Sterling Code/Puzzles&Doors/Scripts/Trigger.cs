@@ -5,8 +5,9 @@ using UnityEngine;
 public class Trigger : MonoBehaviour
 {
     [Header("Refrencing")]
-    
-    public TriggerHolder triggerHolder;
+
+    public GameObject puzzleHolder;
+    public UnpackRoom whichPuzzleInScene;
     //public TriggerSettings triggerSettings;
     public PuzzleDataManager whichPuzzle;
 
@@ -16,9 +17,9 @@ public class Trigger : MonoBehaviour
 
      int numberOfCorrectMatchesInPuzzle;
 
-    private void Start()
+    private void Awake()
     {
-        triggerHolder = GameObject.Find("Trigger Holder").GetComponent<TriggerHolder>();
+        whichPuzzleInScene = puzzleHolder.gameObject.GetComponent<UnpackRoom>();
 
     }
     
@@ -54,7 +55,7 @@ public class Trigger : MonoBehaviour
             {
                
                 numberOfCorrectMatchesInPuzzle = - 1;
-                triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
+                whichPuzzleInScene.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
             }
       
     }
@@ -71,7 +72,7 @@ public class Trigger : MonoBehaviour
             {
                
                 numberOfCorrectMatchesInPuzzle = 1;
-                triggerHolder.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
+                whichPuzzleInScene.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
             }
         }
     }

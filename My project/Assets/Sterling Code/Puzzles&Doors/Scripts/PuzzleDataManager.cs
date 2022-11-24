@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "Puzzles/Puzzles")]
+[CreateAssetMenu(menuName = "Puzzles/PuzzleValue")]
 public class PuzzleDataManager : ScriptableObject
 {
-
-
     public string[] keywords;
-    public GameObject puzzle;
 
-  
- 
 }
 
