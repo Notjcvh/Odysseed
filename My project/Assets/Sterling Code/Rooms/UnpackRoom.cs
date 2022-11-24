@@ -32,15 +32,17 @@ public class UnpackRoom : MonoBehaviour
         {
             lockNumber = enemies.Count;
 
+
+
         }
         else if (room.isAPuzzleRoom == true)
         {
             needMatchesToSolve = room.whichPuzzle.keywords.Length;
-            
         }
         else
             return;
     }
+
     public void GetTriggeredValue(int number)
     {
         print(number);
@@ -73,6 +75,8 @@ public class UnpackRoom : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (room.isAPuzzleRoom)
+            room.cam.camPriority = 0;
 
         if(room.isACombatRoom)
         {

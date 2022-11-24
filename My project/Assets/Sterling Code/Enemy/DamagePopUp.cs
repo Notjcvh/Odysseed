@@ -61,7 +61,6 @@ public class DamagePopUp : MonoBehaviour
         if(testDisappearTimer < 0 )
         {
             // start disappearing change alpha then destory
-
             textColor.a -= disappearSpeed * Time.deltaTime;
             textMesh.color = textColor;
 
