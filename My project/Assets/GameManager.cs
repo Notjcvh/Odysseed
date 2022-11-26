@@ -9,67 +9,54 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject sceneTransition;
-
     public TextMeshProUGUI displayText;
     public VectorValue room;
-
     public SceneManager currentScene;
-
     public float textDisappearTimer = 1.3f;
+
+    public GameObject player;
+    private PlayerMovement playerMovement;
+
+
 
 
 
     private void Awake()
     {
        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
-        DisplayText(sceneTransition);
-       
+       DisplayText(sceneTransition);
+       playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement.stopMovementEvent = true;
+
     }
 
-    public void ChangeScene(VectorValue scene)
+    private void Update()
     {
-        foreach (Transform t in sceneTransition.transform)
-        {
-            t.gameObject.SetActive(true);
-        }
+        Image panel = displayText.GetComponentInParent<Image>();
+        textDisappearTimer -= Time.deltaTime;
 
-
-        if (sceneTransition != null)
+        if (textDisappearTimer < 0)
         {
-            displayText = sceneTransition.GetComponentInChildren<TextMeshProUGUI>();
-            displayText.text = scene.description;
+             playerMovement.stopMovementEvent = false;
         }
-        else
-            return;
     }
 
+    #region Public Functions
     public void DisplayText(GameObject scene)
     {
-        foreach (Transform t in scene.transform)
-        {
-            t.gameObject.SetActive(true);
-
-        }
+      
         if (sceneTransition != null)
         {
+            foreach (Transform t in scene.transform)
+            {
+                t.gameObject.SetActive(true);
+
+            }
             displayText = scene.GetComponentInChildren<TextMeshProUGUI>();
-            print(displayText);
             displayText.SetText(room.description);
         }
         else
             return;       
     }
-
-    private void LateUpdate()
-    {
-        Image panel = displayText.GetComponentInParent<Image>();
-        textDisappearTimer -= Time.deltaTime;
-    
-        if(textDisappearTimer < 0)
-        {
-            Destroy(sceneTransition); 
-        }
-    }
-    
-
+    #endregion
 }

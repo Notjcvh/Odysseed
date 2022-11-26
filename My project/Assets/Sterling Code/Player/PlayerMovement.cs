@@ -31,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
     public float verticalVelocity;
     public float distanceToCheckForGround;
 
+    [Header("Dash")]
+    public bool inCombatRoom;
+
     private void Start()
     {
         //for loading up the scene
@@ -54,12 +57,15 @@ public class PlayerMovement : MonoBehaviour
          {
              movementPriority = 0;
          }*/
-
         if (stopMovementEvent == false)
         {
             MoveNow();
             if (IsGrounded() && Jump())
-                playerBody.velocity = Vector3.up * verticalVelocity ;                  
+                playerBody.velocity = Vector3.up * verticalVelocity ;    
+            if(inCombatRoom == true)
+            {
+                print("Hello");
+            }
         }
         else if(stopMovementEvent == true)
         {
@@ -85,6 +91,9 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = targetRotation;
         }
     }
+
+
+
     private bool IsGrounded()
     {
         Vector3 direction = new Vector3(0, -camTarget.position.y , 0);
@@ -97,4 +106,5 @@ public class PlayerMovement : MonoBehaviour
     }
     private void StopMoving()
     {    }
+
 }

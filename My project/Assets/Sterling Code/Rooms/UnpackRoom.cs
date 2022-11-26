@@ -5,18 +5,25 @@ using UnityEngine;
 public class UnpackRoom : MonoBehaviour
 {
     public RoomType room;
-
+    public GameObject player;
+    public CameraController cam;
+    public PlayerMovement playerMovement;
 
     [Header("Animations")]
     [SerializeField] private Animator door;
     [SerializeField] private GameObject whichDoor;
     [SerializeField] private AnimationClip[] doorClips;
 
+    [Header("Room Type")]
+    public bool isAPuzzleRoom;
+    public bool isACombatRoom;
+
 
     [Header("Puzzle Variables")]
     public NPC puzzleDialouge;
     public int needMatchesToSolve;
     public int currentValue;
+  
 
     [Header("Combat Variables")]
     public int lockNumber = 0;
@@ -26,17 +33,21 @@ public class UnpackRoom : MonoBehaviour
 
     private void Awake()
     {
-        room.cam = room.player.GetComponent<CameraController>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        cam = player.GetComponent<CameraController>();
+        playerMovement = player.GetComponent<PlayerMovement>();
         door = whichDoor.GetComponent<Animator>();
-        if (room.isACombatRoom == true)
+    }
+
+    private void Update()
+    {
+        if (isACombatRoom == true)
         {
             lockNumber = enemies.Count;
-
-
-
         }
-        else if (room.isAPuzzleRoom == true)
+        else if (isAPuzzleRoom == true)
         {
+            
             needMatchesToSolve = room.whichPuzzle.keywords.Length;
         }
         else
@@ -51,16 +62,14 @@ public class UnpackRoom : MonoBehaviour
 
     private void UnlockDoor()
     {
-        if(room.isAPuzzleRoom && needMatchesToSolve == currentValue)
+        if(isAPuzzleRoom && needMatchesToSolve == currentValue)
         {
             
             puzzleDialouge.puzzleCompleted = true;
             door.Play(doorClips[0].name, 0, 0);
         }
 
-
-
-        if(room.isACombatRoom && lockNumber == 0)
+        if(isACombatRoom && lockNumber == 0)
         {
             door.Play(doorClips[0].name, 0, 0);
             allEnemiesDefeated = true;
@@ -75,33 +84,28 @@ public class UnpackRoom : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (room.isAPuzzleRoom)
-            room.cam.camPriority = 0;
+        if (isAPuzzleRoom)
+            cam.camPriority = 0;
+            playerMovement.inCombatRoom = false;
 
-        if(room.isACombatRoom)
+        if (isACombatRoom)
         {
-            if (other.CompareTag(room.tags[0]))
-            {
-                if (room.cam != null)
-                {
-                    room.cam.camPriority = 1;
-                }
-
-            }
+            playerMovement.inCombatRoom = true;
+            cam.camPriority = 1;
             if (other.CompareTag(room.tags[1]))
             {
                 enemies.Add(other.gameObject);
             }
         }
-       
     }
     private void OnTriggerExit(Collider other)
     {
-        if(room.isACombatRoom)
+        if(isACombatRoom)
         {
             if (other.CompareTag(room.tags[0]))
             {
-                room.cam.camPriority = 0;
+                cam.camPriority = 0;
+                playerMovement.inCombatRoom = false;
             }
 
 
@@ -112,8 +116,6 @@ public class UnpackRoom : MonoBehaviour
             }
         }
     }
-
-
 
     public void WhenTriggerEnter()
     {

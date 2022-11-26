@@ -16,10 +16,18 @@ public class PlayerManger : MonoBehaviour
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
+
+    [Header("Shader Settings")] // controls the players outline
+    public Color color;
+    public Material material;
+    public GameObject playerOutline;
+
     #region Unity Functions
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
+        material = playerOutline.GetComponent<Renderer>().material;
     }
 
 
@@ -54,22 +62,30 @@ public class PlayerManger : MonoBehaviour
         {
             print(state);
             element = ElementType.Water;
+            color = Color.blue;
+            material.color = color;
             Debug.Log("Switch to " + element);
         }
         if(state == ElementType.Water)
         {
             element = ElementType.Fire;
+            color = Color.red;
+            material.color = color;
             Debug.Log("Switch to " + element);
         }
         if (state == ElementType.Fire)
         {
             element = ElementType.Earth;
+            color = Color.green;
+            material.color = color;
             Debug.Log("Switch to " + element);
         }
         if(state == ElementType.Earth)
         {
             print(state);
             element = ElementType.Base;
+            color = Color.black;
+            material.color = color;
             Debug.Log("Switch to " + element);
         }
     }

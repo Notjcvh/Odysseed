@@ -9,13 +9,6 @@ public class SceneTransition : MonoBehaviour
     public Vector3 playerPosition;
     public VectorValue room;
 
-    private GameManager gameManager;
-
-    private void Awake()
-    {
-        gameManager = GetComponent<GameManager>();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         
@@ -24,7 +17,6 @@ public class SceneTransition : MonoBehaviour
             playerPosition = room.initialStartValue;
           //  playerStartStorage.initialStartValue = playerPosition;
             Debug.Log(playerPosition);
-            gameManager.ChangeScene(room);
             SceneManager.LoadScene(room.levelName);
         }
 
