@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,9 @@ public class PlayerAttack : MonoBehaviour
 
     private bool isAttacking = false;
 
+
+    private float delay = .3f;
+
     public float knockbackTimer;
     public float knockbackStrength;
     public int damage = 10;
@@ -40,36 +44,36 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isAttacking == false)
-        {           
-            if (playerInput.attack)
-            {
-                attackArea.enabled = true;
-                OnTriggerEnter(attackArea);
-                isAttacking = true;
-                playerMovement.stopMovementEvent = true;
-            }
-        }
-        if (isAttacking)
+        if(playerInput.attack)
         {
-            timer = startTimerAtThisValue;
-            timer -= Time.deltaTime * timeScalar;
-
-            if (timer <= 0)
-            {
-                //Destroy Instance of the prefab
-                timer = 0;
-                isAttacking = false;
-                attackArea.enabled = false;
-                playerMovement.stopMovementEvent = false;
-            }
+            Attack();
         }
+
         if(obj != null)
         {
             direction = (obj.transform.position - attackPosition.position).normalized;
 
         }
     }
+
+    private void Attack()
+    {
+        if (isAttacking)
+            return;
+        attackArea.enabled = true;
+        OnTriggerEnter(attackArea);
+        isAttacking = true;
+        StartCoroutine(DelayAttack());                                                                              
+
+    }
+
+    private IEnumerator DelayAttack()
+    {
+        yield return new WaitForSeconds(delay);
+        isAttacking = false;
+
+    }
+
     private void OnTriggerEnter(Collider attackArea)
     {
        

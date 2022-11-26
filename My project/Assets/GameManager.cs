@@ -4,59 +4,73 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using System;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject sceneTransition;
-    public TextMeshProUGUI displayText;
-    public VectorValue room;
-    public SceneManager currentScene;
-    public float textDisappearTimer = 1.3f;
 
+    [Header("Referencing")]
+    public GameObject sceneTransition;
     public GameObject player;
     private PlayerMovement playerMovement;
 
+    public VectorValue room;
+    public SceneManager currentScene;
+    public TextMeshProUGUI displayText;
 
+    public float textDisappearTimer = 1.3f;
+    public float countdown;
+    private bool sceneTransitonTextActive = false;
 
-
-
+    #region Unity Functions
     private void Awake()
     {
        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
-       DisplayText(sceneTransition);
        playerMovement = player.GetComponent<PlayerMovement>();
-        playerMovement.stopMovementEvent = true;
-
+       sceneTransitonTextActive = true;
+       
+       DisplayText(sceneTransition);    
     }
 
     private void Update()
-    {
-        Image panel = displayText.GetComponentInParent<Image>();
-        textDisappearTimer -= Time.deltaTime;
-
-        if (textDisappearTimer < 0)
+    { 
+        if(sceneTransitonTextActive == true)
         {
-             playerMovement.stopMovementEvent = false;
-        }
+          //  StartCoroutine(Transitioning());
+            countdown = textDisappearTimer;
+            if (countdown > 0)
+            {
+                playerMovement.stopMovementEvent = true;
+                countdown -= Time.deltaTime * 45;
+            }
+            if (countdown <= 0)
+            {
+                playerMovement.stopMovementEvent = false;
+                countdown = textDisappearTimer;
+                sceneTransitonTextActive = false;
+            }
+        }   
     }
+
+ 
+    #endregion
 
     #region Public Functions
     public void DisplayText(GameObject scene)
     {
-      
         if (sceneTransition != null)
         {
             foreach (Transform t in scene.transform)
-            {
-                t.gameObject.SetActive(true);
-
-            }
-            displayText = scene.GetComponentInChildren<TextMeshProUGUI>();
-            displayText.SetText(room.description);
+               t.gameObject.SetActive(true); // setting the pannel and TMP GUI prefab to active 
+            
+            displayText = scene.GetComponentInChildren<TextMeshProUGUI>(); 
+            displayText.SetText(room.levelName);
         }
         else
             return;       
     }
     #endregion
+
+
+
 }

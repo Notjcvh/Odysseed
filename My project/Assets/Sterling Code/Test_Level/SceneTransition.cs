@@ -17,7 +17,7 @@ public class SceneTransition : MonoBehaviour
             playerPosition = room.initialStartValue;
           //  playerStartStorage.initialStartValue = playerPosition;
             Debug.Log(playerPosition);
-            SceneManager.LoadScene(room.levelName);
+            SceneManager.LoadScene(room.sceneName);
         }
 
 

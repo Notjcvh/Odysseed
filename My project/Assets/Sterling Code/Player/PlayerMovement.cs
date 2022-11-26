@@ -61,11 +61,9 @@ public class PlayerMovement : MonoBehaviour
         {
             MoveNow();
             if (IsGrounded() && Jump())
-                playerBody.velocity = Vector3.up * verticalVelocity ;    
-            if(inCombatRoom == true)
-            {
-                print("Hello");
-            }
+                playerBody.velocity = Vector3.up * verticalVelocity ;
+            if (inCombatRoom == true)
+                return;
         }
         else if(stopMovementEvent == true)
         {
@@ -91,8 +89,6 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = targetRotation;
         }
     }
-
-
 
     private bool IsGrounded()
     {

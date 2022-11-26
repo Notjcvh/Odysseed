@@ -1548,7 +1548,7 @@ MonoBehaviour:
   - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
   - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
   isAPuzzleRoom: 0
-  isACombatRoom: 0
+  isACombatRoom: 1
   puzzleDialouge: {fileID: 0}
   needMatchesToSolve: 0
   currentValue: 0
@@ -2512,6 +2512,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 3782437814007961981}
+    - target: {fileID: 2538145067693232679, guid: 832d531b032929545bfafc2f428ed500, type: 3}
+      propertyPath: textDisappearTimer
+      value: 1.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 832d531b032929545bfafc2f428ed500, type: 3}
 --- !u!114 &2644394299886579791 stripped
@@ -3805,6 +3809,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114128837, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
+      propertyPath: timeScalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114128837, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
+      propertyPath: startTimerAtThisValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1498420144, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
       propertyPath: hearts.Array.data[0]
       value: 
@@ -3837,6 +3849,10 @@ PrefabInstance:
       propertyPath: hearts.Array.data[7]
       value: 
       objectReference: {fileID: 1025554334}
+    - target: {fileID: 4100166254625961860, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
+      propertyPath: stopMovementEvent
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4100166254625961862, guid: a79985da0c126594183bc758bc5eb4dc, type: 3}
       propertyPath: cam
       value: 

@@ -8,10 +8,12 @@ using UnityEngine;
 public class VectorValue : ScriptableObject
 {
 
+    public string sceneName;
     public string levelName;
+    public Vector3 initialStartValue;
+
     [TextArea]
     public string description;
-    public Vector3 initialStartValue;
     
 
 
