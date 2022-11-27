@@ -8,7 +8,7 @@ public class UnpackRoom : MonoBehaviour
     public GameObject player;
     public CameraController cam;
     public PlayerMovement playerMovement;
-    public VectorValue value;
+    public VectorValue level;
 
     public PuzzleDataManager whichPuzzle;
 
@@ -86,7 +86,10 @@ public class UnpackRoom : MonoBehaviour
     }
     private void CloseDoor()
     {
-        door.Play(doorClips[1].name, 0, 0);
+        if (isAPuzzleRoom && needMatchesToSolve == currentValue)
+           door.Play(doorClips[1].name, 0, 0);
+        if (isACombatRoom && lockNumber == 0)
+            door.Play(doorClips[0].name, 0, 0);
     }
 
 
@@ -103,7 +106,10 @@ public class UnpackRoom : MonoBehaviour
             if (other.CompareTag(tags[1]))
             {
                 enemies.Add(other.gameObject);
+                other.gameObject.GetComponent<Enemy>().WhichRoom(this.gameObject.GetComponent<Collider>()); // sending the name of the trigger/(theroom) to the enemy
             }
+
+            
         }
     }
     private void OnTriggerExit(Collider other)
@@ -126,8 +132,7 @@ public class UnpackRoom : MonoBehaviour
 
     public void TransportEnemy(GameObject other)
     {
-       other.transform.position = value.boneYard; 
-
+      other.transform.position = level.boneYard;
     }
 
     public void WhenTriggerEnter()

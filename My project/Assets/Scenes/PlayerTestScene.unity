@@ -258,7 +258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4805589847024103400, guid: a985ca7fbad96224698622a0e908695b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.31
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4805589847024103400, guid: a985ca7fbad96224698622a0e908695b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -287,6 +287,10 @@ PrefabInstance:
     - target: {fileID: 4805589847024103400, guid: a985ca7fbad96224698622a0e908695b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4805589847024103405, guid: a985ca7fbad96224698622a0e908695b, type: 3}
+      propertyPath: finishedRoom
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4805589847024103410, guid: a985ca7fbad96224698622a0e908695b, type: 3}
       propertyPath: m_Name
@@ -1118,7 +1122,7 @@ MonoBehaviour:
   player: {fileID: 3782437814007961981}
   cam: {fileID: 3782437814007961861}
   playerMovement: {fileID: 3782437814007961863}
-  value: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  level: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
   whichPuzzle: {fileID: 0}
   tags:
   - Player
@@ -1608,7 +1612,7 @@ MonoBehaviour:
   player: {fileID: 3782437814007961981}
   cam: {fileID: 3782437814007961861}
   playerMovement: {fileID: 3782437814007961863}
-  value: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  level: {fileID: 0}
   whichPuzzle: {fileID: 0}
   tags:
   - Player
@@ -1975,6 +1979,10 @@ PrefabInstance:
     - target: {fileID: 704790505520404043, guid: 4129a777cd3e3214d99caed462c95b44, type: 3}
       propertyPath: m_Name
       value: Combat Encounter Room
+      objectReference: {fileID: 0}
+    - target: {fileID: 704790505520404043, guid: 4129a777cd3e3214d99caed462c95b44, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 704790505520404038, guid: 4129a777cd3e3214d99caed462c95b44, type: 3}
@@ -3590,7 +3598,7 @@ MonoBehaviour:
   player: {fileID: 3782437814007961981}
   cam: {fileID: 3782437814007961861}
   playerMovement: {fileID: 3782437814007961863}
-  value: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  level: {fileID: 0}
   whichPuzzle: {fileID: 11400000, guid: edd8b70d1c3ecca4e9d56b692060fc47, type: 2}
   tags:
   - Player

@@ -36,11 +36,10 @@ public class Enemy : MonoBehaviour
     public GameObject patrolPoint;
 
     [Header("Rooms")]
-    private GameObject room;
-    public UnpackRoom finishedRoom;
+    public GameObject finishedRoom;
+    public UnpackRoom locationInWorld;
 
     public event System.Action<float> OnHealthPercentChange = delegate { };
-
 
     private void Awake()
     {
@@ -50,8 +49,7 @@ public class Enemy : MonoBehaviour
         attackCooldown = attackSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
         attackPoints = GameObject.FindGameObjectsWithTag("AttackPoints");
-        room = GameObject.FindGameObjectWithTag("Room");
-        finishedRoom = room.GetComponent<UnpackRoom>();
+       
         currentAttackPos = attackPoints[0].GetComponent<Transform>();   
         StartCoroutine(FindRandomWaypoint());
         StartCoroutine(FindAttackWaypoint());
@@ -96,15 +94,22 @@ public class Enemy : MonoBehaviour
             navMeshAge.destination = currentWaypoint.position;
             navMeshAge.speed = idleSpeed;
         }
-        if(currentHealth == 0)
+        if (currentHealth <= 0)
         {
             Death();
         }
     }
 
+    public void WhichRoom(Collider colliderTrigger) 
+    {
+        GameObject location = colliderTrigger.gameObject;
+        finishedRoom = location;
+      
+       
+    }
     private void Death()
     {
-        finishedRoom.TransportEnemy(this.gameObject); 
+        finishedRoom.GetComponent<UnpackRoom>().TransportEnemy(this.gameObject);
     }
 
     public void ModifiyHealth(int amount)
