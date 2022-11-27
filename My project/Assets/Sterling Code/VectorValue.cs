@@ -11,6 +11,7 @@ public class VectorValue : ScriptableObject
     public string sceneName;
     public string levelName;
     public Vector3 initialStartValue;
+    public Vector3 boneYard;
     
 
     [TextArea]

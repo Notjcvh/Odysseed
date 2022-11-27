@@ -23,5 +23,5 @@ public class GameAssets : MonoBehaviour
     public GameObject gruntEnemies;
     public GameObject playerUI;
     public GameObject SceneTransitionCanvas;
-    public GameObject theBoneYard; 
+    public GameObject BoneYard;
 }

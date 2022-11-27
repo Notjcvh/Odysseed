@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     private PlayerMovement playerMovement;
 
+    private GameObject BoneYard; // the boneyard is basically the place where we move the enemies then destory them --> this is a test right now though
+    private Vector3 positionOfBoneyard;
+
+
     public VectorValue room;
     public SceneManager currentScene;
     public TextMeshProUGUI displayText;
@@ -30,7 +34,10 @@ public class GameManager : MonoBehaviour
        sceneTransitonTextActive = true;
         
         countdown = textDisappearTimer;
-        DisplayText(sceneTransition);    
+        positionOfBoneyard = room.boneYard;
+        BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
+        DisplayText(sceneTransition);
+
     }
 
     private void Update()

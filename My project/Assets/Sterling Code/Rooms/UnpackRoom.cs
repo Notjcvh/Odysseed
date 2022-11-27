@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class UnpackRoom : MonoBehaviour
 {
-    public RoomType room;
+    
     public GameObject player;
     public CameraController cam;
     public PlayerMovement playerMovement;
+    public VectorValue value;
+
+    public PuzzleDataManager whichPuzzle;
+
+    //variables
+    [Header("Tags")]
+    public string[] tags = { "Player", "Enemy", "Ally", "SpecialEnemy" };
+
 
     [Header("Animations")]
     [SerializeField] private Animator door;
@@ -48,7 +56,7 @@ public class UnpackRoom : MonoBehaviour
         else if (isAPuzzleRoom == true)
         {
             
-            needMatchesToSolve = room.whichPuzzle.keywords.Length;
+            needMatchesToSolve = whichPuzzle.keywords.Length;
         }
         else
             return;
@@ -92,7 +100,7 @@ public class UnpackRoom : MonoBehaviour
         {
             playerMovement.inCombatRoom = true;
             cam.camPriority = 1;
-            if (other.CompareTag(room.tags[1]))
+            if (other.CompareTag(tags[1]))
             {
                 enemies.Add(other.gameObject);
             }
@@ -102,19 +110,24 @@ public class UnpackRoom : MonoBehaviour
     {
         if(isACombatRoom)
         {
-            if (other.CompareTag(room.tags[0]))
+            if (other.CompareTag(tags[0]))
             {
                 cam.camPriority = 0;
                 playerMovement.inCombatRoom = false;
             }
 
-
-            if (other.CompareTag(room.tags[1]))
+            if (other.CompareTag(tags[1]))
             {
-                lockNumber -= 1;
                 enemies.Remove(other.gameObject);
+                lockNumber -= 1;
             }
         }
+    }
+
+    public void TransportEnemy(GameObject other)
+    {
+       other.transform.position = value.boneYard; 
+
     }
 
     public void WhenTriggerEnter()

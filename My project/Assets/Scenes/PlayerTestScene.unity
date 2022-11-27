@@ -1096,6 +1096,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Combat Encounter Room
       objectReference: {fileID: 0}
+    - target: {fileID: 704790505520404043, guid: 4129a777cd3e3214d99caed462c95b44, type: 3}
+      propertyPath: m_TagString
+      value: Room
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 704790505520404038, guid: 4129a777cd3e3214d99caed462c95b44, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4129a777cd3e3214d99caed462c95b44, type: 3}
@@ -1111,10 +1115,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd23f35bef43c04698665e38349b6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 167ab7297f9a12d4099f3b37e042aaec, type: 2}
-  player: {fileID: 0}
-  cam: {fileID: 0}
-  playerMovement: {fileID: 0}
+  player: {fileID: 3782437814007961981}
+  cam: {fileID: 3782437814007961861}
+  playerMovement: {fileID: 3782437814007961863}
+  value: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  whichPuzzle: {fileID: 0}
+  tags:
+  - Player
+  - Enemy
+  - Ally
+  - SpecialEnemy
   door: {fileID: 0}
   whichDoor: {fileID: 970121735}
   doorClips:
@@ -1595,10 +1605,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd23f35bef43c04698665e38349b6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 1f62f854281e15d47b3fe2bc23c3eee4, type: 2}
-  player: {fileID: 0}
-  cam: {fileID: 0}
-  playerMovement: {fileID: 0}
+  player: {fileID: 3782437814007961981}
+  cam: {fileID: 3782437814007961861}
+  playerMovement: {fileID: 3782437814007961863}
+  value: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  whichPuzzle: {fileID: 0}
+  tags:
+  - Player
+  - Enemy
+  - Ally
+  - SpecialEnemy
   door: {fileID: 0}
   whichDoor: {fileID: 1045966714}
   doorClips:
@@ -3571,10 +3587,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd23f35bef43c04698665e38349b6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 091833d45b6c97d45a994afe4e4c82f0, type: 2}
-  player: {fileID: 0}
-  cam: {fileID: 0}
-  playerMovement: {fileID: 0}
+  player: {fileID: 3782437814007961981}
+  cam: {fileID: 3782437814007961861}
+  playerMovement: {fileID: 3782437814007961863}
+  value: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  whichPuzzle: {fileID: 11400000, guid: edd8b70d1c3ecca4e9d56b692060fc47, type: 2}
+  tags:
+  - Player
+  - Enemy
+  - Ally
+  - SpecialEnemy
   door: {fileID: 0}
   whichDoor: {fileID: 8872128963391937199}
   doorClips:

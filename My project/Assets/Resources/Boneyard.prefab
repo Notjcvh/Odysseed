@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3521680212251620811
+--- !u!1 &7937305843006658317
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3676772601619867464}
-  - component: {fileID: 1284285330287296579}
+  - component: {fileID: 861419806560035520}
+  - component: {fileID: 6759007807521642049}
+  - component: {fileID: 7039633971233524248}
   m_Layer: 0
-  m_Name: GameAssets
+  m_Name: Boneyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3676772601619867464
+--- !u!4 &861419806560035520
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521680212251620811}
+  m_GameObject: {fileID: 7937305843006658317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 100, y: 100, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1284285330287296579
+--- !u!65 &6759007807521642049
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7937305843006658317}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.24411, y: 2.7813492, z: 9.093956}
+  m_Center: {x: 2.622055, y: 0.8906746, z: 0.40086746}
+--- !u!114 &7039633971233524248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521680212251620811}
+  m_GameObject: {fileID: 7937305843006658317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30cfadf0a50b5b6498c78ec10025c884, type: 3}
+  m_Script: {fileID: 11500000, guid: da20dffebfa7cb742adf76b5d6ffdae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageTextHolder: {fileID: 3585174543809612875, guid: 8d7f8d41d36212c418666dac4490eeab, type: 3}
-  gruntEnemies: {fileID: 1586565347788462171, guid: 6bf9997f1e861ad4e81fb0ac35e3a8bd, type: 3}
-  playerUI: {fileID: 8059985435349846165, guid: ee9d374c49fb12047b60fbd7db17213e, type: 3}
-  SceneTransitionCanvas: {fileID: 464717614816690130, guid: ef3abe0382e50a847b0363cda67a9a94, type: 3}
-  BoneYard: {fileID: 7937305843006658317, guid: ab5d9fe989f5634448173c10e14795df, type: 3}
