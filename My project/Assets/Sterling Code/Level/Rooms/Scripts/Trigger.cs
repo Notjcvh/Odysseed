@@ -8,7 +8,6 @@ public class Trigger : MonoBehaviour
 
     public GameObject puzzleHolder;
     public UnpackRoom whichPuzzleInScene;
-    //public TriggerSettings triggerSettings;
     public PuzzleDataManager whichPuzzle;
 
     public string[] tags = { "Player", "Key" };
@@ -20,7 +19,6 @@ public class Trigger : MonoBehaviour
     private void Awake()
     {
         whichPuzzleInScene = puzzleHolder.gameObject.GetComponent<UnpackRoom>();
-
     }
     
 
@@ -36,6 +34,8 @@ public class Trigger : MonoBehaviour
             {
                 
                 CompareCollisionStrings(this.gameObject.name, other.name);
+                Debug.Log(this.gameObject.name);
+            Debug.Log(other.name);
                
             }
       
@@ -62,7 +62,7 @@ public class Trigger : MonoBehaviour
 
     public void CompareCollisionStrings(string trigger, string key)
     {
-        string givenKeyword = trigger + key;
+        string givenKeyword = trigger + ' ' +key;
 
 
         foreach (string part in whichPuzzle.keywords)

@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 704790505520404040}
   - component: {fileID: 704790505520404041}
-  - component: {fileID: 704790505520404038}
+  - component: {fileID: 1524710015}
   m_Layer: 0
   m_Name: Combat Encounter Room
-  m_TagString: Untagged
+  m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704790505520404043}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44,9 +44,9 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 9.178369, z: 1}
-  m_Center: {x: 0, y: 4.0891833, z: 0}
---- !u!114 &704790505520404038
+  m_Size: {x: 49.720947, y: 9.178369, z: 45.7721}
+  m_Center: {x: 4.4292536, y: 4.0891833, z: -5.488798}
+--- !u!114 &1524710015
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,20 +55,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 704790505520404043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c32ddccee33c8524e9cb724c0536c196, type: 3}
+  m_Script: {fileID: 11500000, guid: 0bd23f35bef43c04698665e38349b6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemies: []
   player: {fileID: 0}
   cam: {fileID: 0}
-  clips:
-  - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
-  - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
   playerMovement: {fileID: 0}
-  door: {fileID: 0}
-  doorAniamtionTrigger: {fileID: 0}
+  level: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  whichPuzzle: {fileID: 0}
   tags:
   - Player
   - Enemy
+  - Ally
+  - SpecialEnemy
+  door: {fileID: 0}
+  whichDoor: {fileID: 0}
+  doorClips:
+  - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
+  - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
+  isAPuzzleRoom: 0
+  isACombatRoom: 1
+  puzzleDialouge: {fileID: 0}
+  needMatchesToSolve: 0
+  currentValue: 0
   lockNumber: 0
-  allenemiesDefeated: 0
+  allEnemiesDefeated: 0
+  enemies: []

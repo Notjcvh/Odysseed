@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
 {
 
     [Header("Referencing")]
+
+    private static GameManager instance;
+    public Vector3 lastCheckPointPos;
     public GameObject sceneTransition;
     public GameObject player;
     private PlayerMovement playerMovement;
@@ -25,10 +28,19 @@ public class GameManager : MonoBehaviour
     public float textDisappearTimer = 1.3f;
     public float countdown;
     private bool sceneTransitonTextActive = false;
+    public bool hasDiedOnce = false; // might be better to have as a number 
 
     #region Unity Functions
     private void Awake()
     {
+        if (instance == null) // this makes sure we don't find multiple instances where we have multiple game managers in the scene 
+        {
+            instance = this;
+            DontDestroyOnLoad(instance);
+        }
+        else
+            Destroy(gameObject);
+
        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
        playerMovement = player.GetComponent<PlayerMovement>();
        sceneTransitonTextActive = true;
@@ -37,7 +49,6 @@ public class GameManager : MonoBehaviour
         positionOfBoneyard = room.boneYard;
         BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         DisplayText(sceneTransition);
-
     }
 
     private void Update()
@@ -78,6 +89,17 @@ public class GameManager : MonoBehaviour
         else
             return;       
     }
+
+    public void PlayerHasDied()
+    {
+        hasDiedOnce = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+    }
+
+
+
+
     #endregion
 
 

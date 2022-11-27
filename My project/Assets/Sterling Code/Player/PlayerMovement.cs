@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform camTarget;
     [SerializeField] private Transform distanceToGround;
 
-    public VectorValue startingPosition;
+
 
     [Header("Movement")]
     private Vector3 newVelocity;
@@ -36,8 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        //for loading up the scene
-        transform.position = startingPosition.initialStartValue;
+      
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
     }
     private void Awake()

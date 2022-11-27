@@ -12,7 +12,7 @@ public class PickUp : MonoBehaviour
     public Rigidbody playerBody;
     public LayerMask CanPickUp;
 
-    private void Awake()
+    private void Start()
     {
         playerInput = GetComponent<PlayerInput>();
     }
@@ -31,7 +31,7 @@ public class PickUp : MonoBehaviour
       {
            pickUpObject = hit.collider.gameObject;
            pickUpObject.GetComponent<Rigidbody>().useGravity = false;
-           pickUpObject.transform.position = holdingPosition.position;
+            pickUpObject.transform.position = holdingPosition.position ;
            pickUpObject.transform.parent = GameObject.Find(holdingPosition.gameObject.name).transform;
       }
     }

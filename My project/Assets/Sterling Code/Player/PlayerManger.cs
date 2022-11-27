@@ -10,6 +10,10 @@ public class PlayerManger : MonoBehaviour
     public PlayerStats stats;    //Handling Functions related to the player stats scriptable obj
     private PlayerInput playerInput; 
     public ElementType element;
+    public VectorValue startingPosition; // get starting postion from GameManager
+    private GameManager gameManager;
+    
+
 
     [Header("Hearts Images")]     //Heart Sprites
     public Image[] hearts; // the full array of hearts in the game
@@ -23,13 +27,21 @@ public class PlayerManger : MonoBehaviour
     public GameObject playerOutline;
 
     #region Unity Functions
-    private void Awake()
+    private void Start()
     {
+        gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+        if (gameManager.hasDiedOnce == false)
+        {
+            transform.position = startingPosition.initialStartValue;
+        }
+        else
+        {
+            transform.position = gameManager.lastCheckPointPos;
+        }
         playerInput = GetComponent<PlayerInput>();
         playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
         material = playerOutline.GetComponent<Renderer>().material;
     }
-
 
     private void Update()
     { 
@@ -50,6 +62,13 @@ public class PlayerManger : MonoBehaviour
                 hearts[i].enabled = true;
             else
                 hearts[i].enabled = false;
+        }
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            
+            gameManager.PlayerHasDied();
+            Destroy(this.gameObject);
         }
     }
     #endregion
