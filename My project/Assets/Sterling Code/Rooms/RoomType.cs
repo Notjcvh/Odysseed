@@ -11,7 +11,7 @@ public class RoomType : ScriptableObject
 
     //variables
     [Header("Tags")]
-    public string[] tags = { "Player", "Enemy", "Ally" };
+    public string[] tags = { "Player", "Enemy", "Ally", "SpecialEnemy" };
 
 
 

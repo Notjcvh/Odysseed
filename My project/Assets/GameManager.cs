@@ -28,26 +28,28 @@ public class GameManager : MonoBehaviour
        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
        playerMovement = player.GetComponent<PlayerMovement>();
        sceneTransitonTextActive = true;
-       
-       DisplayText(sceneTransition);    
+        
+        countdown = textDisappearTimer;
+        DisplayText(sceneTransition);    
     }
 
     private void Update()
     { 
         if(sceneTransitonTextActive == true)
         {
-          //  StartCoroutine(Transitioning());
-            countdown = textDisappearTimer;
-            if (countdown > 0)
+            playerMovement.stopMovementEvent = true;
+            //  StartCoroutine(Transitioning());
+            if (countdown >= 0)
             {
-                playerMovement.stopMovementEvent = true;
-                countdown -= Time.deltaTime * 45;
+                
+                countdown -= Time.deltaTime;
             }
             if (countdown <= 0)
             {
+                sceneTransitonTextActive = false;
                 playerMovement.stopMovementEvent = false;
                 countdown = textDisappearTimer;
-                sceneTransitonTextActive = false;
+               
             }
         }   
     }

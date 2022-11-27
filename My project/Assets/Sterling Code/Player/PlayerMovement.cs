@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private float targetSpeed;
 
     public float runSpeed;
-    public bool stopMovementEvent = false;
+    public bool stopMovementEvent;
     public bool isTalking = false;
     public bool isRestricted = false;
   
@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //for loading up the scene
         transform.position = startingPosition.initialStartValue;
+        stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
     }
     private void Awake()
     {
@@ -45,18 +46,8 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerBody = GetComponentInChildren<Rigidbody>(); 
     }
-
     private void Update()
     {
-        /*  if(isTalking)
-         {
-             movementPriority = 1;
-         }
-
-        if (!isTalking)
-         {
-             movementPriority = 0;
-         }*/
         if (stopMovementEvent == false)
         {
             MoveNow();
@@ -66,10 +57,7 @@ public class PlayerMovement : MonoBehaviour
                 return;
         }
         else if(stopMovementEvent == true)
-        {
-            StopMoving();
-        }
-
+           StopMoving();
     }
     private  void MoveNow()
     {
@@ -89,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = targetRotation;
         }
     }
-
     private bool IsGrounded()
     {
         Vector3 direction = new Vector3(0, -camTarget.position.y , 0);
