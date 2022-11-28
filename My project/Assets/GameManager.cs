@@ -94,7 +94,6 @@ public class GameManager : MonoBehaviour
     {
         hasDiedOnce = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
     }
 
 

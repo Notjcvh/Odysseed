@@ -51,9 +51,9 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         plannerDirection = followObj.forward;  //Important
-       // Cursor.lockState = CursorLockMode.Locked;
-        //if (Cursor.lockState != CursorLockMode.Locked)  // locking the camera if the cursor isn't moving
-          //  return;
+        Cursor.lockState = CursorLockMode.Locked;
+        if (Cursor.lockState != CursorLockMode.Locked)  // locking the camera if the cursor isn't moving
+            return;
     }
 
     private void Update()

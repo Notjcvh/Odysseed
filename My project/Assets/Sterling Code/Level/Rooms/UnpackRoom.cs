@@ -95,11 +95,12 @@ public class UnpackRoom : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isAPuzzleRoom)
+        if (isAPuzzleRoom || !isACombatRoom)
+        {
             cam.camPriority = 0;
             playerMovement.inCombatRoom = false;
-
-        if (isACombatRoom)
+        }
+        else if (isACombatRoom)
         {
             playerMovement.inCombatRoom = true;
             cam.camPriority = 1;

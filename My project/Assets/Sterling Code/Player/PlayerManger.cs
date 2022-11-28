@@ -12,8 +12,7 @@ public class PlayerManger : MonoBehaviour
     public ElementType element;
     public VectorValue startingPosition; // get starting postion from GameManager
     private GameManager gameManager;
-    
-
+   
 
     [Header("Hearts Images")]     //Heart Sprites
     public Image[] hearts; // the full array of hearts in the game
@@ -38,6 +37,7 @@ public class PlayerManger : MonoBehaviour
         {
             transform.position = gameManager.lastCheckPointPos;
         }
+
         playerInput = GetComponent<PlayerInput>();
         playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
         material = playerOutline.GetComponent<Renderer>().material;
