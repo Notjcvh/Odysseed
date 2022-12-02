@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1368716481460876311}
   - component: {fileID: 1160697920338451469}
   - component: {fileID: 663801528401592185}
-  - component: {fileID: 6902924365325903838}
+  - component: {fileID: 9161672428116163441}
+  - component: {fileID: 9161672428116163442}
   m_Layer: 0
   m_Name: Door Trigger
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655713475038959061}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.98, y: 5.13, z: 18.73}
   m_LocalScale: {x: 14.048, y: 17.693998, z: 1}
   m_ConstrainProportionsScale: 0
@@ -46,8 +47,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.3697165, z: 14.112426}
-  m_Center: {x: 0, y: -0.070232205, z: 8.141044}
+  m_Size: {x: 1, y: 0.3697165, z: 7.7379475}
+  m_Center: {x: 0, y: -0.070232205, z: 11.328292}
 --- !u!95 &663801528401592185
 Animator:
   serializedVersion: 4
@@ -68,7 +69,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6902924365325903838
+--- !u!114 &9161672428116163441
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,30 +78,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 1655713475038959061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb0378aea2a33ab45b53bfbf0c4a08ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 4892ebd65d2e15f4f83c10764207d4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onTriggerEnter:
+  door: {fileID: 663801528401592185}
+  doorClips:
+  - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
+  - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
+--- !u!114 &9161672428116163442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655713475038959061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 93b256470e03eb749b8270a59d18a259, type: 2}
+  Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TriggerHolder, Assembly-CSharp
-        m_MethodName: WhenTriggerEnter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TriggerHolder, Assembly-CSharp
-        m_MethodName: WhenTriggerExit
+      - m_Target: {fileID: 9161672428116163441}
+        m_TargetAssemblyTypeName: DoorAnimation, Assembly-CSharp
+        m_MethodName: Open
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

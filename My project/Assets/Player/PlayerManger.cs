@@ -8,13 +8,14 @@ public class PlayerManger : MonoBehaviour
     // members
     [Header("Refrences")]
     public PlayerStats stats;    //Handling Functions related to the player stats scriptable obj
-    private PlayerInput playerInput; 
+    private PlayerInput playerInput;
     public ElementType element;
-    public VectorValue startingPosition; // get starting postion from GameManager
     private GameManager gameManager;
-   
 
-    [Header("Hearts Images")]     //Heart Sprites
+    public int currentHealth;
+
+    [Header("Hearts Images")] //Heart Sprites
+    public int numberOfHearts;
     public Image[] hearts; // the full array of hearts in the game
     public Sprite fullHeart;
     public Sprite emptyHeart;
@@ -29,18 +30,13 @@ public class PlayerManger : MonoBehaviour
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-        if (gameManager.hasDiedOnce == false)
-        {
-            transform.position = startingPosition.initialStartValue;
-        }
-        else
-        {
-            transform.position = gameManager.lastCheckPointPos;
-        }
-
+        transform.position = gameManager.position;
+         
         playerInput = GetComponent<PlayerInput>();
         playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
         material = playerOutline.GetComponent<Renderer>().material;
+
+        currentHealth = stats.health;
     }
 
     private void Update()
@@ -48,27 +44,28 @@ public class PlayerManger : MonoBehaviour
         if(playerInput.changeWeaponState) // calls the ChangeWeaponState Method
            ChangeWeaponState(element);       
 
-        if(stats.health > stats.numberOfHearts)  // Making sure our health equals the number of hearts 
-            stats.health = stats.numberOfHearts;
+        if(currentHealth >numberOfHearts)  // Making sure our health equals the number of hearts 
+            numberOfHearts = currentHealth;
 
         for (int i = 0; i < hearts.Length; i++)
         {
-            if (i < stats.health) //Handling visually representing players health in realtion to number of hearts  
+            if (i < currentHealth) //Handling visually representing players health in realtion to number of hearts  
                 hearts[i].sprite = fullHeart;
             else
                 hearts[i].sprite = emptyHeart;
 
-            if (i < stats.numberOfHearts)  //This is for creating our final health bar, change number of hearts to make amount visible in game 
+            if (i < numberOfHearts)  //This is for creating our final health bar, change number of hearts to make amount visible in game 
                 hearts[i].enabled = true;
             else
                 hearts[i].enabled = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.L))
+        if(currentHealth == 0 || Input.GetKeyDown(KeyCode.P))
         {
-            
             gameManager.PlayerHasDied();
+            gameManager.ReloadPosition();
             Destroy(this.gameObject);
+            currentHealth = stats.health;
         }
     }
     #endregion
@@ -109,7 +106,13 @@ public class PlayerManger : MonoBehaviour
         }
     }
     #endregion
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+    }
 }
+
 
 
 public enum ElementType

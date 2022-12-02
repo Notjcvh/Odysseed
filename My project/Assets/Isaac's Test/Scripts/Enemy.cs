@@ -104,8 +104,7 @@ public class Enemy : MonoBehaviour
     {
         GameObject location = colliderTrigger.gameObject;
         finishedRoom = location;
-      
-       
+
     }
     private void Death()
     {

@@ -5,10 +5,13 @@ using UnityEngine;
 public class Checkpoints : MonoBehaviour
 {
     private GameManager gameManager;
+    private static Checkpoints instance;
 
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+
+
     }
 
 
@@ -16,9 +19,11 @@ public class Checkpoints : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            
-            gameManager.lastCheckPointPos = transform.position;
-       
+
+            //gameManager.lastCheckPointPos = transform.position;
+            gameManager.hasSet.Add(this.transform);
+            gameManager.Convert();
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
     }
