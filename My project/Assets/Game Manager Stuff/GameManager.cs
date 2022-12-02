@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     private PlayerMovement playerMovement;
 
+
+    public Vector3 position;
+
     private GameObject BoneYard; // the boneyard is basically the place where we move the enemies then destory them --> this is a test right now though
     private Vector3 positionOfBoneyard;
 
@@ -30,7 +33,11 @@ public class GameManager : MonoBehaviour
     private bool sceneTransitonTextActive = false;
     public bool hasDied = false; // might be better to have as a number 
 
-    public List<Transform> checkpoints;
+    public HashSet<Transform> hasSet = new HashSet<Transform>();
+    public List<Transform> checkpointNames = null; // used to convert hashset to list to get transfroms of checkpoints
+    public int largestIndexofCheckpoints = 0;
+    
+
 
     #region Unity Functions
     private void Awake()
@@ -51,6 +58,7 @@ public class GameManager : MonoBehaviour
         positionOfBoneyard = room.boneYard;
         BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         DisplayText(sceneTransition);
+        ReloadPosition();
     }
 
     private void Update()
@@ -95,12 +103,32 @@ public class GameManager : MonoBehaviour
     public void PlayerHasDied()
     {
         hasDied = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function
-        hasDied = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function    
+    }
+
+    public void Convert()
+    {
+        checkpointNames = new List<Transform>(hasSet);
+        largestIndexofCheckpoints = checkpointNames.Count;
     }
 
 
+    public void ReloadPosition()
+    {
+        if (checkpointNames.Count >= 1)
+        {
+            Transform b = checkpointNames[checkpointNames.Count - 1];
+            print(b);
+            position = b.position;
+        }
+        else
+        {
+            position = room.initialStartValue;
+        }
+    }
+ 
 
+    
 
     #endregion
 

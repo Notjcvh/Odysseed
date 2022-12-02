@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class DoorAnimation : MonoBehaviour
 {
-
+    [SerializeField] private Transform player;
+    public float distanceFromPlayer;
+    public float talkRange;
     [Header("Animations")]
-    [SerializeField] private Animator door;
-    [SerializeField] private AnimationClip[] doorClips;
  
 
+    [SerializeField] private Animator door;
+    [SerializeField] private AnimationClip[] doorClips;
 
     public void Open()
     {
-        door.Play(doorClips[0].name, 0, 0);
-        Debug.Log("Hello");
+        distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
+        if (distanceFromPlayer <= talkRange)
+            this.GetComponent<Animator>().Play(doorClips[0].name, 0, 0);
+        else
+            Debug.Log("Too Far Away");
+    
     }
     private void OnTriggerExit(Collider other)
     {
@@ -22,11 +28,14 @@ public class DoorAnimation : MonoBehaviour
         this.gameObject.GetComponent<BoxCollider>().enabled = false; // temporary fix for now if the game includes back tracking then we would need the doors to open and reopen 
     }
 
-    public bool IsActive( bool Active)
+
+    private void OnDrawGizmos()
     {
-        bool IsActive = Active;
-        return IsActive;
+        Gizmos.DrawLine(this.transform.position, player.position);
+
     }
+
+
 
 
 }

@@ -10,7 +10,6 @@ public class PlayerManger : MonoBehaviour
     public PlayerStats stats;    //Handling Functions related to the player stats scriptable obj
     private PlayerInput playerInput;
     public ElementType element;
-    public VectorValue startingPosition; // get starting postion from GameManager
     private GameManager gameManager;
 
     public int currentHealth;
@@ -31,15 +30,8 @@ public class PlayerManger : MonoBehaviour
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-        if (gameManager.hasDied == false)
-        {
-            transform.position = startingPosition.initialStartValue;
-        }
-        else
-        {
-            transform.position = gameManager.lastCheckPointPos;
-        }
-
+        transform.position = gameManager.position;
+         
         playerInput = GetComponent<PlayerInput>();
         playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
         material = playerOutline.GetComponent<Renderer>().material;
@@ -71,6 +63,7 @@ public class PlayerManger : MonoBehaviour
         if(currentHealth == 0 || Input.GetKeyDown(KeyCode.P))
         {
             gameManager.PlayerHasDied();
+            gameManager.ReloadPosition();
             Destroy(this.gameObject);
             currentHealth = stats.health;
         }

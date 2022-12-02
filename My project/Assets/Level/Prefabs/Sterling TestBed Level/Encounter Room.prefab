@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 704790505520404041}
   - component: {fileID: 1524710015}
   m_Layer: 0
-  m_Name: Combat Encounter Room
+  m_Name: Encounter Room
   m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,17 +62,10 @@ MonoBehaviour:
   cam: {fileID: 0}
   playerMovement: {fileID: 0}
   level: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  openDoor: {fileID: 0}
   whichPuzzle: {fileID: 0}
-  tags:
-  - Player
-  - Enemy
-  - Ally
-  - SpecialEnemy
-  door: {fileID: 0}
-  whichDoor: {fileID: 0}
-  doorClips:
-  - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
-  - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
+  isRoomActive: 0
+  wasFunctionCalled: 0
   isAPuzzleRoom: 0
   isACombatRoom: 1
   puzzleDialouge: {fileID: 0}

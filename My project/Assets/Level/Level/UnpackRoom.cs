@@ -11,6 +11,7 @@ public class UnpackRoom : MonoBehaviour
     public VectorValue level;
     public GameEvent openDoor;
     public PuzzleDataManager whichPuzzle;
+   
 
     public bool isRoomActive = false;
     public bool wasFunctionCalled = false;
