@@ -8,5 +8,5 @@ public class PlayerStats: ScriptableObject
 {
     [Header("Health Numbers")]
     public int health;
-    public int numberOfHearts;
+   
 }

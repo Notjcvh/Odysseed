@@ -28,7 +28,9 @@ public class GameManager : MonoBehaviour
     public float textDisappearTimer = 1.3f;
     public float countdown;
     private bool sceneTransitonTextActive = false;
-    public bool hasDiedOnce = false; // might be better to have as a number 
+    public bool hasDied = false; // might be better to have as a number 
+
+    public List<Transform> checkpoints;
 
     #region Unity Functions
     private void Awake()
@@ -92,8 +94,9 @@ public class GameManager : MonoBehaviour
 
     public void PlayerHasDied()
     {
-        hasDiedOnce = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        hasDied = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function
+        hasDied = false;
     }
 
 
