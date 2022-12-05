@@ -4,37 +4,49 @@ using UnityEngine;
 
 public class DoorAnimation : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-    public float distanceFromPlayer;
-    public float talkRange;
-    [Header("Animations")]
- 
+    public int doorValue = 1;
 
+    public UnpackRoom myRoom;
+
+    [Header("Animations")]
     [SerializeField] private Animator door;
     [SerializeField] private AnimationClip[] doorClips;
+    public BoxCollider boxCollider;
+ 
+    public bool active;
+    public bool opened = false;
+    public bool closed = false;
 
-    public void Open()
+    private void Awake()
     {
-        distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
-        if (distanceFromPlayer <= talkRange)
-            this.GetComponent<Animator>().Play(doorClips[0].name, 0, 0);
-        else
-            Debug.Log("Too Far Away");
-    
+        boxCollider.enabled = false;
+    }
+
+    public void UnlockDoor()
+    {
+        this.GetComponent<Animator>().Play(doorClips[0].name, 0, 0);
+        opened = true;
+        boxCollider.enabled = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(opened == false)
+        {
+            door.Play(doorClips[0].name, 0, 0);
+            opened = true;
+            closed = false;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        door.Play(doorClips[1].name, 0, 0);
-        this.gameObject.GetComponent<BoxCollider>().enabled = false; // temporary fix for now if the game includes back tracking then we would need the doors to open and reopen 
+        if(closed == false)
+        {
+            door.Play(doorClips[1].name, 0, 0);
+            closed = true;
+            opened = false;
+        }
     }
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(this.transform.position, player.position);
-
-    }
-
 
 
 

@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordTest : MonoBehaviour
+public class RoomEvents : MonoBehaviour
 {
+   public  RegularEvents regularEvents;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +16,10 @@ public class SwordTest : MonoBehaviour
     {
         
     }
+}
+[System.Serializable]
+public class RegularEvents
+{
+    public string name;
+    public string name2;
 }

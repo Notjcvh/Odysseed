@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private Vector3 positionOfBoneyard;
 
 
-    public VectorValue room;
+    public VectorValue level;
     public SceneManager currentScene;
     public TextMeshProUGUI displayText;
 
@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
     public HashSet<Transform> hasSet = new HashSet<Transform>();
     public List<Transform> checkpointNames = null; // used to convert hashset to list to get transfroms of checkpoints
     public int largestIndexofCheckpoints = 0;
-    
-
 
     #region Unity Functions
     private void Awake()
@@ -50,12 +48,12 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-       sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
-       playerMovement = player.GetComponent<PlayerMovement>();
-       sceneTransitonTextActive = true;
+        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
+        playerMovement = player.GetComponent<PlayerMovement>();
+        sceneTransitonTextActive = true;
         
         countdown = textDisappearTimer;
-        positionOfBoneyard = room.boneYard;
+        positionOfBoneyard = level.boneYard;
         BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         DisplayText(sceneTransition);
         ReloadPosition();
@@ -84,7 +82,6 @@ public class GameManager : MonoBehaviour
 
  
     #endregion
-
     #region Public Functions
     public void DisplayText(GameObject scene)
     {
@@ -94,7 +91,7 @@ public class GameManager : MonoBehaviour
                t.gameObject.SetActive(true); // setting the pannel and TMP GUI prefab to active 
             
             displayText = scene.GetComponentInChildren<TextMeshProUGUI>(); 
-            displayText.SetText(room.levelName);
+            displayText.SetText(level.levelName);
         }
         else
             return;       
@@ -111,25 +108,21 @@ public class GameManager : MonoBehaviour
         checkpointNames = new List<Transform>(hasSet);
         largestIndexofCheckpoints = checkpointNames.Count;
     }
-
-
     public void ReloadPosition()
     {
-        if (checkpointNames.Count >= 1)
+        if (hasSet.Count >= 1)
         {
             Transform b = checkpointNames[checkpointNames.Count - 1];
             print(b);
-            position = b.position;
+
+            lastCheckPointPos = b.position;
+            position = lastCheckPointPos;
         }
         else
         {
-            position = room.initialStartValue;
+            position = level.initialStartValue;
         }
     }
- 
-
-    
-
     #endregion
 
 

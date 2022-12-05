@@ -47,8 +47,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.3697165, z: 7.7379475}
-  m_Center: {x: 0, y: -0.070232205, z: 11.328292}
+  m_Size: {x: 1, y: 0.36971647, z: 18.333393}
+  m_Center: {x: 0, y: -0.07023221, z: 6.030569}
 --- !u!95 &663801528401592185
 Animator:
   serializedVersion: 4
@@ -81,10 +81,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4892ebd65d2e15f4f83c10764207d4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorValue: 1
+  myRoom: {fileID: 0}
   door: {fileID: 663801528401592185}
   doorClips:
   - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
   - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
+  boxCollider: {fileID: 0}
+  active: 0
+  opened: 0
+  closed: 0
 --- !u!114 &9161672428116163442
 MonoBehaviour:
   m_ObjectHideFlags: 0
