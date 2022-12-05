@@ -25,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704790505520404043}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,8 +44,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 49.720947, y: 9.178369, z: 45.7721}
-  m_Center: {x: 4.4292536, y: 4.0891833, z: -5.488798}
+  m_Size: {x: 49.720947, y: 9.178369, z: 46.990612}
+  m_Center: {x: 4.4292526, y: 4.0891833, z: -4.8795414}
 --- !u!114 &1524710015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,11 +61,11 @@ MonoBehaviour:
   player: {fileID: 0}
   cam: {fileID: 0}
   playerMovement: {fileID: 0}
-  level: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
-  openDoor: {fileID: 0}
+  level: {fileID: 11400000, guid: 75ba29431a42ce246b8dc2eeed5e13f8, type: 2}
   whichPuzzle: {fileID: 0}
   isRoomActive: 0
-  wasFunctionCalled: 0
+  isRoomComplete: 0
+  doors: []
   isAPuzzleRoom: 0
   isACombatRoom: 1
   puzzleDialouge: {fileID: 0}
@@ -74,3 +74,5 @@ MonoBehaviour:
   lockNumber: 0
   allEnemiesDefeated: 0
   enemies: []
+  roomEvents:
+  - {fileID: 11400000, guid: acdf9e6cd1493a64cb43576406de966c, type: 2}

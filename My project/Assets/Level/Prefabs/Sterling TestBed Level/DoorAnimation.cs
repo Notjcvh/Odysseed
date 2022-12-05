@@ -46,6 +46,13 @@ public class DoorAnimation : MonoBehaviour
             closed = true;
             opened = false;
         }
+        if(closed == true && opened == true)
+        {
+            door.Play(doorClips[1].name, 0, 0);
+            closed = true;
+            opened = false;
+               
+        }
     }
 
 
