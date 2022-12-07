@@ -100,6 +100,10 @@ public class PlayerAttack : MonoBehaviour
             obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
             obj.SendMessage("TakeDamage", damage / 10);
         }
+        if (obj.tag == "Boss")
+        {
+            obj.SendMessage("TakeDamage", damage / 10);
+        }
     }
 
     private void AddKnockback()

@@ -1,35 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BossAi : MonoBehaviour
 {
     [Header("Generic Attributes")]
     public float genericAtkSpeed;
     private float genericAtkSpeedCounter;
-    public int bossHealth;
-    public int meleeAtkRange;
-    public int nextAttack;
-    [Header("Attack1 Attributes")]
+    public int currentHealth;
+    public int maxHealth;
+    [Header("Movement")]
+    public float movementSpeed;
+    [Header("Ranged Attributes")]
     public float attack1Speed;
     public GameObject attack1;
     public float attack1Life;
-    [Header("Attack2 Attributes")]
-    public float attack2Speed;
-    public GameObject[] spawnLocations;
+    [Header("Melee Attributes")]
+    public float meleeCooldown;
+    private float meleeCooldownCounter;
+    public GameObject spawnLocation;
     public GameObject attack2;
+    public bool activateMelee;
     public float attack2Life;
     [Header("Summon Enemy Attributes")]
-    public float summonEnemySpeed;
+    public float summonEnemyCooldown;
+    private float summonEnemyCounter;
+    public GameObject projectileSpawnLocation;
+    public GameObject projectile;
     public GameObject enemy;
 
     private GameObject player;
     public float distanceFromPlayer;
-
+    private NavMeshAgent navMeshAge;
     // Start is called before the first frame update
     void Start()
     {
+        currentHealth = maxHealth;
         player = GameObject.FindGameObjectWithTag("Player");
+        navMeshAge = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -37,35 +46,24 @@ public class BossAi : MonoBehaviour
     {
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
         genericAtkSpeedCounter -= Time.deltaTime;
-        if(genericAtkSpeedCounter <= 0)
+        meleeCooldownCounter -= Time.deltaTime;
+        summonEnemyCounter -= Time.deltaTime;
+        navMeshAge.destination = player.transform.position;
+        if (genericAtkSpeedCounter <= 0)
         {
-            if (distanceFromPlayer >= meleeAtkRange)
-            {
-                if (nextAttack != 1)
-                    nextAttack = 1;
-                else
-                    nextAttack = 3;
-            }
-            else
-            {
-                if (nextAttack != 2)
-                    nextAttack = 2;
-                else
-                    nextAttack = 3;
-            }
-            if(nextAttack == 1)
-            {
-                Attack1();
-            }
-            else if (nextAttack == 2)
-            {
-                Attack2();
-            }
-            else
-            {
-                SummonEnemyAtack();
-            }
+            Attack1();
             genericAtkSpeedCounter = genericAtkSpeed;
+        }
+        if (meleeCooldownCounter <= 0 && activateMelee)
+        {
+            navMeshAge.speed = 0;
+            activateMelee = false;
+            meleeCooldownCounter = meleeCooldown;
+            //activate animation add event to animation that spawns collider & reenableMovespeed;
+        }
+        if(summonEnemyCounter <= summonEnemyCooldown)
+        {
+            //activate animation with scripts to summon enemy;
         }
     }
 
@@ -78,19 +76,13 @@ public class BossAi : MonoBehaviour
 
     public void Attack2()
     {
-        foreach (var item in spawnLocations)
-        {
-            Vector3 spawnLocation = item.transform.position;
-            SpawnAttack2(spawnLocation);
-        }
-        
+        Vector3 spawnLocation = this.spawnLocation.transform.position;
+        SpawnAttack2(spawnLocation);
     }
 
-    public void SummonEnemyAtack()
+    public void TakeDamage(int damage)
     {
-        Invoke("SummonEnemy", attack1Speed);
-        Invoke("SummonEnemy", attack1Speed * 2);
-        Invoke("SummonEnemy", attack1Speed * 3);
+        this.currentHealth -= damage;
     }
 
     public void SpawnAttack1()
@@ -101,12 +93,12 @@ public class BossAi : MonoBehaviour
     }
     public void SpawnAttack2(Vector3 spawnLocation)
     {
-        GameObject inGameAttack1 = Instantiate(attack1, spawnLocation, player.transform.rotation);
+        GameObject inGameAttack1 = Instantiate(attack2, spawnLocation, this.transform.rotation);
         Destroy(inGameAttack1, attack2Life);
     }
     public void SummonEnemy()
     {
-        GameObject inGameAttack1 = Instantiate(enemy, player.transform.position, player.transform.rotation);
+        GameObject inGameAttack1 = Instantiate(projectile, projectileSpawnLocation.transform.position, projectileSpawnLocation.transform.rotation);
     }
 
     
