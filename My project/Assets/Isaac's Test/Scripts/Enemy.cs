@@ -8,7 +8,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     private NavMeshAgent navMeshAge;
-
+    [Header("Animation")]
+    public Animator animator;
     [Header("Health")]
     public int maxHealth = 3;
     public int currentHealth;
@@ -18,6 +19,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed;
     public float attackLife;
     public float attackPosChangeTimer;
+    public Attack attackScript;
     private Transform currentAttackPos;
     private GameObject[] attackPoints;
     private int attackPointer = 0;
@@ -30,11 +32,12 @@ public class Enemy : MonoBehaviour
     [Header("Movement")]
     public float movementSpeed;
     public float attackMoveSpeed;
+    private float tempAttackMoveSpeed;
     public float idleSpeed;
     public float idleDelay;
     public Transform currentWaypoint;
     public GameObject patrolPoint;
-
+    public Rigidbody rb;
     [Header("Rooms")]
     public GameObject finishedRoom;
     public UnpackRoom locationInWorld;
@@ -47,10 +50,11 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
         navMeshAge = GetComponent<NavMeshAgent>();
         attackCooldown = attackSpeed;
+        tempAttackMoveSpeed = attackMoveSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
         attackPoints = GameObject.FindGameObjectsWithTag("AttackPoints");
-       
-        currentAttackPos = attackPoints[0].GetComponent<Transform>();   
+        rb = this.GetComponent<Rigidbody>();
+        currentAttackPos = attackPoints[0].GetComponent<Transform>();
         StartCoroutine(FindRandomWaypoint());
         StartCoroutine(FindAttackWaypoint());
     }
@@ -60,6 +64,7 @@ public class Enemy : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
         attackCooldown -= Time.deltaTime;
         attackLifetime -= Time.deltaTime;
+        animator.SetFloat("Speed", rb.velocity.magnitude);
         if (attackPointer == 5)
         {
             attackPointer = 0;
@@ -67,16 +72,21 @@ public class Enemy : MonoBehaviour
         if (attackLifetime <= 0)
         {
             attackHitbox.SetActive(false);
+            animator.SetBool("IsAttacking", false);
+            attackScript.hitAlready = false;
+            tempAttackMoveSpeed = attackMoveSpeed;
         }
         if (distanceFromPlayer <= attackRange)
         {
             //if the enemy is in attack range do this
-            navMeshAge.speed = attackMoveSpeed;
+            navMeshAge.speed = tempAttackMoveSpeed;
             transform.LookAt(player.transform);
             navMeshAge.destination = currentAttackPos.position;
             if(attackCooldown <= 0)
             {
                 attackHitbox.SetActive(true);
+                animator.SetBool("IsAttacking", true);
+                tempAttackMoveSpeed = 0;
                 attackLifetime = attackLife;
                 attackCooldown = attackSpeed;
             }
@@ -85,7 +95,7 @@ public class Enemy : MonoBehaviour
         {
             //if the enemy sees the player but is not in attack range
             aggroRange = deaggroRange;
-            navMeshAge.speed = movementSpeed;
+            navMeshAge.speed = tempAttackMoveSpeed;
             navMeshAge.destination = currentAttackPos.position;
         }
         else
@@ -120,6 +130,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        animator.SetBool("TakingDamage", true);
         this.currentHealth -= damage;
     }
 
@@ -148,4 +159,6 @@ public class Enemy : MonoBehaviour
         currentAttackPos = attackPoints[Random.Range(0, attackPoints.Length)].GetComponent<Transform>();
         StartCoroutine(FindAttackWaypoint());
     }
+
+
 }
