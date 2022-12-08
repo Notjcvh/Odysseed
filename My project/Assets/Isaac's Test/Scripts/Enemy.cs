@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed;
     public float attackLife;
     public float attackPosChangeTimer;
+    public Attack attackScript;
     private Transform currentAttackPos;
     private GameObject[] attackPoints;
     private int attackPointer = 0;
@@ -71,6 +72,9 @@ public class Enemy : MonoBehaviour
         if (attackLifetime <= 0)
         {
             attackHitbox.SetActive(false);
+            animator.SetBool("IsAttacking", false);
+            attackScript.hitAlready = false;
+            tempAttackMoveSpeed = attackMoveSpeed;
         }
         if (distanceFromPlayer <= attackRange)
         {
@@ -91,7 +95,7 @@ public class Enemy : MonoBehaviour
         {
             //if the enemy sees the player but is not in attack range
             aggroRange = deaggroRange;
-            navMeshAge.speed = movementSpeed;
+            navMeshAge.speed = tempAttackMoveSpeed;
             navMeshAge.destination = currentAttackPos.position;
         }
         else
@@ -156,11 +160,5 @@ public class Enemy : MonoBehaviour
         StartCoroutine(FindAttackWaypoint());
     }
 
-    public void TurnOffAnimation()
-    {
-        animator.SetBool("TakingDamage", false);
-        animator.SetBool("IsAttacking", false);
-        tempAttackMoveSpeed = attackMoveSpeed;
-    }
 
 }
