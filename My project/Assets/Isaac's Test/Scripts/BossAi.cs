@@ -21,6 +21,7 @@ public class BossAi : MonoBehaviour
     private float meleeCooldownCounter;
     public GameObject spawnLocation;
     public GameObject attack2;
+    public Attack attackScript;
     public bool activateMelee;
     public float attack2Life;
     [Header("Summon Enemy Attributes")]
