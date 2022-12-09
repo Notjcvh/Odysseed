@@ -117,15 +117,16 @@ public class Enemy : MonoBehaviour
     }
     private void Death()
     {
-        finishedRoom.GetComponent<UnpackRoom>().TransportEnemy(this.gameObject);
+        //finishedRoom.GetComponent<UnpackRoom>().TransportEnemy(this.gameObject);
+        Destroy(this.gameObject);
     }
 
     public void ModifiyHealth(int amount)
     {
-        currentHealth += amount;
-        float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
         Destroy(hiteffs, 2f);
+        currentHealth += amount;
+        float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         OnHealthPercentChange(currentHealthPercent);
     }
 

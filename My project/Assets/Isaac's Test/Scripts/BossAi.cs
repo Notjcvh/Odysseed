@@ -10,6 +10,8 @@ public class BossAi : MonoBehaviour
     private float genericAtkSpeedCounter;
     public int currentHealth;
     public int maxHealth;
+    public GameObject hitEffect;
+    public Transform hiteffectLocation;
     [Header("Movement")]
     public float movementSpeed;
     private float tempAttackMoveSpeed;
@@ -88,6 +90,11 @@ public class BossAi : MonoBehaviour
             tempAngularSpeed = 0;
             isTossing = true;
         }
+
+        if(currentHealth <= 0)
+        {
+            Death();
+        }
     }
 
     public void Attack1()
@@ -99,6 +106,8 @@ public class BossAi : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        GameObject hiteffs = Instantiate(hitEffect, hiteffectLocation.position, hiteffectLocation.rotation);
+        Destroy(hiteffs, 2f);
         this.currentHealth += damage;
     }
 
@@ -144,5 +153,10 @@ public class BossAi : MonoBehaviour
     {
         animator.SetBool("IsTossing", false);
         isTossing = false;
+    }
+
+    public void Death()
+    {
+        Destroy(this.gameObject);
     }
 }
