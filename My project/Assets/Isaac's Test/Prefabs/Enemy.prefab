@@ -777,9 +777,10 @@ MonoBehaviour:
   attackLife: 0.5
   attackPosChangeTimer: 0.5
   attackScript: {fileID: 1201973223}
-  aggroRange: 5
-  deaggroRange: 10
+  aggroRange: 20
+  deaggroRange: 30
   attackHitbox: {fileID: 4805589846665646856}
+  hitEffect: {fileID: 1014210819661757414, guid: 09c7af6e75624494e92d661a082fab8b, type: 3}
   movementSpeed: 20
   attackMoveSpeed: 20
   idleSpeed: 10
@@ -788,7 +789,6 @@ MonoBehaviour:
   patrolPoint: {fileID: 5167023446970086707, guid: 9b4ae491da83814489d0ef988fb5f145, type: 3}
   rb: {fileID: 0}
   finishedRoom: {fileID: 0}
-  locationInWorld: {fileID: 0}
 --- !u!136 &4805589847024103407
 CapsuleCollider:
   m_ObjectHideFlags: 0

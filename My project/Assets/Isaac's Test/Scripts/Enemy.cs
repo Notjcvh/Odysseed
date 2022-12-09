@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour
     public float deaggroRange;
     private float distanceFromPlayer;
     public GameObject attackHitbox;
+    public GameObject hitEffect;
     private float attackLifetime;
     private float attackCooldown;
     [Header("Movement")]
@@ -40,7 +41,6 @@ public class Enemy : MonoBehaviour
     public Rigidbody rb;
     [Header("Rooms")]
     public GameObject finishedRoom;
-    public UnpackRoom locationInWorld;
 
     public event System.Action<float> OnHealthPercentChange = delegate { };
 
@@ -114,7 +114,6 @@ public class Enemy : MonoBehaviour
     {
         GameObject location = colliderTrigger.gameObject;
         finishedRoom = location;
-
     }
     private void Death()
     {
@@ -125,6 +124,8 @@ public class Enemy : MonoBehaviour
     {
         currentHealth += amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
+        GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
+        Destroy(hiteffs, 2f);
         OnHealthPercentChange(currentHealthPercent);
     }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5909223684622226124}
   - component: {fileID: 4140417482743610948}
   m_Layer: 0
-  m_Name: Hit
+  m_Name: EnemyHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -977,7 +977,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 50
+        scalar: 30
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -4819,7 +4819,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 16d88eec6721c854195d32a49496dd1c, type: 2}
+  - {fileID: 2100000, guid: adb9cbc267c34d14bb9651287e3a4f40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
