@@ -2821,6 +2821,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5555648250390313032, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555648250390313032, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555648250390313032, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5555648250390313033, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2905,11 +2917,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5555648250390313034, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555648250390313035, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5555648250390313037, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_Name
       value: Player UI
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5555648250390313037, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5555648250390313034, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
 --- !u!1 &250350813
 GameObject:
@@ -13705,6 +13730,7 @@ GameObject:
   - component: {fileID: 1216000353}
   - component: {fileID: 1216000352}
   - component: {fileID: 1216000356}
+  - component: {fileID: 1216000357}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -13761,7 +13787,7 @@ Canvas:
   m_GameObject: {fileID: 1216000351}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
@@ -13771,7 +13797,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1216000355
 RectTransform:
@@ -13807,6 +13833,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 1506059602}
+--- !u!225 &1216000357
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216000351}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 1
 --- !u!1 &1225441718
 GameObject:
   m_ObjectHideFlags: 0
