@@ -21,6 +21,7 @@ public class PauseMenu : MonoBehaviour
             {
                 Pause();
                 Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
