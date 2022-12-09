@@ -5,29 +5,32 @@ using UnityEngine;
 public class Checkpoints : MonoBehaviour
 {
     private GameManager gameManager;
-   // private static Checkpoints instance;
+    public Collider Trigger;
     public bool reached = false;
 
     private void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-        if(reached == true)
+    }
+
+    public void CheckMyPoints()
+    {
+        bool beenReached = reached;
+        if (beenReached == true)
         {
-            Destroy(this.gameObject);
-            Debug.Log("this Checkpoint was destroyed" + this.gameObject); 
+            this.gameObject.SetActive(false);
+            Trigger.enabled = false;
         }
         else
         {
-            DontDestroyOnLoad(this.gameObject);
+            this.gameObject.SetActive(true);
         }
-
+       // Debug.Log(beenReached);
     }
-
-
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Hit");
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             //gameManager.lastCheckPointPos = transform.position;
             gameManager.hasSet.Add(this.transform);
@@ -36,4 +39,6 @@ public class Checkpoints : MonoBehaviour
         }
 
     }
+
 }
+

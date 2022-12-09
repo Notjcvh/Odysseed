@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
     public bool hasDied = false; // might be better to have as a number 
 
     public HashSet<Transform> hasSet = new HashSet<Transform>();
-    public List<Transform> checkpointNames = null; // used to convert hashset to list to get transfroms of checkpoints
-    public int largestIndexofCheckpoints = 0;
+    public List<Transform> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
+    public bool loaded = false;
 
     #region Unity Functions
     private void Awake()
@@ -51,14 +51,12 @@ public class GameManager : MonoBehaviour
         sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
         playerMovement = player.GetComponent<PlayerMovement>();
         sceneTransitonTextActive = true;
-        
         countdown = textDisappearTimer;
         positionOfBoneyard = level.boneYard;
         BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         DisplayText(sceneTransition);
         ReloadPosition();
     }
-
     private void Update()
     { 
         if(sceneTransitonTextActive == true)
@@ -69,15 +67,27 @@ public class GameManager : MonoBehaviour
             {
                 
                 countdown -= Time.deltaTime;
+                loaded = true;
             }
             if (countdown <= 0)
             {
                 sceneTransitonTextActive = false;
+                loaded = false;
                 playerMovement.stopMovementEvent = false;
                 countdown = textDisappearTimer;
                
             }
         }   
+
+
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            foreach (var thing in hasSet)
+            {
+                Debug.Log("This is inside" + thing);
+            }
+            Debug.Log("Ran");
+        }
     }
 
  
@@ -105,16 +115,14 @@ public class GameManager : MonoBehaviour
 
     public void Convert()
     {
-        checkpointNames = new List<Transform>(hasSet);
-        largestIndexofCheckpoints = checkpointNames.Count;
+        triggeredPoints = new List<Transform>(hasSet);
+
     }
     public void ReloadPosition()
     {
         if (hasSet.Count >= 1)
         {
-            Transform b = checkpointNames[checkpointNames.Count - 1];
-            print(b);
-
+            Transform b = triggeredPoints[triggeredPoints.Count - 1];
             lastCheckPointPos = b.position;
             position = lastCheckPointPos;
         }
