@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     public HashSet<Transform> hasSet = new HashSet<Transform>();
     public List<Transform> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
+    private GameObject[] checkpoints = null;
     public bool loaded = false;
 
     #region Unity Functions
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
+
         sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
         playerMovement = player.GetComponent<PlayerMovement>();
         sceneTransitonTextActive = true;
@@ -56,6 +58,12 @@ public class GameManager : MonoBehaviour
         BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         DisplayText(sceneTransition);
         ReloadPosition();
+
+        checkpoints = GameObject.FindGameObjectsWithTag("Checkpoints"); // for disabling all the checkpoint meshes
+        foreach (var item in checkpoints)
+        {
+            item.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
     private void Update()
     { 
@@ -80,14 +88,14 @@ public class GameManager : MonoBehaviour
         }   
 
 
-        if(Input.GetKeyDown(KeyCode.Y))
+       /* if(Input.GetKeyDown(KeyCode.Y))
         {
             foreach (var thing in hasSet)
             {
                 Debug.Log("This is inside" + thing);
             }
             Debug.Log("Ran");
-        }
+        }*/
     }
 
  

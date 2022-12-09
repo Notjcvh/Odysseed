@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +29,7 @@ public class PlayerManger : MonoBehaviour
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         transform.position = gameManager.position;
-         
+
         playerInput = GetComponent<PlayerInput>();
         playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
         material = playerOutline.GetComponent<Renderer>().material;
@@ -40,11 +38,11 @@ public class PlayerManger : MonoBehaviour
     }
 
     private void Update()
-    { 
-        if(playerInput.changeWeaponState) // calls the ChangeWeaponState Method
-           ChangeWeaponState(element);       
+    {
+        if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
+            ChangeWeaponState(element);
 
-        if(currentHealth >numberOfHearts)  // Making sure our health equals the number of hearts 
+        if (currentHealth > numberOfHearts)  // Making sure our health equals the number of hearts 
             numberOfHearts = currentHealth;
 
         for (int i = 0; i < hearts.Length; i++)
@@ -60,7 +58,7 @@ public class PlayerManger : MonoBehaviour
                 hearts[i].enabled = false;
         }
 
-        if(currentHealth == 0 || Input.GetKeyDown(KeyCode.P))
+        if (currentHealth == 0 || Input.GetKeyDown(KeyCode.P))
         {
             gameManager.PlayerHasDied();
             gameManager.ReloadPosition();
@@ -72,9 +70,9 @@ public class PlayerManger : MonoBehaviour
 
     #region Private Functions
     private void ChangeWeaponState(ElementType state)
-    {  
+    {
 
-        if(state == ElementType.Base)
+        if (state == ElementType.Base)
         {
             print(state);
             element = ElementType.Water;
@@ -82,7 +80,7 @@ public class PlayerManger : MonoBehaviour
             material.color = color;
             Debug.Log("Switch to " + element);
         }
-        if(state == ElementType.Water)
+        if (state == ElementType.Water)
         {
             element = ElementType.Fire;
             color = Color.red;
@@ -96,7 +94,7 @@ public class PlayerManger : MonoBehaviour
             material.color = color;
             Debug.Log("Switch to " + element);
         }
-        if(state == ElementType.Earth)
+        if (state == ElementType.Earth)
         {
             print(state);
             element = ElementType.Base;
@@ -121,7 +119,7 @@ public enum ElementType
     Water = 1,
     Fire = 2,
     Earth = 3,
-   
+
 }
 
 
