@@ -12,27 +12,34 @@ public class BossAi : MonoBehaviour
     public int maxHealth;
     [Header("Movement")]
     public float movementSpeed;
+    private float tempAttackMoveSpeed;
+    public float angularSpeed;
+    private float tempAngularSpeed;
     [Header("Ranged Attributes")]
     public float attack1Speed;
     public GameObject attack1;
     public float attack1Life;
     [Header("Melee Attributes")]
     public float meleeCooldown;
-    private float meleeCooldownCounter;
-    public GameObject spawnLocation;
-    public GameObject attack2;
-    public Attack attackScript;
-    public bool activateMelee;
     public float attack2Life;
+    public float meleeRange;
+    private float meleeCooldownCounter;
+    public GameObject attackHitbox;
+    public GameObject explosion;
+    public Attack attackScript;
+    private bool activateMelee;
+    private float attack2LifeCounter;
     [Header("Summon Enemy Attributes")]
     public float summonEnemyCooldown;
     private float summonEnemyCounter;
-    public GameObject projectileSpawnLocation;
+    public Transform projectileSpawnLocation;
     public GameObject projectile;
+    public float projectileVelocity;
     public GameObject enemy;
-
+    private bool isTossing;
     private GameObject player;
     public float distanceFromPlayer;
+    private Animator animator;
     private NavMeshAgent navMeshAge;
     // Start is called before the first frame update
     void Start()
@@ -40,6 +47,9 @@ public class BossAi : MonoBehaviour
         currentHealth = maxHealth;
         player = GameObject.FindGameObjectWithTag("Player");
         navMeshAge = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        animator = this.GetComponent<Animator>();
+        tempAngularSpeed = angularSpeed;
+        tempAttackMoveSpeed = movementSpeed;
     }
 
     // Update is called once per frame
@@ -48,23 +58,35 @@ public class BossAi : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
         genericAtkSpeedCounter -= Time.deltaTime;
         meleeCooldownCounter -= Time.deltaTime;
+        attack2LifeCounter -= Time.deltaTime;
         summonEnemyCounter -= Time.deltaTime;
         navMeshAge.destination = player.transform.position;
+        navMeshAge.speed = tempAttackMoveSpeed;
+        navMeshAge.angularSpeed = tempAngularSpeed;
         if (genericAtkSpeedCounter <= 0)
         {
             Attack1();
             genericAtkSpeedCounter = genericAtkSpeed;
         }
-        if (meleeCooldownCounter <= 0 && activateMelee)
+        if(distanceFromPlayer <= meleeRange && meleeCooldownCounter <= 0)
         {
-            navMeshAge.speed = 0;
-            activateMelee = false;
-            meleeCooldownCounter = meleeCooldown;
-            //activate animation add event to animation that spawns collider & reenableMovespeed;
+            activateMelee = true;
         }
-        if(summonEnemyCounter <= summonEnemyCooldown)
+        if (activateMelee)
         {
-            //activate animation with scripts to summon enemy;
+            animator.SetBool("IsSlaming", true);
+            tempAttackMoveSpeed = 0;
+            tempAngularSpeed = 0;
+            attack2LifeCounter = attack2Life;
+            meleeCooldownCounter = meleeCooldown;
+            activateMelee = false;
+        }
+        if (summonEnemyCounter <= 0 && !isTossing)
+        {
+            animator.SetBool("IsTossing", true);
+            tempAttackMoveSpeed = 0;
+            tempAngularSpeed = 0;
+            isTossing = true;
         }
     }
 
@@ -75,32 +97,52 @@ public class BossAi : MonoBehaviour
         Invoke("SpawnAttack1", attack1Speed*3);
     }
 
-    public void Attack2()
-    {
-        Vector3 spawnLocation = this.spawnLocation.transform.position;
-        SpawnAttack2(spawnLocation);
-    }
-
     public void TakeDamage(int damage)
     {
-        this.currentHealth -= damage;
+        this.currentHealth += damage;
     }
 
     public void SpawnAttack1()
     {
-        Vector3 spawnLocation = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+        Vector3 spawnLocation = new Vector3(player.transform.position.x, 0, player.transform.position.z);
         GameObject inGameAttack1 = Instantiate(attack1, spawnLocation, player.transform.rotation);
         Destroy(inGameAttack1, attack1Life);
     }
-    public void SpawnAttack2(Vector3 spawnLocation)
+
+    public void FireEnemy()
     {
-        GameObject inGameAttack1 = Instantiate(attack2, spawnLocation, this.transform.rotation);
-        Destroy(inGameAttack1, attack2Life);
+        GameObject Seed = Instantiate(projectile, projectileSpawnLocation.position, transform.rotation);
+        Rigidbody rb = Seed.GetComponent<Rigidbody>();
+        rb.AddForce(transform.forward * projectileVelocity,ForceMode.Impulse);
+        summonEnemyCounter = summonEnemyCooldown;
     }
+
     public void SummonEnemy()
     {
         GameObject inGameAttack1 = Instantiate(projectile, projectileSpawnLocation.transform.position, projectileSpawnLocation.transform.rotation);
     }
 
-    
+    public void ActivateMelee()
+    {
+        attackHitbox.SetActive(true);
+        GameObject effectIns = (GameObject)Instantiate(explosion, attackHitbox.transform.position, attackHitbox.transform.rotation);
+        Destroy(effectIns, 2f);
+    }
+
+    public void ReEnableMovement()
+    {        
+        tempAttackMoveSpeed = movementSpeed;
+        tempAngularSpeed = angularSpeed;
+    }
+    public void EndOfMelee()
+    {
+        attackHitbox.SetActive(false);
+        animator.SetBool("IsSlaming", false);
+        attackScript.hitAlready = false;
+    }
+    public void EndOfToss()
+    {
+        animator.SetBool("IsTossing", false);
+        isTossing = false;
+    }
 }

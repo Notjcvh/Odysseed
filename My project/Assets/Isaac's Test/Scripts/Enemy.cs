@@ -131,7 +131,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         animator.SetBool("TakingDamage", true);
-        this.currentHealth -= damage;
+        this.currentHealth += damage;
     }
 
     public void DisableAI()

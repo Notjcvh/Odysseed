@@ -11,7 +11,7 @@ public class Attack : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && !hitAlready)
         {
-            GameObject effectIns = (GameObject)Instantiate(impactEffect, transform.position, transform.rotation);
+            GameObject effectIns = (GameObject)Instantiate(impactEffect, other.transform.position, other.transform.rotation);
             playerHealth.health -= 1;
             hitAlready = true;
             Destroy(effectIns, 2f);
