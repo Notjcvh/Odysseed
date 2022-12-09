@@ -24,4 +24,5 @@ public class GameAssets : MonoBehaviour
     public GameObject playerUI;
     public GameObject SceneTransitionCanvas;
     public GameObject BoneYard;
+    public GameObject hit1;
 }

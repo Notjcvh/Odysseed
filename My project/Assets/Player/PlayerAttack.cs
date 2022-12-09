@@ -11,48 +11,72 @@ public class PlayerAttack : MonoBehaviour
     public Transform attackPosition;
     public Transform enmeyPosition;
     public LayerMask whatIsHittable;
+
+    public Animator animator;
     private PlayerMovement playerMovement;
     private PlayerInput playerInput; 
     private Rigidbody obj;
     private Vector3 direction;
   
     [Header("Attack")]
-    public float delayAttack = .3f;
+    public float delayAttack = 1f;
     public int damage = 10;
     private bool isAttacking;
+
+
+
+    public float cooldownTime = 2f;
+    private float nextFireTime = 0f;
 
     [Header("Knockback")]
     public float knockbackTimer;
     public float knockbackStrength;
+
+    [Header("Combo")]
+    public int attackNumber;
 
     #region Unity Functions
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerInput = GetComponent<PlayerInput>();
+        
         attackArea.enabled = false;       
     }
     // Update is called once per frame
     void Update()
     {
-        if(playerInput.attack)
-          Attack();
+       
         if(obj != null)
           direction = (obj.transform.position - attackPosition.position).normalized; // finding the direction from attackPos to Obj rigidbody. In update so Knockback happen for the full time between frames
+
+        if (playerInput.attack)
+        {
+            Attack();
+            if (attackNumber > 2)
+                attackNumber = 0;
+            if (attackNumber == 0)
+                animator.SetBool("hit1", true);
+            if (attackNumber == 1)
+                animator.SetBool("hit2", true);
+            if (attackNumber == 2)
+                animator.SetBool("hit3", true);
+
+        }
     }
     #endregion
 
     #region Private FUnctions
     private void Attack()
     {
-        if (isAttacking)
-            return;
-        attackArea.enabled = true;
-        OnTriggerEnter(attackArea);
+        Debug.Log("Attack Ran");
         isAttacking = true;
         playerMovement.stopMovementEvent = true;
-        StartCoroutine(DelayAttack());                                                                              
+       
+        attackArea.enabled = true;
 
+        OnTriggerEnter(attackArea);
+        StartCoroutine(DelayAttack());
     }
 
     private IEnumerator DelayAttack()
@@ -61,6 +85,16 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = false;
         playerMovement.stopMovementEvent = false;
         attackArea.enabled = false;
+        if (attackNumber == 0)
+            animator.SetBool("hit1", false);
+        if (attackNumber == 1)
+            animator.SetBool("hit2", false);
+        if (attackNumber == 2) 
+        {
+            animator.SetBool("hit3", false);
+        }
+
+        attackNumber += 1;
     }
 
     private void OnTriggerEnter(Collider attackArea) // if an object has collided with the attacksphere while it is active 

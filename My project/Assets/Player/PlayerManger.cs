@@ -9,6 +9,7 @@ public class PlayerManger : MonoBehaviour
     private PlayerInput playerInput;
     public ElementType element;
     private GameManager gameManager;
+    public Animator animator;
 
     public int currentHealth;
 
@@ -25,22 +26,29 @@ public class PlayerManger : MonoBehaviour
     public GameObject playerOutline;
 
     #region Unity Functions
+    private void Awake()
+    {
+        currentHealth = stats.health;
+    }
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+        
+        animator = GetComponent<Animator>();
         transform.position = gameManager.position;
-
+        Debug.Log(transform.position);
         playerInput = GetComponent<PlayerInput>();
-        playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
+       // playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
         material = playerOutline.GetComponent<Renderer>().material;
 
-        currentHealth = stats.health;
+        
     }
 
     private void Update()
     {
-        if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
-            ChangeWeaponState(element);
+        
+        //if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
+          //  ChangeWeaponState(element);
 
         if (currentHealth > numberOfHearts)  // Making sure our health equals the number of hearts 
             numberOfHearts = currentHealth;
@@ -58,7 +66,7 @@ public class PlayerManger : MonoBehaviour
                 hearts[i].enabled = false;
         }
 
-        if (currentHealth == 0 || Input.GetKeyDown(KeyCode.P))
+        if (currentHealth <= 0 || Input.GetKeyDown(KeyCode.P))
         {
             gameManager.PlayerHasDied();
             gameManager.ReloadPosition();

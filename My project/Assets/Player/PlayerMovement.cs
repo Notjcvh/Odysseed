@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody playerBody;
     [SerializeField] private Transform camTarget;
     [SerializeField] private Transform distanceToGround;
-
+    private Animator animator;
 
 
     [Header("Movement")]
@@ -43,10 +43,13 @@ public class PlayerMovement : MonoBehaviour
     {
         cam = GetComponent<CameraController>();
         playerInput = GetComponent<PlayerInput>();
-        playerBody = GetComponentInChildren<Rigidbody>(); 
+        playerBody = GetComponentInChildren<Rigidbody>();
+        animator = GetComponent<PlayerManger>().animator;
     }
     private void Update()
     {
+       
+
         if (stopMovementEvent == false)
         {
             MoveNow();
@@ -74,7 +77,15 @@ public class PlayerMovement : MonoBehaviour
         {
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
+            animator.SetBool("isRunning", true);
         }
+        else
+            animator.SetBool("isRunning", false);
+
+
+
+
+
     }
     private bool IsGrounded()
     {
@@ -87,6 +98,8 @@ public class PlayerMovement : MonoBehaviour
         return playerInput.jumpInput;
     }
     private void StopMoving()
-    {    }
+    {
+       
+    }
 
 }
