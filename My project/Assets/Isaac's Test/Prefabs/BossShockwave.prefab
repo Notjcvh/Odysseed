@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 8519602723990475188}
   - component: {fileID: 8519602723990475187}
   - component: {fileID: 8519602723990475186}
-  - component: {fileID: 8519602723990475190}
-  - component: {fileID: 8519602723990475189}
   m_Layer: 0
   m_Name: BossShockwave
   m_TagString: Untagged
@@ -4872,30 +4870,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!65 &8519602723990475190
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8519602723990475185}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.480268, y: 4.757031, z: 2.37291}
-  m_Center: {x: 0.3588047, y: -0.13454151, z: 1.2362044}
---- !u!114 &8519602723990475189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8519602723990475185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 837d275ebc84f4a4d82bdbc91d742a02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
-  playerHealth: {fileID: 11400000, guid: 61a4eb993a70e834f8663ef018a8a3b9, type: 2}
