@@ -2269,14 +2269,14 @@ MonoBehaviour:
   doors: []
   isAPuzzleRoom: 0
   isACombatRoom: 1
+  roomEvents:
+  - {fileID: 11400000, guid: 9df62a26bb5d4704086a731d5c0bbd7a, type: 2}
   puzzleDialouge: {fileID: 0}
   needMatchesToSolve: 0
   currentValue: 0
   lockNumber: 0
   allEnemiesDefeated: 0
   enemies: []
-  roomEvents:
-  - {fileID: 11400000, guid: 9df62a26bb5d4704086a731d5c0bbd7a, type: 2}
 --- !u!1 &217026625
 GameObject:
   m_ObjectHideFlags: 0
@@ -6462,6 +6462,10 @@ PrefabInstance:
       propertyPath: talkRange
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 9161672428116163441, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+      propertyPath: triggerCollider
+      value: 
+      objectReference: {fileID: 2029152960}
     - target: {fileID: 9161672428116163442, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
       propertyPath: Event
       value: 
@@ -6998,14 +7002,14 @@ MonoBehaviour:
   doors: []
   isAPuzzleRoom: 0
   isACombatRoom: 1
+  roomEvents:
+  - {fileID: 11400000, guid: 389a4b39dc6c1ee49b9c24594ab0e7d1, type: 2}
   puzzleDialouge: {fileID: 0}
   needMatchesToSolve: 0
   currentValue: 0
   lockNumber: 0
   allEnemiesDefeated: 0
   enemies: []
-  roomEvents:
-  - {fileID: 11400000, guid: 389a4b39dc6c1ee49b9c24594ab0e7d1, type: 2}
 --- !u!1 &486408415
 GameObject:
   m_ObjectHideFlags: 0
@@ -7384,6 +7388,10 @@ PrefabInstance:
       propertyPath: talkRange
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 9161672428116163441, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+      propertyPath: triggerCollider
+      value: 
+      objectReference: {fileID: 1795526507}
     - target: {fileID: 9161672428116163442, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
       propertyPath: Event
       value: 
@@ -15596,6 +15604,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 6.27
       objectReference: {fileID: 0}
+    - target: {fileID: 8416268366433841059, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2c018aec86d9b6b488d5013f969e4bfb, type: 2}
     - target: {fileID: 9161672428116163441, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
       propertyPath: player
       value: 
@@ -15694,6 +15706,10 @@ PrefabInstance:
       propertyPath: myRoom
       value: 
       objectReference: {fileID: 1734466339}
+    - target: {fileID: 9161672428116163441, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+      propertyPath: triggerCollider
+      value: 
+      objectReference: {fileID: 2140885701}
     - target: {fileID: 9161672428116163442, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
       propertyPath: Event
       value: 
@@ -23554,6 +23570,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4892ebd65d2e15f4f83c10764207d4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &1795526507 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 1160697920338451469, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+  m_PrefabInstance: {fileID: 494392571}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1806096828
 GameObject:
   m_ObjectHideFlags: 0
@@ -24025,6 +24046,10 @@ PrefabInstance:
       propertyPath: myRoom
       value: 
       objectReference: {fileID: 922751782}
+    - target: {fileID: 9161672428116163441, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+      propertyPath: triggerCollider
+      value: 
+      objectReference: {fileID: 2126148368}
     - target: {fileID: 9161672428116163442, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
       propertyPath: Event
       value: 
@@ -26067,6 +26092,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2029152960 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 1160697920338451469, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+  m_PrefabInstance: {fileID: 456287792}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2029668554
 GameObject:
   m_ObjectHideFlags: 0
@@ -27881,6 +27911,11 @@ Transform:
   m_Father: {fileID: 1853951673}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2126148368 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 1160697920338451469, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+  m_PrefabInstance: {fileID: 1818724041}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2140150509
 GameObject:
   m_ObjectHideFlags: 0
@@ -27981,6 +28016,11 @@ Transform:
 --- !u!4 &2140885697 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1368716481460876311, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
+  m_PrefabInstance: {fileID: 1383949384}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2140885701 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 1160697920338451469, guid: 861db185eb0fd2048809e3d2116d6c6c, type: 3}
   m_PrefabInstance: {fileID: 1383949384}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &144061592866232911
@@ -28558,14 +28598,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4892ebd65d2e15f4f83c10764207d4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorValue: 1
   myRoom: {fileID: 215672578}
+  triggerCollider: {fileID: 223710732622885461}
+  doorValue: 1
   door: {fileID: 1889027888395571489}
   doorClips:
   - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
   - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
-  boxCollider: {fileID: 223710732622885461}
-  active: 0
   opened: 0
   closed: 0
 --- !u!114 &7792823478435550506
@@ -28678,13 +28717,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4892ebd65d2e15f4f83c10764207d4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myRoom: {fileID: 479106937}
+  triggerCollider: {fileID: 1160697920624871606}
   doorValue: 1
-  myRoom: {fileID: 0}
   door: {fileID: 663801528147209154}
   doorClips:
   - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
   - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
-  boxCollider: {fileID: 1160697920624871606}
-  active: 0
   opened: 0
   closed: 0

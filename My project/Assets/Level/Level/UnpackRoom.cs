@@ -22,20 +22,19 @@ public class UnpackRoom : MonoBehaviour
     [Header("Room Type")]
     public bool isAPuzzleRoom;
     public bool isACombatRoom;
-    
+    public GameEvent[] roomEvents; // what the doors are listening for
+
 
     [Header("Puzzle Variables")]
     public NPC puzzleDialouge;
-    public int needMatchesToSolve;
+    public int needMatchesToSolve; // this is what the room will check to open 
     public int currentValue;
   
 
     [Header("Combat Variables")]
     public int lockNumber = 0;
     public bool allEnemiesDefeated = false;
-    public List<GameObject> enemies = null;
-
-    public GameEvent[] roomEvents;
+    public List<GameObject> enemies = null; // this is what the room will check to open 
 
     private float timer = 1;
     Coroutine currentCoroutine = null;
@@ -60,9 +59,7 @@ public class UnpackRoom : MonoBehaviour
                 {
                     roomEvents[i].Raise();
                 }
-             
             }
-
         }
         else if (isAPuzzleRoom == true)
         {
@@ -102,7 +99,7 @@ public class UnpackRoom : MonoBehaviour
         if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies
         {
             enemies.Add(other.gameObject);
-            other.gameObject.GetComponent<Enemy>().WhichRoom(this.gameObject.GetComponent<Collider>()); // sending the name of the trigger/(theroom) to the enemy
+            other.gameObject.GetComponent<Enemy>().WhichRoom(this.gameObject); // sending to the enemy which room it is in
         }
         if (other.CompareTag(tags[4])) //doors
         {
@@ -126,17 +123,19 @@ public class UnpackRoom : MonoBehaviour
                 cam.camPriority = 0;
                 playerMovement.inCombatRoom = false;
             }
-
-            if (other.CompareTag(tags[2]) || other.CompareTag(tags[3]))
+            if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies 
             {
                 enemies.Remove(other.gameObject);
             }         
         }
     }
 
-    public void TransportEnemy(GameObject other)
+    public void TransportEnemy(GameObject other) // Transport the enemy to the boneyard 
     {
-      other.transform.position = level.boneYard;
+      //this function will activate the OnTriggerExit and Do:
+      // remove the enemy from the list 
+      // subtract 1 from the lock number 
+      other.transform.position = level.boneYard; 
     }
 
     public void GetTriggeredValue(int number)

@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class DoorAnimation : MonoBehaviour
 {
-    public int doorValue = 1;
-
+    
     public UnpackRoom myRoom;
+    public BoxCollider triggerCollider; // this object, for backtracking 
+
+    [Header("Door Values")]
+    public int doorValue; // for operating rooms with multiple doors  
+
 
     [Header("Animations")]
     [SerializeField] private Animator door;
     [SerializeField] private AnimationClip[] doorClips;
-    public BoxCollider boxCollider;
- 
-    public bool active;
+   
+    
     public bool opened = false;
     public bool closed = false;
 
     private void Awake()
     {
-        boxCollider.enabled = false;
+        triggerCollider.enabled = false;
     }
 
     public void UnlockDoor()
     {
         this.GetComponent<Animator>().Play(doorClips[0].name, 0, 0);
+        triggerCollider.enabled = true;
         opened = true;
-        boxCollider.enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -50,8 +53,7 @@ public class DoorAnimation : MonoBehaviour
         {
             door.Play(doorClips[1].name, 0, 0);
             closed = true;
-            opened = false;
-               
+            opened = false;  
         }
     }
 
