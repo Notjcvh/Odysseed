@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -41,6 +42,10 @@ public class CameraController : MonoBehaviour
    
     [Header("Camera Clipping")]    
     public GameObject camClippingSphere;
+    public LayerMask masks;
+
+    public float disappearSpeed = 3f;
+    Transform Obstruction;
     [SerializeField] private LayerMask walls;
     [SerializeField] private float camRayLength = 5;
     
@@ -50,6 +55,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        Obstruction = followObj.transform; // default starting point 
         plannerDirection = followObj.forward;  //Important
         Cursor.lockState = CursorLockMode.Locked;
         if (Cursor.lockState != CursorLockMode.Locked)  // locking the camera if the cursor isn't moving
@@ -60,7 +66,31 @@ public class CameraController : MonoBehaviour
     {
         if (camPriority == 0)  ExploringCam();
         if (camPriority == 1) CombatCam();
-        ScaleClipSphere();
+
+        var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 40, ~(masks),QueryTriggerInteraction.Ignore)) 
+        {
+            if (hit.collider.gameObject.tag != "Player")
+            {
+                BlockingSightofPlayer(hit);
+            }
+
+            else
+            {
+                if (Obstruction.gameObject.tag == "Enviorment")
+                {
+                    Obstruction.GetComponent<ObstructionView>().SendMessage("NotObstructing");
+                }
+                else if (Obstruction.gameObject.tag == "Wall")
+                {
+
+
+                }
+            }
+                
+        }
+
     }
 
     #endregion
@@ -111,6 +141,26 @@ public class CameraController : MonoBehaviour
         camRayLength = 9;
     }
 
+    void BlockingSightofPlayer(RaycastHit hit)
+    {
+        Obstruction = hit.transform;
+
+        if (Obstruction.gameObject.tag == "Enviorment")
+        {
+            // your being hit run function
+            Obstruction.GetComponent<ObstructionView>().SendMessage("Obstructing");
+        }
+        else if(Obstruction.gameObject.tag == "Wall")
+        {
+
+
+        }
+
+    }
+
+
+
+
     void ScaleClipSphere() // for camera clipping test right now
     {
         RaycastHit hit;
@@ -127,6 +177,20 @@ public class CameraController : MonoBehaviour
         }
     }
     #endregion
+
+
+
+    #region Editor Gizmos 
+
+    private void OnDrawGizmos()
+    {
+        Handles.DrawLine(cam.transform.position, followObj.position); 
+    }
+
+
+
+    #endregion
+
 
     #region Unused Functions
     public static float Smooth(float source, float target, float rate, float dt)

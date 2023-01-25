@@ -13,7 +13,6 @@ public class UnpackRoom : MonoBehaviour
 
     public bool isRoomActive = false;
     public bool isRoomComplete = false;
-    public List<GameObject> doors;
 
     //variables
     [Header("Tags")]
@@ -103,7 +102,7 @@ public class UnpackRoom : MonoBehaviour
         }
         if (other.CompareTag(tags[4])) //doors
         {
-            Add(other.gameObject.transform.parent.gameObject);
+           
 
         }
 
@@ -141,25 +140,6 @@ public class UnpackRoom : MonoBehaviour
     public void GetTriggeredValue(int number)
     {
         currentValue += number;
-    }
-
-    public void Add(GameObject door)
-    {
-        if (!doors.Contains(door))
-            doors.Add(door);
-        if (doors.Count > 0)
-        {
-            doors.Sort(delegate (GameObject door1, GameObject door2)
-            {
-                DoorAnimation a;
-                DoorAnimation b;
-
-                a = door1.GetComponent(typeof(DoorAnimation)) as DoorAnimation;
-                b = door2.GetComponent(typeof(DoorAnimation)) as DoorAnimation;
-
-                return (a.doorValue).CompareTo(b.doorValue);
-            });
-        }
     }
 
     IEnumerator WaitFor() //checking if the room is complete

@@ -39,14 +39,11 @@ public class PlayerManger : MonoBehaviour
         Debug.Log(transform.position);
         playerInput = GetComponent<PlayerInput>();
        // playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
-        material = playerOutline.GetComponent<Renderer>().material;
-
-        
+       // material = playerOutline.GetComponent<Renderer>().material;        
     }
 
     private void Update()
     {
-        
         //if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
           //  ChangeWeaponState(element);
 
