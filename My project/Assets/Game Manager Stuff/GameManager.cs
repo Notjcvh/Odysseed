@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         {
             item.GetComponent<MeshRenderer>().enabled = false;
         }
+
       
     }
     private void Update()
