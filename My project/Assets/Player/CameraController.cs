@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     [Header("Refrenceing")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private Transform followObj = null;
+    private Vector3 camerasTransformPosition;
 
     [Header("Vertical Rotations")]
    
@@ -22,6 +23,7 @@ public class CameraController : MonoBehaviour
 
     [Header("Distance")]
     [SerializeField] private float defeaultDistance;
+     public float copiedDefaultDistance;
     [SerializeField] private float combatCamDistance;
 
     [Header("Smooth/Sharp")]
@@ -40,14 +42,19 @@ public class CameraController : MonoBehaviour
     private float targetVerticalAngle;
     private float targetDistance;
    
-    [Header("Camera Clipping")]    
-    public GameObject camClippingSphere;
-    public LayerMask masks;
-
-    public float disappearSpeed = 3f;
+    [Header("Camera Obstruction")]    
+    public LayerMask obstructionMasks; // This layermask will be inverted to choose what layers to ignore. 
     Transform Obstruction;
-    [SerializeField] private LayerMask walls;
-    [SerializeField] private float camRayLength = 5;
+
+
+
+    [Header("Camera Collision")]
+    public LayerMask collisionMask;
+    public bool isCollisionDetected = false;
+    public float cameraSphereRadius = 0.3f;
+    public float cameraCollisionOffset = 0.3f;
+    public float minimumCollisionOffset = 0.3f;
+
     
     public Vector3 CameraPlannerDirection { get => plannerDirection; }
 
@@ -63,13 +70,13 @@ public class CameraController : MonoBehaviour
     }
 
     private void Update()
-    {
-        if (camPriority == 0)  ExploringCam();
+    {     
+        if (camPriority == 0)  ExploringCam(); 
         if (camPriority == 1) CombatCam();
 
         var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 40, ~(masks),QueryTriggerInteraction.Ignore)) 
+        if (Physics.Raycast(ray, out hit, 40, ~(obstructionMasks),QueryTriggerInteraction.Ignore)) 
         {
             if (hit.collider.gameObject.tag != "Player")
             {
@@ -82,32 +89,70 @@ public class CameraController : MonoBehaviour
                 {
                     Obstruction.GetComponent<ObstructionView>().SendMessage("NotObstructing");
                 }
-                else if (Obstruction.gameObject.tag == "Wall")
-                {
-
-
-                }
             }
                 
         }
+        
+    }
 
+
+    private void FixedUpdate()
+    {
+        HandleCameraCollisions(cam.transform.position, copiedDefaultDistance);
     }
 
     #endregion
 
+    IEnumerator PauseCameraForMoment()
+    {
+        yield return new WaitForSeconds(7);
+
+        isCollisionDetected = false;
+    }
+
+
+
     #region Public Functions
+    private void HandleCameraCollisions(Vector3 currentCamPosition, float camDist)
+    {
+        float position = (currentCamPosition - followObj.position).magnitude; // ray sphere will go along
+        RaycastHit hit;
+
+        if (Physics.SphereCast(currentCamPosition, cameraSphereRadius, followObj.position, out hit, Mathf.Abs(position), collisionMask, QueryTriggerInteraction.Ignore))
+        {
+            copiedDefaultDistance = defeaultDistance;
+            float dist = Vector3.Distance(cam.transform.position, hit.point); // get the distance from the camera and the point of contact
+            position = -(dist - cameraCollisionOffset);
+        }
+
+        if (Mathf.Abs(position) < minimumCollisionOffset)
+        {
+            print(Mathf.Abs(position));
+            isCollisionDetected = true;
+            copiedDefaultDistance = Mathf.Lerp(defeaultDistance, position, cameraCollisionOffset);
+            StartCoroutine(PauseCameraForMoment());
+        }
+
+    }
+
     public void ExploringCam() 
     {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
+        if (isCollisionDetected == true)
+        {
+            targetDistance = copiedDefaultDistance;
+        }
+        else targetDistance = defeaultDistance;
+
+
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
-        targetDistance = defeaultDistance;
 
+        
+      
         //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
-
-        float rate = Smooth(cam.transform.position.y, targetPosition.y, smoothing, Time.deltaTime);
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
    
@@ -137,9 +182,9 @@ public class CameraController : MonoBehaviour
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
-
-        camRayLength = 9;
     }
+
+    
 
     void BlockingSightofPlayer(RaycastHit hit)
     {
@@ -150,31 +195,6 @@ public class CameraController : MonoBehaviour
             // your being hit run function
             Obstruction.GetComponent<ObstructionView>().SendMessage("Obstructing");
         }
-        else if(Obstruction.gameObject.tag == "Wall")
-        {
-
-
-        }
-
-    }
-
-
-
-
-    void ScaleClipSphere() // for camera clipping test right now
-    {
-        RaycastHit hit;
-        Vector3 objectScale = camClippingSphere.transform.localScale;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, camRayLength, walls))
-        {
-            objectScale.Set(6, 6, 6);
-            camClippingSphere.transform.localScale = objectScale;
-        }
-        else
-        {
-            objectScale.Set(0, 0, 0);
-            camClippingSphere.transform.localScale = objectScale;
-        }
     }
     #endregion
 
@@ -184,18 +204,12 @@ public class CameraController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Handles.DrawLine(cam.transform.position, followObj.position); 
+        Handles.DrawLine(cam.transform.position, followObj.position);
+
+        Gizmos.DrawSphere(cam.transform.position, cameraSphereRadius);
     }
 
 
 
-    #endregion
-
-
-    #region Unused Functions
-    public static float Smooth(float source, float target, float rate, float dt)
-    {
-        return Mathf.Lerp(source, target, 1 - Mathf.Pow(rate, dt));
-    }
     #endregion
 }

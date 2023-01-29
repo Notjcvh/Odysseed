@@ -69,7 +69,7 @@ public class PlayerAttack : MonoBehaviour
     #region Private FUnctions
     private void Attack()
     {
-        Debug.Log("Attack Ran");
+        //Debug.Log("Attack Ran");
         isAttacking = true;
         playerMovement.stopMovementEvent = true;
        

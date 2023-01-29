@@ -35,11 +35,14 @@ public class PlayerManger : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         
         animator = GetComponent<Animator>();
-        transform.position = gameManager.position;
-        Debug.Log(transform.position);
+
+        if(Input.GetKeyDown(KeyCode.F9))
+        {
+            transform.position = gameManager.position;
+        }
+      
+    
         playerInput = GetComponent<PlayerInput>();
-       // playerOutline = this.gameObject.transform.Find("Capsule/Capsule Outline").gameObject;
-       // material = playerOutline.GetComponent<Renderer>().material;        
     }
 
     private void Update()
@@ -63,7 +66,7 @@ public class PlayerManger : MonoBehaviour
                 hearts[i].enabled = false;
         }
 
-        if (currentHealth <= 0 || Input.GetKeyDown(KeyCode.P))
+        if (currentHealth <= 0)
         {
             gameManager.PlayerHasDied();
             gameManager.ReloadPosition();
