@@ -17,7 +17,8 @@ public class TargetEnemies : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(targetingEnemy)
+            this.gameObject.transform.LookAt(target);
     }
 
     void UpdateTarget()
@@ -38,10 +39,12 @@ public class TargetEnemies : MonoBehaviour
         if (nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
+            targetingEnemy = true;
         }
         else
         {
             target = null;
+            targetingEnemy = false;
         }
     }
 }

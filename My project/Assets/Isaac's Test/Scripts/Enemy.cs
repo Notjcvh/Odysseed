@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     private float distanceFromPlayer;
     public GameObject attackHitbox;
     public GameObject hitEffect;
+    public bool isTargeted;
     private float attackLifetime;
     private float attackCooldown;
     [Header("Movement")]
@@ -141,11 +142,13 @@ public class Enemy : MonoBehaviour
     public void DisableAI()
     {
         this.navMeshAge.enabled = false;
+        attackCooldown = 99999f;
         Invoke("EnableAI", player.GetComponent<PlayerAttack>().knockbackTimer + stunDuration);
     }
 
     public void EnableAI()
     {
+        attackCooldown = attackSpeed;
         this.navMeshAge.enabled = true;
     }
     IEnumerator FindRandomWaypoint()
