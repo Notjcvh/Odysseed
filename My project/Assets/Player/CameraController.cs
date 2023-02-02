@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour
 {
     // members
@@ -12,7 +13,6 @@ public class CameraController : MonoBehaviour
     private Vector3 camerasTransformPosition;
 
     [Header("Vertical Rotations")]
-   
     [SerializeField] [Range(-90, 90)] private float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
     [SerializeField] [Range(-90, 90)] private float maxVerticalAngle = 90;   
     [SerializeField] [Range(13, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
@@ -23,8 +23,12 @@ public class CameraController : MonoBehaviour
 
     [Header("Distance")]
     [SerializeField] private float defeaultDistance;
-     public float copiedDefaultDistance;
+    
     [SerializeField] private float combatCamDistance;
+
+    //For later 
+    public float newDistanceFromPlayer; // exploring 
+    public float newDistanceFromPlayerInCombat; // combat
 
     [Header("Smooth/Sharp")]
     [SerializeField] private float rotationSharpness;
@@ -45,7 +49,6 @@ public class CameraController : MonoBehaviour
     [Header("Camera Obstruction")]    
     public LayerMask obstructionMasks; // This layermask will be inverted to choose what layers to ignore. 
     Transform Obstruction;
-
 
 
     [Header("Camera Collision")]
@@ -71,7 +74,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {     
-        if (camPriority == 0)  ExploringCam(); 
+        if (camPriority == 0)  ExploringCam();
         if (camPriority == 1) CombatCam();
 
         var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
@@ -82,7 +85,6 @@ public class CameraController : MonoBehaviour
             {
                 BlockingSightofPlayer(hit);
             }
-
             else
             {
                 if (Obstruction.gameObject.tag == "Enviorment")
@@ -94,65 +96,33 @@ public class CameraController : MonoBehaviour
         }
         
     }
-
-
     private void FixedUpdate()
     {
-        HandleCameraCollisions(cam.transform.position, copiedDefaultDistance);
+        if (CheckForCameraCollisions())
+            HandleCameraCollision();
     }
 
     #endregion
 
-    IEnumerator PauseCameraForMoment()
-    {
-        yield return new WaitForSeconds(7);
-
-        isCollisionDetected = false;
-    }
-
-
-
     #region Public Functions
-    private void HandleCameraCollisions(Vector3 currentCamPosition, float camDist)
-    {
-        float position = (currentCamPosition - followObj.position).magnitude; // ray sphere will go along
-        RaycastHit hit;
 
-        if (Physics.SphereCast(currentCamPosition, cameraSphereRadius, followObj.position, out hit, Mathf.Abs(position), collisionMask, QueryTriggerInteraction.Ignore))
-        {
-            copiedDefaultDistance = defeaultDistance;
-            float dist = Vector3.Distance(cam.transform.position, hit.point); // get the distance from the camera and the point of contact
-            position = -(dist - cameraCollisionOffset);
-        }
-
-        if (Mathf.Abs(position) < minimumCollisionOffset)
-        {
-            print(Mathf.Abs(position));
-            isCollisionDetected = true;
-            copiedDefaultDistance = Mathf.Lerp(defeaultDistance, position, cameraCollisionOffset);
-            StartCoroutine(PauseCameraForMoment());
-        }
-
-    }
 
     public void ExploringCam() 
     {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        if (isCollisionDetected == true)
+        if (isCollisionDetected == true && camPriority != 1)
         {
-            targetDistance = copiedDefaultDistance;
+
+            targetDistance = Mathf.Clamp(newDistanceFromPlayer, 4, defeaultDistance);
+            
         }
         else targetDistance = defeaultDistance;
 
 
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
-
-        
-      
-        //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
    
@@ -164,16 +134,23 @@ public class CameraController : MonoBehaviour
         cam.transform.rotation = newRotation;
 
     }
-    public void CombatCam()
+    public void CombatCam() // Combat camera collision should no be going down the same rate at the exploring cam Fix later
     {
-
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, combatMinVerticalAngle, combatMaxVerticalAngle);
-        targetDistance = combatCamDistance;
-        //targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
+
+        if (isCollisionDetected == true && camPriority != 0)
+        {
+            if (newDistanceFromPlayer > 4)
+                targetDistance = newDistanceFromPlayer;
+            else
+                targetDistance = Mathf.Clamp(newDistanceFromPlayer, 7.5f, combatCamDistance);
+           
+        }
+        else targetDistance = combatCamDistance;
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
         targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
@@ -183,10 +160,10 @@ public class CameraController : MonoBehaviour
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
     }
+  #endregion
 
-    
-
-    void BlockingSightofPlayer(RaycastHit hit)
+    // Camera Collsion and Obstructions
+    private void BlockingSightofPlayer(RaycastHit hit)
     {
         Obstruction = hit.transform;
 
@@ -196,16 +173,45 @@ public class CameraController : MonoBehaviour
             Obstruction.GetComponent<ObstructionView>().SendMessage("Obstructing");
         }
     }
-    #endregion
 
+    private bool CheckForCameraCollisions() // becasue this is a fixed upda
+    {
+        Collider[] colliders = Physics.OverlapSphere(cam.transform.position, cameraSphereRadius, collisionMask, QueryTriggerInteraction.Ignore);
+        foreach (var walls in colliders)
+        {
+            // find the current distance from the player and return true 
+            float distanceToPlayer = Vector3.Distance(followObj.position, cam.transform.position);
+            Debug.Log("Hit " + walls.name + "Distance from Player " + distanceToPlayer);
+            newDistanceFromPlayer = distanceToPlayer;
+            return true;
+        }
+        // no collision return false
+        return false;
+    }
 
+    private void HandleCameraCollision()
+    {
+        isCollisionDetected = true;
+        StartCoroutine(PauseCameraForMoment());
+        newDistanceFromPlayer = newDistanceFromPlayer / 2f;
+    }
 
+    private IEnumerator PauseCameraForMoment()
+    {
+        yield return new WaitForSeconds(2);
+        isCollisionDetected = false;
+
+        // possible error here 
+        if (camPriority == 0)
+            newDistanceFromPlayer = defeaultDistance;
+        else
+            newDistanceFromPlayer = combatCamDistance;
+      }
     #region Editor Gizmos 
 
     private void OnDrawGizmos()
     {
         Handles.DrawLine(cam.transform.position, followObj.position);
-
         Gizmos.DrawSphere(cam.transform.position, cameraSphereRadius);
     }
 

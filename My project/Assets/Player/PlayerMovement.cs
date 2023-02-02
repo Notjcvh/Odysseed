@@ -55,8 +55,6 @@ public class PlayerMovement : MonoBehaviour
             MoveNow();
             if (IsGrounded() && Jump())
                 playerBody.velocity = Vector3.up * verticalVelocity ;
-            if (inCombatRoom == true)
-                return;
         }
         else if(stopMovementEvent == true)
            StopMoving();
@@ -65,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // if we have input that is either vertical or horizontal then is moving is true 
         movementVector = playerInput.movementInput;
+        print(movementVector);
         Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
         Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
         //Aligning movement in relation to the camera
@@ -81,12 +80,20 @@ public class PlayerMovement : MonoBehaviour
         }
         else
             animator.SetBool("isRunning", false);
-
-
-
-
-
     }
+
+   public void AttackMoveFoward() //For Later
+   {
+
+        stopMovementEvent = true;
+        Vector3 attackLunge = transform.forward * 5;
+        Quaternion currentRotation = targetRotation;
+        transform.rotation = currentRotation;
+        transform.Translate(attackLunge, Space.World);
+        
+    }
+
+
     private bool IsGrounded()
     {
         Vector3 direction = new Vector3(0, -camTarget.position.y , 0);

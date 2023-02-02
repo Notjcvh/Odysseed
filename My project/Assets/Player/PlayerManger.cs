@@ -40,8 +40,6 @@ public class PlayerManger : MonoBehaviour
         {
             transform.position = gameManager.position;
         }
-      
-    
         playerInput = GetComponent<PlayerInput>();
     }
 

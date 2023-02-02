@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("Referencing")]
     public Collider attackArea;
+    public Transform playerPos;
     public Transform attackPosition;
     public Transform enmeyPosition;
     public LayerMask whatIsHittable;
@@ -39,6 +40,7 @@ public class PlayerAttack : MonoBehaviour
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+
         playerInput = GetComponent<PlayerInput>();
         
         attackArea.enabled = false;       
@@ -52,7 +54,9 @@ public class PlayerAttack : MonoBehaviour
 
         if (playerInput.attack)
         {
+            
             Attack();
+            playerMovement.AttackMoveFoward(); // For Later
             if (attackNumber > 2)
                 attackNumber = 0;
             if (attackNumber == 0)
