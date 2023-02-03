@@ -91,7 +91,7 @@ public class UnpackRoom : MonoBehaviour
             }
             else if (isACombatRoom)
             {
-                playerMovement.inCombatRoom = true;
+                
                 cam.camPriority = 1;
             }
         }
@@ -120,7 +120,7 @@ public class UnpackRoom : MonoBehaviour
             if (other.CompareTag(tags[0]))
             {
                 cam.camPriority = 0;
-                playerMovement.inCombatRoom = false;
+               
             }
             if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies 
             {

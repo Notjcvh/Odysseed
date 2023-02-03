@@ -36,24 +36,28 @@ public class SeedWheelButtonController : MonoBehaviour
     //Selecting and Deselecting our button 
     public void Selected()
     {
-        selected = true;       
+        selected = true;
+        WeaponWheelController.weaponID = Id;
     }
 
     public void Deselected()
     {
-        selected = false; 
+        selected = false;
+        WeaponWheelController.weaponID = 0;
     }
 
 
     public void HoverEnter()
     {
         anim.SetBool("Hover", true);
+        Debug.Log("helllo");
         itemText.text = itemName;
     }
 
     public void HoverExit()
     {
         anim.SetBool("Hover", false);
+        Debug.Log("helllo");
         itemText.text = ""; // text empty 
     }
 

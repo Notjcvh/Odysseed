@@ -181,7 +181,7 @@ public class CameraController : MonoBehaviour
         {
             // find the current distance from the player and return true 
             float distanceToPlayer = Vector3.Distance(followObj.position, cam.transform.position);
-            Debug.Log("Hit " + walls.name + "Distance from Player " + distanceToPlayer);
+          
             newDistanceFromPlayer = distanceToPlayer;
             return true;
         }

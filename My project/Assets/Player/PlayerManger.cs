@@ -5,12 +5,13 @@ public class PlayerManger : MonoBehaviour
 {
     // members
     [Header("Refrences")]
-    public PlayerStats stats;    //Handling Functions related to the player stats scriptable obj
     private PlayerInput playerInput;
     public ElementType element;
     private GameManager gameManager;
     public Animator animator;
 
+
+    public int maxHealth = 5;
     public int currentHealth;
 
     [Header("Hearts Images")] //Heart Sprites
@@ -20,15 +21,14 @@ public class PlayerManger : MonoBehaviour
     public Sprite emptyHeart;
 
 
-    [Header("Shader Settings")] // controls the players outline
-    public Color color;
-    public Material material;
-    public GameObject playerOutline;
+
+    [Header("Currency")]
+    public int currency;
 
     #region Unity Functions
     private void Awake()
     {
-        currentHealth = stats.health;
+        currentHealth = 5;
     }
     private void Start()
     {
@@ -69,7 +69,7 @@ public class PlayerManger : MonoBehaviour
             gameManager.PlayerHasDied();
             gameManager.ReloadPosition();
             Destroy(this.gameObject);
-            currentHealth = stats.health;
+            currentHealth = maxHealth;
         }
     }
     #endregion
@@ -82,30 +82,26 @@ public class PlayerManger : MonoBehaviour
         {
             print(state);
             element = ElementType.Water;
-            color = Color.blue;
-            material.color = color;
+          
             Debug.Log("Switch to " + element);
         }
         if (state == ElementType.Water)
         {
             element = ElementType.Fire;
-            color = Color.red;
-            material.color = color;
+  
             Debug.Log("Switch to " + element);
         }
         if (state == ElementType.Fire)
         {
             element = ElementType.Earth;
-            color = Color.green;
-            material.color = color;
+     
             Debug.Log("Switch to " + element);
         }
         if (state == ElementType.Earth)
         {
             print(state);
             element = ElementType.Base;
-            color = Color.black;
-            material.color = color;
+        
             Debug.Log("Switch to " + element);
         }
     }

@@ -56,7 +56,6 @@ public class PlayerAttack : MonoBehaviour
         {
             
             Attack();
-            playerMovement.AttackMoveFoward(); // For Later
             if (attackNumber > 2)
                 attackNumber = 0;
             if (attackNumber == 0)
