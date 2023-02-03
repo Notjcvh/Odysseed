@@ -35,15 +35,20 @@ public class PlayerMovement : MonoBehaviour
     [Header("Lunging")]
     public bool isLunging = false;
     public Transform lerpPosition;
+    public Transform orgLerpPos;
     public float lerpduration;
     public LayerMask playerCollionMask;
     IEnumerator co;
 
+    [Header("Targeting")]
+    public bool targetingEnemy;
+    public Transform target;
+    public float range;
 
     private void Start()
     {
-
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
+        InvokeRepeating("UpdateTarget", 0f, 0.1f * Time.deltaTime);
     }
     private void Awake()
     {
@@ -61,7 +66,9 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(co);
         }
 
-
+        if (targetingEnemy)
+            this.gameObject.transform.LookAt(target);
+            
         if (stopMovementEvent == false)
         {
             MoveNow();
@@ -138,7 +145,37 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void UpdateTarget()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        float shortestDistance = Mathf.Infinity;
+        GameObject nearestEnemy = null;
+        foreach (GameObject enemy in enemies)
+        {
+            float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distanceToEnemy < shortestDistance )
+            {
+                shortestDistance = distanceToEnemy;
+                nearestEnemy = enemy;
+            }
+        }
 
+        if (nearestEnemy != null && shortestDistance <= range)
+        {
+            target = nearestEnemy.transform;
+            lerpPosition = target;
+            targetingEnemy = true;
+        }
+        else
+        {
+            target = null;
+            lerpPosition = orgLerpPos;
+            targetingEnemy = false;
+        }
+    }
+
+
+  
 
     private void OnDrawGizmos()
     {
