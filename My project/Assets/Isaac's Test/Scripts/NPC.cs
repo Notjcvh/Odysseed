@@ -9,12 +9,14 @@ public class NPC : MonoBehaviour
     [SerializeField] private Transform player;
     private PlayerMovement playerController;
     private NavMeshAgent navMeshAge;
+    private GameObject talkingIndicator;
     private bool isTalking;
     private int dialoguePointer;
+    public bool hasTalked;
     public GameObject dialogue;
     private TextMeshProUGUI myDialouge;
     public string[] dialogueList;
-
+    
     public bool person;
     public bool puzzleCompleted;
     public float distanceFromPlayer;
@@ -27,11 +29,14 @@ public class NPC : MonoBehaviour
         isTalking = false;
         myDialouge = dialogue.GetComponentInChildren<TextMeshProUGUI>();
         playerController = player.GetComponent<PlayerMovement>();
+        talkingIndicator = GameObject.FindGameObjectWithTag("TalkingIndicator");
+        hasTalked = false;
     }
     void Update()
     {
         distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
         dialogue.SetActive(isTalking);
+        talkingIndicator.SetActive(!hasTalked);
         //playerController.isTalking = isTalking;
         if (Input.GetKeyDown(KeyCode.T) && distanceFromPlayer < talkRange && !person)
         {
@@ -40,7 +45,7 @@ public class NPC : MonoBehaviour
                 StartDialouge();
             }
         }
-        if (puzzleCompleted && distanceFromPlayer < talkRange)
+        if (Input.GetKeyDown(KeyCode.T) && puzzleCompleted && distanceFromPlayer < talkRange)
         {
             if (!isTalking)
             {
@@ -65,6 +70,7 @@ public class NPC : MonoBehaviour
     public void EndDialouge()
     {
         isTalking = false;
+        hasTalked = true;
         dialoguePointer = 0;
     }
 
