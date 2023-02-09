@@ -47,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
         InvokeRepeating("UpdateTarget", 0f, 0.1f * Time.deltaTime);
     }
