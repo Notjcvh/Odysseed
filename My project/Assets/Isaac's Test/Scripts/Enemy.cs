@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
     public GameObject patrolPoint;
     public Rigidbody rb;
     [Header("Rooms")]
-    public UnpackRoom finishedRoom;
+    public CombatRoom finishedRoom;
 
     public event System.Action<float> OnHealthPercentChange = delegate { };
 
@@ -116,11 +116,11 @@ public class Enemy : MonoBehaviour
     public void WhichRoom(GameObject room) 
     {
         GameObject location = room.gameObject;
-        finishedRoom = location.GetComponent<UnpackRoom>();  // finding the Unpack room script so we can run the functions when the enemy dies
+        finishedRoom = location.GetComponent<CombatRoom>();  // finding the Combatroom script so we can run the functions when the enemy dies
     }
     private void Death()
     {
-        finishedRoom.TransportEnemy(this.gameObject); // runing function in the UnpackRoom Script 
+        finishedRoom.TransportEnemy(this.gameObject); // running function in the UnpackRoom Script 
         //Destroy(this.gameObject);
     }
 

@@ -50,14 +50,12 @@ public class SeedWheelButtonController : MonoBehaviour
     public void HoverEnter()
     {
         anim.SetBool("Hover", true);
-        Debug.Log("helllo");
         itemText.text = itemName;
     }
 
     public void HoverExit()
     {
         anim.SetBool("Hover", false);
-        Debug.Log("helllo");
         itemText.text = ""; // text empty 
     }
 

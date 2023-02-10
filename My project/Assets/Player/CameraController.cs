@@ -58,8 +58,13 @@ public class CameraController : MonoBehaviour
     public float cameraCollisionOffset = 0.3f;
     public float minimumCollisionOffset = 0.3f;
 
-    
-    public Vector3 CameraPlannerDirection { get => plannerDirection; }
+    [Header("Weapon Wheel Ui")]
+    public Canvas seedWheel; //get game object 
+    public LayerMask playerObstructsUi; // have it check for player layer 
+    public Transform behindPlayer; // starting point 
+    public Transform inFrontOfPlayer; // lerp point
+
+     public Vector3 CameraPlannerDirection { get => plannerDirection; }
 
     #region Unity Functions
 
@@ -91,10 +96,10 @@ public class CameraController : MonoBehaviour
                 {
                     Obstruction.GetComponent<ObstructionView>().SendMessage("NotObstructing");
                 }
-            }
-                
+            }       
         }
-        
+
+        OpenSeedWheel();
     }
     private void FixedUpdate()
     {
@@ -206,13 +211,54 @@ public class CameraController : MonoBehaviour
             newDistanceFromPlayer = defeaultDistance;
         else
             newDistanceFromPlayer = combatCamDistance;
-      }
+    }
+
+    private void OpenSeedWheel()
+    {
+        if (WeaponWheelController.weaponWheelSelected == true)
+        {
+            seedWheel.transform.LookAt(Camera.main.transform);
+            seedWheel.transform.Rotate(0, 180, 0);
+
+            Vector3 wheel = seedWheel.transform.position;
+
+            Cursor.lockState = CursorLockMode.None;
+            var ray = new Ray(wheel, cam.transform.position - seedWheel.transform.position);
+            RaycastHit hit;
+
+
+            // FOr later might have to corutine this or something else 
+            Debug.DrawRay(wheel, cam.transform.position - seedWheel.transform.position,Color.blue);
+           if (Physics.Raycast(ray, out hit, 50f, playerObstructsUi, QueryTriggerInteraction.Ignore))
+           {
+                wheel = Vector3.MoveTowards(wheel, inFrontOfPlayer.position, .1f);
+                seedWheel.transform.position = wheel;
+                Debug.Log("yes");
+           }
+           else
+           {
+               wheel = Vector3.MoveTowards(wheel, behindPlayer.position, .1f);
+                seedWheel.transform.position = wheel;
+               Debug.Log("no");
+           }
+
+        }
+        else
+            Cursor.lockState = CursorLockMode.Locked;
+
+    }
+
+
+
+
     #region Editor Gizmos 
 
     private void OnDrawGizmos()
     {
         Handles.DrawLine(cam.transform.position, followObj.position);
         Gizmos.DrawSphere(cam.transform.position, cameraSphereRadius);
+
+        Handles.DrawLine(seedWheel.transform.position, cam.transform.position);
     }
 
 

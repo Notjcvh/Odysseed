@@ -108,7 +108,6 @@ public class PlayerMovement : MonoBehaviour
         Quaternion currentRotation = targetRotation;
         transform.rotation = currentRotation;
         transform.Translate(attackLunge, Space.World);
-
     }
 
 
@@ -174,8 +173,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
-  
 
     private void OnDrawGizmos()
     {

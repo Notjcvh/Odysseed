@@ -18,9 +18,8 @@ public class DamagePopUp : MonoBehaviour
 
     public static DamagePopUp Create(Vector3 position, int damageAmount)
     {
-        Vector3 offfset = new Vector3( 0,.5f,0);
+        Vector3 offfset = new Vector3( 0,.75f,0);
         Vector3   newPos = position + offfset;
-       
         Transform  damagePopupTransfrom = Instantiate(GameAssets.i.DamageTextHolder, newPos , Quaternion.identity);
         DamagePopUp damagePopUp = damagePopupTransfrom.GetComponent<DamagePopUp>();
         damagePopUp.Setup(damageAmount);
