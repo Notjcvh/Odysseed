@@ -34,7 +34,7 @@ public class EquipmentManager : MonoBehaviour
     }
 
 
-    public void Equip(Equipment newEquipment)
+    public void Equip(Equipment newEquipment) // w
     {
         int equipSlot = (int) newEquipment.equipType; // For Later
 

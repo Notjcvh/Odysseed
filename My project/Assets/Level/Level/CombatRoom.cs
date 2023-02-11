@@ -38,7 +38,7 @@ public class CombatRoom : MonoBehaviour
     private void IsTheRoomComplete()
     {
         lockNumber = enemies.Count;
-        if (isRoomActive && enemies.Count == 0)
+        if (Input.GetKeyDown(KeyCode.T)) //isRoomActive && enemies.Count == 0
         {
             isRoomComplete = true;
             for (int i = 0; i < roomEvents.Length; i++)

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public enum EquipType {Seed} // For Later is there way to match a string type to enum type
+public enum EquipType {Seed,} // For Later is there way to match a string type to enum type
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Equipment")]
 public class Equipment : Item

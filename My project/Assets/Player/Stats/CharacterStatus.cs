@@ -8,7 +8,7 @@ public class CharacterStatus : ScriptableObject
     public string characterName = "name";
     public int health = 0;
 
-    
+    [Header("Base Stats")]
     public int baseSpeed = 0;
     public int baseAttackSpeed = 0;
     public int baseStrength = 0; // damage dealtFF
@@ -16,7 +16,7 @@ public class CharacterStatus : ScriptableObject
     public int baseStun = 0;
 
 
-
+    [Header("Modifiers")]
     public int armourHearts = 0; 
     public int speed = 0;
     public int attackSpeed = 0;

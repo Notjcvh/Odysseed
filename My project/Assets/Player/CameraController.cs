@@ -84,8 +84,10 @@ public class CameraController : MonoBehaviour
 
         var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
         RaycastHit hit;
+        Debug.DrawRay(cam.transform.position, followObj.position - cam.transform.position, Color.red);
         if (Physics.Raycast(ray, out hit, 40, ~(obstructionMasks),QueryTriggerInteraction.Ignore)) 
         {
+            
             if (hit.collider.gameObject.tag != "Player")
             {
                 BlockingSightofPlayer(hit);
@@ -109,7 +111,7 @@ public class CameraController : MonoBehaviour
 
     #endregion
 
-    #region Public Functions
+    #region Camera States
 
 
     public void ExploringCam() 
@@ -165,19 +167,9 @@ public class CameraController : MonoBehaviour
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         cam.transform.rotation = newRotation;
     }
-  #endregion
+    #endregion
 
-    // Camera Collsion and Obstructions
-    private void BlockingSightofPlayer(RaycastHit hit)
-    {
-        Obstruction = hit.transform;
-
-        if (Obstruction.gameObject.tag == "Enviorment")
-        {
-            // your being hit run function
-            Obstruction.GetComponent<ObstructionView>().SendMessage("Obstructing");
-        }
-    }
+    #region Camera Collison
 
     private bool CheckForCameraCollisions() // becasue this is a fixed upda
     {
@@ -186,7 +178,7 @@ public class CameraController : MonoBehaviour
         {
             // find the current distance from the player and return true 
             float distanceToPlayer = Vector3.Distance(followObj.position, cam.transform.position);
-          
+
             newDistanceFromPlayer = distanceToPlayer;
             return true;
         }
@@ -212,7 +204,23 @@ public class CameraController : MonoBehaviour
         else
             newDistanceFromPlayer = combatCamDistance;
     }
+    #endregion
 
+    #region Camera Obstruction
+    private void BlockingSightofPlayer(RaycastHit hit)
+    {
+        Obstruction = hit.transform;
+
+        if (Obstruction.gameObject.tag == "Enviorment")
+        {
+            // your being hit run function
+            Obstruction.GetComponent<ObstructionView>().SendMessage("Obstructing");
+        }
+    }
+
+    #endregion
+
+    #region Seed Wheel
     private void OpenSeedWheel()
     {
         if (WeaponWheelController.weaponWheelSelected == true)
@@ -247,9 +255,7 @@ public class CameraController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
 
     }
-
-
-
+    #endregion
 
     #region Editor Gizmos 
 
@@ -258,7 +264,7 @@ public class CameraController : MonoBehaviour
         Handles.DrawLine(cam.transform.position, followObj.position);
         Gizmos.DrawSphere(cam.transform.position, cameraSphereRadius);
 
-        Handles.DrawLine(seedWheel.transform.position, cam.transform.position);
+     //  Handles.DrawLine(seedWheel.transform.position, cam.transform.position);
     }
 
 

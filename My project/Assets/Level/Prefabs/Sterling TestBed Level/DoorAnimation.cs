@@ -19,7 +19,6 @@ public class DoorAnimation : MonoBehaviour
      public void UnlockDoor()
     {
         locked = false;
-      
     }
 
     private void OnTriggerEnter(Collider other)
