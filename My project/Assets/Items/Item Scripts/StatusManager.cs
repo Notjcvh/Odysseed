@@ -37,7 +37,7 @@ public class StatusManager : MonoBehaviour
 
     public void UpdateCharacterStatus(Equipment newEquipment, Equipment oldEquipment)
     {
-
+        /*
         if (oldEquipment != null)
         {
             playerStatus.armourHearts -= oldEquipment.armourModifier;
@@ -47,7 +47,9 @@ public class StatusManager : MonoBehaviour
             playerStatus.knockbackValue -= oldEquipment.knockbackModifier;
             playerStatus.stun -= oldEquipment.stunModifier;
         }
+        */
 
+        //just use this 
         playerStatus.armourHearts = newEquipment.armourModifier;
         playerStatus.speed = playerStatus.baseSpeed + newEquipment.speedModifier;
         playerStatus.attackSpeed = playerStatus.baseAttackSpeed + newEquipment.attackSpeedModifier;
