@@ -20,19 +20,19 @@ public class PlayerManger : MonoBehaviour
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-
-
     [Header("Currency")]
     public int currency;
+
+  
 
     #region Unity Functions
     private void Awake()
     {
-        currentHealth = 5;
+        currentHealth = maxHealth;
     }
     private void Start()
     {
-        gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+        //gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         
         animator = GetComponent<Animator>();
 
@@ -70,6 +70,13 @@ public class PlayerManger : MonoBehaviour
             gameManager.ReloadPosition();
             Destroy(this.gameObject);
             currentHealth = maxHealth;
+        }
+
+
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+
         }
     }
     #endregion

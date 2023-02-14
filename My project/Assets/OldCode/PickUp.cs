@@ -18,11 +18,11 @@ public class PickUp : MonoBehaviour
     }
 
     private void Update()
-    {
+    {/*
         if (playerInput.pickUp)
             Pickup();
         else if (playerInput.drop)       
-            Drop();
+            Drop();*/
     }
     private void Pickup()
     { 

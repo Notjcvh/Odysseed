@@ -8,6 +8,10 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("Referencing")]
     public Collider attackArea;
+
+    // second collider to launch heavy 
+
+    
     public Transform playerPos;
     public Transform attackPosition;
     public Transform enmeyPosition;
@@ -25,6 +29,8 @@ public class PlayerAttack : MonoBehaviour
     private bool isAttacking;
 
 
+    
+
 
     public float cooldownTime = 2f;
     private float nextFireTime = 0f;
@@ -35,6 +41,10 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Combo")]
     public int attackNumber;
+
+
+
+
 
     #region Unity Functions
     private void Awake()
@@ -74,7 +84,7 @@ public class PlayerAttack : MonoBehaviour
     {
         //Debug.Log("Attack Ran");
         isAttacking = true;
-        playerMovement.stopMovementEvent = true;
+      //  playerMovement.stopMovementEvent = true;
        
         attackArea.enabled = true;
 
@@ -112,7 +122,9 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    //Temporary
+
+    // Create Stun Stop enemey
+
     private void HitSomething(Vector3 direction, Rigidbody obj)
     {
         //timer here 
@@ -141,6 +153,7 @@ public class PlayerAttack : MonoBehaviour
         {
             obj.SendMessage("TakeDamage", damage / 10);
         }
+
     }
 
     private void AddKnockback()
