@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     public float verticalVelocity;
     public float distanceToCheckForGround;
 
-    [Header("Lunging")]
+    [Header("Dash")]
     public bool isLunging = false;
     public Transform lerpPosition;
     public Transform orgLerpPos;
@@ -59,11 +59,12 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        if (playerInput.attack) //For Later
+        if (playerInput.dash) //For Later
         {
-            isLunging = true;
+            Debug.Log("Dash");
+          /*  isLunging = true;
             co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
-                StartCoroutine(co);
+                StartCoroutine(co);*/
         }
 
         if (targetingEnemy)

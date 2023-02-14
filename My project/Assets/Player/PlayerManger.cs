@@ -32,7 +32,7 @@ public class PlayerManger : MonoBehaviour
     }
     private void Start()
     {
-        gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+        //gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         
         animator = GetComponent<Animator>();
 

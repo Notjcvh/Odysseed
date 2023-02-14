@@ -4497,24 +4497,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5528353740249928020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 557d4357a49eb554babe770de22a1d4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickUpObject: {fileID: 0}
-  holdingPosition: {fileID: 7645446600527355526}
-  playerBody: {fileID: 5528353741350565331}
-  CanPickUp:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!208 &5528353740254904309
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -5252,7 +5234,6 @@ GameObject:
   - component: {fileID: 2336037821758343619}
   - component: {fileID: 5528353740084727191}
   - component: {fileID: 8385173726301645219}
-  - component: {fileID: 5528353740249928020}
   - component: {fileID: 5528353741485287906}
   m_Layer: 3
   m_Name: 'Test_Player '
