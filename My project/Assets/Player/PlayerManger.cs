@@ -20,8 +20,9 @@ public class PlayerManger : MonoBehaviour
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    [Header("Currency")]
-    public int currency;
+    [Header("Seeds")]
+    public int currentSeed;
+
 
   
 

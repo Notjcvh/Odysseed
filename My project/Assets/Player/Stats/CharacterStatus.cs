@@ -8,6 +8,10 @@ public class CharacterStatus : ScriptableObject
     public string characterName = "name";
     public int health = 0;
 
+    public bool hasWaterSeed = false;
+    public bool hasEarthSeed = false;
+    public bool hasFireSeed = false;
+
     [Header("Base Stats")]
     public int baseSpeed = 0;
     public int baseAttackSpeed = 0;
