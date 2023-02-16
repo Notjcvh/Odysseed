@@ -6,9 +6,9 @@ public class PlayerManger : MonoBehaviour
     // members
     [Header("Refrences")]
     private PlayerInput playerInput;
-    public ElementType element;
     private GameManager gameManager;
     public Animator animator;
+
 
 
     public int maxHealth = 5;
@@ -23,9 +23,7 @@ public class PlayerManger : MonoBehaviour
     [Header("Seeds")]
     public int currentSeed;
 
-
-  
-
+    
     #region Unity Functions
     private void Awake()
     {
@@ -34,14 +32,15 @@ public class PlayerManger : MonoBehaviour
     private void Start()
     {
         //gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-        
-        animator = GetComponent<Animator>();
+        playerInput = GetComponent<PlayerInput>();
 
-        if(Input.GetKeyDown(KeyCode.F9))
+        //Debugging stuff
+        if (Input.GetKeyDown(KeyCode.F9))
         {
             transform.position = gameManager.position;
         }
-        playerInput = GetComponent<PlayerInput>();
+
+     
     }
 
     private void Update()
@@ -74,44 +73,7 @@ public class PlayerManger : MonoBehaviour
         }
 
 
-
-        if(Input.GetKeyDown(KeyCode.Tab))
-        {
-
-        }
-    }
-    #endregion
-
-    #region Private Functions
-    private void ChangeWeaponState(ElementType state)
-    {
-
-        if (state == ElementType.Base)
-        {
-            print(state);
-            element = ElementType.Water;
-          
-            Debug.Log("Switch to " + element);
-        }
-        if (state == ElementType.Water)
-        {
-            element = ElementType.Fire;
-  
-            Debug.Log("Switch to " + element);
-        }
-        if (state == ElementType.Fire)
-        {
-            element = ElementType.Earth;
-     
-            Debug.Log("Switch to " + element);
-        }
-        if (state == ElementType.Earth)
-        {
-            print(state);
-            element = ElementType.Base;
-        
-            Debug.Log("Switch to " + element);
-        }
+       
     }
     #endregion
 
@@ -119,17 +81,9 @@ public class PlayerManger : MonoBehaviour
     {
         currentHealth -= damage;
     }
-}
 
 
-
-public enum ElementType
-{
-    Base = 0,
-    Water = 1,
-    Fire = 2,
-    Earth = 3,
+   
 
 }
-
 

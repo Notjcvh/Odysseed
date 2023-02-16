@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     [Header("Refrenceing")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private Transform followObj = null;
-    private Vector3 camerasTransformPosition;
+    private PlayerInput playerInput;
 
     [Header("Vertical Rotations")]
     [SerializeField] [Range(-90, 90)] private float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
@@ -58,11 +58,7 @@ public class CameraController : MonoBehaviour
     public float cameraCollisionOffset = 0.3f;
     public float minimumCollisionOffset = 0.3f;
 
-    [Header("Weapon Wheel Ui")]
-    public Canvas seedWheel; //get game object 
-    public LayerMask playerObstructsUi; // have it check for player layer 
-    public Transform behindPlayer; // starting point 
-    public Transform inFrontOfPlayer; // lerp point
+   
 
      public Vector3 CameraPlannerDirection { get => plannerDirection; }
 
@@ -70,6 +66,8 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        playerInput = GetComponent<PlayerInput>();
+
         Obstruction = followObj.transform; // default starting point 
         plannerDirection = followObj.forward;  //Important
         Cursor.lockState = CursorLockMode.Locked;
@@ -79,8 +77,8 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {     
-        if (camPriority == 0)  ExploringCam();
-        if (camPriority == 1) CombatCam();
+        if (camPriority == 0)  ExploringCam(playerInput.mouseX, playerInput.mouseY);
+        if (camPriority == 1) CombatCam(playerInput.mouseX, playerInput.mouseY);
 
         var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
         RaycastHit hit;
@@ -101,7 +99,7 @@ public class CameraController : MonoBehaviour
             }       
         }
 
-        OpenSeedWheel();
+       
     }
     private void FixedUpdate()
     {
@@ -114,11 +112,8 @@ public class CameraController : MonoBehaviour
     #region Camera States
 
 
-    public void ExploringCam() 
+    public void ExploringCam(float mouseX,float mouseY) 
     {
-        float mouseX = Input.GetAxisRaw("Mouse X");
-        float mouseY = Input.GetAxisRaw("Mouse Y");
-
         if (isCollisionDetected == true && camPriority != 1)
         {
 
@@ -128,7 +123,7 @@ public class CameraController : MonoBehaviour
         else targetDistance = defeaultDistance;
 
 
-        plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
+        plannerDirection = Quaternion.Euler(0, -mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
 
         newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
@@ -141,13 +136,10 @@ public class CameraController : MonoBehaviour
         cam.transform.rotation = newRotation;
 
     }
-    public void CombatCam() // Combat camera collision should no be going down the same rate at the exploring cam Fix later
+    public void CombatCam(float mouseX, float mouseY) // Combat camera collision should no be going down the same rate at the exploring cam Fix later
     {
-        float mouseX = Input.GetAxisRaw("Mouse X");
-        float mouseY = Input.GetAxisRaw("Mouse Y");
-
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
-        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, combatMinVerticalAngle, combatMaxVerticalAngle);
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + -mouseY, combatMinVerticalAngle, combatMaxVerticalAngle);
 
         if (isCollisionDetected == true && camPriority != 0)
         {
@@ -220,52 +212,16 @@ public class CameraController : MonoBehaviour
 
     #endregion
 
-    #region Seed Wheel
-    private void OpenSeedWheel()
-    {
-        if (WeaponWheelController.weaponWheelSelected == true)
-        {
-            seedWheel.transform.LookAt(Camera.main.transform);
-            seedWheel.transform.Rotate(0, 180, 0);
-
-            Vector3 wheel = seedWheel.transform.position;
-
-            Cursor.lockState = CursorLockMode.None;
-            var ray = new Ray(wheel, cam.transform.position - seedWheel.transform.position);
-            RaycastHit hit;
-
-
-            // FOr later might have to corutine this or something else 
-            Debug.DrawRay(wheel, cam.transform.position - seedWheel.transform.position,Color.blue);
-           if (Physics.Raycast(ray, out hit, 50f, playerObstructsUi, QueryTriggerInteraction.Ignore))
-           {
-                wheel = Vector3.MoveTowards(wheel, inFrontOfPlayer.position, .1f);
-                seedWheel.transform.position = wheel;
-                Debug.Log("yes");
-           }
-           else
-           {
-               wheel = Vector3.MoveTowards(wheel, behindPlayer.position, .1f);
-                seedWheel.transform.position = wheel;
-               Debug.Log("no");
-           }
-
-        }
-        else
-            Cursor.lockState = CursorLockMode.Locked;
-
-    }
-    #endregion
-
+   
     #region Editor Gizmos 
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Handles.DrawLine(cam.transform.position, followObj.position);
         Gizmos.DrawSphere(cam.transform.position, cameraSphereRadius);
 
      //  Handles.DrawLine(seedWheel.transform.position, cam.transform.position);
-    }
+    }*/
 
 
 

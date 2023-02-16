@@ -64,30 +64,24 @@ public class PlayerAttack : MonoBehaviour
 
         if (playerInput.attack)
         {
-            
-            Attack();
-            if (attackNumber > 2)
-                attackNumber = 0;
-            if (attackNumber == 0)
-                animator.SetBool("hit1", true);
-            if (attackNumber == 1)
-                animator.SetBool("hit2", true);
-            if (attackNumber == 2)
-                animator.SetBool("hit3", true);
+            Attack(0);
+        }
 
+        if(playerInput.secondaryAttack)
+        {
+            Attack(1);
         }
     }
     #endregion
 
     #region Private FUnctions
-    private void Attack()
+    private void Attack(int attackType)
     {
-        //Debug.Log("Attack Ran");
         isAttacking = true;
-      //  playerMovement.stopMovementEvent = true;
-       
+        playerMovement.stopMovementEvent = true;
         attackArea.enabled = true;
-
+        animator.SetBool("Active", true);
+        animator.SetInteger("Attack Type", attackType);
         OnTriggerEnter(attackArea);
         StartCoroutine(DelayAttack());
     }
@@ -95,25 +89,19 @@ public class PlayerAttack : MonoBehaviour
     private IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(delayAttack);
-        isAttacking = false;
-        playerMovement.stopMovementEvent = false;
-        attackArea.enabled = false;
-        if (attackNumber == 0)
-            animator.SetBool("hit1", false);
-        if (attackNumber == 1)
-            animator.SetBool("hit2", false);
-        if (attackNumber == 2) 
-        {
-            animator.SetBool("hit3", false);
-        }
-
+      
         attackNumber += 1;
     }
 
+
+    // pass in the attack int 
     private void OnTriggerEnter(Collider attackArea) // if an object has collided with the attacksphere while it is active 
     {
-        if(whatIsHittable == (whatIsHittable | (1 << attackArea.transform.gameObject.layer)))
+        // if the 3rd hit 
+        if(whatIsHittable == (whatIsHittable | (1 << attackArea.transform.gameObject.layer))) // Bitwise equation: layermask == (layermask | 1 << layermask)
         {
+
+            Debug.Log(Convert.ToString(whatIsHittable, 2).PadLeft(32, '0'));
             obj = attackArea.gameObject.GetComponent<Rigidbody>();
             if (obj != null)
               HitSomething(direction, obj);
@@ -122,16 +110,13 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-
     // Create Stun Stop enemey
-
     private void HitSomething(Vector3 direction, Rigidbody obj)
     {
         //timer here 
         //if tag is enemy
         if (obj.tag == "Enemy")
         {
-            Invoke("AddKnockback", knockbackTimer); // only applying knockback to what we consider an enemy
             DamagePopUp.Create(obj.transform.position, damage);
             obj.SendMessage("DisableAI");
             obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
@@ -141,8 +126,6 @@ public class PlayerAttack : MonoBehaviour
         }
         else if (obj.tag == "SpecialEnemy")
         {
-            Invoke("AddKnockback", knockbackTimer);
-            Debug.Log("Special hit");
             DamagePopUp.Create(obj.transform.position, damage);
             obj.SendMessage("DisableAI");
             obj.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
@@ -162,4 +145,15 @@ public class PlayerAttack : MonoBehaviour
         obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
     }
     #endregion
+
+
+
+    public void isAnimationFinished()
+    {
+        isAttacking = false;
+        playerMovement.stopMovementEvent = false;
+        attackArea.enabled = false;
+        animator.SetBool("Active", false);
+
+    }
 }

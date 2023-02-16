@@ -10,21 +10,32 @@
 //------------------------------------------------------
 
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Events;
 
 public class GameEventListener : MonoBehaviour
 {
-    public GameEvent Event; // event to register with
+    public List<GameEvent> Event; // event to register with
 
     public UnityEvent Response; // response to invoke when event is raised in the inspector 
+
     private void OnEnable()
     {
-        Event.RegisterListener(this);
+        foreach (var item in Event)
+        {
+            item?.RegisterListener(this);
+        }
+       
     }
 
     private void OnDisable()
     {
-        Event.UnregisterListener(this);
+
+        foreach (var item in Event)
+        {
+            item?.UnregisterListener(this);
+        }
+        
     }
 
     public void OnEventRaised()

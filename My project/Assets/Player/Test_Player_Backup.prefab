@@ -186,13 +186,20 @@ MonoBehaviour:
   camPriority: 0
   defeaultDistance: 8
   combatCamDistance: 10
+  newDistanceFromPlayer: 0
+  newDistanceFromPlayerInCombat: 0
   rotationSharpness: 25
   smoothing: 0.752
-  camClippingSphere: {fileID: 8753082029509424996}
-  walls:
+  obstructionMasks:
     serializedVersion: 2
-    m_Bits: 1024
-  camRayLength: 5
+    m_Bits: 0
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  isCollisionDetected: 0
+  cameraSphereRadius: 0.3
+  cameraCollisionOffset: 0.3
+  minimumCollisionOffset: 0.3
 --- !u!54 &8753082028900565062
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -263,9 +270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db34a3a09ad3f7044a9ddc535a67de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 61a4eb993a70e834f8663ef018a8a3b9, type: 2}
-  element: 0
   animator: {fileID: 8753082029798776751}
+  maxHealth: 5
   currentHealth: 0
   numberOfHearts: 0
   hearts:
@@ -279,9 +285,7 @@ MonoBehaviour:
   - {fileID: 0}
   fullHeart: {fileID: 21300000, guid: 7734b3e44bbc8e44193153e982455161, type: 3}
   emptyHeart: {fileID: 21300000, guid: 450b3886b87ae8643980717db9a17ea1, type: 3}
-  color: {r: 0, g: 0, b: 0, a: 0}
-  material: {fileID: 0}
-  playerOutline: {fileID: 0}
+  currentSeed: 0
 --- !u!114 &4728646321269529654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 8753082028900565062}
-  camTarget: {fileID: 4728646322619330709}
+  lungePosition: {fileID: 0}
   distanceToGround: {fileID: 8753082027964194132}
   runSpeed: 10
   stopMovementEvent: 0
@@ -306,7 +310,16 @@ MonoBehaviour:
     m_Bits: 256
   verticalVelocity: 5
   distanceToCheckForGround: 1
-  inCombatRoom: 0
+  isLunging: 0
+  lerpPosition: {fileID: 0}
+  orgLerpPos: {fileID: 0}
+  lerpduration: 0
+  playerCollionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  targetingEnemy: 0
+  target: {fileID: 0}
+  range: 0
 --- !u!114 &8753082029996975297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,6 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackArea: {fileID: 8753082029368529487}
+  playerPos: {fileID: 0}
   attackPosition: {fileID: 6907269451527826195}
   enmeyPosition: {fileID: 0}
   whatIsHittable:
@@ -1182,6 +1196,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3714026442996874862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8218218366223416690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c502c47352f0f45b79499ed71f22ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: b8a2b3297dd0e2a4689acaf7346bdf15, type: 2}
 --- !u!4 &8739000483649562568 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5cc643eb71be864a991ab81801fb619, type: 3}
