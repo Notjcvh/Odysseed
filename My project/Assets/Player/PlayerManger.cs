@@ -22,9 +22,6 @@ public class PlayerManger : MonoBehaviour
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    [Header("Seeds")]
-    public int currentSeed;
-
     
     #region Unity Functions
     private void Awake()

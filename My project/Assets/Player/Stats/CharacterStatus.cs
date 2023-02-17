@@ -7,7 +7,6 @@ public class CharacterStatus : ScriptableObject
     // Base Stats
     public string characterName = "name";
     public int health = 0;
-
     public bool hasWaterSeed = false;
     public bool hasEarthSeed = false;
     public bool hasFireSeed = false;
