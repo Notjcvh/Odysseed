@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public float distanceToCheckForGround;
 
     [Header("Dash")]
-    public bool isLunging = false;
+    public bool isDashing = false;
     public Transform lerpPosition;
     public Transform orgLerpPos;
     public float lerpduration;
@@ -47,8 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
-        InvokeRepeating("UpdateTarget", 0f, 0.1f * Time.deltaTime);
+       
     }
     private void Awake()
     {
@@ -56,15 +55,20 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerBody = GetComponentInChildren<Rigidbody>();
         animator = GetComponent<PlayerManger>().animator;
+
+        stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
+        InvokeRepeating("UpdateTarget", 0f, 0.1f * Time.deltaTime);
     }
     private void Update()
     {
         if (playerInput.dash) //For Later
         {
             Debug.Log("Dash");
-          /*  isLunging = true;
-            co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
-                StartCoroutine(co);*/
+            co = Dash(transform.position, lerpPosition.position, lerpduration);
+            StartCoroutine(co);
+            /* isLunging = true;
+              co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
+                  StartCoroutine(co);*/
         }
 
         if (targetingEnemy)
@@ -79,6 +83,8 @@ public class PlayerMovement : MonoBehaviour
         else if (stopMovementEvent == true)
             StopMoving();
     }
+
+    #region Player Movement and Stop Movement 
     private void MoveNow()
     {
         // if we have input that is either vertical or horizontal then is moving is true 
@@ -100,19 +106,14 @@ public class PlayerMovement : MonoBehaviour
         else
             animator.SetBool("isRunning", false);
     }
-
-    public void AttackMoveFoward() //For Later
+    private void StopMoving()
     {
 
-        stopMovementEvent = true;
-        Vector3 attackLunge = transform.forward * 5;
-        Quaternion currentRotation = targetRotation;
-        transform.rotation = currentRotation;
-        transform.Translate(attackLunge, Space.World);
     }
+    #endregion
 
-
-    private bool IsGrounded()
+    #region Ground Check and Jumping
+    public bool IsGrounded()
     {
         Vector3 direction = new Vector3(0, -transform.position.y, 0);
         RaycastHit hit;
@@ -122,29 +123,34 @@ public class PlayerMovement : MonoBehaviour
     {
         return playerInput.jumpInput;
     }
-    private void StopMoving()
-    {
+    #endregion
 
-    }
-
-    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time) //Document
+    #region Dashing
+    private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float time)
     {
         RaycastHit hit;
-        float range = 2f;
+        float range = 5f;
         Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
 
-        for (float t = 0; t < 1; t += Time.deltaTime / time) 
+        print("Start : " + currentPostion + " End : " + endPosition);
+
+
+        //this is for sliding 
+        for (float t = 0; t < 1; t += Time.deltaTime / time)
         {
             if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
             {
                 transform.position = currentPostion;
             }
             else
-              transform.position = Vector3.Lerp(currentPostion, endPosition, t);
+                transform.position = Vector3.Lerp(currentPostion, endPosition, t);
             yield return null;
         }
     }
+    #endregion
 
+
+    /*
     void UpdateTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -173,14 +179,12 @@ public class PlayerMovement : MonoBehaviour
             targetingEnemy = false;
         }
     }
-
+    */
 
     private void OnDrawGizmos()
     {
         float range = 2f;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * range));
-
-
     }
 
 }

@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class AnimationEventHandler : MonoBehaviour
 {
-   
-    public GameEvent Event;
-    
+
+    public GameEvent TriggerEvent; 
+    public GameEvent EndEvent;
+
+    void AnimationTrigger()
+    {
+        TriggerEvent?.Raise();
+    }
+
     void AnimationEventEnded()
     {
-        Event?.Raise();
+        EndEvent?.Raise();
     }
 }

@@ -9,6 +9,8 @@ public class PlayerManger : MonoBehaviour
     private GameManager gameManager;
     public Animator animator;
 
+    [Header("Initial Start Position")]
+    private Vector3 intialStartPos;
 
 
     public int maxHealth = 5;
@@ -71,9 +73,6 @@ public class PlayerManger : MonoBehaviour
             Destroy(this.gameObject);
             currentHealth = maxHealth;
         }
-
-
-       
     }
     #endregion
 

@@ -12,13 +12,13 @@ public class GameManager : MonoBehaviour
     [Header("Referencing")]
 
     private static GameManager instance;
-    public Vector3 lastCheckPointPos;
-    public GameObject sceneTransition;
+    
     public GameObject player;
     private PlayerMovement playerMovement;
 
 
     public Vector3 position;
+    public Vector3 lastCheckPointPos;
 
     private GameObject BoneYard; // the boneyard is basically the place where we move the enemies then destory them --> this is a test right now though
     private Vector3 positionOfBoneyard;
@@ -26,16 +26,22 @@ public class GameManager : MonoBehaviour
 
     public VectorValue level;
     public SceneManager currentScene;
-    public TextMeshProUGUI displayText;
 
+
+    [Header("Scene Transitions")]
+    private GameObject sceneTransition;
     public float textDisappearTimer = 1.3f;
     public float countdown;
     private bool sceneTransitonTextActive = false;
+    public TextMeshProUGUI displayText;
+
+
     public bool hasDied = false; // might be better to have as a number 
 
-    public HashSet<Transform> hasSet = new HashSet<Transform>();
-    public List<Transform> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
+    public HashSet<Vector3> hasSet = new HashSet<Vector3>();
+    public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
     private GameObject[] checkpoints = null;
+    
     public bool loaded = false;
 
     #region Unity Functions
@@ -49,27 +55,34 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-
-        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
+        // Get Components 
+        player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
+
+        //Instantiate
+        positionOfBoneyard = level.boneYard;
+        BoneYard = Instantiate(GameAssets.i.BoneYard, positionOfBoneyard, Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
+        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
+        
+        //Start Scene Transitions 
         sceneTransitonTextActive = true;
         countdown = textDisappearTimer;
-        positionOfBoneyard = level.boneYard;
-        BoneYard = Instantiate(GameAssets.i.BoneYard,positionOfBoneyard,Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         DisplayText(sceneTransition);
-        ReloadPosition();
 
+        //Find Checkpoints 
         checkpoints = GameObject.FindGameObjectsWithTag("Checkpoints"); // for disabling all the checkpoint meshes
         foreach (var item in checkpoints)
         {
             item.GetComponent<MeshRenderer>().enabled = false;
         }
 
-      
+        ReloadPosition();
+
     }
     private void Update()
-    { 
-        if(sceneTransitonTextActive == true)
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (sceneTransitonTextActive == true)
         {
             playerMovement.stopMovementEvent = true;
             //  StartCoroutine(Transitioning());
@@ -87,22 +100,36 @@ public class GameManager : MonoBehaviour
                 countdown = textDisappearTimer;
                
             }
-        }   
+        }
 
 
-       /* if(Input.GetKeyDown(KeyCode.Y))
+        //Debuging 
+
+        if(Input.GetKeyDown(KeyCode.I))
         {
-            foreach (var thing in hasSet)
+            checkpoints = GameObject.FindGameObjectsWithTag("Checkpoints"); // for disabling all the checkpoint meshes
+            foreach (var item in checkpoints)
             {
-                Debug.Log("This is inside" + thing);
+                item.GetComponent<MeshRenderer>().enabled = true;
             }
-            Debug.Log("Ran");
-        }*/
+        }
+
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            ReloadPosition();
+            PlayerHasDied();
+ 
+
+        }
+
+
+
     }
 
- 
+
     #endregion
-    #region Public Functions
+
+    #region Scene Transitions 
     public void DisplayText(GameObject scene)
     {
         if (sceneTransition != null)
@@ -116,32 +143,41 @@ public class GameManager : MonoBehaviour
         else
             return;       
     }
+    #endregion
 
-    public void PlayerHasDied()
+
+
+    public void PlayerHasDied() // called in Player Manager 
     {
         hasDied = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function    
     }
 
+
+
+
     public void Convert()
     {
-        triggeredPoints = new List<Transform>(hasSet);
+        triggeredPoints = new List<Vector3>(hasSet);
 
     }
     public void ReloadPosition()
     {
-        if (hasSet.Count >= 1)
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (hasSet.Count > 0)
         {
-            Transform b = triggeredPoints[triggeredPoints.Count - 1];
-            lastCheckPointPos = b.position;
-            position = lastCheckPointPos;
+            Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
+            Debug.Log(b);
+            lastCheckPointPos = b;
+            player.transform.position = lastCheckPointPos;
         }
         else
         {
-            position = level.initialStartValue;
+            player.transform.position = level.initialStartValue;
+            position = player.transform.position;
         }
     }
-    #endregion
+  
 
 
 

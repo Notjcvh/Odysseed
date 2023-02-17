@@ -9,7 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2538145067693232676}
-  - component: {fileID: 2538145067693232679}
+  - component: {fileID: 1482087284}
+  - component: {fileID: 1482087285}
+  - component: {fileID: 1482087286}
+  - component: {fileID: 1482087288}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -32,7 +35,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2538145067693232679
+--- !u!114 &1482087284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538145067693232677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c6ee4ceab73943449d6de327e2d3cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStatus: {fileID: 11400000, guid: 251546afa64149e42a7f854a7cde24a8, type: 2}
+--- !u!114 &1482087285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538145067693232677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eeddedc18793914f923808dad8a59c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentEquipment: []
+--- !u!114 &1482087286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538145067693232677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20cd172389c748b4e9a3d1458f9cf418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 11400000, guid: accf51d742e74924fa90cda702c48c30, type: 2}
+  - {fileID: 11400000, guid: 2c7050f9625072143b21ae5e211b9826, type: 2}
+--- !u!114 &1482087288
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,6 +88,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ce288d85c5ffe4786a18f84e734a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastCheckPointPos: {x: 0, y: 0, z: 0}
   sceneTransition: {fileID: 0}
+  player: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  level: {fileID: 0}
   displayText: {fileID: 0}
-  room: {fileID: 11400000, guid: 2ad7193e2d8f58344910fd8c6e48b4f5, type: 2}
+  textDisappearTimer: 1.3
+  countdown: 0
+  hasDied: 0
+  triggeredPoints: []
+  loaded: 0
