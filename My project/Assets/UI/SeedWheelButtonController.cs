@@ -8,9 +8,11 @@ using TMPro;
 public class SeedWheelButtonController : MonoBehaviour
 {
     public int Id;
+    public int prevId;
     private Animator anim;
     public string itemName; 
     public TextMeshProUGUI itemText;
+    public WeaponWheelController weaponWheelController;
     public Image selecteditem;
     private bool selected = false;
     public Sprite icon; 
@@ -19,7 +21,6 @@ public class SeedWheelButtonController : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-
     }
 
     // Update is called once per frame
@@ -37,26 +38,36 @@ public class SeedWheelButtonController : MonoBehaviour
     public void Selected()
     {
         selected = true;
-        WeaponWheelController.weaponID = Id;
+        prevId = weaponWheelController.weaponID;
+        weaponWheelController.weaponID = Id;
     }
 
     public void Deselected()
     {
         selected = false;
-        WeaponWheelController.weaponID = 0;
+        weaponWheelController.weaponID = prevId;
     }
 
 
     public void HoverEnter()
     {
+        /*
         anim.SetBool("Hover", true);
         itemText.text = itemName;
+        */
+        selected = true;
+        prevId = weaponWheelController.weaponID;
+        weaponWheelController.weaponID = Id;
     }
 
     public void HoverExit()
     {
+        /*
         anim.SetBool("Hover", false);
         itemText.text = ""; // text empty 
+        */
+        selected = false;
+        weaponWheelController.weaponID = prevId;
     }
 
 }

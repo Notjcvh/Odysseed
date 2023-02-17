@@ -45,6 +45,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform target;
     public float range;
 
+    [Header("Seeds")]
+    public int seedId;
+
     private void Start()
     {
        
@@ -55,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerBody = GetComponentInChildren<Rigidbody>();
         animator = GetComponent<PlayerManger>().animator;
-
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
         InvokeRepeating("UpdateTarget", 0f, 0.1f * Time.deltaTime);
     }
@@ -181,7 +183,9 @@ public class PlayerMovement : MonoBehaviour
     }
     */
 
-    private void OnDrawGizmos()
+            
+
+private void OnDrawGizmos()
     {
         float range = 2f;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * range));

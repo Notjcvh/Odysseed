@@ -8,28 +8,39 @@ public class WeaponWheelController : MonoBehaviour
     public bool weaponWheelSelected = false;
     public Image selectedItem;
     public Sprite noImage;
-    public static int weaponID; // For later
+    public int weaponID;
 
     public GameObject player;
     public PlayerInput playerInput;
+    public PlayerMovement playerMovement;
     
     [Header("Weapon Wheel Ui")]
     public LayerMask playerObstructsUi; // have it check for player layer 
     public Transform behindPlayer; // starting point 
     public Transform inFrontOfPlayer; // lerp point
 
+    private void Start()
+    {
+        
+    }
+
     void Update()
     {
-       /* if(playerInput.activateSeedWheel)
+       if(Input.GetButtonDown("Activate Seed Wheel"))
         {
 
-            weaponWheelSelected = !weaponWheelSelected;
-
+            weaponWheelSelected = true;
+            Cursor.lockState = CursorLockMode.None;
             Debug.Log(weaponWheelSelected);
 
-        }*/
-
-        if (weaponWheelSelected == true)
+        }
+        if (Input.GetButtonUp("Activate Seed Wheel"))
+        {
+            weaponWheelSelected = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Debug.Log(weaponWheelSelected);
+        }
+            if (weaponWheelSelected == true)
         {
             anim.SetBool("OpenSeedWheel", true);
             SeedwheelIsActive();
@@ -49,13 +60,15 @@ public class WeaponWheelController : MonoBehaviour
             case 1:
                // Debug.Log("Water Seed"); // here is where we can call animations 
                 noImage = selectedItem.sprite;
+                playerMovement.seedId = 1;
                 break;
             case  2:
-
                 noImage = selectedItem.sprite;
+                playerMovement.seedId = 2;
                 break;
             case 3:
                 noImage = selectedItem.sprite;
+                playerMovement.seedId = 3;
                 break;
         }
 
@@ -69,10 +82,6 @@ public class WeaponWheelController : MonoBehaviour
         Camera cam = Camera.main;
         /*this.transform.LookAt(cam.transform);
         transform.RotateAround(player.transform.position, Vector3.up, 2 * Time.deltaTime);*/
-   
-
-
-
         Vector3 wheel = this.transform.position;
 
         var ray = new Ray(wheel, cam.transform.position - this.transform.position);
@@ -106,7 +115,6 @@ public class WeaponWheelController : MonoBehaviour
         }
         else
             Cursor.lockState = CursorLockMode.Locked;
-
     }
     #endregion
 }
