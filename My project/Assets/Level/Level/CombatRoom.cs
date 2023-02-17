@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CombatRoom : MonoBehaviour
 {
-    public GameObject player;
-    public CameraController cam;
-    public PlayerMovement playerMovement;
-    public VectorValue level;
+    private GameObject player;
+    private CameraController cam;
+    private PlayerMovement playerMovement;
 
+    public GameEvent[] roomEvents; // what the doors are listening for
+    public VectorValue level;
 
     public bool isRoomActive = false;
     public bool isRoomComplete = false;
@@ -17,16 +18,12 @@ public class CombatRoom : MonoBehaviour
     [Header("Tags")]
     private string[] tags = { "Player", "Ally", "Enemy", "SpecialEnemy", "Door" };
 
-    public GameEvent[] roomEvents; // what the doors are listening for
-
     [Header("Combat Variables")]
     public int lockNumber = 0;
-    public bool allEnemiesDefeated = false;
     public List<GameObject> enemies = null; // this is what the room will check to open 
 
     private float timer = 1;
     Coroutine currentCoroutine = null;
-
 
     private void Awake()
     {
@@ -35,17 +32,25 @@ public class CombatRoom : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
     }
 
+    private void Update()
+    {
+        IsTheRoomComplete();
+    }
+
     private void IsTheRoomComplete()
     {
         lockNumber = enemies.Count;
-        if (Input.GetKeyDown(KeyCode.T)) //isRoomActive && enemies.Count == 0
+        if (isRoomActive == true && lockNumber == 0)
         {
             isRoomComplete = true;
+    
             for (int i = 0; i < roomEvents.Length; i++)
             {
                 roomEvents[i].Raise();
             }
         }
+        else
+            Debug.Log("Room is not complete");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,8 +58,9 @@ public class CombatRoom : MonoBehaviour
         if (other.CompareTag(tags[0])) // the player
         {
             isRoomActive = true;
-            currentCoroutine = StartCoroutine(WaitFor());
+
             cam.camPriority = 1;
+
         }
         if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies
         {
@@ -68,7 +74,7 @@ public class CombatRoom : MonoBehaviour
         {
             isRoomActive = false;
             StopCoroutine(currentCoroutine);
-            cam.camPriority = 0;  
+            cam.camPriority = 0;
         }
         if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies 
         {
@@ -83,12 +89,6 @@ public class CombatRoom : MonoBehaviour
         // subtract 1 from the lock number 
         other.transform.position = level.boneYard;
     }
-    IEnumerator WaitFor() //checking if the room is complete
-    {
-        while (isRoomActive && !isRoomComplete)
-        {
-            yield return new WaitForSeconds(timer);
-            IsTheRoomComplete();
-        }
-    }
 }
+
+    

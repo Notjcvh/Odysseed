@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 704790505520404040}
   - component: {fileID: 704790505520404041}
-  - component: {fileID: 1524710015}
   m_Layer: 0
   m_Name: Encounter Room
   m_TagString: Room
@@ -46,33 +45,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 49.720947, y: 9.178369, z: 46.990612}
   m_Center: {x: 4.4292526, y: 4.0891833, z: -4.8795414}
---- !u!114 &1524710015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704790505520404043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bd23f35bef43c04698665e38349b6cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  cam: {fileID: 0}
-  playerMovement: {fileID: 0}
-  level: {fileID: 11400000, guid: 75ba29431a42ce246b8dc2eeed5e13f8, type: 2}
-  whichPuzzle: {fileID: 0}
-  isRoomActive: 0
-  isRoomComplete: 0
-  doors: []
-  isAPuzzleRoom: 0
-  isACombatRoom: 1
-  puzzleDialouge: {fileID: 0}
-  needMatchesToSolve: 0
-  currentValue: 0
-  lockNumber: 0
-  allEnemiesDefeated: 0
-  enemies: []
-  roomEvents:
-  - {fileID: 11400000, guid: acdf9e6cd1493a64cb43576406de966c, type: 2}

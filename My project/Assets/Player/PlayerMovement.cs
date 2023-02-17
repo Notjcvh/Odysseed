@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         float range = 5f;
         Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
 
-        print("Start : " + currentPostion + " End : " + endPosition);
+       // print("Start : " + currentPostion + " End : " + endPosition);
 
 
         //this is for sliding 
