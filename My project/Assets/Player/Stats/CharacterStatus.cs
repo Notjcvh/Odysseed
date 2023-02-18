@@ -20,7 +20,6 @@ public class CharacterStatus : ScriptableObject
 
 
     [Header("Modifiers")]
-    public int armourHearts = 0; 
     public int speed = 0;
     public int attackSpeed = 0;
     public int strength = 0; // damage dealtFF
