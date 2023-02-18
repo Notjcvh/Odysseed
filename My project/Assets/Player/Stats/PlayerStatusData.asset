@@ -14,15 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: name
   health: 30
+  hasWaterSeed: 0
+  hasEarthSeed: 0
+  hasFireSeed: 0
+  seedId: 0
+  seedsList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   baseSpeed: 5
   baseAttackSpeed: 4
   baseStrength: 5
   baseKnockbackValue: 4
   baseStun: 3
-  armourHearts: 0
-  speed: 0
-  attackSpeed: 0
-  strength: 0
-  knockbackValue: 0
-  stun: 0
-  focusMeter: 0
+  speed: 1
+  attackSpeed: 1
+  strength: 1
+  knockbackValue: 2
+  stun: 3
+  focusMeter: 3

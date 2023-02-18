@@ -10,6 +10,8 @@ public class CharacterStatus : ScriptableObject
     public bool hasWaterSeed = false;
     public bool hasEarthSeed = false;
     public bool hasFireSeed = false;
+    public int seedId;
+    public Seeds[] seedsList;
 
     [Header("Base Stats")]
     public int baseSpeed = 0;
@@ -26,4 +28,18 @@ public class CharacterStatus : ScriptableObject
     public int knockbackValue = 0; // how far does an attack push the enemy 
     public int stun = 0;
     public float focusMeter = 0; // For later, this is not upgradable
+
+    public void SwitchSeed()
+    {
+        int[] modifers = {speed, attackSpeed, strength, knockbackValue, stun};
+        if(seedsList[seedId] != null)
+        {
+            int[] newModifers = seedsList[seedId].GetAttributes();
+            for (int i = 0; i < 5; i++)
+            {
+                modifers[i] = newModifers[i];
+            }
+        }
+    }
+
 }

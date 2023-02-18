@@ -12,7 +12,7 @@ public class WeaponWheelController : MonoBehaviour
 
     public GameObject player;
     public PlayerInput playerInput;
-    public PlayerMovement playerMovement;
+    public CharacterStatus playerMovement;
 
 
     public Animator[] animators;
@@ -65,6 +65,7 @@ public class WeaponWheelController : MonoBehaviour
                     playerMovement.seedId = 3;
                     break;
             }
+            playerMovement.SwitchSeed();
         }
 
 
