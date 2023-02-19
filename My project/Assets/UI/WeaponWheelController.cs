@@ -12,7 +12,7 @@ public class WeaponWheelController : MonoBehaviour
 
     public GameObject player;
     public PlayerInput playerInput;
-    public CharacterStatus playerMovement;
+    public CharacterStatus characterStatus;
 
 
     public Animator[] animators;
@@ -54,18 +54,18 @@ public class WeaponWheelController : MonoBehaviour
                 case 1:
                     // Debug.Log("Water Seed"); // here is where we can call animations 
                     noImage = selectedItem.sprite;
-                    playerMovement.seedId = 1;
+                    characterStatus.seedId = 1;
                     break;
                 case 2:
                     noImage = selectedItem.sprite;
-                    playerMovement.seedId = 2;
+                    characterStatus.seedId = 2;
                     break;
                 case 3:
                     noImage = selectedItem.sprite;
-                    playerMovement.seedId = 3;
+                    characterStatus.seedId = 3;
                     break;
             }
-            playerMovement.SwitchSeed();
+            characterStatus.SwitchSeed();
         }
 
 
