@@ -13,7 +13,7 @@ public class WeaponWheelController : MonoBehaviour
     public GameObject player;
     public PlayerInput playerInput;
     public CharacterStatus characterStatus;
-
+    public Seeds[] seedsList;
 
     public Animator[] animators;
     
@@ -24,7 +24,7 @@ public class WeaponWheelController : MonoBehaviour
 
     private void Start()
     {
-        
+        characterStatus.UpdateSeedList(seedsList); //add this code to when we pickup a seed
     }
 
     void Update()
@@ -39,7 +39,7 @@ public class WeaponWheelController : MonoBehaviour
             weaponWheelSelected = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
-            if (weaponWheelSelected == true)
+        if (weaponWheelSelected == true)
         {
             anim.SetBool("OpenSeedWheel", true);
         }

@@ -7,9 +7,6 @@ public class CharacterStatus : ScriptableObject
     // Base Stats
     public string characterName = "name";
     public int health = 0;
-    public bool hasWaterSeed = false;
-    public bool hasEarthSeed = false;
-    public bool hasFireSeed = false;
     public int seedId;
     public Seeds[] seedsList;
 
@@ -28,6 +25,11 @@ public class CharacterStatus : ScriptableObject
     public int knockbackValue = 0; // how far does an attack push the enemy 
     public int stun = 0;
     public float focusMeter = 0; // For later, this is not upgradable
+
+    public void UpdateSeedList(Seeds[] newSeedList)
+    {
+        seedsList = newSeedList;
+    }
 
     public void SwitchSeed()
     {

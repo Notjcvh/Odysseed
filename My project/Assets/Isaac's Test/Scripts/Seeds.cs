@@ -13,17 +13,10 @@ public class Seeds : MonoBehaviour
     public float focusMeter = 0; // For later, this is not upgradable
     public CharacterStatus characterStatus;
 
-
-
     public int[] GetAttributes()
     {
         int[] seedAtributes = {armourHearts, speed, attackSpeed, strength, knockbackValue, stun};
         return seedAtributes;
-    }
-
-    public void PickUpSeed()
-    {
-        
     }
     public void SpecialAbility()
     {
