@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationEventHandler : MonoBehaviour
-{
 
+
+public class AnimationStateHandler : MonoBehaviour
+{
+    // Triggers
     public GameEvent TriggerEvent; 
     public GameEvent EndEvent;
+
+    protected Animator animator;
 
     void AnimationTrigger()
     {
@@ -18,3 +22,8 @@ public class AnimationEventHandler : MonoBehaviour
         EndEvent?.Raise();
     }
 }
+
+
+
+
+
