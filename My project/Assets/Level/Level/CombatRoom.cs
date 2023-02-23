@@ -43,14 +43,15 @@ public class CombatRoom : MonoBehaviour
         if (isRoomActive == true && lockNumber == 0)
         {
             isRoomComplete = true;
-    
+
             for (int i = 0; i < roomEvents.Length; i++)
             {
                 roomEvents[i].Raise();
             }
         }
         else
-            Debug.Log("Room is not complete");
+            return;
+            //Debug.Log("Room is not complete");
     }
 
     private void OnTriggerEnter(Collider other)

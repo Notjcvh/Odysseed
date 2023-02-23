@@ -34,23 +34,8 @@ public class SeedWheelButtonController : MonoBehaviour
             itemText.text = itemName;
         }
         anim.SetInteger("CurrentId",weaponWheelController.weaponID);
+
     }
-
-
-    //Selecting and Deselecting our button 
-   /* public void Selected()
-    {
-        selected = true;
-        prevId = weaponWheelController.weaponID;
-        weaponWheelController.weaponID = Id;
-    }
-
-    public void Deselected()
-    {
-        selected = false;
-        weaponWheelController.weaponID = prevId;
-    }*/
-
 
     public void HoverEnter()
     {

@@ -21,12 +21,12 @@ public class DoorHandler : MonoBehaviour
         //check type if the door has an encounter the it's locked else then the door is unlocked
         if (encounterCollider != null)
         {
-            print(this.name + " is locked? " + locked);
+            //print(this.name + " is locked? " + locked);
         }
         else
         {
             locked = false;
-            print(this.name + " is locked? " + locked);
+           // print(this.name + " is locked? " + locked);
         }
     }
     public void UnlockDoors()
