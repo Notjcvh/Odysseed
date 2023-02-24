@@ -51,12 +51,6 @@ public class PlayerPush : MonoBehaviour
         // make sure we hit a non kinematic rigidbody
         /* Rigidbody body = hit.collider.attachedRigidbody;
          if (body == null || body.isKinematic) return;*/
-
-
-
-
-
-
     }
 
 

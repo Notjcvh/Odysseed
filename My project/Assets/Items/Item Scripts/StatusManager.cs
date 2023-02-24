@@ -50,7 +50,6 @@ public class StatusManager : MonoBehaviour
         */
 
         //just use this 
-        playerStatus.armourHearts = newEquipment.armourModifier;
         playerStatus.speed = playerStatus.baseSpeed + newEquipment.speedModifier;
         playerStatus.attackSpeed = playerStatus.baseAttackSpeed + newEquipment.attackSpeedModifier;
         playerStatus.strength = playerStatus.baseStrength + newEquipment.strengthModifier;

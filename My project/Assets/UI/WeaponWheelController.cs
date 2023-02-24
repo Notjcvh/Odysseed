@@ -12,109 +12,55 @@ public class WeaponWheelController : MonoBehaviour
 
     public GameObject player;
     public PlayerInput playerInput;
-    public PlayerMovement playerMovement;
-    
-    [Header("Weapon Wheel Ui")]
-    public LayerMask playerObstructsUi; // have it check for player layer 
-    public Transform behindPlayer; // starting point 
-    public Transform inFrontOfPlayer; // lerp point
+    public CharacterStatus characterStatus;
+    public Seeds[] seedsList;
 
+    public Animator[] animators;
+    
     private void Start()
     {
-        
+        characterStatus.UpdateSeedList(seedsList); //add this code to when we pickup a seed
     }
 
     void Update()
     {
        if(Input.GetButtonDown("Activate Seed Wheel"))
         {
-
             weaponWheelSelected = true;
             Cursor.lockState = CursorLockMode.None;
-            Debug.Log(weaponWheelSelected);
-
         }
         if (Input.GetButtonUp("Activate Seed Wheel"))
         {
             weaponWheelSelected = false;
             Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log(weaponWheelSelected);
         }
-            if (weaponWheelSelected == true)
+        if (weaponWheelSelected == true)
         {
             anim.SetBool("OpenSeedWheel", true);
-            SeedwheelIsActive();
         }
         else
         {
             anim.SetBool("OpenSeedWheel", false);
-
-        }
-
-
-        switch (weaponID) // For Later switch Statement 
-        {
-             case 0: //NOTHING IS SELECTED
-                noImage = selectedItem.sprite;
-                break;
-            case 1:
-               // Debug.Log("Water Seed"); // here is where we can call animations 
-                noImage = selectedItem.sprite;
-                playerMovement.seedId = 1;
-                break;
-            case  2:
-                noImage = selectedItem.sprite;
-                playerMovement.seedId = 2;
-                break;
-            case 3:
-                noImage = selectedItem.sprite;
-                playerMovement.seedId = 3;
-                break;
-        }
-
-        
-    }
-
-
-    #region Seed Wheel
-    private void SeedwheelIsActive()
-    {
-        Camera cam = Camera.main;
-        /*this.transform.LookAt(cam.transform);
-        transform.RotateAround(player.transform.position, Vector3.up, 2 * Time.deltaTime);*/
-        Vector3 wheel = this.transform.position;
-
-        var ray = new Ray(wheel, cam.transform.position - this.transform.position);
-        Debug.DrawRay(wheel, cam.transform.position - this.transform.position, Color.blue);
-
-        Cursor.lockState = CursorLockMode.Confined;
-        if (weaponWheelSelected == true)
-        {
-           /*
-
-            Cursor.lockState = CursorLockMode.None;
-           
-            RaycastHit hit;
-
-            // FOr later might have to corutine this or something else 
-          
-            
-            if (Physics.Raycast(ray, out hit, 50f, playerObstructsUi, QueryTriggerInteraction.Ignore))
+            switch (weaponID) // For Later switch Statement 
             {
-                wheel = Vector3.MoveTowards(wheel, inFrontOfPlayer.position, .1f);
-                seedWheel.transform.position = wheel;
-                Debug.Log("yes");
+                case 0: //NOTHING IS SELECTED
+                    noImage = selectedItem.sprite;
+                    break;
+                case 1:
+                    // Debug.Log("Water Seed"); // here is where we can call animations 
+                    noImage = selectedItem.sprite;
+                    characterStatus.seedId = 1;
+                    break;
+                case 2:
+                    noImage = selectedItem.sprite;
+                    characterStatus.seedId = 2;
+                    break;
+                case 3:
+                    noImage = selectedItem.sprite;
+                    characterStatus.seedId = 3;
+                    break;
             }
-            else
-            {
-                wheel = Vector3.MoveTowards(wheel, behindPlayer.position, .1f);
-                seedWheel.transform.position = wheel;
-                Debug.Log("no");
-            }*/
-
+            characterStatus.SwitchSeed();
         }
-        else
-            Cursor.lockState = CursorLockMode.Locked;
     }
-    #endregion
 }

@@ -158,10 +158,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 1
+  prevId: 0
   itemName: 'Sun Seed '
   itemText: {fileID: 1298586873805642698}
+  weaponWheelController: {fileID: 1491524644057413185}
   selecteditem: {fileID: 1298586874333010940}
   icon: {fileID: 21300000, guid: f8c9467a892580344bb697526dac0d13, type: 3}
+  button: {fileID: 0}
 --- !u!114 &483983178783125835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,10 +552,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 2
+  prevId: 0
   itemName: 'Earth Seed '
   itemText: {fileID: 1298586873805642698}
+  weaponWheelController: {fileID: 1491524644057413185}
   selecteditem: {fileID: 1298586874333010940}
   icon: {fileID: 21300000, guid: e36d1a38d7aa309409e80bf66a089330, type: 3}
+  button: {fileID: 0}
 --- !u!114 &483983180304845313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,7 +740,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0.6666667}
     m_HighlightedColor: {r: 1, g: 0.8965436, b: 0, a: 1}
-    m_PressedColor: {r: 1, g: 0.8980393, b: 0, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 0.6666667}
     m_SelectedColor: {r: 1, g: 0.8980393, b: 0, a: 1}
     m_DisabledColor: {r: 0, g: 0, b: 0, a: 0.33333334}
     m_ColorMultiplier: 1
@@ -788,10 +794,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 1
+  prevId: 0
   itemName: 'Water Seed '
   itemText: {fileID: 1298586873805642698}
+  weaponWheelController: {fileID: 1491524644057413185}
   selecteditem: {fileID: 1298586874333010940}
   icon: {fileID: 21300000, guid: f8c9467a892580344bb697526dac0d13, type: 3}
+  button: {fileID: 0}
 --- !u!114 &1298586873221388761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1060,8 +1069,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 893182053}
+  weaponWheelSelected: 0
   selectedItem: {fileID: 1298586874333010940}
   noImage: {fileID: 0}
+  weaponID: 0
+  player: {fileID: 0}
+  playerInput: {fileID: 0}
+  playerMovement: {fileID: 0}
+  playerObstructsUi:
+    serializedVersion: 2
+    m_Bits: 0
+  behindPlayer: {fileID: 0}
+  inFrontOfPlayer: {fileID: 0}
 --- !u!95 &893182053
 Animator:
   serializedVersion: 4
