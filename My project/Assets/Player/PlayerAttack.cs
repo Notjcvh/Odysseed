@@ -44,9 +44,7 @@ public class PlayerAttack : MonoBehaviour
     public float knockbackStrength;
 
 
-
-    [Header("In Combo")]
-   
+    [Header("In Combo")]   
     public States previousState; //currentState
     public bool isAnimationActive;
     public bool isInComboState;
@@ -91,7 +89,7 @@ public class PlayerAttack : MonoBehaviour
         playerMovement.stopMovementEvent = true;
         // attackArea.enabled = true;
         //checking for attack Type and is Grounded for Knockback
-        if (isInComboState == false)
+        if (isInComboState == false) // light or heavy attack
         {
             //choose stater throw in own function
             switch (attackType, playerMovement.IsGrounded())
@@ -134,6 +132,9 @@ public class PlayerAttack : MonoBehaviour
         StartCoroutine(DelayAttack());
     }
 
+    // lights attacks
+    //heavy attacks
+
 
     private bool IsComboComplete(int fullComboString, int num)
     {
@@ -144,6 +145,8 @@ public class PlayerAttack : MonoBehaviour
         else
             return false;
     }
+
+    //delete
     private int NextAttack(States currentState)
     {
 
@@ -154,10 +157,6 @@ public class PlayerAttack : MonoBehaviour
         int count = previousStatesCalled;
 
         int whatAttackType = attackType;
-
-
-
-
 
         statesCalled.Add(((short)previousStatesCalled));
 
@@ -209,8 +208,6 @@ public class PlayerAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(delayAttack);
     }
-
-  
 
     #region Sliding Forward When Attacking 
     public void SlideForward()
@@ -311,7 +308,7 @@ public enum States
     
 
 
-    //Full Combo Strings 
+    //Full Combo Strings  delete
 
     fullLightCombo = LightStarter | LightCombo1 | LightFinisher,
    // LightHeavy = LightStarter | LightCombo1 | HeavyStarter,
