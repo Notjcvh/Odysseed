@@ -9,6 +9,7 @@ public class AnimationStateHandler : MonoBehaviour
     // Triggers
     public GameEvent TriggerEvent; 
     public GameEvent EndEvent;
+    public GameEvent comboFinisher;
 
     protected Animator animator;
 
@@ -20,6 +21,11 @@ public class AnimationStateHandler : MonoBehaviour
     void AnimationEventEnded()
     {
         EndEvent?.Raise();
+    }
+
+    void ComboHasFinished()
+    {
+        comboFinisher?.Raise();
     }
 }
 
