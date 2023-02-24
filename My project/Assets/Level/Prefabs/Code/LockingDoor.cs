@@ -8,10 +8,6 @@ public class LockingDoor : DoorHandler
 
     private GameObject[] neareastEncounters;
 
-
-
-
-
     public override void OnTriggerExit(Collider other)
     {
         // make sure lock is false
@@ -26,8 +22,6 @@ public class LockingDoor : DoorHandler
             locked = true;
             print(this.name + " is locked? " + locked);
             GetClosestEncounterCollider();
-            
-
         }
     }
 
@@ -41,7 +35,6 @@ public class LockingDoor : DoorHandler
             if (distance < closestDistanceRange)
             {
                 nearestEncounterTrigger = neareastEncounters[objects];
-                print(nearestEncounterTrigger);
             }
 
         }
