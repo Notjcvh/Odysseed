@@ -152,18 +152,21 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
 
-    /*
+    
     void UpdateTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         float shortestDistance = Mathf.Infinity;
         GameObject nearestEnemy = null;
+        Vector3 screenCenter = new Vector3(Screen.width, Screen.height, 0) / 2;
+
         foreach (GameObject enemy in enemies)
         {
-            float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distanceToEnemy < shortestDistance )
+            Vector3 TargetScreenPoint = Camera.main.WorldToScreenPoint(target.transform.position);
+            float distance = Vector2.Distance(TargetScreenPoint, screenCenter);
+            if (distance < shortestDistance)
             {
-                shortestDistance = distanceToEnemy;
+                shortestDistance = distance;
                 nearestEnemy = enemy;
             }
         }
@@ -181,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
             targetingEnemy = false;
         }
     }
-    */
+    
 
             
 

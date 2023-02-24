@@ -11,7 +11,6 @@ public class Seeds : MonoBehaviour
     public int knockbackValue = 0; // how far does an attack push the enemy 
     public int stun = 0;
     public float focusMeter = 0; // For later, this is not upgradable
-    public CharacterStatus characterStatus;
 
     public int[] GetAttributes()
     {

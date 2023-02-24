@@ -17,9 +17,6 @@ public class WeaponWheelController : MonoBehaviour
 
     public Animator[] animators;
     
- 
-
-
     private void Start()
     {
         characterStatus.UpdateSeedList(seedsList); //add this code to when we pickup a seed
@@ -65,10 +62,5 @@ public class WeaponWheelController : MonoBehaviour
             }
             characterStatus.SwitchSeed();
         }
-
-
-        
-
-        
     }
 }

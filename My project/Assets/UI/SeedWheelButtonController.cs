@@ -18,7 +18,6 @@ public class SeedWheelButtonController : MonoBehaviour
     public Sprite icon;
     public Button button;
     public bool isSelecting;
-    private ColorBlock cb;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +38,6 @@ public class SeedWheelButtonController : MonoBehaviour
 
     public void HoverEnter()
     {
-        
         anim.SetBool("Hover", true);
         itemText.text = itemName;
         selected = true;
