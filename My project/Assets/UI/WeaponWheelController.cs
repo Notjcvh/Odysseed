@@ -17,11 +17,6 @@ public class WeaponWheelController : MonoBehaviour
 
     public Animator[] animators;
     
-    [Header("Weapon Wheel Ui")]
-    public LayerMask playerObstructsUi; // have it check for player layer 
-    public Transform behindPlayer; // starting point 
-    public Transform inFrontOfPlayer; // lerp point
-
     private void Start()
     {
         characterStatus.UpdateSeedList(seedsList); //add this code to when we pickup a seed
@@ -67,10 +62,5 @@ public class WeaponWheelController : MonoBehaviour
             }
             characterStatus.SwitchSeed();
         }
-
-
-        
-
-        
     }
 }

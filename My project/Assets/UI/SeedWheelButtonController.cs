@@ -18,7 +18,6 @@ public class SeedWheelButtonController : MonoBehaviour
     public Sprite icon;
     public Button button;
     public bool isSelecting;
-    private ColorBlock cb;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,27 +33,11 @@ public class SeedWheelButtonController : MonoBehaviour
             itemText.text = itemName;
         }
         anim.SetInteger("CurrentId",weaponWheelController.weaponID);
+
     }
-
-
-    //Selecting and Deselecting our button 
-   /* public void Selected()
-    {
-        selected = true;
-        prevId = weaponWheelController.weaponID;
-        weaponWheelController.weaponID = Id;
-    }
-
-    public void Deselected()
-    {
-        selected = false;
-        weaponWheelController.weaponID = prevId;
-    }*/
-
 
     public void HoverEnter()
     {
-        
         anim.SetBool("Hover", true);
         itemText.text = itemName;
         selected = true;
