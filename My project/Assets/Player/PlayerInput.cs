@@ -14,6 +14,7 @@ public class PlayerInput : MonoBehaviour
     public bool attack { get; private set; }
     public bool secondaryAttack { get; private set; }
     public bool dash { get; private set; } // shift
+    public bool target { get; private set; }
 
     public float mouseX { get; private set; }
     public float mouseY { get; private set; }
@@ -61,6 +62,8 @@ public class PlayerInput : MonoBehaviour
         mouseY = Input.GetAxisRaw("Mouse Y"); // number 8
 
         dash = Input.GetButton("Dash"); // number 17
+
+        target = Input.GetButton("Target"); // Mouse 3
 
         interact = Input.GetButton("Interact"); // number 19
 

@@ -59,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
         playerBody = GetComponentInChildren<Rigidbody>();
         animator = GetComponent<PlayerManger>().animator;
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
-        InvokeRepeating("UpdateTarget", 0f, 0.1f * Time.deltaTime);
     }
     private void Update()
     {
@@ -71,6 +70,11 @@ public class PlayerMovement : MonoBehaviour
             /* isLunging = true;
               co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
                   StartCoroutine(co);*/
+        }
+
+        if(playerInput.target)
+        {
+            UpdateTarget();
         }
 
         if (targetingEnemy)
@@ -159,11 +163,13 @@ public class PlayerMovement : MonoBehaviour
         float shortestDistance = Mathf.Infinity;
         GameObject nearestEnemy = null;
         Vector3 screenCenter = new Vector3(Screen.width, Screen.height, 0) / 2;
-
+        Debug.Log("AHHHHHHHHHHH");
         foreach (GameObject enemy in enemies)
         {
-            Vector3 TargetScreenPoint = Camera.main.WorldToScreenPoint(target.transform.position);
+            Vector3 TargetScreenPoint = Camera.main.WorldToScreenPoint(enemy.transform.position);
+            
             float distance = Vector2.Distance(TargetScreenPoint, screenCenter);
+
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;
@@ -174,13 +180,11 @@ public class PlayerMovement : MonoBehaviour
         if (nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
-            lerpPosition = target;
             targetingEnemy = true;
         }
         else
         {
             target = null;
-            lerpPosition = orgLerpPos;
             targetingEnemy = false;
         }
     }

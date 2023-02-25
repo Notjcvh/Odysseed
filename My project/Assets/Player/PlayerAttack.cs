@@ -14,8 +14,6 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Referencing")]
     public Collider attackArea;
-
-    // second collider to launch heavy 
     public Transform playerPos;
     public Transform attackPosition;
     public Transform enmeyPosition;
@@ -34,7 +32,6 @@ public class PlayerAttack : MonoBehaviour
   
 
     public Transform lerpPosition;
-  //  public Transform orgLerpPos;
     public float lerpduration;
     public LayerMask playerCollionMask;
     IEnumerator co;
@@ -46,28 +43,24 @@ public class PlayerAttack : MonoBehaviour
     public float knockbackTimer;
     public float knockbackStrength;
 
-    public States states;
-    public States startingState;
-  
+
+    [Header("In Combo")]   
+    public States previousState; //currentState
+    public bool isAnimationActive;
     public bool isInComboState;
-    private int fullComboValue;
 
-    public int numberofAttacksLeft;
+    public int fullcomboValue; 
+    public int numberAttacksleft;
 
 
-
+    public int nextAttack;
     #region Unity Functions
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
-
-        playerInput = GetComponent<PlayerInput>();
-
-        attackArea.enabled = false;      
+        playerInput = GetComponent<PlayerInput>();  
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if(obj != null)
@@ -75,113 +68,139 @@ public class PlayerAttack : MonoBehaviour
 
         if (playerInput.attack)
         {
-            Attack(0, states);
+            Attack(1);
+            Debug.Log("light attack");
+            attackType = 1;
         }
         else if (playerInput.secondaryAttack)
         {
-            Attack(1, states);
+            Attack(2);
+            Debug.Log("Heavy attack");
+            attackType = 2;
         }
+
+
     }
     #endregion
 
-    #region Private Functions
-    private void Attack(int attackType, States currentState)
+    #region Attacks and Combos
+    private void Attack(int attackType)
     {
         playerMovement.stopMovementEvent = true;
-       // attackArea.enabled = true;
-      
-         //checking for attack Type and is Grounded for Knockback
-        bool isAnimationActive = animator.GetBool("Active");
-
-        if(isInComboState == false)
+        // attackArea.enabled = true;
+        //checking for attack Type and is Grounded for Knockback
+        if (isInComboState == false) // light or heavy attack
         {
-            //choose possible combo
+            //choose stater throw in own function
             switch (attackType, playerMovement.IsGrounded())
             {
                 //ground attack checks 
-                case (0,  true):
-                    states = States.fullLightCombo;
-                    animator.SetInteger("Attack Type", ComboStringBreakdown(states, States.LightStarter));
+                case (1, true):
+                    animator.SetInteger("Attack Type", (1 << nextAttack));
+                    previousState = States.LightStarter;
                     animator.SetBool("Active", true);
-                    startingState = States.LightStarter;
-                     isInComboState = true;
+                    isInComboState = true;
+                    numberAttacksleft += 1;
+                    animator.SetBool("InCombo", isInComboState);
                     //Start timer
                     break;
-                case (1,  true):
+                case (2, true):
                     //Debug.Log("Heavy Attadck Starter");
-                    states = States.fullHeavyCombo;
-                    animator.SetInteger("Attack Type", ComboStringBreakdown(states, States.HeavyStarter));
+                    animator.SetInteger("Attack Type", (8 << nextAttack));
+                    previousState = States.HeavyStarter;
                     animator.SetBool("Active", true);
-                    startingState = States.HeavyStarter;
-                    isInComboState = true;
                     break;
                 // air attack checks
-                case (0,  false):
+                case (1, false):
                     Debug.Log("Light Attack in Air Starter");
                     break;
-                case (1, false):
+                case (2, false):
                     Debug.Log("Heavy Attack in Air Starter");
                     break;
                 default:
                     Debug.Log("null");
                     break;
             }
-
         }
-        else
+        else if (isInComboState == true)
         {
-            if(numberofAttacksLeft != 0)
-            {
-                numberofAttacksLeft -= 1;
-                int bitSet = 1 << 1;
-                Debug.Log( Convert.ToString(bitSet, 2).PadLeft(32, '0'));
-                // bit shift 
-            }
-
-            // compare
-
-
-            //then hash? 
+            nextAttack = NextAttack(previousState);
+            animator.SetInteger("Attack Type", nextAttack);
+            animator.SetBool("Active", true);           
         }
         OnTriggerEnter(attackArea);
         StartCoroutine(DelayAttack());
     }
 
-                                    //full combo
-    int ComboStringBreakdown(States currentstate, States starterAttack)
+    // lights attacks
+    //heavy attacks
+
+
+    private bool IsComboComplete(int fullComboString, int num)
     {
-        int comboValue = ((int)currentstate);
-        int startervalue = ((int)starterAttack);
-        fullComboValue = comboValue;
-
-        string L = Convert.ToString(fullComboValue, 2).PadLeft(32, '0');
-        string H = Convert.ToString(startervalue, 2).PadLeft(32, '0');
-
-        //count all the ones then add 
-        int count = 0;
-    
-        foreach (var item in L)
+        if (num > fullComboString)
         {
-            if(item == '1')
-              count++;
+            return true;
         }
-
-        numberofAttacksLeft = count -1;
-       // print(fullComboValue + " this value " + startervalue);
-       // print(L);
-        print(H);
-        return startervalue;
+        else
+            return false;
     }
 
+    //delete
+    private int NextAttack(States currentState)
+    {
 
+        List<short> copy = GetStates(currentState).ToList();
+        List<short> statesCalled = new List<short>();
 
+        int previousStatesCalled = Convert.ToInt32(currentState);
+        int count = previousStatesCalled;
+
+        int whatAttackType = attackType;
+
+        statesCalled.Add(((short)previousStatesCalled));
+
+        fullcomboValue = copy.LastOrDefault();
+
+        foreach (var item in copy)
+        {
+            if ((item << 1 & (int)previousStatesCalled) == previousStatesCalled - previousStatesCalled) // finding next attack 
+            {
+                int newAttackState = item << 1;
+                //Debug.Log(Convert.ToString(newAttackState, 2).PadLeft(32, '0'));\
+               
+                previousState = ((States)newAttackState);
+                return newAttackState;
+            }                
+        }
+        return 0;
+    }
+            
+    static IEnumerable<Int16> GetStates(States previousState)
+    {
+        
+        foreach (States value in Enum.GetValues(previousState.GetType()))
+            if ((value & previousState) == previousState) //if the bits are the same  we are going to add to list
+            {
+                yield return (short)value;
+            }
+    }
+   
 
     public void isAnimationFinished()
     {
         playerMovement.stopMovementEvent = false;
-        attackArea.enabled = false;
         animator.SetBool("Active", false);
+        isAnimationActive = false;
+    }
 
+    public void FinishedCombo()
+    {
+        animator.SetBool("InCombo", false);
+        nextAttack = 0;
+        animator.SetInteger("Attack Type", nextAttack);
+        isInComboState = false;
+       previousState = States.None;
     }
 
     // how does this affect attacking 
@@ -190,15 +209,43 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(delayAttack);
     }
 
+    #region Sliding Forward When Attacking 
+    public void SlideForward()
+    {
+        co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
+        StartCoroutine(co);
+    }
+    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time)
+    {
+        RaycastHit hit;
+        float range = 2f;
+        Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
+
+        Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
+        //this is for sliding 
+        for (float t = 0; t < 1; t += Time.deltaTime / time)
+        {
+            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
+            {
+                transform.position = currentPostion;
+            }
+            else
+                transform.position = Vector3.Lerp(currentPostion, midpoint, t);
+            yield return null;
+        }
+    }
+    #endregion
+
+
     #region Move somewhere else 
     private void OnTriggerEnter(Collider attackArea) // if an object has collided with the attacksphere while it is active 
     {
         // if the 3rd hit 
-        if(whatIsHittable == (whatIsHittable | (1 << attackArea.transform.gameObject.layer))) // Bitwise equation: layermask == (layermask | 1 << layermask)
+        if (whatIsHittable == (whatIsHittable | (1 << attackArea.transform.gameObject.layer))) // Bitwise equation: layermask == (layermask | 1 << layermask)
         {
             obj = attackArea.gameObject.GetComponent<Rigidbody>();
             if (obj != null)
-              HitSomething(direction, obj);
+                HitSomething(direction, obj);
             else
                 return;
         }
@@ -209,8 +256,8 @@ public class PlayerAttack : MonoBehaviour
     {
 
         //int attackTypeConnected = attackType; // might be a problem with multiple clicks 
-       
-        
+
+
         //if tag is enemy
         if (obj.tag == "Enemy")
         {
@@ -242,49 +289,28 @@ public class PlayerAttack : MonoBehaviour
     }
     #endregion
     #endregion
-
-    #region Sliding Forward When Attacking 
-    public void SlideForward()
-    {
-        co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
-        StartCoroutine(co);
-    }
-    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time)
-    {
-        RaycastHit hit;
-        float range = 2f;
-        Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
-
-        Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
-        //this is for sliding 
-        for (float t = 0; t < 1; t += Time.deltaTime / time)
-        {
-            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
-            {
-                transform.position = currentPostion;
-            }
-            else
-                transform.position = Vector3.Lerp(currentPostion, midpoint, t);
-            yield return null;
-        }
-    }
-    #endregion
 }
 
 
 [System.Flags]
 public enum States
 {
+    //Powers of two
     None = 0,
-    LightStarter = 1 << 0,
-    LightCombo1 = 1 << 1,
-    LightFinisher = 1 << 2,
-    //3
-    HeavyStarter = 1 << 3,
-    HeavyFinished = 1  << 4,
+    //Individual Attacks
+    LightStarter = 1 << 0, // 1
+    LightCombo1 = 1 << 1,  //2
+    LightFinisher = 1 << 2, //4
+    
+    HeavyStarter = 1 << 3, //8
+    HeavyFinished = 1  << 4, //16
 
-    //2
+    
+
+
+    //Full Combo Strings  delete
 
     fullLightCombo = LightStarter | LightCombo1 | LightFinisher,
+   // LightHeavy = LightStarter | LightCombo1 | HeavyStarter,
     fullHeavyCombo = HeavyStarter | HeavyFinished
 }
