@@ -139,11 +139,11 @@ public class Enemy : MonoBehaviour
         this.currentHealth += damage;
     }
 
-    public void DisableAI()
+    public void DisableAI(float duration)
     {
         this.navMeshAge.enabled = false;
         attackCooldown = 99999f;
-        Invoke("EnableAI", player.GetComponent<PlayerAttack>().knockbackTimer + stunDuration);
+        Invoke("EnableAI", Time.deltaTime * duration);
     }
 
     public void EnableAI()
