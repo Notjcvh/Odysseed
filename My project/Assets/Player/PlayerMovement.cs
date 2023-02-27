@@ -65,8 +65,8 @@ public class PlayerMovement : MonoBehaviour
         if (playerInput.dash) //For Later
         {
             Debug.Log("Dash");
-            co = Dash(transform.position, lerpPosition.position, lerpduration);
-            StartCoroutine(co);
+            StartCoroutine(Dash(transform.position, lerpPosition.position, lerpduration));
+            stopMovementEvent = true;
             /* isLunging = true;
               co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
                   StartCoroutine(co);*/
@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void StopMoving()
     {
-
+        Debug.Log("Movement should be not working");
     }
     #endregion
 
@@ -136,6 +136,7 @@ public class PlayerMovement : MonoBehaviour
     {
         RaycastHit hit;
         float range = 5f;
+        isDashing = true;
         Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
 
        // print("Start : " + currentPostion + " End : " + endPosition);
@@ -152,11 +153,16 @@ public class PlayerMovement : MonoBehaviour
                 transform.position = Vector3.Lerp(currentPostion, endPosition, t);
             yield return null;
         }
+        EndDash();
+    }
+    private void EndDash()
+    {
+        stopMovementEvent = false;
     }
     #endregion
 
 
-    
+
     void UpdateTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
