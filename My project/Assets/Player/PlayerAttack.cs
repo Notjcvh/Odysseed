@@ -287,6 +287,13 @@ public class PlayerAttack : MonoBehaviour
         direction.y = 0;
         obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
     }
+    private void AddKnockUp()
+    {
+        direction.x = 0;
+        direction.z = 0;
+        direction.y = 1;
+        obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
+    }
     #endregion
     #endregion
 }
