@@ -64,10 +64,10 @@ public class CameraController : MonoBehaviour
 
     #region Unity Functions
 
-    private void Start()
+    private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-
+        cam = Camera.main;
         Obstruction = followObj.transform; // default starting point 
         plannerDirection = followObj.forward;  //Important
         Cursor.lockState = CursorLockMode.Locked;

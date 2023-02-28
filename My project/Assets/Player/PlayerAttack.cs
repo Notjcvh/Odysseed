@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Animations;
 using UnityEngine;
 
 
@@ -26,7 +27,7 @@ public class PlayerAttack : MonoBehaviour
     private Vector3 direction;
 
     [Header("Attack")]
-    private int attackType;
+    public int inputType;
     public float delayAttack = 1f;
     public int damage = 10;
   
@@ -45,164 +46,178 @@ public class PlayerAttack : MonoBehaviour
 
 
     [Header("In Combo")]   
-    public States previousState; //currentState
     public bool isAnimationActive;
-    public bool isInComboState;
 
-    public int fullcomboValue; 
-    public int numberAttacksleft;
+    [Range(0, 3)]public  int lightAttackCounter;
+    [Range(0, 3)]public int heavyAttackCounter;
+    public float comboLifeCounter = 0;
 
 
-    public int nextAttack;
     #region Unity Functions
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        playerInput = GetComponent<PlayerInput>();  
-    }
+        playerInput = GetComponent<PlayerInput>();
+    }   
 
     void Update()
     {
         if(obj != null)
           direction = (obj.transform.position - attackPosition.position).normalized; // finding the direction from attackPos to Obj rigidbody. In update so Knockback happen for the full time between frames
-
-        if (playerInput.attack)
+        if (playerInput.attack && isAnimationActive == false)
         {
-            Attack(1);
-            Debug.Log("light attack");
-            attackType = 1;
+            animator.SetBool("Attacking", true);
+            inputType = 0;
+            Attack(inputType);
+            animator.SetInteger("Mouse Input", inputType);
         }
-        else if (playerInput.secondaryAttack)
+        else if (playerInput.secondaryAttack && isAnimationActive == false)
         {
-            Attack(2);
-            Debug.Log("Heavy attack");
-            attackType = 2;
+            animator.SetBool("Attacking", true);
+            inputType = 1;
+            Attack(inputType);
+            animator.SetInteger("Mouse Input", inputType);
         }
 
-
+        if(comboLifeCounter > 0)
+        {
+            //begin countdown 
+            comboLifeCounter -= 1 * Time.deltaTime;
+            animator.SetFloat("ComboLifetime", comboLifeCounter);
+  
+        }
+        else if(comboLifeCounter < 0)
+        {
+            comboLifeCounter = 0;
+            animator.SetFloat("ComboLifetime", comboLifeCounter);
+        }
+      
     }
     #endregion
 
     #region Attacks and Combos
-    private void Attack(int attackType)
+    private void Attack(int inputType)
     {
         playerMovement.stopMovementEvent = true;
-        // attackArea.enabled = true;
-        //checking for attack Type and is Grounded for Knockback
-        if (isInComboState == false) // light or heavy attack
+
+        //Light Attacks
+        if (inputType == 0)
         {
-            //choose stater throw in own function
-            switch (attackType, playerMovement.IsGrounded())
+            lightAttackCounter++;
+            switch (lightAttackCounter, playerMovement.IsGrounded())
             {
-                //ground attack checks 
-                case (1, true):
-                    animator.SetInteger("Attack Type", (1 << nextAttack));
-                    previousState = States.LightStarter;
-                    animator.SetBool("Active", true);
-                    isInComboState = true;
-                    numberAttacksleft += 1;
-                    animator.SetBool("InCombo", isInComboState);
-                    //Start timer
+                #region Ground Light Attacks
+                case (1, true): // Starter
+                    Debug.Log("Light Starter");
+                    animator.SetFloat("Starter Type", 0);
+                    animator.SetFloat("ComboLifetime", 5f);
+                    PlayAttackAnimation(lightAttackCounter);
                     break;
                 case (2, true):
-                    //Debug.Log("Heavy Attadck Starter");
-                    animator.SetInteger("Attack Type", (8 << nextAttack));
-                    previousState = States.HeavyStarter;
-                    animator.SetBool("Active", true);
+                    Debug.Log("Light Attack 2");
+                    animator.SetFloat("ComboLifetime", 5f);
+                    PlayAttackAnimation(lightAttackCounter);
                     break;
-                // air attack checks
+                case (3, true):
+                    Debug.Log("Light Attack 3");
+                    animator.SetFloat("ComboLifetime", 5f);
+                    PlayAttackAnimation(lightAttackCounter);
+
+                    break;
+                case (4, true): // finisher
+                    Debug.Log("Light Attack 4");
+                    break;
+                #endregion
+                #region Air Light Attacks 
                 case (1, false):
-                    Debug.Log("Light Attack in Air Starter");
+                    Debug.Log("Air Light Starter");
                     break;
-                case (2, false):
-                    Debug.Log("Heavy Attack in Air Starter");
-                    break;
+
+                #endregion
                 default:
-                    Debug.Log("null");
                     break;
             }
-        }
-        else if (isInComboState == true)
-        {
-            nextAttack = NextAttack(previousState);
-            animator.SetInteger("Attack Type", nextAttack);
-            animator.SetBool("Active", true);           
-        }
-        OnTriggerEnter(attackArea);
-        StartCoroutine(DelayAttack());
-    }
-
-    // lights attacks
-    //heavy attacks
-
-
-    private bool IsComboComplete(int fullComboString, int num)
-    {
-        if (num > fullComboString)
-        {
-            return true;
         }
         else
-            return false;
-    }
-
-    //delete
-    private int NextAttack(States currentState)
-    {
-
-        List<short> copy = GetStates(currentState).ToList();
-        List<short> statesCalled = new List<short>();
-
-        int previousStatesCalled = Convert.ToInt32(currentState);
-        int count = previousStatesCalled;
-
-        int whatAttackType = attackType;
-
-        statesCalled.Add(((short)previousStatesCalled));
-
-        fullcomboValue = copy.LastOrDefault();
-
-        foreach (var item in copy)
         {
-            if ((item << 1 & (int)previousStatesCalled) == previousStatesCalled - previousStatesCalled) // finding next attack 
+            heavyAttackCounter++;
+            switch (heavyAttackCounter, playerMovement.IsGrounded())
             {
-                int newAttackState = item << 1;
-                //Debug.Log(Convert.ToString(newAttackState, 2).PadLeft(32, '0'));\
-               
-                previousState = ((States)newAttackState);
-                return newAttackState;
-            }                
-        }
-        return 0;
-    }
-            
-    static IEnumerable<Int16> GetStates(States previousState)
-    {
-        
-        foreach (States value in Enum.GetValues(previousState.GetType()))
-            if ((value & previousState) == previousState) //if the bits are the same  we are going to add to list
-            {
-                yield return (short)value;
+                #region Ground Heavy Attacks
+                case (1, true):
+                    Debug.Log("Heavy Starter");
+                    animator.SetFloat("Starter Type", 1);
+                    animator.SetFloat("ComboLifetime", 5f);
+                    PlayAttackAnimation(heavyAttackCounter);
+                    break;
+                case (2, true):
+                    Debug.Log("Heavy Attack 2");
+                    animator.SetFloat("ComboLifetime", 5f);
+                    PlayAttackAnimation(heavyAttackCounter);
+                    break;
+                case (3, true):
+                    Debug.Log("Heavy Attack 3");
+                    animator.SetFloat("ComboLifetime", 5f);
+                    PlayAttackAnimation(heavyAttackCounter);
+                    break;
+                #endregion
+                default:
+                    break;
             }
+            OnTriggerEnter(attackArea);
+            StartCoroutine(DelayAttack()); // For Later what does this do
+        }
     }
    
+    private void PlayAttackAnimation(int value)
+    {
+        isAnimationActive = true;
+
+        int sum = value;
+        
+        if(inputType == 0) // light attack 
+        {
+            
+            animator.SetInteger("Attack Type", sum);
+            heavyAttackCounter++;
+        }
+        else // heavy attack 
+        {
+            animator.SetInteger("Attack Type", sum);
+            lightAttackCounter++;
+        }
+
+    }
 
     public void isAnimationFinished()
     {
         playerMovement.stopMovementEvent = false;
-        animator.SetBool("Active", false);
+        animator.SetBool("Attacking", false);
         isAnimationActive = false;
+
+        // check the max number, true?, reset 
+        if(lightAttackCounter == 3)
+        {
+            lightAttackCounter = 0;
+            heavyAttackCounter = 0;
+            comboLifeCounter = 0;
+            animator.SetInteger("Attack Type", 0);    
+        }
+        if(heavyAttackCounter == 3)
+        {
+            heavyAttackCounter = 0;
+            heavyAttackCounter = 0;
+            comboLifeCounter = 0;
+            animator.SetInteger("Attack Type", 0);
+        }
+
+        //get combo timer
+        comboLifeCounter = animator.GetFloat("ComboLifetime");
+      
+        
     }
 
-    public void FinishedCombo()
-    {
-        animator.SetBool("InCombo", false);
-        nextAttack = 0;
-        animator.SetInteger("Attack Type", nextAttack);
-        isInComboState = false;
-       previousState = States.None;
-    }
-
+ 
     // how does this affect attacking 
     private IEnumerator DelayAttack()
     {
@@ -296,28 +311,4 @@ public class PlayerAttack : MonoBehaviour
     }
     #endregion
     #endregion
-}
-
-
-[System.Flags]
-public enum States
-{
-    //Powers of two
-    None = 0,
-    //Individual Attacks
-    LightStarter = 1 << 0, // 1
-    LightCombo1 = 1 << 1,  //2
-    LightFinisher = 1 << 2, //4
-    
-    HeavyStarter = 1 << 3, //8
-    HeavyFinished = 1  << 4, //16
-
-    
-
-
-    //Full Combo Strings  delete
-
-    fullLightCombo = LightStarter | LightCombo1 | LightFinisher,
-   // LightHeavy = LightStarter | LightCombo1 | HeavyStarter,
-    fullHeavyCombo = HeavyStarter | HeavyFinished
 }
