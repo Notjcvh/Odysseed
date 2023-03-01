@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Animations;
+using System.Reflection;
 using UnityEngine;
 
 
@@ -40,17 +41,20 @@ public class PlayerAttack : MonoBehaviour
     public float cooldownTime = 2f;
     private float nextFireTime = 0f;
 
-    [Header("Knockback")]
+    [Header("Knockback or Launch Up")]
     public float knockbackTimer;
     public float knockbackStrength;
-
+    public bool canKnockback;
+    public bool canLaunchUp;
 
     [Header("In Combo")]   
     public bool isAnimationActive;
-
-    [Range(0, 3)]public  int lightAttackCounter;
-    [Range(0, 3)]public int heavyAttackCounter;
+    // These have to be Integers to work with the Animator 
+    [Range(0, 3)]public int lightAttackCounter; private float lightAttackMaxRange;
+    [Range(0, 3)]public int heavyAttackCounter; private float heavyAttackMaxRange;   
     public float comboLifeCounter = 0;
+
+
 
 
     #region Unity Functions
@@ -58,12 +62,22 @@ public class PlayerAttack : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerInput = GetComponent<PlayerInput>();
+
+        var lightAttackRange = typeof(PlayerAttack).GetField(nameof(PlayerAttack.lightAttackCounter)).GetCustomAttribute<RangeAttribute>();
+        lightAttackMaxRange = lightAttackRange.max;
+        var heavyAttackRange = typeof(PlayerAttack).GetField(nameof(PlayerAttack.heavyAttackCounter)).GetCustomAttribute<RangeAttribute>();
+        heavyAttackMaxRange = heavyAttackRange.max;
     }   
 
     void Update()
     {
         if(obj != null)
           direction = (obj.transform.position - attackPosition.position).normalized; // finding the direction from attackPos to Obj rigidbody. In update so Knockback happen for the full time between frames
+
+     
+
+
+        //Handing Mouse inputs
         if (playerInput.attack && isAnimationActive == false)
         {
             animator.SetBool("Attacking", true);
@@ -79,19 +93,21 @@ public class PlayerAttack : MonoBehaviour
             animator.SetInteger("Mouse Input", inputType);
         }
 
+        //Handeling starting and Reseting Combo timer
         if(comboLifeCounter > 0)
         {
             //begin countdown 
             comboLifeCounter -= 1 * Time.deltaTime;
-            animator.SetFloat("ComboLifetime", comboLifeCounter);
-  
+            // bool isDashing
+            //bool isJumping
+
         }
         else if(comboLifeCounter < 0)
         {
-            comboLifeCounter = 0;
             animator.SetFloat("ComboLifetime", comboLifeCounter);
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Drop Ground Combo") || animator.GetCurrentAnimatorStateInfo(0).IsName("Drop")) // Checking for if Combo is dropped 
+                ResetCombo();
         }
-      
     }
     #endregion
 
@@ -112,6 +128,7 @@ public class PlayerAttack : MonoBehaviour
                     animator.SetFloat("Starter Type", 0);
                     animator.SetFloat("ComboLifetime", 5f);
                     PlayAttackAnimation(lightAttackCounter);
+                    canKnockback = true;
                     break;
                 case (2, true):
                     Debug.Log("Light Attack 2");
@@ -122,7 +139,7 @@ public class PlayerAttack : MonoBehaviour
                     Debug.Log("Light Attack 3");
                     animator.SetFloat("ComboLifetime", 5f);
                     PlayAttackAnimation(lightAttackCounter);
-
+                    canKnockback = true;
                     break;
                 case (4, true): // finisher
                     Debug.Log("Light Attack 4");
@@ -149,6 +166,7 @@ public class PlayerAttack : MonoBehaviour
                     animator.SetFloat("Starter Type", 1);
                     animator.SetFloat("ComboLifetime", 5f);
                     PlayAttackAnimation(heavyAttackCounter);
+                    canLaunchUp = true;
                     break;
                 case (2, true):
                     Debug.Log("Heavy Attack 2");
@@ -159,6 +177,7 @@ public class PlayerAttack : MonoBehaviour
                     Debug.Log("Heavy Attack 3");
                     animator.SetFloat("ComboLifetime", 5f);
                     PlayAttackAnimation(heavyAttackCounter);
+                    canLaunchUp = true;
                     break;
                 #endregion
                 default:
@@ -174,10 +193,8 @@ public class PlayerAttack : MonoBehaviour
         isAnimationActive = true;
 
         int sum = value;
-        
         if(inputType == 0) // light attack 
         {
-            
             animator.SetInteger("Attack Type", sum);
             heavyAttackCounter++;
         }
@@ -195,26 +212,22 @@ public class PlayerAttack : MonoBehaviour
         animator.SetBool("Attacking", false);
         isAnimationActive = false;
 
-        // check the max number, true?, reset 
-        if(lightAttackCounter == 3)
-        {
-            lightAttackCounter = 0;
-            heavyAttackCounter = 0;
-            comboLifeCounter = 0;
-            animator.SetInteger("Attack Type", 0);    
-        }
-        if(heavyAttackCounter == 3)
-        {
-            heavyAttackCounter = 0;
-            heavyAttackCounter = 0;
-            comboLifeCounter = 0;
-            animator.SetInteger("Attack Type", 0);
-        }
+        canKnockback = false;
+        canLaunchUp = false;
 
-        //get combo timer
-        comboLifeCounter = animator.GetFloat("ComboLifetime");
-      
-        
+        if(lightAttackCounter == lightAttackMaxRange|| heavyAttackCounter == heavyAttackMaxRange) // Finisher end of the Combo 
+            ResetCombo();
+        else
+           comboLifeCounter = animator.GetFloat("ComboLifetime");
+    }
+
+    private void ResetCombo()
+    {
+        comboLifeCounter = 0;
+        animator.SetFloat("ComboLifetime", comboLifeCounter);
+        lightAttackCounter = 0;
+        heavyAttackCounter = 0;
+        animator.SetInteger("Attack Type", 0);
     }
 
  
@@ -224,35 +237,7 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(delayAttack);
     }
 
-    #region Sliding Forward When Attacking 
-    public void SlideForward()
-    {
-        co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
-        StartCoroutine(co);
-    }
-    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time)
-    {
-        RaycastHit hit;
-        float range = 2f;
-        Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
-
-        Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
-        //this is for sliding 
-        for (float t = 0; t < 1; t += Time.deltaTime / time)
-        {
-            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
-            {
-                transform.position = currentPostion;
-            }
-            else
-                transform.position = Vector3.Lerp(currentPostion, midpoint, t);
-            yield return null;
-        }
-    }
-    #endregion
-
-
-    #region Move somewhere else 
+    #region Hit Detection and Knockback 
     private void OnTriggerEnter(Collider attackArea) // if an object has collided with the attacksphere while it is active 
     {
         // if the 3rd hit 
@@ -260,7 +245,10 @@ public class PlayerAttack : MonoBehaviour
         {
             obj = attackArea.gameObject.GetComponent<Rigidbody>();
             if (obj != null)
+            {
                 HitSomething(direction, obj);
+            }
+                
             else
                 return;
         }
@@ -269,18 +257,31 @@ public class PlayerAttack : MonoBehaviour
     // Create Stun Stop enemey
     private void HitSomething(Vector3 direction, Rigidbody obj)
     {
-
-        //int attackTypeConnected = attackType; // might be a problem with multiple clicks 
-
-
-        //if tag is enemy
+        //check tag of the enemies
+        // then check if this is the final hit in the combo, and the type of input pressed 
+        // then create the response 
         if (obj.tag == "Enemy")
         {
             DamagePopUp.Create(obj.transform.position, damage);
             obj.SendMessage("DisableAI");
             obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
             obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-            obj.SendMessage("TakeDamage", damage / 10);
+           
+            if(canKnockback == true)
+            {
+                AddKnockback();
+            }
+            else if(canLaunchUp == true)
+            {
+                AddKnockUp();
+            }
+            else
+            {
+                // For Later disable Ai 
+            }
+                
+                
+           obj.SendMessage("TakeDamage", damage / 10); obj.SendMessage("TakeDamage", damage / 10);
 
         }
         else if (obj.tag == "SpecialEnemy")
@@ -309,6 +310,35 @@ public class PlayerAttack : MonoBehaviour
         direction.y = 1;
         obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
     }
+
+    #endregion
+
+    #region Sliding Forward When Attacking 
+    public void SlideForward()
+    {
+        co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
+        StartCoroutine(co);
+    }
+    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time)
+    {
+        RaycastHit hit;
+        float range = 2f;
+        Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
+
+        Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
+        //this is for sliding 
+        for (float t = 0; t < 1; t += Time.deltaTime / time)
+        {
+            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
+            {
+                transform.position = currentPostion;
+            }
+            else
+                transform.position = Vector3.Lerp(currentPostion, midpoint, t);
+            yield return null;
+        }
+    }
     #endregion
     #endregion
 }
+
