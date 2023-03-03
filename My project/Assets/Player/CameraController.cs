@@ -16,8 +16,8 @@ public class CameraController : MonoBehaviour
     [Header("Vertical Rotations")]
     [SerializeField] [Range(-90, 90)] private float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
     [SerializeField] [Range(-90, 90)] private float maxVerticalAngle = 90;   
-    [SerializeField] [Range(13, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
-    [SerializeField] [Range(13, 90)] private float combatMaxVerticalAngle = 90;
+    [SerializeField] [Range(-90, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
+    [SerializeField] [Range(-90, 90)] private float combatMaxVerticalAngle = 90;
 
     [Header("Priority")]
     public int camPriority = 0;
@@ -118,8 +118,8 @@ public class CameraController : MonoBehaviour
         }
         else targetDistance = defeaultDistance;
 
-        plannerDirection = Quaternion.Euler(0, -mouseX, 0) * plannerDirection;
-        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
+        plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVerticalAngle, maxVerticalAngle);
 
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness / Time.deltaTime);
