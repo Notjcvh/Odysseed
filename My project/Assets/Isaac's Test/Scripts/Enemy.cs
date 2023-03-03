@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     public bool isStunned = false;
 
     [Header("Rooms")]
-    public CombatRoom finishedRoom;
+    public CombatRoom myRoom;
 
     public event System.Action<float> OnHealthPercentChange = delegate { };
 
@@ -39,12 +39,12 @@ public class Enemy : MonoBehaviour
     public void WhichRoom(GameObject room) 
     {
         GameObject location = room.gameObject;
-        finishedRoom = location.GetComponent<CombatRoom>();  // finding the Combatroom script so we can run the functions when the enemy dies
+        myRoom = location.GetComponent<CombatRoom>();  // finding the Combatroom script so we can run the functions when the enemy dies
     }
     private void Death()
     {
-        finishedRoom.TransportEnemy(this.gameObject); // running function in the UnpackRoom Script 
-        //Destroy(this.gameObject);
+        myRoom.enemies.Remove(this.gameObject);
+        Destroy(this.gameObject);
     }
 
     public void ModifiyHealth(int amount)

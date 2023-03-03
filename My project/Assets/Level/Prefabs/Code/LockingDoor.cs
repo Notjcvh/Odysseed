@@ -4,47 +4,25 @@ using UnityEngine;
 
 public class LockingDoor : DoorHandler
 {
-    private GameObject nearestEncounterTrigger;
+    //this Door Handler will reference two Box Colliders, 
+    //First for opening and closing 
+    public BoxCollider collider1;
+    //Second for locking 
+    public BoxCollider collider2;
 
-    private GameObject[] neareastEncounters;
-
-    public override void OnTriggerExit(Collider other)
+    public override void Open()
     {
-        // make sure lock is false
-        locked = false;
-
-        base.OnTriggerExit(other);
-        if (other.gameObject.CompareTag("Player") && locked == false)
+        base.Open();
+        if(encounterCollider.GetComponent<CombatRoom>().isRoomComplete != true)
         {
-            door.SetBool("Close", true);
-            door.SetBool("Open", false);
-
-            locked = true;
-            print(this.name + " is locked? " + locked);
-            GetClosestEncounterCollider();
+            collider1.enabled = false;
         }
     }
 
-    void GetClosestEncounterCollider()
+    public override void UnlockDoors()
     {
-        float closestDistanceRange = 50;
-        neareastEncounters = GameObject.FindGameObjectsWithTag("Room");
-        for (int  objects = 0;  objects < neareastEncounters.Length;  objects++)
-        {
-            float distance = Vector3.Distance(neareastEncounters[objects].transform.position, this.transform.position);
-            if (distance < closestDistanceRange)
-            {
-                nearestEncounterTrigger = neareastEncounters[objects];
-            }
-
-        }
+        base.UnlockDoors();
+        collider1.enabled = true;
+        collider2.enabled = false;
     }
-
-    void ChangeColor()
-    {
-
-        material.color = Color.red;       
-    }
-
-
 }
