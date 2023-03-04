@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class CombatRoom : MonoBehaviour
 {
+    //Referencing 
     private GameObject player;
     private CameraController cam;
     private PlayerMovement playerMovement;
 
-    public GameEvent[] roomEvents; // what the doors are listening for
-    public VectorValue level;
-
+    // Room Checks
     public bool isRoomActive = false;
     public bool isRoomComplete = false;
 
     //variables
     [Header("Tags")]
-    private string[] tags = { "Player", "Ally", "Enemy", "SpecialEnemy", "Door" };
+    private string[] tags = { "Player", "Ally", "Enemy", "SpecialEnemy"};
 
     [Header("Combat Variables")]
     public int lockNumber = 0;
     public List<GameObject> enemies = null; // this is what the room will check to open 
 
-    private float timer = 1;
-    Coroutine currentCoroutine = null;
+
+    [Header("My Doors")]
+    public DoorHandler[] myDoors;
 
     private void Awake()
     {
@@ -34,7 +34,10 @@ public class CombatRoom : MonoBehaviour
 
     private void Update()
     {
-        IsTheRoomComplete();
+        if(isRoomActive == true && isRoomComplete != true)
+        {
+            IsTheRoomComplete();
+        }
     }
 
     private void IsTheRoomComplete()
@@ -43,15 +46,14 @@ public class CombatRoom : MonoBehaviour
         if (isRoomActive == true && lockNumber == 0)
         {
             isRoomComplete = true;
-
-            for (int i = 0; i < roomEvents.Length; i++)
+            for (int i = 0; i < myDoors.Length; i++)
             {
-                roomEvents[i].Raise();
+                myDoors[i].UnlockDoors();
+                Debug.Log(myDoors[i]);
             }
         }
         else
             return;
-            //Debug.Log("Room is not complete");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,9 +61,7 @@ public class CombatRoom : MonoBehaviour
         if (other.CompareTag(tags[0])) // the player
         {
             isRoomActive = true;
-
             cam.camPriority = 1;
-
         }
         if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies
         {
@@ -74,21 +74,8 @@ public class CombatRoom : MonoBehaviour
         if (other.CompareTag(tags[0]))
         {
             isRoomActive = false;
-            StopCoroutine(currentCoroutine);
             cam.camPriority = 0;
         }
-        if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies 
-        {
-            enemies.Remove(other.gameObject);
-        }
-    }
-
-    public void TransportEnemy(GameObject other) // Transport the enemy to the boneyard 
-    {
-        //this function will activate the OnTriggerExit and Do:
-        // remove the enemy from the list 
-        // subtract 1 from the lock number 
-        other.transform.position = level.boneYard;
     }
 }
 

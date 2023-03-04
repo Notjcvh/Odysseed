@@ -11,12 +11,13 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Camera cam = null;
     [SerializeField] private Transform followObj = null;
     private PlayerInput playerInput;
+    private PlayerMovement playerMovement;
 
     [Header("Vertical Rotations")]
     [SerializeField] [Range(-90, 90)] private float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
     [SerializeField] [Range(-90, 90)] private float maxVerticalAngle = 90;   
-    [SerializeField] [Range(13, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
-    [SerializeField] [Range(13, 90)] private float combatMaxVerticalAngle = 90;
+    [SerializeField] [Range(-90, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
+    [SerializeField] [Range(-90, 90)] private float combatMaxVerticalAngle = 90;
 
     [Header("Priority")]
     public int camPriority = 0;
@@ -67,6 +68,7 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        playerMovement = GetComponent<PlayerMovement>();
         cam = Camera.main;
         Obstruction = followObj.transform; // default starting point 
         plannerDirection = followObj.forward;  //Important
@@ -89,7 +91,7 @@ public class CameraController : MonoBehaviour
             if (hit.collider.gameObject.tag != "Player")
             {
                 BlockingSightofPlayer(hit);
-            }
+            } 
             else
             {
                 if (Obstruction.gameObject.tag == "Enviorment")
@@ -98,8 +100,6 @@ public class CameraController : MonoBehaviour
                 }
             }       
         }
-
-       
     }
     private void FixedUpdate()
     {
@@ -110,31 +110,25 @@ public class CameraController : MonoBehaviour
     #endregion
 
     #region Camera States
-
-
     public void ExploringCam(float mouseX,float mouseY) 
     {
         if (isCollisionDetected == true && camPriority != 1)
         {
-
             targetDistance = Mathf.Clamp(newDistanceFromPlayer, 4, defeaultDistance);
-            
         }
         else targetDistance = defeaultDistance;
 
+        plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVerticalAngle, maxVerticalAngle);
 
-        plannerDirection = Quaternion.Euler(0, -mouseX, 0) * plannerDirection;
-        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + mouseY, minVerticalAngle, maxVerticalAngle);
-
-        newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
-   
-        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
-        cam.transform.position = newPosition;
-
-        newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
+        newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness / Time.deltaTime);
         cam.transform.rotation = newRotation;
 
+        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
+        Vector3 velocity = Vector3.zero;
+        newPosition = Vector3.SmoothDamp(cam.transform.position, targetPosition, ref velocity, 0f);
+        cam.transform.position = newPosition;
     }
     public void CombatCam(float mouseX, float mouseY) // Combat camera collision should no be going down the same rate at the exploring cam Fix later
     {
@@ -151,13 +145,15 @@ public class CameraController : MonoBehaviour
         }
         else targetDistance = combatCamDistance;
 
-        newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
-        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
-        cam.transform.position = newPosition;
-
-        newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
+        newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness / Time.deltaTime);
         cam.transform.rotation = newRotation;
+
+        targetPosition = followObj.position - (targetRotation * Vector3.forward) * targetDistance;
+        Vector3 velocity = Vector3.zero;
+        newPosition = Vector3.SmoothDamp(cam.transform.position, targetPosition, ref velocity, 0f);
+        // newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
+        cam.transform.position = newPosition;
     }
     #endregion
 

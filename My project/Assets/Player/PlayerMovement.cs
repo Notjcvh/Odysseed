@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movementVector;
     private Quaternion targetRotation;
 
-    private float targetSpeed;
+    public float targetSpeed;
 
     public float runSpeed;
     public bool stopMovementEvent;
@@ -48,10 +48,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Seeds")]
     public int seedId;
 
-    private void Start()
-    {
-       
-    }
     private void Awake()
     {
         cam = GetComponent<CameraController>();

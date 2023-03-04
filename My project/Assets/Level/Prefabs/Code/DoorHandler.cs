@@ -11,40 +11,37 @@ public class DoorHandler : MonoBehaviour
     public  AnimationClip[] doorClips;
 
     public bool locked = true;
+    public Material material;
 
-    protected Material material;
-    
 
     private void Start()
     {
-       // material = GetComponentInChildren<Material>();
-        //check type if the door has an encounter the it's locked else then the door is unlocked
-        if (encounterCollider != null)
+        material = GetComponentInChildren<MeshRenderer>().material;
+        if (locked != true)
         {
-            //print(this.name + " is locked? " + locked);
-        }
-        else
-        {
-            locked = false;
-           // print(this.name + " is locked? " + locked);
+            material.SetColor("_Color", Color.green);
         }
     }
-    public void UnlockDoors()
+    public virtual void UnlockDoors()
     {
         locked = false;
-        material.color = Color.green;
+        material.SetColor("_Color", Color.green);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player") && locked == false)
         {
-            door.SetBool("Open", true);
-            door.SetBool("Close", false);
+            Open();
         }
-           
     }
-    public virtual void OnTriggerExit(Collider other)
+    public virtual void Open()
+    {
+        door.SetBool("Open", true);
+        door.SetBool("Close", false);
+    }
+
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player") && locked == false)
         {
@@ -53,6 +50,4 @@ public class DoorHandler : MonoBehaviour
 
         }   
     }
-
-
 }

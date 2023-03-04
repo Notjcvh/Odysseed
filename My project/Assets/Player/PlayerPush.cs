@@ -4,24 +4,20 @@ public class PlayerPush : MonoBehaviour
 {
 
     public LayerMask pushableLayers;
-    public bool canPush;
     [Range(0.5f, 50f)] public float strength = 10f;
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Hit Detected");
-        if (canPush) PushObject(collision);
-    }
-
-    private void Update()
-    {
-        Debug.DrawRay(transform.position, Vector3.down.normalized, Color.green);
+        if (collision.gameObject.layer == pushableLayers) PushObject(collision);
     }
 
     private void PushObject(Collision collision)
     {
         // get Rigidbody
         Rigidbody objectBody = collision.collider.attachedRigidbody;
+
+
+
 
         // make sure we only push desired layer(s)
         var objectLayerMask = 1 << objectBody.gameObject.layer;
@@ -39,14 +35,17 @@ public class PlayerPush : MonoBehaviour
         }
 
         //Calculate the push Direction
-        float pushDirX = ( collision.transform.position.x - this.transform.position.x);
-        float pushDirZ = ( collision.transform.position.z - this.transform.position.z);
 
-        Vector3 pushDirection = Vector3.Normalize(new Vector3(pushDirX, 0, pushDirZ));
+        Vector3 direction = collision.contacts[0].point - transform.position;
+        direction = -direction.normalized;
 
-        Debug.Log(pushDirection);
+        // float pushDirX = ( collision.transform.position.x - this.transform.position.x);
+        //float pushDirZ = ( collision.transform.position.z - this.transform.position.z);
+
+        // Vector3 pushDirection = Vector3.Normalize(new Vector3(pushDirX, 0, pushDirZ));
+
         // Apply push and take strength into account
-        objectBody.AddForce(pushDirection * strength, ForceMode.Impulse);
+        objectBody.AddForce(direction * strength,ForceMode.Force);
 
         // make sure we hit a non kinematic rigidbody
         /* Rigidbody body = hit.collider.attachedRigidbody;

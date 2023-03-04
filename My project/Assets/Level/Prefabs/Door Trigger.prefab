@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1160697920338451469}
   - component: {fileID: 663801528401592185}
   - component: {fileID: 9161672428116163441}
-  - component: {fileID: 9161672428116163442}
   m_Layer: 0
   m_Name: Door Trigger
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655713475038959061}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -14.9, y: 5.13, z: -4.47}
+  m_LocalPosition: {x: 15.9, y: 7.5, z: -3}
   m_LocalScale: {x: 14.048, y: 17.693998, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -47,8 +46,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.36971647, z: 18.333393}
-  m_Center: {x: 0, y: -0.07023221, z: 6.030569}
+  m_Size: {x: 1.060775, y: 0.45052505, z: 13.54732}
+  m_Center: {x: -0.030387709, y: -0.11063651, z: -0.57683825}
 --- !u!95 &663801528401592185
 Animator:
   serializedVersion: 4
@@ -81,43 +80,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4892ebd65d2e15f4f83c10764207d4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRoom: {fileID: 0}
-  triggerCollider: {fileID: 0}
+  encounterCollider: {fileID: 0}
   door: {fileID: 663801528401592185}
   doorClips:
   - {fileID: 7400000, guid: bebd710b3fa1b0d43bbb73aaa930a94a, type: 2}
   - {fileID: 7400000, guid: 2746563eb57b7f04ca8297f219f0e788, type: 2}
   locked: 1
-  opened: 0
-  closed: 0
---- !u!114 &9161672428116163442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1655713475038959061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: acdf9e6cd1493a64cb43576406de966c, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 9161672428116163441}
-        m_TargetAssemblyTypeName: DoorAnimation, Assembly-CSharp
-        m_MethodName: UnlockDoor
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &2797801886390425303
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,8 +113,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2797801886390425303}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0.16943514, z: 5.460001}
-  m_LocalScale: {x: 1, y: 0.99999994, z: 1}
+  m_LocalPosition: {x: -0.030000051, y: 0.16943514, z: -0.63999933}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1368716481460876311}

@@ -55,6 +55,8 @@ public class PlayerAttack : MonoBehaviour
     public float comboLifeCounter = 0;
 
 
+    [Header("Animation Multiplier")]
+   [Range(0,10)] public float animMultiplier;
 
 
     #region Unity Functions
@@ -82,15 +84,17 @@ public class PlayerAttack : MonoBehaviour
         {
             animator.SetBool("Attacking", true);
             inputType = 0;
-            Attack(inputType);
             animator.SetInteger("Mouse Input", inputType);
+            Attack(inputType);
+         
         }
         else if (playerInput.secondaryAttack && isAnimationActive == false)
         {
             animator.SetBool("Attacking", true);
             inputType = 1;
-            Attack(inputType);
             animator.SetInteger("Mouse Input", inputType);
+            Attack(inputType);
+            
         }
 
         //Handeling starting and Reseting Combo timer
@@ -102,11 +106,22 @@ public class PlayerAttack : MonoBehaviour
             //bool isJumping
 
         }
-        else if(comboLifeCounter < 0)
+        else if(comboLifeCounter < 0 || playerMovement.targetSpeed != 0)
         {
+            // if player moves than we set to -1 to move to next transition
+            comboLifeCounter = -1;
             animator.SetFloat("ComboLifetime", comboLifeCounter);
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Drop Ground Combo") || animator.GetCurrentAnimatorStateInfo(0).IsName("Drop")) // Checking for if Combo is dropped 
-                ResetCombo();
+            ResetCombo();
+            //if (animator.GetCurrentAnimatorStateInfo(0).IsName("Drop Ground Combo") || animator.GetCurrentAnimatorStateInfo(0).IsName("Drop")) // Checking for if Combo is dropped 
+
+        }
+        
+        
+        if(playerMovement.targetSpeed != 0 && comboLifeCounter > 0)
+        {
+            comboLifeCounter = -1;
+            print(comboLifeCounter);
+            animator.SetFloat("ComboLifetime", comboLifeCounter);
         }
     }
     #endregion
@@ -223,6 +238,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void ResetCombo()
     {
+        Debug.Log("ran");
         comboLifeCounter = 0;
         animator.SetFloat("ComboLifetime", comboLifeCounter);
         lightAttackCounter = 0;
@@ -263,9 +279,9 @@ public class PlayerAttack : MonoBehaviour
         if (obj.tag == "Enemy")
         {
             DamagePopUp.Create(obj.transform.position, damage);
-            obj.SendMessage("DisableAI");
+            obj.SendMessage("DisableAI", 100);
             obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
-            obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
+            //obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
            
             if(canKnockback == true)
             {
