@@ -35,7 +35,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Dash")]
     public bool isDashing = false;
     public Transform lerpPosition;
-    public Transform orgLerpPos;
+    public float dashStartValue;
+
+    // 
+    public float dashLifeTimeCounter = 0;
+
     public float lerpduration;
     public LayerMask playerCollionMask;
     IEnumerator co;
@@ -58,24 +62,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        if (playerInput.dash) //For Later
-        {
-            Debug.Log("Dash");
-            StartCoroutine(Dash(transform.position, lerpPosition.position, lerpduration));
-            stopMovementEvent = true;
-            /* isLunging = true;
-              co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
-                  StartCoroutine(co);*/
-        }
-
-        if(playerInput.target)
-        {
-            UpdateTarget();
-        }
-
-        if (targetingEnemy)
-            this.gameObject.transform.LookAt(target);
-            
+      
         if (stopMovementEvent == false)
         {
             MoveNow();
@@ -84,6 +71,24 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (stopMovementEvent == true)
             StopMoving();
+
+        if (playerInput.dash && dashLifeTimeCounter == 0) 
+        {
+            StartCoroutine(Dash(transform.position, lerpPosition.position, lerpduration, dashStartValue));
+            stopMovementEvent = true;
+        }
+
+        if (dashLifeTimeCounter > 0)
+            dashLifeTimeCounter -= 1 * Time.deltaTime;
+        else
+            dashLifeTimeCounter = 0;
+
+
+        //Enemy Targetting 
+        if (playerInput.target)
+            UpdateTarget();
+        if (targetingEnemy)
+            this.gameObject.transform.LookAt(target);
     }
 
     #region Player Movement and Stop Movement 
@@ -128,18 +133,17 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Dashing
-    private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float time)
+    private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float lerpDuration, float dashtime)
     {
         RaycastHit hit;
         float range = 5f;
         isDashing = true;
+        dashLifeTimeCounter = dashtime;
         Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
 
-       // print("Start : " + currentPostion + " End : " + endPosition);
-
-
+       
         //this is for sliding 
-        for (float t = 0; t < 1; t += Time.deltaTime / time)
+        for (float t = 0; t < 1; t += Time.deltaTime / lerpduration)
         {
             if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
             {

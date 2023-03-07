@@ -76,12 +76,11 @@ public class PlayerAttack : MonoBehaviour
         if(obj != null)
           direction = (obj.transform.position - attackPosition.position).normalized; // finding the direction from attackPos to Obj rigidbody. In update so Knockback happen for the full time between frames
 
-     
-
 
         //Handing Mouse inputs
         if (playerInput.attack && isAnimationActive == false)
         {
+            animator.SetBool("IsRunning", false);
             animator.SetBool("Attacking", true);
             inputType = 0;
             animator.SetInteger("Mouse Input", inputType);
@@ -90,11 +89,19 @@ public class PlayerAttack : MonoBehaviour
         }
         else if (playerInput.secondaryAttack && isAnimationActive == false)
         {
+            animator.SetBool("IsRunning", false);
             animator.SetBool("Attacking", true);
             inputType = 1;
             animator.SetInteger("Mouse Input", inputType);
+            
             Attack(inputType);
             
+        }
+
+        
+        if(playerMovement.targetSpeed != 0 && comboLifeCounter > 0)
+        {
+            comboLifeCounter = -1;
         }
 
         //Handeling starting and Reseting Combo timer
@@ -104,24 +111,13 @@ public class PlayerAttack : MonoBehaviour
             comboLifeCounter -= 1 * Time.deltaTime;
             // bool isDashing
             //bool isJumping
-
         }
-        else if(comboLifeCounter < 0 || playerMovement.targetSpeed != 0)
+        else if(comboLifeCounter < 0 )
         {
             // if player moves than we set to -1 to move to next transition
-            comboLifeCounter = -1;
             animator.SetFloat("ComboLifetime", comboLifeCounter);
             ResetCombo();
             //if (animator.GetCurrentAnimatorStateInfo(0).IsName("Drop Ground Combo") || animator.GetCurrentAnimatorStateInfo(0).IsName("Drop")) // Checking for if Combo is dropped 
-
-        }
-        
-        
-        if(playerMovement.targetSpeed != 0 && comboLifeCounter > 0)
-        {
-            comboLifeCounter = -1;
-            print(comboLifeCounter);
-            animator.SetFloat("ComboLifetime", comboLifeCounter);
         }
     }
     #endregion
@@ -239,11 +235,14 @@ public class PlayerAttack : MonoBehaviour
     private void ResetCombo()
     {
         Debug.Log("ran");
-        comboLifeCounter = 0;
-        animator.SetFloat("ComboLifetime", comboLifeCounter);
+   
         lightAttackCounter = 0;
         heavyAttackCounter = 0;
         animator.SetInteger("Attack Type", 0);
+
+        comboLifeCounter = -1;
+        animator.SetFloat("ComboLifetime", comboLifeCounter);
+        comboLifeCounter = 0;
     }
 
  
@@ -332,26 +331,30 @@ public class PlayerAttack : MonoBehaviour
     #region Sliding Forward When Attacking 
     public void SlideForward()
     {
-        co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration);
+        co = MoveForwardWhenAttacking(transform.position, lerpPosition.position, lerpduration, playerMovement.IsGrounded());
         StartCoroutine(co);
     }
-    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time)
+    private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time, bool isGrounded)
     {
-        RaycastHit hit;
-        float range = 2f;
-        Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
-
-        Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
-        //this is for sliding 
-        for (float t = 0; t < 1; t += Time.deltaTime / time)
-        {
-            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
-            {
-                transform.position = currentPostion;
-            }
-            else
-                transform.position = Vector3.Lerp(currentPostion, midpoint, t);
+        if (isGrounded == false)
             yield return null;
+        else
+        {
+            RaycastHit hit;
+            float range = 2f;
+            Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
+            Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
+            //this is for sliding 
+            for (float t = 0; t < 1; t += Time.deltaTime / time)
+            {
+                if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
+                {
+                    transform.position = currentPostion;
+                }
+                else
+                    transform.position = Vector3.Lerp(currentPostion, midpoint, t);
+                yield return null;
+            }
         }
     }
     #endregion
