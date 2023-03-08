@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float lerpduration;
     public LayerMask playerCollionMask;
-    IEnumerator co;
+    IEnumerator dashCoroutine;
 
     [Header("Targeting")]
     public bool targetingEnemy;
@@ -59,6 +59,11 @@ public class PlayerMovement : MonoBehaviour
         playerBody = GetComponentInChildren<Rigidbody>();
         animator = GetComponent<PlayerManger>().animator;
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
+
+       
+
+
+
     }
     private void Update()
     {
@@ -74,8 +79,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerInput.dash && dashLifeTimeCounter == 0) 
         {
-            StartCoroutine(Dash(transform.position, lerpPosition.position, lerpduration, dashStartValue));
+            dashCoroutine = Dash(transform.position, lerpPosition.position, lerpduration, dashStartValue);
+            StartCoroutine(dashCoroutine);
             stopMovementEvent = true;
+            isDashing = true;
         }
 
         if (dashLifeTimeCounter > 0)
@@ -84,6 +91,20 @@ public class PlayerMovement : MonoBehaviour
             dashLifeTimeCounter = 0;
 
 
+        if (isDashing == true)
+        {
+            RaycastHit hit;
+            float range = 2f;
+            Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward * range));
+            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
+            {
+                StopCoroutine(dashCoroutine);
+                stopMovementEvent = false;
+                isDashing = false;
+
+            }
+        }
+ 
         //Enemy Targetting 
         if (playerInput.target)
             UpdateTarget();
@@ -104,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
         newVelocity = movementVector * targetSpeed;
         transform.Translate(newVelocity * Time.deltaTime, Space.World);
-        if (targetSpeed != 0)
+        if (targetSpeed != 0 && isDashing == false)
         {
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
@@ -135,32 +156,17 @@ public class PlayerMovement : MonoBehaviour
     #region Dashing
     private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float lerpDuration, float dashtime)
     {
-        RaycastHit hit;
-        float range = 5f;
-        isDashing = true;
         dashLifeTimeCounter = dashtime;
-        Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
-
-       
         //this is for sliding 
         for (float t = 0; t < 1; t += Time.deltaTime / lerpduration)
         {
-            if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
-            {
-                transform.position = currentPostion;
-            }
-            else
-                transform.position = Vector3.Lerp(currentPostion, endPosition, t);
+            transform.position = Vector3.Lerp(currentPostion, endPosition, t);
             yield return null;
         }
-        EndDash();
-    }
-    private void EndDash()
-    {
-        stopMovementEvent = false;
+        isDashing = false;
+        stopMovementEvent = false; 
     }
     #endregion
-
 
 
     void UpdateTarget()

@@ -158,7 +158,6 @@ public class CameraController : MonoBehaviour
     #endregion
 
     #region Camera Collison
-
     private bool CheckForCameraCollisions() // becasue this is a fixed upda
     {
         Collider[] colliders = Physics.OverlapSphere(cam.transform.position, cameraSphereRadius, collisionMask, QueryTriggerInteraction.Ignore);

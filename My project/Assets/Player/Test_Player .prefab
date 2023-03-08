@@ -1327,11 +1327,12 @@ MonoBehaviour:
   distanceToCheckForGround: 4
   isDashing: 0
   lerpPosition: {fileID: 6528760257728996185}
-  orgLerpPos: {fileID: 3370046907677284396}
-  lerpduration: 0.3
+  dashStartValue: 1
+  dashLifeTimeCounter: 0
+  lerpduration: 0.5
   playerCollionMask:
     serializedVersion: 2
-    m_Bits: 3200
+    m_Bits: 3456
   targetingEnemy: 0
   target: {fileID: 0}
   range: 200
@@ -1348,7 +1349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7189a76d8ba5bd64d89f76204661a87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackArea: {fileID: 0}
+  attackArea: {fileID: 970987175}
   playerPos: {fileID: 0}
   attackPosition: {fileID: 4962644510913362143}
   enmeyPosition: {fileID: 0}
