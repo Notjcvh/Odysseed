@@ -158,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
     #region Dashing
     private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float lerpDuration, float dashtime)
     {
+        audioController.PlayAudio(AudioType.Dash, true, 0, false);
         dashLifeTimeCounter = dashtime;
         //this is for sliding 
         for (float t = 0; t < 1; t += Time.deltaTime / lerpduration)
