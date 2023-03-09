@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform distanceToGround;
     private Animator animator;
 
+    public AudioController audioController;
+
 
     [Header("Movement")]
     private Vector3 newVelocity;
