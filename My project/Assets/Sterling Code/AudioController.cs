@@ -9,7 +9,7 @@ public class AudioController : MonoBehaviour
     //members
 
     public static AudioController instance;
-    [SerializeField] Slider MasterVolumeSlider;
+    [SerializeField] Slider MasterVolumeSlider; // Maybe we can ge the slider value f
     [SerializeField] Slider MusicVolumeSlider;
     [SerializeField] Slider SFXVolumeSlider;
 
@@ -38,7 +38,7 @@ public class AudioController : MonoBehaviour
     [System.Serializable]
     public class AudioTrack
     {
-        public AudioSource source;
+        public AudioSource source; 
         public AudioObject[] audio;
     }
 
@@ -50,14 +50,17 @@ public class AudioController : MonoBehaviour
         public float delay;
         public bool looping;
 
+        //Constuctor 
         public AudioJob(AudioAction _action, AudioType _type, bool _fade, float _delay, bool _looping)
         {
+            //assigning values what those default values will be
             action = _action;
             type = _type;
             fade = _fade;
             delay = _delay;
             looping = _looping;
         }
+
     }
 
     private enum AudioAction
@@ -119,8 +122,8 @@ public class AudioController : MonoBehaviour
     public void ChangeMasterVolume()
     {
         AudioListener.volume = MasterVolumeSlider.value;
-        Log("Master Volume Slider set to: " + MasterVolumeSlider.value);
-        Log("Master Volume Source set to: " + AudioListener.volume);
+        Debug.Log("Master Volume Slider set to: " + MasterVolumeSlider.value);
+        Debug.Log("Master Volume Source set to: " + AudioListener.volume);
 
     }
 

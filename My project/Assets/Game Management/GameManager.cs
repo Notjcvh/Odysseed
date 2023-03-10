@@ -118,12 +118,7 @@ public class GameManager : MonoBehaviour
         {
             ReloadPosition();
             PlayerHasDied();
- 
-
         }
-
-
-
     }
 
 
@@ -163,7 +158,9 @@ public class GameManager : MonoBehaviour
     }
     public void ReloadPosition()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        // if the player is null then 
+
+ 
         if (hasSet.Count > 0)
         {
             Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
@@ -176,6 +173,8 @@ public class GameManager : MonoBehaviour
             player.transform.position = level.initialStartValue;
             position = player.transform.position;
         }
+
+
     }
   
 
