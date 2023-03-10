@@ -8,14 +8,13 @@ public class BossAi : MonoBehaviour
     [Header("Generic Attributes")]
     public float genericAtkSpeed;
     private float genericAtkSpeedCounter;
-    public int currentHealth;
-    public int maxHealth;
     public GameObject hitEffect;
     public Transform hiteffectLocation;
     [Header("Movement")]
     public float movementSpeed;
     private float tempAttackMoveSpeed;
     public float angularSpeed;
+    public Rigidbody rb;
     private float tempAngularSpeed;
     [Header("Ranged Attributes")]
     public float attack1Speed;
@@ -46,11 +45,11 @@ public class BossAi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = maxHealth;
         player = GameObject.FindGameObjectWithTag("Player");
         navMeshAge = GetComponent<UnityEngine.AI.NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         tempAngularSpeed = angularSpeed;
+        rb = this.GetComponent<Rigidbody>();
         tempAttackMoveSpeed = movementSpeed;
     }
 
@@ -90,10 +89,13 @@ public class BossAi : MonoBehaviour
             tempAngularSpeed = 0;
             isTossing = true;
         }
-
-        if(currentHealth <= 0)
+        if (distanceFromPlayer <= meleeRange)
         {
-            Death();
+            rb.isKinematic = true;
+        }
+        else
+        {
+            rb.isKinematic = false;
         }
     }
 
@@ -102,13 +104,6 @@ public class BossAi : MonoBehaviour
         Invoke("SpawnAttack1", attack1Speed);
         Invoke("SpawnAttack1", attack1Speed*2);
         Invoke("SpawnAttack1", attack1Speed*3);
-    }
-
-    public void TakeDamage(int damage)
-    {
-        GameObject hiteffs = Instantiate(hitEffect, hiteffectLocation.position, hiteffectLocation.rotation);
-        Destroy(hiteffs, 2f);
-        this.currentHealth += damage;
     }
 
     public void SpawnAttack1()
@@ -153,10 +148,5 @@ public class BossAi : MonoBehaviour
     {
         animator.SetBool("IsTossing", false);
         isTossing = false;
-    }
-
-    public void Death()
-    {
-        Destroy(this.gameObject);
     }
 }
