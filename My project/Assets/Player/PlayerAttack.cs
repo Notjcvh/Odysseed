@@ -223,6 +223,7 @@ public class PlayerAttack : MonoBehaviour
     //This is called by the animation trigger
     public void isAnimationFinished()
     {
+        Debug.Log("Finished");
         playerMovement.stopMovementEvent = false;
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
@@ -243,6 +244,9 @@ public class PlayerAttack : MonoBehaviour
         lightAttackCounter = 0;
         heavyAttackCounter = 0;
         animator.SetInteger("Attack Type", 0);
+        isAnimationActive = false;
+        animator.SetBool("Attacking", false);
+        animator.ResetTrigger("Input Pressed");
         comboLifeCounter = -1; // we set it to -1 so the animator contion : Combolifetime can understand that we are dropping the combo 
         animator.SetFloat("ComboLifetime", comboLifeCounter);
         comboLifeCounter = 0;
