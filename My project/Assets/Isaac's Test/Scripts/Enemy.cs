@@ -9,12 +9,14 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 3;
     public int currentHealth;
     public GameObject hitEffect;
+    public GameObject targetEffect;
 
     [Header("Animation")]
     public Animator animator;
 
     [Header("EnemyStatus")]
     public bool isStunned = false;
+    public bool isTargeted = true;
 
     [Header("Rooms")]
     public CombatRoom myRoom;
@@ -32,6 +34,7 @@ public class Enemy : MonoBehaviour
         {
             Death();
         }
+        targetEffect.SetActive(isTargeted);
     }
 
     // the goal here is to 
