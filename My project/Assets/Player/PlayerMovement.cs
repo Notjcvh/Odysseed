@@ -9,7 +9,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     private CameraController cam;
     private PlayerInput playerInput;
+    private PlayerAttack playerAttack;
     [SerializeField] private Rigidbody playerBody;
+
+  
+
+
     [SerializeField] private Transform lungePosition;
     [SerializeField] private Transform distanceToGround;
     private Animator animator;
@@ -31,7 +36,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Jumping")]
     public LayerMask Ground;
-    public float verticalVelocity;
+    [SerializeField] private float verticalVelocity;
+    public Vector3 playerVerticalVelocity;
     public float distanceToCheckForGround;
 
     [Header("Dash")]
@@ -59,25 +65,34 @@ public class PlayerMovement : MonoBehaviour
         cam = GetComponent<CameraController>();
         playerInput = GetComponent<PlayerInput>();
         playerBody = GetComponentInChildren<Rigidbody>();
+        playerAttack = GetComponent<PlayerAttack>();
         animator = GetComponent<PlayerManger>().animator;
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
 
-       
 
+        //We want to make sure when the game starters the animator recognizes the player is on the groun
+        animator.SetBool("isGrounded", IsGrounded());
 
 
     }
     private void Update()
     {
-      
         if (stopMovementEvent == false)
         {
             MoveNow();
+            animator.SetBool("isGrounded", IsGrounded());
             if (IsGrounded() && Jump())
+            {
                 playerBody.velocity = Vector3.up * verticalVelocity;
+                
+            }
+               
         }
         else if (stopMovementEvent == true)
             StopMoving();
+
+        playerVerticalVelocity = playerBody.velocity;
+    
 
         if (playerInput.dash && dashLifeTimeCounter == 0) 
         {
@@ -91,7 +106,6 @@ public class PlayerMovement : MonoBehaviour
             dashLifeTimeCounter -= 1 * Time.deltaTime;
         else
             dashLifeTimeCounter = 0;
-
 
         if (isDashing == true)
         {
@@ -149,7 +163,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         return Physics.Raycast(transform.position, direction.normalized, out hit, distanceToCheckForGround, Ground);
     }
-    private bool Jump()
+    public bool Jump()
     {
         return playerInput.jumpInput;
     }
@@ -171,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-
+    #region Player Targeting 
     void UpdateTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -203,11 +217,9 @@ public class PlayerMovement : MonoBehaviour
             targetingEnemy = false;
         }
     }
-    
+    #endregion
 
-            
-
-private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         float range = 2f;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * range));
