@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     [Header("Rooms")]
     public CombatRoom myRoom;
 
-    public event System.Action<float> OnHealthPercentChange = delegate { };
+    public event System.Action<float> OnHealthPercentChange = delegate {};
 
     private void Awake()
     {
