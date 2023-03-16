@@ -7,7 +7,7 @@ public class SceneTransition : MonoBehaviour
 {
     public string sceneToLoad;
     public Vector3 playerPosition;
-    public VectorValue room;
+    public Level room;
 
     private void OnTriggerEnter(Collider other)
     {

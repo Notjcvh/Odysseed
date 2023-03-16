@@ -1,32 +1,33 @@
 public enum AudioType
 {
     None,
-
-#region Music Tracks
-    MainMenuMusic,
-    CharacterSelectMusic,
-    GameSong1,
-    GameSong2,
-    GameSong3,
-    GameSong4,
-    ArtTheme,
-    LawTheme,
-    VictoryTrack,
-    DefeatTrack,
+    #region Music Tracks
+    MainMenu,
+    RotBoss,
+    DungeonOne,
     #endregion
 
-#region UI SFX
-    MenuSelect1,
-    MenuSelect2, 
-    MenuSelect3,
-    MenuMove1,
-    MenuMove2,
+    #region UI SFX
 #endregion
 
     #region Character Sounds
     //Merlot
-    Slash,
-    Dash,
+    PlayerAttack,
+    PlayerWalk,
+    PlayerDeath,
+
+    #endregion
+
+    #region Enemy Sounds
+    PopperDeath,
+    PopperEnemyExplode,
+    RotEnemyNoise,
+    RotDeath,
+    #region Bosses
+    BossIntro,
+    EnemySpawnBoss,
+    BossDeath,
+    #endregion
     #endregion
 }
 //Audio files under the same audioSource cannot play at the same time. They can only be handled one at a time.

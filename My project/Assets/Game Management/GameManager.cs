@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private Vector3 positionOfBoneyard;
 
 
-    public VectorValue level;
+    public Level level;
     public SceneManager currentScene;
 
 

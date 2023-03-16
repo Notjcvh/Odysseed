@@ -13,15 +13,6 @@ public class AudioController : MonoBehaviour
     [SerializeField] Slider MusicVolumeSlider;
     [SerializeField] Slider SFXVolumeSlider;
 
-    public AudioSource MusicVolume;
-    public AudioSource SFXVolume;
-    public AudioSource Player1PuyoSpawner;
-    public AudioSource Player2PuyoSpawner;
-    public AudioSource Player1PuyoFX;
-    public AudioSource Player2PuyoFX;
-
-
-
     public bool debug;
     public AudioTrack[] tracks;
 
@@ -75,11 +66,7 @@ public class AudioController : MonoBehaviour
 
     private void Awake()
     {
-        if (!instance)
-        {
-            Configure();
-            DontDestroyOnLoad(this);
-        }
+        Configure();
     }
 
     private void OnDisable()
@@ -129,22 +116,16 @@ public class AudioController : MonoBehaviour
 
     public void ChangeMusicVolume()
     {
-        MusicVolume.volume = MusicVolumeSlider.value;
+       // MusicVolume.volume = MusicVolumeSlider.value;
         //MusicVolumeSlider.value = MusicVolume.volume;
         Log("Music Volume Slider set to: " + MusicVolumeSlider.value);
-        Log("Music Volume Source set to: " + MusicVolume.volume);
+      //  Log("Music Volume Source set to: " + MusicVolume.volume);
     }
 
     public void ChangeSFXVolume()
     {
-        SFXVolume.volume = SFXVolumeSlider.value;
-        Player1PuyoSpawner.volume = SFXVolumeSlider.value;
-        Player2PuyoSpawner.volume = SFXVolumeSlider.value;
-        Player1PuyoFX.volume = SFXVolumeSlider.value;
-        Player2PuyoFX.volume = SFXVolumeSlider.value;
-
         Log("SFX Volume Slider set to: " + SFXVolumeSlider.value);
-        Log("SFX Volume Source set to: " + SFXVolume.volume);
+       // Log("SFX Volume Source set to: " + SFXVolume.volume);
     }
 
 
@@ -159,9 +140,9 @@ public class AudioController : MonoBehaviour
         JobTable = new Hashtable();
         GenerateAudioTable();
 
-        ChangeMasterVolume();
-        ChangeMusicVolume();
-        ChangeSFXVolume();
+        //ChangeMasterVolume();
+        //ChangeMusicVolume();
+        //ChangeSFXVolume();
 
     }
 

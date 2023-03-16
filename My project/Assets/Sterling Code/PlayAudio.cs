@@ -4,38 +4,18 @@ public class PlayAudio : MonoBehaviour
 {
     private AudioController audioController;
 
+
+    //Use Scriptable Object events to play the type of music
+
     void Start()
     {
-        audioController = (AudioController)FindObjectOfType(typeof(AudioController));
+        audioController = this.GetComponent<AudioController>();
     }
 
-    public void MenuSelect()
+    public void MainMenu()
     {
-        int whichSound = Random.Range(0, 2);
-
-        switch (whichSound)
-        {
-            case 0:
-                audioController.PlayAudio(AudioType.MenuSelect1, false, 0, false);
-                break;
-            case 1:
-                audioController.PlayAudio(AudioType.MenuSelect2, false, 0, false);
-                break;
-            case 2:
-                audioController.PlayAudio(AudioType.MenuSelect3, false, 0, false);
-                break;
-        }
+        audioController.PlayAudio(AudioType.MainMenu, false, 0, true);
     }
 
-    public void CharacterQuip_NAME_()
-    {
-        int whichSound = Random.Range(0, 2);
-
-        switch (whichSound)
-        {
-            case 0:
-                //audioController.PlayAudio(AudioType.CHAR_QUIP, false, 0, false);
-                break;
-        }
-    }
+  
 }

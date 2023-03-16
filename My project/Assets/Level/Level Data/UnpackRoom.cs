@@ -8,7 +8,7 @@ public class UnpackRoom : MonoBehaviour
     public GameObject player;
     public CameraController cam;
     public PlayerMovement playerMovement;
-    public VectorValue level;
+    public Level level;
     public PuzzleDataManager whichPuzzle;
 
     public bool isRoomActive = false;
@@ -127,14 +127,6 @@ public class UnpackRoom : MonoBehaviour
                 enemies.Remove(other.gameObject);
             }         
         }
-    }
-
-    public void TransportEnemy(GameObject other) // Transport the enemy to the boneyard 
-    {
-      //this function will activate the OnTriggerExit and Do:
-      // remove the enemy from the list 
-      // subtract 1 from the lock number 
-      other.transform.position = level.boneYard; 
     }
 
     public void GetTriggeredValue(int number)

@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Dash")]
     public bool isDashing = false;
-    public Transform lerpPosition;
+    public Transform lerpToPosition;
     public float dashStartValue;
 
     // 
@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerInput.dash && dashLifeTimeCounter == 0) 
         {
-            dashCoroutine = Dash(transform.position, lerpPosition.position, lerpduration, dashStartValue);
+            dashCoroutine = Dash(transform.position, lerpToPosition.position, lerpduration, dashStartValue);
             StartCoroutine(dashCoroutine);
             stopMovementEvent = true;
             isDashing = true;
@@ -172,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
     #region Dashing
     private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float lerpDuration, float dashtime)
     {
-        audioController.PlayAudio(AudioType.Dash, true, 0, false);
+        audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
         dashLifeTimeCounter = dashtime;
         //this is for sliding 
         for (float t = 0; t < 1; t += Time.deltaTime / lerpduration)
