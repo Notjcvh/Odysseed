@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private Vector3 positionOfBoneyard;
 
 
-    public VectorValue level;
+    public Level level;
     public SceneManager currentScene;
 
 
@@ -60,8 +60,8 @@ public class GameManager : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
 
         //Instantiate
-        positionOfBoneyard = level.boneYard;
-        BoneYard = Instantiate(GameAssets.i.BoneYard, positionOfBoneyard, Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
+      //  positionOfBoneyard = level.boneYard;
+      //  BoneYard = Instantiate(GameAssets.i.BoneYard, positionOfBoneyard, Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
         sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
         
         //Start Scene Transitions 

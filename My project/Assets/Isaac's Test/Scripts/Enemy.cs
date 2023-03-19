@@ -9,17 +9,19 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 3;
     public int currentHealth;
     public GameObject hitEffect;
+    public GameObject targetEffect;
 
     [Header("Animation")]
     public Animator animator;
 
     [Header("EnemyStatus")]
     public bool isStunned = false;
+    public bool isTargeted = true;
 
     [Header("Rooms")]
     public CombatRoom myRoom;
 
-    public event System.Action<float> OnHealthPercentChange = delegate { };
+    public event System.Action<float> OnHealthPercentChange = delegate {};
 
     private void Awake()
     {
@@ -32,6 +34,7 @@ public class Enemy : MonoBehaviour
         {
             Death();
         }
+        targetEffect.SetActive(isTargeted);
     }
 
     // the goal here is to 

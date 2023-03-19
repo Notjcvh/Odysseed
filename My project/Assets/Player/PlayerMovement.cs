@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Dash")]
     public bool isDashing = false;
-    public Transform lerpPosition;
+    public Transform lerpToPosition;
     public float dashStartValue;
 
     // 
@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerInput.dash && dashLifeTimeCounter == 0) 
         {
-            dashCoroutine = Dash(transform.position, lerpPosition.position, lerpduration, dashStartValue);
+            dashCoroutine = Dash(transform.position, lerpToPosition.position, lerpduration, dashStartValue);
             StartCoroutine(dashCoroutine);
             stopMovementEvent = true;
             isDashing = true;
@@ -172,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
     #region Dashing
     private IEnumerator Dash(Vector3 currentPostion, Vector3 endPosition, float lerpDuration, float dashtime)
     {
-        audioController.PlayAudio(AudioType.Dash, true, 0, false);
+        audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
         dashLifeTimeCounter = dashtime;
         //this is for sliding 
         for (float t = 0; t < 1; t += Time.deltaTime / lerpduration)
@@ -192,7 +192,6 @@ public class PlayerMovement : MonoBehaviour
         float shortestDistance = Mathf.Infinity;
         GameObject nearestEnemy = null;
         Vector3 screenCenter = new Vector3(Screen.width, Screen.height, 0) / 2;
-        Debug.Log("AHHHHHHHHHHH");
         foreach (GameObject enemy in enemies)
         {
             Vector3 TargetScreenPoint = Camera.main.WorldToScreenPoint(enemy.transform.position);
@@ -209,11 +208,23 @@ public class PlayerMovement : MonoBehaviour
         if (nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
+            nearestEnemy.GetComponent<Enemy>().isTargeted = true;
+            foreach (var enemy in enemies)
+            {
+                if(nearestEnemy.transform != target)
+                {
+                    enemy.GetComponent<Enemy>().isTargeted = false;
+                }
+            }
             targetingEnemy = true;
         }
         else
         {
             target = null;
+            foreach (var enemy in enemies)
+            {
+                enemy.GetComponent<Enemy>().isTargeted = false;
+            }
             targetingEnemy = false;
         }
     }

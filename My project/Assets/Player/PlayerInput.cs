@@ -13,6 +13,10 @@ public class PlayerInput : MonoBehaviour
     public bool jumpInput { get; private set; }
     public bool attack { get; private set; }
     public bool secondaryAttack { get; private set; }
+
+    public bool chargedSecondaryAttack { get; private set;  }
+
+
     public bool dash { get; private set; } // shift
     public bool target { get; private set; }
 
@@ -52,7 +56,8 @@ public class PlayerInput : MonoBehaviour
 
         //Attacking 
         attack = Input.GetMouseButtonDown(0);
-        secondaryAttack = Input.GetMouseButtonDown(1);
+        secondaryAttack = Input.GetMouseButtonUp(1);
+        chargedSecondaryAttack = Input.GetMouseButton(1);
 
         //Jumping 
         jumpInput = Input.GetButtonDown("Jump");// number 6

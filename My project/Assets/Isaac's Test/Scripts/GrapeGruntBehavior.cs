@@ -111,21 +111,7 @@ public class GrapeGruntBehavior : MonoBehaviour
             }
         }
     }
-    //IEnumerator FindRandomWaypoint()
-    //{
-    //    yield return new WaitForSeconds(idleDelay);
-    //    Vector3 newPatrolPoint = Random.insideUnitCircle * 5;
-    //    GameObject newPatrolPointGO = Instantiate(patrolPoint, newPatrolPoint, transform.rotation);
-    //    currentWaypoint = newPatrolPointGO.transform;
-    //    Destroy(newPatrolPointGO, 5f);
-    //    StartCoroutine(FindRandomWaypoint());
-    //}
-    //IEnumerator FindAttackWaypoint()
-    //{
-    //    yield return new WaitForSeconds(attackPosChangeTimer);
-    //    currentAttackPos = attackPoints[Random.Range(0, attackPoints.Length)].GetComponent<Transform>();
-    //    StartCoroutine(FindAttackWaypoint());
-    //}
+
     public void DisableAI(float duration)
     {
         this.navMeshAge.enabled = false;

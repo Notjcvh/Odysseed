@@ -7,7 +7,7 @@ public class PuzzleRoom : MonoBehaviour
     public GameObject player;
     public CameraController cam;
     public PlayerMovement playerMovement;
-    public VectorValue level;
+    public Level level;
     public PuzzleDataManager whichPuzzle;
 
     public GameEvent[] roomEvents; // what the doors are listening for
