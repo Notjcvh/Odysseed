@@ -9,7 +9,7 @@ public class ObstructionView : MonoBehaviour
     public Color  originalColor, alphaColor;
     public float rateOfChange= 3f;
 
-    private bool obstructing = false;
+  //rivate bool obstructing = false;
     private void Start()
     {
         material = gameObject.GetComponent<MeshRenderer>().material;

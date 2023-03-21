@@ -60,7 +60,7 @@ public class PlayerInput : MonoBehaviour
         chargedSecondaryAttack = Input.GetMouseButton(1);
 
         //Jumping 
-        jumpInput = Input.GetButtonDown("Jump");// number 6
+        jumpInput = Input.GetButton("Jump");// number 6
 
         // Camera Movement 
         mouseX = Input.GetAxisRaw("Mouse X"); // number 7

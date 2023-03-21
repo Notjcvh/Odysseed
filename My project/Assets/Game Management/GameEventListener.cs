@@ -15,7 +15,8 @@ using UnityEngine.Events;
 
 public class GameEventListener : MonoBehaviour
 {
-    public List<GameEvent> Event; // event to register with
+    public List<GameEvent> Event; // Game Event to register with
+    public List<PlayerEvents> playerEvents;
 
     public UnityEvent Response; // response to invoke when event is raised in the inspector 
 
@@ -25,17 +26,24 @@ public class GameEventListener : MonoBehaviour
         {
             item?.RegisterListener(this);
         }
-       
+
+        foreach (var item in playerEvents)
+        {
+            item?.RegisterListener(this);
+        }
     }
 
     private void OnDisable()
     {
-
         foreach (var item in Event)
         {
             item?.UnregisterListener(this);
         }
-        
+
+        foreach (var item in playerEvents)
+        {
+            item?.RegisterListener(this);
+        }
     }
 
     public void OnEventRaised()

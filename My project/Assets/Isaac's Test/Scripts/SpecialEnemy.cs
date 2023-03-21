@@ -91,7 +91,8 @@ public class SpecialEnemy : MonoBehaviour
     {
         this.navMeshAge.enabled = false;
         isStunned = true;
-        Invoke("EnableAI", player.GetComponent<PlayerAttack>().knockbackTimer + stunDuration);
+
+      // Invoke("EnableAI", player.GetComponent<PlayerAttack>().knockbackTimer + stunDuration);
     }
 
     public void DisableAIforExplosion()

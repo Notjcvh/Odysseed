@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     private CameraController cam;
     private PlayerInput playerInput;
-    private PlayerAttack playerAttack;
+    private PlayerManger playerManger;
     [SerializeField] private Rigidbody playerBody;
 
   
@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Movement")]
-    private Vector3 newVelocity;
+    public Vector3 newVelocity;
     private Vector3 movementVector;
     private Quaternion targetRotation;
 
@@ -31,14 +31,46 @@ public class PlayerMovement : MonoBehaviour
 
     public float runSpeed;
     public bool stopMovementEvent;
+    public bool isFalling;
     public bool isTalking = false;
     public bool isRestricted = false;
 
     [Header("Jumping")]
     public LayerMask Ground;
+
+    public float jumpForce = 10f;
+   
+    public float maxJumpTime = 1f; // the max time for the jump to complete, from standstill to standstill 
+    public float gravity = 6; // our accleration 
+    public float maxJumpHeight = 1;
+    public float currentJumpTime = 0; //the current amount of time passed since the first frame of the jump 
+    public float maxJumpTime2 = 2f;
+    public float maxJumpHeight2= 1;
+
+
+
+    //
+    public AnimationCurve jumpCurve;
+    public float jumpHieghtMultiplier = 2; // applied to jump force based on how long the button is held down for
+  
+
+    // Gravity
+
+   
+
+
+
+    public float time;
+    private Vector3 fallingVector;
+   // public AnimationCurve gravity;
+    private float gravitySpeed;
+
+    
+    
+    // Possibly will be removed 
     [SerializeField] private float verticalVelocity;
     public Vector3 playerVerticalVelocity;
-    public float distanceToCheckForGround;
+
 
     [Header("Dash")]
     public bool isDashing = false;
@@ -65,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
         cam = GetComponent<CameraController>();
         playerInput = GetComponent<PlayerInput>();
         playerBody = GetComponentInChildren<Rigidbody>();
-        playerAttack = GetComponent<PlayerAttack>();
+        playerManger = GetComponent<PlayerManger>();
         animator = GetComponent<PlayerManger>().animator;
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
 
@@ -74,25 +106,79 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isGrounded", IsGrounded());
 
 
+        //Set gravity allready 
+        float jumpApex = maxJumpTime / 2;
+        gravity = (-2 * maxJumpHeight) / Mathf.Pow(jumpApex, 2);
+
     }
-    private void Update()
+    private void FixedUpdate()
     {
-        if (stopMovementEvent == false)
+
+        CheckGravity();
+        #region Locomotion Inputs
+        if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true )
         {
             MoveNow();
-            animator.SetBool("isGrounded", IsGrounded());
-            if (IsGrounded() && Jump())
+            if (playerInput.jumpInput && IsGrounded() || playerInput.jumpInput && IsGrounded() == false && currentJumpTime < maxJumpTime)
             {
-                playerBody.velocity = Vector3.up * verticalVelocity;
-                
+                Debug.Log("Jump Pressed");
+                CalculateJump(newVelocity);
+                currentJumpTime += Time.fixedDeltaTime;
+                //jumpHieghtMultiplier += Time.deltaTime;
+                playerManger.currentState = PlayerStates.Jumping;
             }
-               
-        }
-        else if (stopMovementEvent == true)
-            StopMoving();
 
-        playerVerticalVelocity = playerBody.velocity;
-    
+            animator.SetBool("isRunning", true);
+            animator.SetBool("isGrounded", IsGrounded());
+        
+            playerManger.currentState = PlayerStates.Moving;
+        }
+        else if(stopMovementEvent != true && isFalling != true)
+        {
+            playerManger.currentState = PlayerStates.Idle;
+            newVelocity = Vector3.zero;
+            animator.SetBool("isRunning", false);
+            if (playerInput.jumpInput && IsGrounded() || playerInput.jumpInput && IsGrounded() == false && currentJumpTime < maxJumpTime)
+            {
+                Debug.Log("Jump Pressed");
+                CalculateJump(newVelocity);
+                currentJumpTime += Time.fixedDeltaTime;
+                //jumpHieghtMultiplier += Time.deltaTime;
+                playerManger.currentState = PlayerStates.Jumping;
+            }
+        }
+
+        // ground Check 
+        if (IsGrounded() == true) // player is on the ground 
+        {
+            playerBody.drag = 7;
+            animator.SetBool("isGrounded", IsGrounded());
+   
+            if (isFalling == true || currentJumpTime > maxJumpTime)
+            {
+                jumpHieghtMultiplier = 2;
+                currentJumpTime = 0;
+                isFalling = false;
+                time = 0;
+                gravity = 0;
+
+            }
+        }
+        else if (IsGrounded() == false)  // player is in the air 
+        {
+            playerBody.drag = 0;
+            animator.SetBool("isGrounded", IsGrounded());
+            animator.SetBool("isRunning", false);
+        }
+        bool isGrounded = IsGrounded();
+       
+       
+
+        //Dashing
+        if (dashLifeTimeCounter > 0)
+            dashLifeTimeCounter -= 1 * Time.deltaTime;
+        else
+            dashLifeTimeCounter = 0;
 
         if (playerInput.dash && dashLifeTimeCounter == 0) 
         {
@@ -100,16 +186,12 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(dashCoroutine);
             stopMovementEvent = true;
             isDashing = true;
+            playerManger.currentState = PlayerStates.Dashing;
         }
-
-        if (dashLifeTimeCounter > 0)
-            dashLifeTimeCounter -= 1 * Time.deltaTime;
-        else
-            dashLifeTimeCounter = 0;
 
         if (isDashing == true)
         {
-            RaycastHit hit;
+           //aycastHit hit;
             float range = 2f;
             Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward * range));
             if (Physics.Raycast(ray, range, playerCollionMask, QueryTriggerInteraction.Ignore))
@@ -117,10 +199,12 @@ public class PlayerMovement : MonoBehaviour
                 StopCoroutine(dashCoroutine);
                 stopMovementEvent = false;
                 isDashing = false;
-
+                playerManger.currentState = PlayerStates.Idle;
             }
         }
- 
+        #endregion
+
+
         //Enemy Targetting 
         if (playerInput.target)
             UpdateTarget();
@@ -128,7 +212,20 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.transform.LookAt(target);
     }
 
-    #region Player Movement and Stop Movement 
+
+
+    private void CheckGravity()
+    {
+        // Apply Gravity 
+        if (IsGrounded() == false || playerBody.velocity.y != 0 )
+        {
+            Debug.Log("AppyGravity");
+            newVelocity.y += gravity * Time.fixedDeltaTime;
+            playerBody.velocity = newVelocity;
+        }
+    }
+
+    #region Moving the Player
     private void MoveNow()
     {
         // if we have input that is either vertical or horizontal then is moving is true 
@@ -140,32 +237,76 @@ public class PlayerMovement : MonoBehaviour
         // checking for inputs from Player
         targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
         newVelocity = movementVector * targetSpeed;
-        transform.Translate(newVelocity * Time.deltaTime, Space.World);
+        //   transform.Translate(newVelocity * Time.deltaTime, Space.World);
+        playerBody.velocity = newVelocity;
         if (targetSpeed != 0 && isDashing == false)
         {
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
-            animator.SetBool("isRunning", true);
         }
-        else
-            animator.SetBool("isRunning", false);
-    }
-    private void StopMoving()
-    {
-        Debug.Log("Movement should be not working");
+
     }
     #endregion
 
-    #region Ground Check and Jumping
+    #region Ground Check
     public bool IsGrounded()
     {
-        Vector3 direction = new Vector3(0, -transform.position.y, 0);
+        Vector3 direction = Vector3.down;
         RaycastHit hit;
-        return Physics.Raycast(transform.position, direction.normalized, out hit, distanceToCheckForGround, Ground);
+        if (Physics.Raycast(distanceToGround.position, direction, out hit, .1f, Ground))
+            return true;
+        else
+        {
+            isFalling = true;
+            return false;
+        }  
     }
-    public bool Jump()
+    #endregion
+
+    #region Jumping     
+    private void CalculateJump(Vector3 velocity)
     {
-        return playerInput.jumpInput;
+
+        //Jump 1
+        //caluclate basic gravity based of time duration 
+
+        if (velocity == Vector3.zero)
+        {
+            float jumpApex = maxJumpTime / 2;
+            gravity = (-2 * maxJumpHeight) / Mathf.Pow(jumpApex, 2);
+            if (currentJumpTime <= jumpApex)
+            {
+                Debug.Log("Jump based on time duration: Stationary");
+                float intialjumpVelocity = (2 * maxJumpHeight) / jumpApex;
+                newVelocity.y = intialjumpVelocity;
+                playerBody.velocity = newVelocity;
+            }
+
+        }
+
+        //Calculate Jump 2 with respect to horizontal velocity
+        else if(velocity != Vector3.zero)
+        {
+
+            //add movement vector and vector 3.zero 
+            Vector3 c = new Vector3(movementVector.x + 0, movementVector.y + 1, movementVector.z + 0);
+            float angle = Vector3.Angle(movementVector, c); // should co
+
+            float intialHor = movementVector.magnitude * Mathf.Cos(angle);
+            float intialVert = Vector3.up.magnitude * Mathf.Sin(angle);
+
+            float horDisplacement = intialHor * maxJumpTime2;
+            float vertDisplacement = intialVert * maxJumpTime2;
+
+            gravity = (-2 * maxJumpHeight2 * (intialHor * intialHor)) / ((horDisplacement * horDisplacement)/2);
+
+            vertDisplacement = (2 * maxJumpTime2 * intialHor) / (horDisplacement / 2);
+            newVelocity.y = vertDisplacement * runSpeed;
+            playerBody.velocity = newVelocity;         
+            
+        }
+
+        
     }
     #endregion
 
@@ -234,6 +375,24 @@ public class PlayerMovement : MonoBehaviour
     {
         float range = 2f;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * range));
+
+        Gizmos.color = Color.black;
+        //add movement vector and vector 3.zero 
+        Vector3 c = new Vector3(movementVector.x + 0, movementVector.y + 1, movementVector.z + 0);
+        Gizmos.DrawRay(distanceToGround.position, c.normalized * 10);
+        if (currentJumpTime <= maxJumpTime)
+        {
+            //calculate a direction from ground
+            Vector3 direction = Vector3.Normalize(playerBody.position - distanceToGround.position);
+
+            float multiplier = jumpCurve.Evaluate(currentJumpTime / (maxJumpTime * jumpHieghtMultiplier));
+
+            Vector3 jumpVector = new Vector3(0, direction.y * multiplier * jumpForce, 0);
+
+            Gizmos.DrawRay(jumpVector, direction);
+
+            //playerBody.AddForce(jumpVector, ForceMode.Impulse);
+        }
     }
 
 }

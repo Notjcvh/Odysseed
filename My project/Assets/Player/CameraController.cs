@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.Reflection;
 
 
 public class CameraController : MonoBehaviour
@@ -9,21 +10,32 @@ public class CameraController : MonoBehaviour
     // members
     [Header("Refrenceing")]
     [SerializeField] private Camera cam = null;
-    [SerializeField] private Transform followObj = null;
+    [SerializeField] public Transform followObj = null;
     private PlayerInput playerInput;
     private PlayerMovement playerMovement;
 
     [Header("Vertical Rotations")]
-    [SerializeField] [Range(-90, 90)] private float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
-    [SerializeField] [Range(-90, 90)] private float maxVerticalAngle = 90;   
-    [SerializeField] [Range(-90, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
-    [SerializeField] [Range(-90, 90)] private float combatMaxVerticalAngle = 90;
+    [Range(-90, 90)] public float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
+    [Range(-90, 90)] public float maxVerticalAngle = 90;
+
+    
+     
+
+    //[SerializeField] [Range(-90, 90)] private float combatMinVerticalAngle = 13; // turning and moving the camera up while in combat mode
+    //[SerializeField] [Range(-90, 90)] private float combatMaxVerticalAngle = 90;
+
+    public float maxVerticalAngleRef;
+    public float minVertivalAngleRef;
+
+
+
+
 
     [Header("Priority")]
     public int camPriority = 0;
 
     [Header("Distance")]
-    [SerializeField] private float defeaultDistance;
+    [SerializeField] public float defeaultDistance;
     
     [SerializeField] private float combatCamDistance;
 
@@ -33,11 +45,12 @@ public class CameraController : MonoBehaviour
 
     [Header("Smooth/Sharp")]
     [SerializeField] private float rotationSharpness;
-    [Range(0, 1)] [SerializeField] private float smoothing = 0.5f;
+ // [Range(0, 1)] [SerializeField] private float smoothing = 0.5f;
 
 
     [Header("Cam")]
     private Vector3 plannerDirection;  // Camera's postion on the x & z plane
+    public Vector3 planDirectionRef;
     private Vector3 targetPosition;   // player's target position
     private Quaternion targetRotation; // player's target rotation
 
@@ -46,6 +59,8 @@ public class CameraController : MonoBehaviour
 
     private float targetVerticalAngle;
     private float targetDistance;
+
+    public float testAngle;
    
     [Header("Camera Obstruction")]    
     public LayerMask obstructionMasks; // This layermask will be inverted to choose what layers to ignore. 
@@ -72,19 +87,26 @@ public class CameraController : MonoBehaviour
         cam = Camera.main;
         Obstruction = followObj.transform; // default starting point 
         plannerDirection = followObj.forward;  //Important
+        planDirectionRef = plannerDirection;
+
+        var range = typeof(CameraController).GetField(nameof(maxVerticalAngle)).GetCustomAttribute<RangeAttribute>();
+        maxVerticalAngleRef = range.max;
+        minVertivalAngleRef = range.min;
+
         Cursor.lockState = CursorLockMode.Locked;
         if (Cursor.lockState != CursorLockMode.Locked)  // locking the camera if the cursor isn't moving
             return;
     }
 
+
     private void Update()
     {     
         if (camPriority == 0)  ExploringCam(playerInput.mouseX, playerInput.mouseY);
-        if (camPriority == 1) CombatCam(playerInput.mouseX, playerInput.mouseY);
+       // if (camPriority == 1) CombatCam(playerInput.mouseX, playerInput.mouseY);
 
         var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
         RaycastHit hit;
-        Debug.DrawRay(cam.transform.position, followObj.position - cam.transform.position, Color.red);
+       
         if (Physics.Raycast(ray, out hit, 40, ~(obstructionMasks),QueryTriggerInteraction.Ignore)) 
         {
             
@@ -101,12 +123,6 @@ public class CameraController : MonoBehaviour
             }       
         }
     }
-    private void FixedUpdate()
-    {
-        if (CheckForCameraCollisions())
-            HandleCameraCollision();
-    }
-
     #endregion
 
     #region Camera States
@@ -115,12 +131,18 @@ public class CameraController : MonoBehaviour
         if (isCollisionDetected == true && camPriority != 1)
         {
             targetDistance = Mathf.Clamp(newDistanceFromPlayer, 4, defeaultDistance);
+
         }
         else targetDistance = defeaultDistance;
 
+        //move point to position:
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
-        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVerticalAngle, maxVerticalAngle);
+           
+        testAngle = targetVerticalAngle;
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVertivalAngleRef, maxVerticalAngleRef);
 
+   
+                         //rotation around y axis                    // rotation around x axis
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
         newRotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, rotationSharpness / Time.deltaTime);
         cam.transform.rotation = newRotation;
@@ -130,7 +152,7 @@ public class CameraController : MonoBehaviour
         newPosition = Vector3.SmoothDamp(cam.transform.position, targetPosition, ref velocity, 0f);
         cam.transform.position = newPosition;
     }
-    public void CombatCam(float mouseX, float mouseY) // Combat camera collision should no be going down the same rate at the exploring cam Fix later
+  /*  public void CombatCam(float mouseX, float mouseY) // Combat camera collision should no be going down the same rate at the exploring cam Fix later
     {
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
         targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + -mouseY, combatMinVerticalAngle, combatMaxVerticalAngle);
@@ -154,44 +176,20 @@ public class CameraController : MonoBehaviour
         newPosition = Vector3.SmoothDamp(cam.transform.position, targetPosition, ref velocity, 0f);
         // newPosition = Vector3.Lerp(cam.transform.position, targetPosition, rotationSharpness * Time.deltaTime);
         cam.transform.position = newPosition;
-    }
+    }*/
     #endregion
 
-    #region Camera Collison
-    private bool CheckForCameraCollisions() // becasue this is a fixed upda
-    {
-        Collider[] colliders = Physics.OverlapSphere(cam.transform.position, cameraSphereRadius, collisionMask, QueryTriggerInteraction.Ignore);
-        foreach (var walls in colliders)
-        {
-            // find the current distance from the player and return true 
-            float distanceToPlayer = Vector3.Distance(followObj.position, cam.transform.position);
-
-            newDistanceFromPlayer = distanceToPlayer;
-            return true;
-        }
-        // no collision return false
-        return false;
-    }
-
-    private void HandleCameraCollision()
-    {
-        isCollisionDetected = true;
-        StartCoroutine(PauseCameraForMoment());
-        newDistanceFromPlayer = newDistanceFromPlayer / 2f;
-    }
-
-    private IEnumerator PauseCameraForMoment()
+    public IEnumerator ReturnCamToDefalut()
     {
         yield return new WaitForSeconds(2);
-        isCollisionDetected = false;
-
-        // possible error here 
-        if (camPriority == 0)
-            newDistanceFromPlayer = defeaultDistance;
-        else
-            newDistanceFromPlayer = combatCamDistance;
+        minVertivalAngleRef = -30;
+        defeaultDistance = 8;
+        Debug.Log("Finished");
     }
-    #endregion
+
+
+
+
 
     #region Camera Obstruction
     private void BlockingSightofPlayer(RaycastHit hit)
@@ -209,14 +207,7 @@ public class CameraController : MonoBehaviour
 
    
     #region Editor Gizmos 
-
-    /*private void OnDrawGizmos()
-    {
-        Handles.DrawLine(cam.transform.position, followObj.position);
-        Gizmos.DrawSphere(cam.transform.position, cameraSphereRadius);
-
-     //  Handles.DrawLine(seedWheel.transform.position, cam.transform.position);
-    }*/
+   
 
 
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PlayerManger : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class PlayerManger : MonoBehaviour
     private PlayerInput playerInput;
     private GameManager gameManager;
     public Animator animator;
+
+
+    [Header("Player States")]
+    public PlayerStates currentState;
+    public bool inputsEnable;
 
     [Header("Initial Start Position")]
     private Vector3 intialStartPos;
@@ -40,14 +46,24 @@ public class PlayerManger : MonoBehaviour
         {
             transform.position = gameManager.position;
         }
-
-     
     }
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if (playerInput.enabled == true)
+                DisableAllInputs();
+            else
+            {
+                playerInput.enabled = true;
+            }
+        }
+
+        inputsEnable = playerInput.enabled;
+
         //if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
-          //  ChangeWeaponState(element);
+        //  ChangeWeaponState(element);
 
         if (currentHealth > numberOfHearts)  // Making sure our health equals the number of hearts 
             numberOfHearts = currentHealth;
@@ -80,8 +96,22 @@ public class PlayerManger : MonoBehaviour
         currentHealth -= damage;
     }
 
-
-   
-
+    public void DisableAllInputs()
+    {
+        playerInput.enabled = false;
+    }
 }
+
+public enum PlayerStates
+{
+    
+    Idle,
+    Attacking,
+    Dashing,
+    Moving,
+    Jumping, 
+    Falling,
+    Dying,
+}
+
 

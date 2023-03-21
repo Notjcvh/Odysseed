@@ -301,6 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event:
   - {fileID: 11400000, guid: 16c10078207f42a43acca795a8ec73d3, type: 2}
+  playerEvents: []
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event:
   - {fileID: 11400000, guid: b8a2b3297dd0e2a4689acaf7346bdf15, type: 2}
+  playerEvents: []
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -359,6 +361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event:
   - {fileID: 11400000, guid: 59b4103625cb2db4ba708f48bbac7532, type: 2}
+  playerEvents: []
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -1029,6 +1032,8 @@ MonoBehaviour:
   maxVerticalAngle: 90
   combatMinVerticalAngle: -30
   combatMaxVerticalAngle: 60
+  maxVerticalAngleRef: 0
+  minVertivalAngleRef: 0
   camPriority: 0
   defeaultDistance: 8
   combatCamDistance: 15
@@ -1036,6 +1041,8 @@ MonoBehaviour:
   newDistanceFromPlayerInCombat: 0
   rotationSharpness: 60
   smoothing: 0.711
+  planDirectionRef: {x: 0, y: 0, z: 0}
+  testAngle: 0
   obstructionMasks:
     serializedVersion: 2
     m_Bits: 352
@@ -1071,6 +1078,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7096661054246325347}
+  currentState: 0
+  inputsEnable: 0
   maxHealth: 100
   currentHealth: 100
   numberOfHearts: 10
@@ -1105,16 +1114,21 @@ MonoBehaviour:
   targetSpeed: 0
   runSpeed: 10
   stopMovementEvent: 0
+  isJumping: 0
   isTalking: 0
   isRestricted: 0
   Ground:
     serializedVersion: 2
     m_Bits: 256
+  jumpForce: 10
+  maxJumpTime: 1
+  jumpHieghtMultiplier: 2
+  currentJumpTime: 0
   verticalVelocity: 30
   playerVerticalVelocity: {x: 0, y: 0, z: 0}
   distanceToCheckForGround: 4
   isDashing: 0
-  lerpPosition: {fileID: 6528760257728996185}
+  lerpToPosition: {fileID: 0}
   dashStartValue: 1
   dashLifeTimeCounter: 0
   lerpduration: 0.5
@@ -1140,22 +1154,13 @@ MonoBehaviour:
   playerPos: {fileID: 0}
   enmeyPosition: {fileID: 0}
   attackArea: {fileID: 970987175}
-  attackPosition: {fileID: 0}
   whatIsHittable:
     serializedVersion: 2
     m_Bits: 2176
   inputType: 0
-  delayAttack: 1
-  damage: -10
-  lerpPosition: {fileID: 6528760257728996185}
-  lerpduration: 0.2
-  playerCollionMask:
-    serializedVersion: 2
-    m_Bits: 3200
-  knockbackTimer: 1
-  knockbackStrength: 7
-  canKnockback: 0
-  canLaunchUp: 0
+  chargeSpeed: 0
+  chargeTime: 0
+  Charged: 0
   isInAir: 0
   isAnimationActive: 0
   lightAttackCounter: 0
@@ -1166,6 +1171,7 @@ MonoBehaviour:
   heavyAttackMaxAir: 0
   comboLifeCounter: 0
   animMultiplier: 0
+  lerpduration: 0.2
 --- !u!114 &8385173726301645281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1645,6 +1651,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7096661056148737688}
+  - component: {fileID: 2189594101739826788}
   m_Layer: 3
   m_Name: DistancetoGround
   m_TagString: Untagged
@@ -1660,13 +1667,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7096661056148737691}
   m_LocalRotation: {x: -0, y: -0, z: 0.004926152, w: 0.9999879}
-  m_LocalPosition: {x: 0.011261044, y: -1.1429442, z: 0}
+  m_LocalPosition: {x: -0.17, y: -1.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6528760259279523717}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2189594101739826788
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096661056148737691}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7305850547650598046
 GameObject:
   m_ObjectHideFlags: 0
@@ -1832,7 +1852,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TriggerEvent: {fileID: 11400000, guid: 16c10078207f42a43acca795a8ec73d3, type: 2}
   EndEvent: {fileID: 11400000, guid: b8a2b3297dd0e2a4689acaf7346bdf15, type: 2}
-  comboFinisher: {fileID: 11400000, guid: 59b4103625cb2db4ba708f48bbac7532, type: 2}
+  canKnockUp: {fileID: 0}
+  canKnockBack: {fileID: 0}
 --- !u!1 &8018289595111985983
 GameObject:
   m_ObjectHideFlags: 0

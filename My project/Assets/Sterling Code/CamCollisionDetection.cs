@@ -2,55 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 
 
-public class CameraCollision : MonoBehaviour
+public class CamCollisionDetection : MonoBehaviour
 {
     //Reference to Camera Controller 
-    private CameraController camControl;
+    public CameraController camControl;
 
     private int groundLayer = (1 << 8);
     private int wallLayer = (1 << 10);
 
 
+    public float contactPoint;
+
 
     //Methods
     [Header("Camera Collision")]
-
-
-
-
-
-
-
     //public LayerMask collisionMask;
-    public bool isCollisionDetected = false;
-
-
-
+    public bool isHittingWall = false;
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
-        Vector3 down = new Vector3(0, -10, 0);
-        //  Gizmos.DrawLine(transform.position, transform.position + down);
+        //  Vector3 direct = Vector3.Normalize(camControl.followObj.position - transform.position);
+        // float distance = Mathf.Ceil((transform.position - camControl.followObj.position).magnitude);
+        //print(distance);
+        //Gizmos.DrawRay(transform.position, direct);
 
+        if(isHittingWall == true)
+        {
+            Gizmos.color = Color.green;
+            Vector3 followObjUp = Vector3.up;
+            Gizmos.DrawRay(camControl.followObj.position, followObjUp);
+            Gizmos.color = Color.blue;
+            Vector3 directtoCam = Vector3.Normalize(transform.position - camControl.followObj.position);
+            Gizmos.DrawRay(camControl.followObj.position, directtoCam);
+        }
     }
-
     private void Start()
     {
         camControl = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraController>();
-
     }
 
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-
+        // Run the checks 
         if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
         {
-            isCollisionDetected = true;
+            isHittingWall = true;
         }
 
         else if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
@@ -58,45 +58,68 @@ public class CameraCollision : MonoBehaviour
             Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
             Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
             Debug.Log("Hit wall");
+            camControl.defeaultDistance -= 1;
         }
-
-
     }
-
-
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider collision)
     {
-        // check distacne to ground
-        RaycastHit hit;
-        Ray downRay = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(downRay, out hit, groundLayer))
+        if(isHittingWall == true)
         {
-
-            int roundedDist = Mathf.CeilToInt(hit.point.y);
-            Debug.DrawLine(transform.position, new Vector3(transform.position.x, roundedDist, transform.position.z), Color.green);
-            // print("This is the hit point " + transform.position + " This is the hit point" + roundedDist);
-            if (transform.position.y < roundedDist + .5f)
+            RaycastHit hit;
+            Ray downRay = new Ray(transform.position, Vector3.down);
+            if (Physics.Raycast(downRay, out hit, groundLayer))
             {
-                print("too low");
+                #region  Checking For Distance from Ground
+                //B
+                Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
+                float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
+                //A
+                float distanceToGround = (transform.position - hit.point).magnitude; 
+                //C
+                Vector3 directionToGround = Vector3.Normalize(hit.point - camControl.followObj.position);
+                float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
+            
+                float angleInRadians = Mathf.Atan(distanceToGround / distancePlayerToCam); //arctan(a/b
+                float angleInDegrees = angleInRadians * Mathf.Rad2Deg;
 
+                //CamController
+                  Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
+                  Debug.DrawRay(transform.position, Vector3.down * distanceToGround, Color.green);
+                  Debug.DrawRay(camControl.followObj.position, directionToGround * distancePlayerToGround, Color.red);
+
+                if (angleInDegrees < 2)
+                {
+                   // print("too low");
+                    HandleGroundCollision(hit);
+                }
+                #endregion
             }
         }
-
-
-
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider collision)
     {
+       // return to default values 
+    }
 
-        if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
+    void HandleGroundCollision(RaycastHit hit)
+    {    
+        Vector3 followObjUp = camControl.followObj.up;
+        Vector3 directtoCam = Vector3.Normalize(transform.position - camControl.followObj.position);
+   
+        float dot = Vector3.Dot(directtoCam, followObjUp);
+        dot = Mathf.Clamp(dot, -1, 1);
+
+        float angleRad = Mathf.Acos(dot) * Mathf.Rad2Deg;
+        float degree = camControl.maxVerticalAngleRef - angleRad;
+      //  print(degree);
+        if(degree <= -14)
         {
-            isCollisionDetected = false;
+            camControl.minVertivalAngleRef = -14;
+         //   Debug.Log(camControl.minVertivalAngleRef);
+            StartCoroutine(camControl.ReturnCamToDefalut());
         }
     }
-
-
-
 
     /*
     [Header("Camera Obstruction")]
@@ -148,20 +171,6 @@ public class CameraCollision : MonoBehaviour
     /*
 
     #region Camera Collison
-    private bool CheckForCameraCollisions() // becasue this is a fixed upda
-    {
-        Collider[] colliders = Physics.OverlapSphere(cam.transform.position, cameraSphereRadius, collisionMask, QueryTriggerInteraction.Ignore);
-        foreach (var walls in colliders)
-        {
-            // find the current distance from the player and return true 
-            float distanceToPlayer = Vector3.Distance(followObj.position, cam.transform.position);
-
-            newDistanceFromPlayer = distanceToPlayer;
-            return true;
-        }
-        // no collision return false
-        return false;
-    }
 
     private void HandleCameraCollision()
     {

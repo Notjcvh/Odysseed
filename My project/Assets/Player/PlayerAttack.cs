@@ -4,7 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
+using Cinemachine;
 
+public enum PhysicsBehaviours
+{
+    #region No Physics Behaviour
+    None,
+    #endregion
+
+    #region Add a Single Physics Behaviour 
+    Knockback,
+    KnockUp,
+    #endregion
+
+    #region Add a Continous Physics Behaviour
+
+    ContinousKnockback,
+    #endregion
+}
 
 
 [RequireComponent(typeof(PlayerInput))]
@@ -15,27 +32,18 @@ public class PlayerAttack : MonoBehaviour
     public Transform playerPos;
     public Transform enmeyPosition;
     private Animator animator;
+    private PlayerManger playerManger;
     private PlayerMovement playerMovement;
     private PlayerInput playerInput;
 
-
-
-
     [Header("Hit Detectetion")]
-    public Collider attackArea;
     public LayerMask whatIsHittable;
-    private Rigidbody obj;
-    private Vector3 direction;
 
     [Header("Inputs")]
     public int inputType;
-    private int damage = 10;
     public float chargeSpeed;
     public float chargeTime;
     public bool Charged;
-  
-
-
 
     [Header("States")]
     public bool isInAir;
@@ -51,29 +59,44 @@ public class PlayerAttack : MonoBehaviour
     public float comboLifeCounter = 0;
     [Range(0, 10)] public float animMultiplier;
 
-
     [Header("Attack Behaviours")]
-    //Does Attack knockback ?
-    public bool canKnockback;
-    public float knockbackTimer;
-    public float knockbackStrength;
-    //Does Attack knockup ?
-    public bool canLaunchUp;
-    public float knockUpTimer;
-    public float knockUpStrength; 
+
     //Does Merlot Slide foreward ?
     private Transform lerpToPosition;
     public float lerpduration;
     private LayerMask playerCollionMask;
     IEnumerator co;
 
+    [Header("List of Colliders")]
+    public Dictionary<string, HitCollider> colliders = new Dictionary<string, HitCollider>();
+    public bool activateCollidersAcive;
+
+    public class PlayerCollider
+    {
+        public Transform origin;
+       // public LayerMask whatIsHittable;
+        public PhysicsBehaviours behaviours;
+        public int damage;
+        public float timer;
+        public float strength;
+
+        public PlayerCollider(PhysicsBehaviours behaviourType, int _damage, float _timer, float _strength)
+        {
+          //  whatIsHittable = layers;
+            behaviours = behaviourType;
+            damage = _damage;
+            timer = _timer;
+            strength = _strength;
+        }
+    }
+
     #region Unity Functions
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerInput = GetComponent<PlayerInput>();
+        playerManger = GetComponent<PlayerManger>();
         animator = GetComponentInChildren<Animator>();
-
         //Pass Variable
         playerCollionMask = playerMovement.playerCollionMask;
         lerpToPosition = playerMovement.lerpToPosition;
@@ -81,13 +104,11 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        if (obj != null)
-            direction = (obj.transform.position - attackArea.transform.position).normalized; // finding the direction from attackPos to Obj rigidbody. In update so Knockback happen for the full time between frames
-
+      
         #region Handling Mouse Inputs
         if (playerInput.attack && isAnimationActive == false)
         {
-            animator.SetBool("IsRunning", false);
+            animator.SetBool("isRunning", false);
             animator.SetBool("Attacking", true);
             inputType = 0; // 0 represents the left mouse button 
             animator.SetInteger("Mouse Input", inputType);
@@ -142,18 +163,23 @@ public class PlayerAttack : MonoBehaviour
         #region Handeling Special Case Resets
         //if we move, jump, or dash the combo counter will reset 
         // this is assuming the player wants to reset intentionally 
-        if (playerMovement.targetSpeed != 0 && comboLifeCounter > 0)
-            ResetCombo();
-        else if (playerMovement.IsGrounded() && playerMovement.Jump()) // if we jump reset combo 
+
+        if(comboLifeCounter > 0)
         {
-            isInAir = true;
-            animator.SetBool("isGrounded", playerMovement.IsGrounded());
-            ResetCombo();
-        }
-        else if (isInAir == true && playerMovement.playerVerticalVelocity == Vector3.zero) // if we land reset the combo 
-        {
-            isInAir = false;
-            ResetCombo();
+            if (playerManger.currentState == PlayerStates.Moving)
+            {
+                ResetCombo();
+            }
+            else if (playerManger.currentState == PlayerStates.Jumping) // if we jump reset combo 
+            {
+                isInAir = true;
+                ResetCombo();
+            }
+            else if (playerMovement.IsGrounded() == true && playerManger.currentState == PlayerStates.Jumping) // if we land reset the combo 
+            {
+                isInAir = true;
+                ResetCombo();
+            }
         }
         #endregion
     }
@@ -163,6 +189,7 @@ public class PlayerAttack : MonoBehaviour
     private void Attack(int inputType)
     {
         playerMovement.stopMovementEvent = true;
+        playerManger.currentState = PlayerStates.Attacking;
 
         //Light Attacks
         if (inputType == 0)
@@ -174,6 +201,8 @@ public class PlayerAttack : MonoBehaviour
                     lightAttackCounter++;
                     animator.SetFloat("Starter Type", 0);
                     Set(inputType, lightAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 30, 10));
+
                     break;
                 case (1, true):
                     lightAttackCounter++;
@@ -182,7 +211,6 @@ public class PlayerAttack : MonoBehaviour
                 case (2, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    canKnockback = true;
                     break;
                 #endregion
                 #region Air Light Attacks 
@@ -198,8 +226,6 @@ public class PlayerAttack : MonoBehaviour
                 default:
                     break;
             }
-            OnTriggerEnter(attackArea);
-            // StartCoroutine(DelayAttack()); // For Later what does this do
         }
         else
         {
@@ -233,11 +259,10 @@ public class PlayerAttack : MonoBehaviour
                 default:
                     break;
             }
-            OnTriggerEnter(attackArea);
         }
     }
 
-    private void Set(int inputType, int attacktype, float combolifetime /*,float damage)*/)
+    private void Set(int inputType, int attacktype, float combolifetime)
     {
         //increase the attack counters
         if (inputType == 0) // light attack 
@@ -251,15 +276,27 @@ public class PlayerAttack : MonoBehaviour
         isAnimationActive = true;
     }
 
+    private void SendValues(string myCollider, PlayerCollider values)
+    {
+        
+        if(colliders.ContainsKey(myCollider))
+        {
+            HitCollider calledCollider = colliders[myCollider];
+            calledCollider.MyBehaviour(values);
+        }
+
+    }
+
+    
     //This is called by the animation trigger
     public void isAnimationFinished()
     {
-        Debug.Log("Finished");
+        Debug.Log("Animation is Finished");
         playerMovement.stopMovementEvent = false;
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
         isAnimationActive = false;
-
+        
         //Checking if the player has hit the combo finisher  
         if (lightAttackCounter == lightAttackMaxGround && playerMovement.IsGrounded() == true || heavyAttackCounter == heavyAttackMaxGround && playerMovement.IsGrounded() == true) // Finisher end of the Combo grounded
             ResetCombo();
@@ -271,7 +308,6 @@ public class PlayerAttack : MonoBehaviour
 
     public void ResetCombo()
     {
-        Debug.Log("ran");
         lightAttackCounter = 0;
         heavyAttackCounter = 0;
         animator.SetInteger("Attack Type", 0);
@@ -282,81 +318,6 @@ public class PlayerAttack : MonoBehaviour
         animator.SetFloat("ComboLifetime", comboLifeCounter);
         comboLifeCounter = 0;
     }
-    #endregion
-
-    #region Hit Detection and Knockback 
-    private void OnTriggerEnter(Collider attackArea) // if an object has collided with the attacksphere while it is active 
-    {
-        // if the 3rd hit 
-        if (whatIsHittable == (whatIsHittable | (1 << attackArea.transform.gameObject.layer))) // Bitwise equation: layermask == (layermask | 1 << layermask)
-        {
-            obj = attackArea.gameObject.GetComponent<Rigidbody>();
-            if (obj != null)
-            {
-                HitSomething(direction, obj);
-            }
-            else
-                return;
-        }
-    }
-
-    // Create Stun Stop enemey
-    private void HitSomething(Vector3 direction, Rigidbody obj)
-    {
-        //check tag of the enemies
-        // then check if this is the final hit in the combo, and the type of input pressed 
-        // then create the response 
-        if (obj.tag == "Enemy")
-        {
-            DamagePopUp.Create(obj.transform.position, damage);
-            obj.SendMessage("DisableAI", 100);
-            obj.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
-            //obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-
-            if (canKnockback == true)
-            {
-                AddKnockback();
-            }
-            else if (canLaunchUp == true)
-            {
-                AddKnockUp();
-            }
-            else
-            {
-                // For Later disable Ai 
-            }
-
-
-            obj.SendMessage("TakeDamage", damage / 10); obj.SendMessage("TakeDamage", damage / 10);
-
-        }
-        else if (obj.tag == "SpecialEnemy")
-        {
-            DamagePopUp.Create(obj.transform.position, damage);
-            obj.SendMessage("DisableAI");
-            obj.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
-            obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-            obj.SendMessage("TakeDamage", damage / 10);
-        }
-        if (obj.tag == "Boss")
-        {
-            obj.SendMessage("TakeDamage", damage / 10);
-        }
-    }
-
-    private void AddKnockback()
-    {
-        direction.y = 0;
-        obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
-    }
-    private void AddKnockUp()
-    {
-        direction.x = 0;
-        direction.z = 0;
-        direction.y = 1;
-        obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
-    }
-
     #endregion
 
     #region Sliding Forward When Attacking 
@@ -371,7 +332,7 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         else
         {
-            RaycastHit hit;
+         // RaycastHit hit;
             float range = 2f;
             Ray ray = new Ray(currentPostion, transform.TransformDirection(Vector3.forward * range));
             Vector3 midpoint = Vector3.Lerp(currentPostion, endPosition, .5f);
