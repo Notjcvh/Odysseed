@@ -15,6 +15,7 @@ public enum PhysicsBehaviours
     #region Add a Single Physics Behaviour 
     Knockback,
     KnockUp,
+    Knockdown,
     #endregion
 
     #region Add a Continous Physics Behaviour
@@ -121,17 +122,17 @@ public class PlayerAttack : MonoBehaviour
         else if (playerInput.secondaryAttack && isAnimationActive == false)
         {
             Debug.Log("Not Charging");
-            /*
+            
             animator.SetBool("IsRunning", false);
             animator.SetBool("Attacking", true);
             inputType = 1; //1 represents the roght mouse button 
             animator.SetInteger("Mouse Input", inputType);
             animator.SetTrigger("Input Pressed");
-            Attack(inputType);*/
+            Attack(inputType);
         }
         
         
-        if (playerInput.chargedSecondaryAttack && chargeTime < 2 && isAnimationActive == false)
+     /*   if (playerInput.chargedSecondaryAttack && chargeTime < 2 && isAnimationActive == false)
         {
             Debug.Log("Charging");
             bool isCharging = true;
@@ -140,12 +141,12 @@ public class PlayerAttack : MonoBehaviour
                 chargeTime += Time.deltaTime * chargeSpeed;
             }
 
-        }
+        }*/
 
-        if(chargeTime >2)
+      /*if(chargeTime >2)
         {
             chargeTime = 0;
-        }
+        }*/
         #endregion
 
         #region Handeling Starting and Ending Combo
@@ -201,26 +202,25 @@ public class PlayerAttack : MonoBehaviour
                     lightAttackCounter++;
                     animator.SetFloat("Starter Type", 0);
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 30, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 30, 10));
 
                     break;
                 case (1, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 30, 10));
                     break;
                 case (2, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockback, 20, 30, 10));
                     break;
                 #endregion
                 #region Air Light Attacks 
                 case (0, false):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    break;
-                case (1, false):
-                    lightAttackCounter++;
-                    Set(inputType, lightAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockback, 20, 30, 10));
                     break;
                 #endregion
                 default:
@@ -236,26 +236,25 @@ public class PlayerAttack : MonoBehaviour
                     animator.SetFloat("Starter Type", 1);
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 30, 10));
                     break;
                 case (1, true):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 30, 10));
                     break;
                 case (2, true):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 30, 1));
                     break;
                 #endregion
                 #region Air Heavy Attacks 
                 case (0, false):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockdown, 20, 30, 10));
                     break;
-                case (1, false):
-                    heavyAttackCounter++;
-                    Set(inputType, heavyAttackCounter, 5f);
-                    break;
-                #endregion
                 default:
                     break;
             }
@@ -350,6 +349,6 @@ public class PlayerAttack : MonoBehaviour
         }
     }
     #endregion
-  
+    #endregion
 }
 

@@ -96,6 +96,12 @@ public class PlayerManger : MonoBehaviour
         currentHealth -= damage;
     }
 
+    public void RestoreHealth()
+    {
+        currentHealth = maxHealth;
+        Debug.Log("Health Restored");
+    }
+
     public void DisableAllInputs()
     {
         playerInput.enabled = false;

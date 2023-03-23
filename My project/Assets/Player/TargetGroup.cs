@@ -10,17 +10,9 @@ public class TargetGroup : MonoBehaviour
     public CinemachineVirtualCamera virtualCamera;
     public PlayerInput playerInput;
 
-
-
-
     public Queue<Transform> uncleanTargetGroup = new Queue<Transform>();
     private Queue<Transform> cleanTargetGroup = new Queue<Transform>();
     private HashSet<Transform> filter = new HashSet<Transform>();
-
-   
-    
-
-
 
     private void Start()
     {
@@ -47,7 +39,7 @@ public class TargetGroup : MonoBehaviour
     }
     
 
-    // Once all the targets 
+    // Once if Player Manger != jump then 
     public void EmptyAllCollections()
     {
         if(Input.GetKey(KeyCode.Backspace))

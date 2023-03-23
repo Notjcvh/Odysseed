@@ -34,7 +34,7 @@ public class HitCollider : MonoBehaviour
 
     public void MyBehaviour(PlayerAttack.PlayerCollider collider)
     {
-        origin = collider.origin;
+        origin = this.transform;
        // whatIsHittable = collider.whatIsHittable;
         behaviours = collider.behaviours;
         damage = collider.damage;
@@ -52,11 +52,11 @@ public class HitCollider : MonoBehaviour
         }
     }
 
-    public void ClearList()
+   /*public void ClearList()
     {
         hittableObjects.Clear();
         Debug.Log("List Cleared");
-    }
+    }*/
 
     private void HitSomething(List<Rigidbody> objs)
     {
@@ -86,11 +86,7 @@ public class HitCollider : MonoBehaviour
                     break;
             }
         }
-    }
 
-     public void ActivateAdditionalBehaviours()
-    {
-        //doing other things
         foreach (var item in hittableObjects)
         {
             switch (behaviours)
@@ -103,20 +99,30 @@ public class HitCollider : MonoBehaviour
                     break;
                 case PhysicsBehaviours.ContinousKnockback:
                     break;
+                case PhysicsBehaviours.Knockdown:
+                    AddKnockdown(item);
+                    break;
                 default:
                     break;
             }
         }
     }
 
+     public void ActivateAdditionalBehaviours()
+    {
+        Debug.Log("Activated");
+        //doing other things
+       
+    }
+
     private void AddKnockback(Rigidbody body)
     {
         //Dot product
-     //   Vector3 targetDirection = (body.position - originTarget.position).normalized;
-       // float dotProduct = Vector3.Dot(targetDirection, originTarget.position);
+            Vector3 targetDirection = (body.position - origin.position).normalized;
+           // float dotProduct = Vector3.Dot(targetDirection, origin.position);
 
-        //  direction.y = 0;
-        // obj.AddForce(direction * knockbackStrength, ForceMode.Impulse);
+             targetDirection.y = 0;
+             body.AddForce(targetDirection * strength, ForceMode.Impulse);
     }
     private void AddKnockUp(Rigidbody body)
     {   
@@ -124,5 +130,9 @@ public class HitCollider : MonoBehaviour
         targetGroup.Add(body.transform);
     }
 
-
+    private void AddKnockdown(Rigidbody body)
+    {
+        body.AddForce(Vector3.down * strength, ForceMode.Impulse);
+        targetGroup.cinemachineTargets.RemoveMember(body.transform);
+    }
 }

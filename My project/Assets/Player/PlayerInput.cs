@@ -18,6 +18,9 @@ public class PlayerInput : MonoBehaviour
 
 
     public bool dash { get; private set; } // shift
+
+    public bool anyKeyFrame { get; private set; } // shift
+
     public bool target { get; private set; }
 
     public float mouseX { get; private set; }
@@ -70,7 +73,7 @@ public class PlayerInput : MonoBehaviour
 
         target = Input.GetButton("Target"); // Mouse 3
 
-        interact = Input.GetButton("Interact"); // number 19
+        interact = Input.GetButtonDown("Interact"); // number 19
 
         activateSpecial = Input.GetButton("Activate Special"); // number 20
 
