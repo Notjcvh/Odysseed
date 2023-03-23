@@ -8,7 +8,7 @@ public class EnemyHealthbar : MonoBehaviour
     public Image foregroundImage;
     public Image middlegroundImage;
     public Enemy enemy;
-    public SpecialEnemy specialEnemy;
+    public bool isStatic;
 
     public float updateSpeedInSeconds1 = 0.2f;
     public float updateSpeedInSeconds2 = 0.5f;
@@ -21,12 +21,6 @@ public class EnemyHealthbar : MonoBehaviour
             enemy = GetComponentInParent<Enemy>();
             GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
         }
-        else
-        { 
-            specialEnemy = GetComponentInParent<SpecialEnemy>();
-            GetComponentInParent<SpecialEnemy>().OnHealthPercentChange += HandleHealthChange;
-        }
-            
 
     }
     
@@ -63,8 +57,11 @@ public class EnemyHealthbar : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
+        if(!isStatic)
+        {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
 
 

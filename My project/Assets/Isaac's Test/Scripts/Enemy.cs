@@ -9,7 +9,6 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 3;
     public int currentHealth;
     public GameObject hitEffect;
-    public GameObject targetEffect;
 
     [Header("Animation")]
     public Animator animator;
@@ -34,7 +33,6 @@ public class Enemy : MonoBehaviour
         {
             Death();
         }
-        targetEffect.SetActive(isTargeted);
     }
 
     // the goal here is to 

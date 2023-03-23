@@ -350,24 +350,8 @@ public class PlayerMovement : MonoBehaviour
         {
             target = nearestEnemy.transform;
             nearestEnemy.GetComponent<Enemy>().isTargeted = true;
-            foreach (var enemy in enemies)
-            {
-                if(nearestEnemy.transform != target)
-                {
-                    enemy.GetComponent<Enemy>().isTargeted = false;
-                }
-            }
-            targetingEnemy = true;
         }
-        else
-        {
-            target = null;
-            foreach (var enemy in enemies)
-            {
-                enemy.GetComponent<Enemy>().isTargeted = false;
-            }
-            targetingEnemy = false;
-        }
+
     }
     #endregion
 
