@@ -8,7 +8,7 @@ public class CombatRoom : MonoBehaviour
     private CameraController cam;
     private PlayerMovement playerMovement;
 
-    public GameEvent[] roomEvents; // what the doors are listening for
+    public DoorHandler[] doors; // what the doors are listening for
     public bool isRoomActive = false;
     public bool isRoomComplete = false;
 
@@ -42,9 +42,9 @@ public class CombatRoom : MonoBehaviour
         {
             isRoomComplete = true;
 
-            for (int i = 0; i < roomEvents.Length; i++)
+            for (int i = 0; i < doors.Length; i++)
             {
-                roomEvents[i].Raise();
+                doors[i].UnlockDoors();
             }
         }
         else
@@ -58,7 +58,6 @@ public class CombatRoom : MonoBehaviour
         {
             isRoomActive = true;
 
-            cam.camPriority = 1;
 
         }
         if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies
