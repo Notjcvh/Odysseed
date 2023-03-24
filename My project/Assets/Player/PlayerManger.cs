@@ -24,7 +24,7 @@ public class PlayerManger : MonoBehaviour
 
     [Header("Hearts Images")] //Heart Sprites
     public int numberOfHearts;
-    public Image[] hearts; // the full array of hearts in the game
+    public Sprite[] hearts; // the full array of hearts in the game
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
@@ -41,8 +41,7 @@ public class PlayerManger : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         playerInput = GetComponent<PlayerInput>();
 
-      
-            transform.position = gameManager.position;
+        transform.position = gameManager.position;
     }
 
     private void Update()
@@ -65,14 +64,14 @@ public class PlayerManger : MonoBehaviour
         for (int i = 0; i < hearts.Length; i++)
         {
             if (i < currentHealth) //Handling visually representing players health in realtion to number of hearts  
-                hearts[i].sprite = fullHeart;
+                hearts[i] = fullHeart;
             else
-                hearts[i].sprite = emptyHeart;
+                hearts[i] = emptyHeart;
 
-            if (i < numberOfHearts)  //This is for creating our final health bar, change number of hearts to make amount visible in game 
-                hearts[i].enabled = true;
-            else
-                hearts[i].enabled = false;
+        //    if (i < numberOfHearts)  //This is for creating our final health bar, change number of hearts to make amount visible in game 
+          //      hearts[i].enabled= true;
+           // else
+             //   hearts[i].enabled = false;
         }
 
         if (Input.GetKey(KeyCode.N))

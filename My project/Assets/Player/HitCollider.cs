@@ -52,17 +52,18 @@ public class HitCollider : MonoBehaviour
         }
     }
 
-   /*public void ClearList()
-    {
+   public void ClearList()
+   {
         hittableObjects.Clear();
         Debug.Log("List Cleared");
-    }*/
+   }
 
     private void HitSomething(List<Rigidbody> objs)
     {
         //Deal Damage 
         foreach (var item in objs)
         {
+            print(item.name);
             switch (item.tag)
             {
                 case("Enemy"):
@@ -106,6 +107,8 @@ public class HitCollider : MonoBehaviour
                     break;
             }
         }
+
+        ClearList();
     }
 
      public void ActivateAdditionalBehaviours()
