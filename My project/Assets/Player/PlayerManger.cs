@@ -42,6 +42,7 @@ public class PlayerManger : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         transform.position = gameManager.position;
+        
     }
 
     private void Update()
@@ -76,8 +77,9 @@ public class PlayerManger : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            gameManager.playerHasDied = true;
+            
             Destroy(this.gameObject);
+            gameManager.PlayerHasDied();
         }
     }
     #endregion

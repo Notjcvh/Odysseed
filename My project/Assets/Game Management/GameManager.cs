@@ -46,6 +46,10 @@ public class GameManager : MonoBehaviour
 
     public bool playerHasDied;
 
+    private GameObject Boss;
+
+    public int buildindex;
+
     #region Unity Functions
     private void Awake()
     {
@@ -79,11 +83,15 @@ public class GameManager : MonoBehaviour
         }
 
         ReloadPosition();
-       
+        Boss = GameObject.FindGameObjectWithTag("Boss");
 
     }
     private void Update()
     {
+        
+
+
+
         player = GameObject.FindGameObjectWithTag("Player");
         if (sceneTransitonTextActive == true)
         {
@@ -113,11 +121,6 @@ public class GameManager : MonoBehaviour
                 item.GetComponent<MeshRenderer>().enabled = true;
             }
         }
-
-        if(playerHasDied == true)
-        {
-            PlayerHasDied();
-        }
     }
 
 
@@ -144,8 +147,9 @@ public class GameManager : MonoBehaviour
     public void PlayerHasDied() // called in Player Manager 
     {
         hasDied = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function                                                              
-        ReloadPosition();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function
+
+        Debug.Log("loading");
     }
 
     public void Convert()
@@ -164,7 +168,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            position = level.initialStartValue;
+            position = player.transform.position;
         }
     }
   
