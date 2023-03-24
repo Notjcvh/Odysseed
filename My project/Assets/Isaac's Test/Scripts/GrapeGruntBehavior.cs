@@ -41,6 +41,8 @@ public class GrapeGruntBehavior : MonoBehaviour
     public GameObject patrolPoint;
     public Rigidbody rb;
     // Start is called before the first frame update
+
+
     void Awake()
     {
         currentWaypoint = this.transform;
@@ -110,6 +112,8 @@ public class GrapeGruntBehavior : MonoBehaviour
                 navMeshAge.speed = idleSpeed;
             }
         }
+
+   
     }
 
     public void DisableAI(float duration)

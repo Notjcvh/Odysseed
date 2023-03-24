@@ -9,8 +9,6 @@ public class CombatRoom : MonoBehaviour
     private PlayerMovement playerMovement;
 
     public GameEvent[] roomEvents; // what the doors are listening for
-    public VectorValue level;
-
     public bool isRoomActive = false;
     public bool isRoomComplete = false;
 
@@ -83,13 +81,6 @@ public class CombatRoom : MonoBehaviour
         }
     }
 
-    public void TransportEnemy(GameObject other) // Transport the enemy to the boneyard 
-    {
-        //this function will activate the OnTriggerExit and Do:
-        // remove the enemy from the list 
-        // subtract 1 from the lock number 
-        other.transform.position = level.boneYard;
-    }
 }
 
     

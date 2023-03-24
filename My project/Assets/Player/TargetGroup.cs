@@ -14,9 +14,28 @@ public class TargetGroup : MonoBehaviour
     private Queue<Transform> cleanTargetGroup = new Queue<Transform>();
     private HashSet<Transform> filter = new HashSet<Transform>();
 
+
+    public float timer;
+    private bool timerActive = false; 
+
     private void Start()
     {
         cinemachineTargets = GetComponent<CinemachineTargetGroup>();
+    }
+
+    private void Update()
+    {
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime * 1;
+            timerActive = true;
+        }
+
+        if(timer <= 0 && timerActive == true)
+        {
+            EmptyAllCollections();
+            timerActive = false;
+        }
     }
 
     public void Add(Transform objLocation)
@@ -42,10 +61,9 @@ public class TargetGroup : MonoBehaviour
     // Once if Player Manger != jump then 
     public void EmptyAllCollections()
     {
-        if(Input.GetKey(KeyCode.Backspace))
-        {
-            while (cinemachineTargets.m_Targets.Length > 0 )
-            {
+        virtualCamera.enabled = false;
+        while (cinemachineTargets.m_Targets.Length > 0 )
+         {
                 Transform current = cleanTargetGroup.Dequeue();
                 if(current.gameObject.tag == "Player")
                 {
@@ -54,9 +72,9 @@ public class TargetGroup : MonoBehaviour
                 }            
                 filter.Clear();
                 cinemachineTargets.RemoveMember(current); // this one is in the CinemachineTarget group componenet
-            }
-            virtualCamera.enabled = false;
         }
+
+       
     }
 
 

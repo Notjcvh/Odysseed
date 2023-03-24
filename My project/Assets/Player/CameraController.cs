@@ -139,7 +139,7 @@ public class CameraController : MonoBehaviour
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
            
         testAngle = targetVerticalAngle;
-        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVertivalAngleRef, maxVerticalAngleRef);
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVerticalAngle, maxVerticalAngle);
 
    
                          //rotation around y axis                    // rotation around x axis

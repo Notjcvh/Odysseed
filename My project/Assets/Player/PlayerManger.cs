@@ -41,11 +41,8 @@ public class PlayerManger : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         playerInput = GetComponent<PlayerInput>();
 
-        //Debugging stuff
-        if (Input.GetKeyDown(KeyCode.F9))
-        {
+      
             transform.position = gameManager.position;
-        }
     }
 
     private void Update()
@@ -59,12 +56,9 @@ public class PlayerManger : MonoBehaviour
                 playerInput.enabled = true;
             }
         }
-
         inputsEnable = playerInput.enabled;
-
         //if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
         //  ChangeWeaponState(element);
-
         if (currentHealth > numberOfHearts)  // Making sure our health equals the number of hearts 
             numberOfHearts = currentHealth;
 
@@ -81,10 +75,9 @@ public class PlayerManger : MonoBehaviour
                 hearts[i].enabled = false;
         }
 
-        if (currentHealth <= 0)
+        if (Input.GetKey(KeyCode.N))
         {
-            gameManager.PlayerHasDied();
-            gameManager.ReloadPosition();
+            gameManager.playerHasDied = true;
             Destroy(this.gameObject);
             currentHealth = maxHealth;
         }

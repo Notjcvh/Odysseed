@@ -28,6 +28,7 @@ public class SpecialEnemy : MonoBehaviour
     public float movementSpeed;
     public float idleSpeed;
 
+    public TargetGroup targetGroup;
     private void Awake()
     {
         currentWaypoint = this.transform;

@@ -27,10 +27,18 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+
     private void Update()
     {
+        Debug.Log(currentHealth);
         if (currentHealth <= 0)
         {
+            Debug.Log("True");
+
+            myRoom.enemies.Remove(this.gameObject);
+            this.gameObject.SetActive(false);
+            DestroyImmediate(this.gameObject);
+     
             Death();
         }
     }
@@ -44,15 +52,14 @@ public class Enemy : MonoBehaviour
     }
     private void Death()
     {
-        myRoom.enemies.Remove(this.gameObject);
-        Destroy(this.gameObject);
+       
     }
 
     public void ModifiyHealth(int amount)
     {
         GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
         Destroy(hiteffs, 2f);
-        currentHealth += amount;
+        currentHealth -= amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         OnHealthPercentChange(currentHealthPercent);
     }
