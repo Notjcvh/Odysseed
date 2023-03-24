@@ -30,15 +30,21 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(currentHealth);
         if (currentHealth <= 0)
         {
-            Debug.Log("True");
-
-            myRoom.enemies.Remove(this.gameObject);
-            this.gameObject.SetActive(false);
-            DestroyImmediate(this.gameObject);
-     
+            if(myRoom != null)
+            {
+                myRoom.enemies.Remove(this.gameObject);
+            }
+            if (this.tag == "Boss")
+            {
+                animator.SetBool("IsDying", true);
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+                DestroyImmediate(this.gameObject);
+            }
             Death();
         }
     }
@@ -52,7 +58,8 @@ public class Enemy : MonoBehaviour
     }
     private void Death()
     {
-       
+        this.gameObject.SetActive(false);
+        DestroyImmediate(this.gameObject);
     }
 
     public void ModifiyHealth(int amount)

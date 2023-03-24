@@ -108,7 +108,7 @@ public class BossAi : MonoBehaviour
 
     public void SpawnAttack1()
     {
-        Vector3 spawnLocation = new Vector3(player.transform.position.x, 0, player.transform.position.z);
+        Vector3 spawnLocation = new Vector3(player.transform.position.x, 20, player.transform.position.z);
         GameObject inGameAttack1 = Instantiate(attack1, spawnLocation, player.transform.rotation);
         Destroy(inGameAttack1, attack1Life);
     }

@@ -46,17 +46,18 @@ public class HitCollider : MonoBehaviour
     {
         if (whatIsHittable == (whatIsHittable | (1 << other.transform.gameObject.layer))) // Bitwise equation: layermask == (layermask | 1 << layermask)
         {
+            ClearList();
             //Check for all gameobjects 
             hittableObjects.Add(other.gameObject.GetComponent<Rigidbody>());
             HitSomething(hittableObjects);
         }
     }
 
-   /*public void ClearList()
+   public void ClearList()
     {
         hittableObjects.Clear();
         Debug.Log("List Cleared");
-    }*/
+    }
 
     private void HitSomething(List<Rigidbody> objs)
     {
@@ -72,14 +73,10 @@ public class HitCollider : MonoBehaviour
                     item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
                     item.SendMessage("TakeDamage", damage / 10); 
                     break;
-                case ("SpecialEnemy"):
-                    DamagePopUp.Create(item.transform.position, damage);
-                    item.SendMessage("DisableAI");
-                    item.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
-                    item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
-                    item.SendMessage("TakeDamage", damage / 10);
-                    break;
                 case ("Boss"):
+                    DamagePopUp.Create(item.transform.position, damage);
+                    item.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
+                    item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
                     item.SendMessage("TakeDamage", damage / 10);
                     break;
                 default:

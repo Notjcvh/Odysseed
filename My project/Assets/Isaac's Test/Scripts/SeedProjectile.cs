@@ -9,7 +9,7 @@ public class SeedProjectile : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            Vector3 spawnLocation = new Vector3(this.transform.position.x, 0, this.transform.position.z);
+            Vector3 spawnLocation = new Vector3(this.transform.position.x, 20, this.transform.position.z);
             GameObject newEnemy = Instantiate(enemy, spawnLocation, transform.rotation);
             Destroy(this.gameObject);
         }
