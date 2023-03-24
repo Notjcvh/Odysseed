@@ -166,6 +166,7 @@ public class PlayerMovement : MonoBehaviour
                 isJumping = true;
                 CalculateJump(ref rbRefVelocity);
                 Debug.Log("start jumping");
+
             }
 
             if(isFalling == true)
@@ -242,8 +243,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetVelocity(Vector3 rigibodyVelocity, Vector3 additionalVelocity)
     {
-         playerBody.velocity += additionalVelocity;
+        animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+        playerBody.velocity += additionalVelocity;
 
+       
         if(playerBody.velocity.magnitude > targetSpeed)
         {
 
@@ -346,7 +349,7 @@ public class PlayerMovement : MonoBehaviour
     #region Dashing
 
     void Dash(float time)
-    {
+    { 
         force = dashValueCurve.Evaluate(time);
         if (movementVector == Vector3.zero)
             playerBody.AddForce(transform.forward * force * Time.fixedDeltaTime, ForceMode.VelocityChange);

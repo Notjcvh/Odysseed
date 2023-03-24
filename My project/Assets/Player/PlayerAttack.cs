@@ -183,6 +183,13 @@ public class PlayerAttack : MonoBehaviour
             }
         }
         #endregion
+
+
+        if(playerMovement.isDashing == true)
+        {
+            animator.SetBool("Attacking", false);
+            isAnimationActive = false;
+        }
     }
     #endregion
 

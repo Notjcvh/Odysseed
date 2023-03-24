@@ -21,7 +21,7 @@ public class CamCollisionDetection : MonoBehaviour
     //Methods
     [Header("Camera Collision")]
     //public LayerMask collisionMask;
-    public bool isHittingWall = false;
+    public bool isCollisionDetected = false;
 
     void OnDrawGizmos()
     {
@@ -30,7 +30,7 @@ public class CamCollisionDetection : MonoBehaviour
         //print(distance);
         //Gizmos.DrawRay(transform.position, direct);
 
-        if(isHittingWall == true)
+        if(isCollisionDetected == true)
         {
             Gizmos.color = Color.green;
             Vector3 followObjUp = Vector3.up;
@@ -50,7 +50,7 @@ public class CamCollisionDetection : MonoBehaviour
         // Run the checks 
         if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
         {
-            isHittingWall = true;
+            isCollisionDetected = true;
         }
 
         else if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
@@ -58,12 +58,13 @@ public class CamCollisionDetection : MonoBehaviour
             Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
             Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
             Debug.Log("Hit wall");
-            camControl.defeaultDistance -= 1;
+            camControl.isWallCollisionDetected = true;
+            camControl.newDistanceFromPlayer -= 1;
         }
     }
     private void OnTriggerStay(Collider collision)
     {
-        if(isHittingWall == true)
+        if(isCollisionDetected == true)
         {
             RaycastHit hit;
             Ray downRay = new Ray(transform.position, Vector3.down);
@@ -99,9 +100,15 @@ public class CamCollisionDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-       // return to default values 
+        if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
+        {
+            Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
+            Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
+            Debug.Log("Hit wall");
+            camControl.isWallCollisionDetected = false;
+            
+        }
     }
-
     void HandleGroundCollision(RaycastHit hit)
     {    
         Vector3 followObjUp = camControl.followObj.up;
@@ -113,12 +120,11 @@ public class CamCollisionDetection : MonoBehaviour
         float angleRad = Mathf.Acos(dot) * Mathf.Rad2Deg;
         float degree = camControl.maxVerticalAngleRef - angleRad;
       //  print(degree);
-        if(degree <= -14)
-        {
-            camControl.minVertivalAngleRef = -14;
+    //    if(degree <= -14)
+      //  {
+        //    camControl.minVertivalAngleRef = -14;
          //   Debug.Log(camControl.minVertivalAngleRef);
-            StartCoroutine(camControl.ReturnCamToDefalut());
-        }
+        //}
     }
 
     /*

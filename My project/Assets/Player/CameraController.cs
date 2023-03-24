@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] public Transform followObj = null;
     private PlayerInput playerInput;
     private PlayerMovement playerMovement;
+    private CamCollisionDetection camCollision;
 
     [Header("Vertical Rotations")]
     [Range(-90, 90)] public float minVerticalAngle = -90;  //turning and moving the camera up while in exploring mode 
@@ -69,10 +70,12 @@ public class CameraController : MonoBehaviour
 
     [Header("Camera Collision")]
     public LayerMask collisionMask;
-    public bool isCollisionDetected = false;
+    public bool isWallCollisionDetected = false;
     public float cameraSphereRadius = 0.3f;
     public float cameraCollisionOffset = 0.3f;
     public float minimumCollisionOffset = 0.3f;
+
+    private IEnumerator co;
 
    
 
@@ -96,6 +99,9 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         if (Cursor.lockState != CursorLockMode.Locked)  // locking the camera if the cursor isn't moving
             return;
+
+
+        co = ReturnCamToDefalut();
     }
 
 
@@ -126,21 +132,31 @@ public class CameraController : MonoBehaviour
     #endregion
 
     #region Camera States
-    public void ExploringCam(float mouseX,float mouseY) 
+    public void ExploringCam(float mouseX,float mouseY)
     {
-        if (isCollisionDetected == true && camPriority != 1)
-        {
-            targetDistance = Mathf.Clamp(newDistanceFromPlayer, 4, defeaultDistance);
+        targetDistance = defeaultDistance;
+        //Wall Collision
+        /* if ( co != null||isWallCollisionDetected != true)
+         {
 
-        }
-        else targetDistance = defeaultDistance;
+         }
+         else
+         {
+             targetDistance = Mathf.Clamp(newDistanceFromPlayer, 4, defeaultDistance);
+             StartCoroutine(co);
+         }*/
+
+
+        //Ground Collison
+        testAngle = targetVerticalAngle;
+        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVerticalAngle, maxVerticalAngle);
+
+
 
         //move point to position:
         plannerDirection = Quaternion.Euler(0, mouseX, 0) * plannerDirection;
            
-        testAngle = targetVerticalAngle;
-        targetVerticalAngle = Mathf.Clamp(targetVerticalAngle + (-mouseY), minVerticalAngle, maxVerticalAngle);
-
+        
    
                          //rotation around y axis                    // rotation around x axis
         targetRotation = Quaternion.LookRotation(plannerDirection) * Quaternion.Euler(targetVerticalAngle, 0, 0);
@@ -181,14 +197,11 @@ public class CameraController : MonoBehaviour
 
     public IEnumerator ReturnCamToDefalut()
     {
+        newDistanceFromPlayer += 1;
         yield return new WaitForSeconds(2);
-        minVertivalAngleRef = -30;
-        defeaultDistance = 8;
-        Debug.Log("Finished");
+       // minVertivalAngleRef = -30;
+       
     }
-
-
-
 
 
     #region Camera Obstruction
