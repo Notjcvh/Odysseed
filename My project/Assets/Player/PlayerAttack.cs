@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Animations;
+// using UnityEditor.Animations; thomas coding is a dangerous thing that should only happen in extreme circumstances
 using UnityEngine;
 using Cinemachine;
 
