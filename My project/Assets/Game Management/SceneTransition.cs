@@ -11,7 +11,6 @@ public class SceneTransition : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
         if(other.CompareTag("Player") && !other.isTrigger)
         {
             playerPosition = room.initialStartValue;

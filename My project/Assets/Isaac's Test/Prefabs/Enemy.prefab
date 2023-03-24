@@ -621,6 +621,51 @@ Transform:
   m_Father: {fileID: 5578197308685451735}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 12.816419, z: 0}
+--- !u!1 &3682608321305335024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1016237830009621800}
+  - component: {fileID: 4812395126362260127}
+  m_Layer: 11
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1016237830009621800
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682608321305335024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.919, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4805589847024103400}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4812395126362260127
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682608321305335024}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4089330714382129102
 GameObject:
   m_ObjectHideFlags: 0
@@ -753,6 +798,7 @@ Transform:
   - {fileID: 5396619499955596709}
   - {fileID: 5578197308685451735}
   - {fileID: 850533210721419940}
+  - {fileID: 1016237830009621800}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -771,7 +817,6 @@ MonoBehaviour:
   maxHealth: 3
   currentHealth: 0
   hitEffect: {fileID: 1014210819661757414, guid: 09c7af6e75624494e92d661a082fab8b, type: 3}
-  targetEffect: {fileID: 0}
   animator: {fileID: 599578100386350052}
   isStunned: 0
   isTargeted: 0
@@ -808,6 +853,7 @@ MonoBehaviour:
   currentWaypoint: {fileID: 0}
   patrolPoint: {fileID: 0}
   rb: {fileID: 0}
+  targetGroup: {fileID: 0}
 --- !u!136 &4805589847024103407
 CapsuleCollider:
   m_ObjectHideFlags: 0

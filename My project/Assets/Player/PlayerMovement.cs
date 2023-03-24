@@ -18,21 +18,19 @@ public class PlayerMovement : MonoBehaviour
 
     public AudioController audioController;
 
+    public Vector3 newVelocity; // new setter 
+    public Vector3 rbRefVelocity; // calculation passer 
+ 
 
     [Header("Movement")]
     private bool isMoving;
-    public Vector3 newVelocity;
-    public Vector3 rbRefVelocity;
     private Vector3 movementVector;
     private Quaternion targetRotation;
     public float targetSpeed;
     public float runSpeed;
     public bool stopMovementEvent;
- 
     public bool isTalking = false;
     public bool isRestricted = false;
-
-
 
     [Header("Jumping")]
     public bool isFalling;
@@ -40,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     public float JumpForce;
     public LayerMask Ground;
     private float maxJumpTime = .5f; // the max time for the jump to complete, from standstill to standstill 
+    private float jumpApex;
     public float currentJumpTime = 0; //the current amount of time passed since the first frame of the jump 
     public float fallMultiplier = 2.3f;
     public float lowFallMultiplier = 1f;
@@ -50,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
      public float maxJumpHeight2= 1;
      public AnimationCurve jumpCurve;
      public float jumpHieghtMultiplier = 2; // applied to jump force based on how long the button is held down for
-     public float gravity; // our accleration 
+   
      public float time;
      public AnimationCurve gravity;
      */
@@ -58,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     // Possibly will be removed 
     [SerializeField] private float verticalVelocity;
     [SerializeField] private float gravitySpeed;
+    public float gravity; // our accleration 
     public Vector3 playerVerticalVelocity;
 
 
@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
     public float force;
     private float dashAnimationEndTime;
     private bool incremented = false;
-    private int numberOfDashes = 2;
+  //  private int numberOfDashes = 2;
     public int numberOfUsedDashes;
     public float dashResetTimer = 0;
     public float lerpduration;
@@ -102,6 +102,9 @@ public class PlayerMovement : MonoBehaviour
 
         //We want to make sure when the game starters the animator recognizes the player is on the groun
         animator.SetBool("isGrounded", IsGrounded());
+
+
+
     }
 
     private void Update()
@@ -127,16 +130,20 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        CheckForSpecialGravity();
-
+        
+        //Apply
         playerBody.drag = 7;
-
         currentAnimation = animator.GetCurrentAnimatorStateInfo(0).ToString();
+        rbRefVelocity = playerBody.velocity; //reference velocity
+        jumpApex = maxJumpTime / 2;
+    
+
+        // create a function to set velocity at one place
 
         #region Locomotion Inputs
         if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true ) // The player is moving 
         {
-            CanMove();
+            CanMove(ref rbRefVelocity);
             animator.SetBool("isRunning", true);
             playerManger.currentState = PlayerStates.Moving;
         }
@@ -146,61 +153,40 @@ public class PlayerMovement : MonoBehaviour
             playerManger.currentState = PlayerStates.Idle;
             animator.SetBool("isRunning", false);
             isMoving = false;
+            rbRefVelocity = Vector3.zero;
+            SetVelocity(playerBody.velocity, rbRefVelocity);
         }
-
-        //
-
-//   else if (playerInput.jumpInput && IsGrounded() || playerInput.jumpInput && IsGrounded() == false && currentJumpTime <= maxJumpTim
-
+        //   else if (playerInput.jumpInput && IsGrounded() || playerInput.jumpInput && IsGrounded() == false && currentJumpTime <= maxJumpTim
 
         if (IsGrounded() == true)
         {
-
             animator.SetBool("isGrounded", IsGrounded());
-            if (currentJumpTime <= maxJumpTime && playerInput.jumpInput)
+            if (playerInput.jumpInput && currentJumpTime <= jumpApex)
             {
                 isJumping = true;
-                currentJumpTime += Time.fixedDeltaTime;
-                CalculateJump();
-                //Start Jump
+                CalculateJump(ref rbRefVelocity);
+                Debug.Log("start jumping");
             }
 
-            else if (currentJumpTime >= maxJumpTime && !playerInput.jumpInput)
+            if(isFalling == true)
             {
                 currentJumpTime = 0;
-
+                isFalling = false;
             }
-
-            else if(currentJumpTime > 0 && isFalling == true)
-            {
-                currentJumpTime = 0;
-            }
-            isFalling = false;
-       
         }
-        else
-        {
+        else 
+        {          
+            gravity = (-2 * maxJumpTime) / ( jumpApex * jumpApex);
             animator.SetBool("isGrounded", IsGrounded());
-            if (currentJumpTime <= maxJumpTime && playerInput.jumpInput)
+            if (playerInput.jumpInput && currentJumpTime <= jumpApex)
             {
                 isJumping = true;
                 currentJumpTime += Time.fixedDeltaTime;
-                CalculateJump();
+                CalculateJump(ref rbRefVelocity);
+                Debug.Log("continue jumping");
                 //Contimue Jump
             }
-            else if(currentJumpTime <= maxJumpTime && !playerInput.jumpInput)
-            {
-                isJumping = false;
-
-            }
-            else
-            {
-                isFalling = true;
-                isJumping = false;
-                //We can no longer jump so we are falling
-            }
-
-        }
+        } 
       
         #region Dashing
         //Dashing
@@ -248,14 +234,31 @@ public class PlayerMovement : MonoBehaviour
         if (targetingEnemy)
             this.gameObject.transform.LookAt(target);
 
-         
+        CheckForSpecialGravity(ref rbRefVelocity);
 
+        SetVelocity(playerBody.velocity, rbRefVelocity);
+
+    }
+
+    private void SetVelocity(Vector3 rigibodyVelocity, Vector3 additionalVelocity)
+    {
+         playerBody.velocity += additionalVelocity;
+
+        if(playerBody.velocity.magnitude > targetSpeed)
+        {
+
+            playerBody.velocity = Vector3.ClampMagnitude(playerBody.velocity, targetSpeed);
+            
+        }
+
+       
     }
 
 
     #region Moving the Player
-    private void CanMove()
+    private void CanMove(ref Vector3 currentVelocity)
     {
+        isMoving = true;
         // if we have input that is either vertical or horizontal then is moving is true 
         movementVector = playerInput.movementInput;
         Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
@@ -264,11 +267,8 @@ public class PlayerMovement : MonoBehaviour
         movementVector = cameraPlannerRotation * movementVector;
         // checking for inputs from Player
         targetSpeed = movementVector != Vector3.zero ? runSpeed : 0;
-        newVelocity = movementVector * targetSpeed;
-        newVelocity.y = 0;
-        playerBody.velocity = newVelocity;
-
-        isMoving = true;
+        currentVelocity = movementVector * targetSpeed;
+        currentVelocity.y = 0;     
         if (targetSpeed != 0 && isDashing == false)
         {
             targetRotation = Quaternion.LookRotation(movementVector);
@@ -290,78 +290,57 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Jumping     
-    private void CalculateJump()
+    private void CalculateJump(ref Vector3 velocity)
     {
         float jumpApex = maxJumpTime / 2;
-        if (currentJumpTime <= jumpApex && playerBody.velocity.x == 0 && playerBody.velocity.z ==0)
-            playerBody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
-        else if(currentJumpTime <= jumpApex && isMoving == true)
+        gravity = (-2 * maxJumpTime) / (jumpApex * jumpApex);
+        //Stationary Jump 
+        float verticalMagnitude = (2 * maxJumpTime) / jumpApex;
+        velocity = Vector3.up * verticalMagnitude;
+        // if (isMoving == false && currentJumpTime <= maxJumpTime)
+      
+        /* Parabolic Jump 
+        else
         {
-            //add movement vector and vector 3.zero 
-            //Vector3 c = new Vector3(movementVector.x + 0, movementVector.y + 1, movementVector.z + 0);
-            //  float angle = Vector3.Angle(movementVector, c); // should co
-            //    float rad = angle * Mathf.Deg2Rad;
+            float angle = Vector3.Angle(velocity.normalized, Vector3.up) / 2; // 45 degrees
 
-            Vector3 direction = movementVector + (Vector3.up * 20);
-            //new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), Mathf.Cos(rad));
+            Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
 
-            playerBody.AddForce( direction.normalized * JumpForce * 10, ForceMode.Impulse);
-        }
-            /*
-            //Jump 1
-            //caluclate basic gravity based of time duration 
-            if (playerBody.velocity.y == 0)
-            {
-                maxJumpTime = 1;
-                float jumpApex = maxJumpTime / 2;
+            float Vo = (2 * maxJumpTime * horizontalVelocity.magnitude) / (jumpApex * jumpApex);
 
-              //  gravity = (2 * maxJumpHeight) / Mathf.Abs(jumpApex * jumpApex); //-40
+            float initialHor = Vo * Mathf.Cos(angle);
+            float initalVert = Vo * Mathf.Sin(angle);
 
-                if (currentJumpTime <= jumpApex)
-                {
-                    float intialjumpVelocity = (2 * maxJumpHeight) / jumpApex; //20
-                    verticalVelocity = Mathf.Abs(intialjumpVelocity);
-                    Vector3 newJumpVelocity = new Vector3(0, verticalVelocity, 0);
-                    playerBody.AddForce(newJumpVelocity, ForceMode.Impulse);
+            gravity = (-2 * maxJumpTime * (initialHor * initialHor)) / (jumpApex * jumpApex);
 
-                }
-            }*/
+            float verticalDisplacement = initalVert * jumpApex;
 
-            //Calculate Jump 2 with respect to horizontal velocity (Projectile Motion  and Freefall)
-/*
-
-            float intialHor = movementVector.magnitude * Mathf.Cos(angle);
-            float intialVert = Vector3.up.magnitude * Mathf.Sin(angle);
-
-           
-            float vertDisplacement = intialVert * maxJumpTime2;
-
-       
+            velocity.y += verticalDisplacement;
         }*/
     }
     #endregion
 
-
-    private void CheckForSpecialGravity()
+    private void CheckForSpecialGravity(ref Vector3 velocity)
     {
-        if (playerBody.velocity != Vector3.zero && !playerInput.jumpInput)
+        if (IsGrounded() == false)
         {
-            playerBody.AddForce(Vector3.down * JumpForce * 10 * (fallMultiplier - 1), ForceMode.Acceleration);
-   
-            /*
-            float previousYVelocity = playerBody.velocity.y;
-            gravitySpeed += gravity * Time.fixedDeltaTime; 
-            Vector3 gravityForce = new Vector3(0, gravitySpeed, 0);
-            playerBody.AddForce(gravityForce);*/
+            if(isMoving != true)
+            {
+                velocity.y += gravity * Time.fixedDeltaTime;
+                isFalling = true;
+            }
+
+            else
+            {
+                velocity.y += gravity * Time.fixedDeltaTime * 10;
+                isFalling = true;
+            }
+          
+
+
         }
-        /*
-        else if(IsGrounded() != true && targetSpeed != 0)
-        {
-            //Double Gravity
-            gravitySpeed += (gravity * Time.fixedDeltaTime)*20;
-            Vector3 gravityForce = new Vector3(0, gravitySpeed, 0);
-            playerBody.AddForce(gravityForce);
-        }*/
+
+    
     }
 
     #region Dashing

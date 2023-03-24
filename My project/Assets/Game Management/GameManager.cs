@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     
     public bool loaded = false;
 
+    public bool playerHasDied;
+
     #region Unity Functions
     private void Awake()
     {
@@ -77,6 +79,7 @@ public class GameManager : MonoBehaviour
         }
 
         ReloadPosition();
+       
 
     }
     private void Update()
@@ -102,9 +105,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
-        //Debuging 
-
         if(Input.GetKeyDown(KeyCode.I))
         {
             checkpoints = GameObject.FindGameObjectsWithTag("Checkpoints"); // for disabling all the checkpoint meshes
@@ -114,9 +114,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.U))
+        if(playerHasDied == true)
         {
-            ReloadPosition();
             PlayerHasDied();
         }
     }
@@ -145,36 +144,28 @@ public class GameManager : MonoBehaviour
     public void PlayerHasDied() // called in Player Manager 
     {
         hasDied = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function    
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function                                                              
+        ReloadPosition();
     }
-
-
-
 
     public void Convert()
     {
         triggeredPoints = new List<Vector3>(hasSet);
-
     }
     public void ReloadPosition()
     {
         // if the player is null then 
-
- 
         if (hasSet.Count > 0)
         {
             Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
             Debug.Log(b);
             lastCheckPointPos = b;
-            player.transform.position = lastCheckPointPos;
+            position = lastCheckPointPos;
         }
         else
         {
-            player.transform.position = level.initialStartValue;
-            position = player.transform.position;
+            position = level.initialStartValue;
         }
-
-
     }
   
 

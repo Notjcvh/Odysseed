@@ -17,7 +17,7 @@ public class TriggerLock : MonoBehaviour
 
             myParent.locked = true;
             this.gameObject.SetActive(false);
-            myParent.material.SetColor("_Color", Color.red);
+          //  myParent.material.SetColor("_Color", Color.red);
         }
     }
 

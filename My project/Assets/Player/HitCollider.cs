@@ -66,21 +66,21 @@ public class HitCollider : MonoBehaviour
             switch (item.tag)
             {
                 case("Enemy"):
-                    //   DamagePopUp.Create(item.transform.position, damage);
+                    DamagePopUp.Create(item.transform.position, damage);
                     item.SendMessage("DisableAI", 100);
-                    //  item.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
-                    //   //obj.gameObject.GetComponent<EnemyStats>().VisualizeDamage(obj);
-                    //  item.SendMessage("TakeDamage", damage / 10); 
+                    item.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
+                    item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
+                    item.SendMessage("TakeDamage", damage / 10); 
                     break;
                 case ("SpecialEnemy"):
-                    //  DamagePopUp.Create(item.transform.position, damage);
+                    DamagePopUp.Create(item.transform.position, damage);
                     item.SendMessage("DisableAI");
-                    //   item.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
-                    // item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
-                    //  item.SendMessage("TakeDamage", damage / 10);
+                    item.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
+                    item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
+                    item.SendMessage("TakeDamage", damage / 10);
                     break;
                 case ("Boss"):
-                    //  item.SendMessage("TakeDamage", damage / 10);
+                    item.SendMessage("TakeDamage", damage / 10);
                     break;
                 default:
                     break;
@@ -128,6 +128,7 @@ public class HitCollider : MonoBehaviour
     {   
         body.AddForce(Vector3.up * strength, ForceMode.Impulse);
         targetGroup.Add(body.transform);
+        targetGroup.timer = timer;
     }
 
     private void AddKnockdown(Rigidbody body)
