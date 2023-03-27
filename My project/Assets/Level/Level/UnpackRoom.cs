@@ -8,7 +8,7 @@ public class UnpackRoom : MonoBehaviour
     public GameObject player;
     public CameraController cam;
     public PlayerMovement playerMovement;
-    public VectorValue level;
+  //  public VectorValue level;
     public PuzzleDataManager whichPuzzle;
 
     public bool isRoomActive = false;
@@ -134,7 +134,7 @@ public class UnpackRoom : MonoBehaviour
       //this function will activate the OnTriggerExit and Do:
       // remove the enemy from the list 
       // subtract 1 from the lock number 
-      other.transform.position = level.boneYard; 
+  //    other.transform.position = level.boneYard; 
     }
 
     public void GetTriggeredValue(int number)

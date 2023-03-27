@@ -10,7 +10,6 @@ public class PlayerManger : MonoBehaviour
     private GameManager gameManager;
     public Animator animator;
 
-
     [Header("Player States")]
     public PlayerStates currentState;
     public bool inputsEnable;
@@ -18,11 +17,11 @@ public class PlayerManger : MonoBehaviour
     [Header("Initial Start Position")]
     private Vector3 intialStartPos;
 
-
+    [Header("Health")]
     public int maxHealth = 5;
     public int currentHealth;
 
-    [Header("Hearts Images")] //Heart Sprites
+    [Header("UI")] //Heart Sprites
     public int numberOfHearts;
     public Image[] hearts; // the full array of hearts in the game
     public Sprite fullHeart;
@@ -32,58 +31,58 @@ public class PlayerManger : MonoBehaviour
     public Seeds seeds;
     
     #region Unity Functions
-    private void Awake()
-    {
-        currentHealth = maxHealth;
-    }
     private void Start()
     {
+        currentHealth = maxHealth;
+        numberOfHearts = currentHealth;
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         playerInput = GetComponent<PlayerInput>();
-
-        transform.position = gameManager.position;
-        
     }
-
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            if (playerInput.enabled == true)
-                DisableAllInputs();
-            else
-            {
-                playerInput.enabled = true;
-            }
-        }
-        inputsEnable = playerInput.enabled;
-        //if (playerInput.changeWeaponState) // calls the ChangeWeaponState Method
-        //  ChangeWeaponState(element);
-        if (currentHealth > numberOfHearts)  // Making sure our health equals the number of hearts 
-            numberOfHearts = currentHealth;
-
+        if (inputsEnable == true)
+            playerInput.enabled = true;
+        else
+            playerInput.enabled = false;
+      
+        //Handeling Player Health 
         for (int i = 0; i < hearts.Length; i++)
         {
-            if (i < currentHealth) //Handling visually representing players health in realtion to number of hearts  
+            //This is for creating our final health bar, change number of hearts to make amount visible in game 
+            if (i < numberOfHearts)  
+                hearts[i].enabled = true;
+            else
+                hearts[i].enabled = false;
+
+            //Handling visually representing players health in realtion to number of hearts  
+            if (i < currentHealth) 
                 hearts[i].sprite = fullHeart;
             else
                 hearts[i].sprite = emptyHeart;
+        }
 
-             if (i < numberOfHearts)  //This is for creating our final health bar, change number of hearts to make amount visible in game 
-                 hearts[i].enabled= true;
-            else
-                 hearts[i].enabled = false;
+        // Saftey net check making sure our hearts equal the current health
+        if (numberOfHearts < currentHealth)
+        { 
+            numberOfHearts = currentHealth;
         }
 
         if (currentHealth <= 0)
         {
-            
-            Destroy(this.gameObject);
             gameManager.PlayerHasDied();
+            Destroy(this.gameObject);
         }
     }
     #endregion
 
+    #region Disable All Inputs
+    public void DisableAllInputs()
+    {
+        playerInput.enabled = false;
+    }
+    #endregion 
+
+    #region Player Restore Health or Taking Damgage
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
@@ -94,13 +93,9 @@ public class PlayerManger : MonoBehaviour
         currentHealth = maxHealth;
         Debug.Log("Health Restored");
     }
+    #endregion
 
-    public void DisableAllInputs()
-    {
-        playerInput.enabled = false;
-    }
 }
-
 public enum PlayerStates
 {
     

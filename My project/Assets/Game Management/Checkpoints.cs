@@ -27,6 +27,8 @@ public class Checkpoints : MonoBehaviour
         }
        // Debug.Log(beenReached);
     }
+
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Hit");
@@ -35,10 +37,13 @@ public class Checkpoints : MonoBehaviour
             //gameManager.lastCheckPointPos = transform.position;
             gameManager.hasSet.Add(this.transform.position);
             gameManager.Convert();
-            gameManager.lastCheckPointPos = this.transform.position;
             reached = true;
         }
 
+        foreach (Vector3 item in gameManager.hasSet)
+        {
+            Debug.Log(item);
+        }
     }
 
 }
