@@ -38,21 +38,21 @@ public class NPC : MonoBehaviour
         dialogue.SetActive(isTalking);
         talkingIndicator.SetActive(!hasTalked);
         //playerController.isTalking = isTalking;
-        if (Input.GetKeyDown(KeyCode.T) && distanceFromPlayer < talkRange && !person)
+        if (Input.GetKeyDown(KeyCode.E) && distanceFromPlayer < talkRange && !person)
         {
             if (!isTalking)
             {
                 StartDialouge();
             }
         }
-        if (Input.GetKeyDown(KeyCode.T) && puzzleCompleted && distanceFromPlayer < talkRange)
+        if (Input.GetKeyDown(KeyCode.E) && puzzleCompleted && distanceFromPlayer < talkRange)
         {
             if (!isTalking)
             {
                 StartDialouge();
             }
         }
-        if(isTalking && Input.GetKeyDown(KeyCode.T))
+        if(isTalking && Input.GetKeyDown(KeyCode.E))
         {
             dialoguePointer++;
             if (dialoguePointer == dialogueList.Length)
@@ -73,6 +73,4 @@ public class NPC : MonoBehaviour
         hasTalked = true;
         dialoguePointer = 0;
     }
-
-
 }
