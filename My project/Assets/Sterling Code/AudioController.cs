@@ -13,11 +13,16 @@ public class AudioController : MonoBehaviour
     [SerializeField] Slider MusicVolumeSlider;
     [SerializeField] Slider SFXVolumeSlider;
 
+    public AudioSource source;
+    public bool playingAudio;
+
+
     public bool debug;
     public AudioTrack[] tracks;
 
     private Hashtable AudioTable; //relationship between audio types (key) and audio tracks (value)
     private Hashtable JobTable; //relationship between audio types (key) and jobs (value) (Coroutine,IEnumerator)
+
 
     [System.Serializable]
     public class AudioObject
@@ -29,7 +34,7 @@ public class AudioController : MonoBehaviour
     [System.Serializable]
     public class AudioTrack
     {
-        public AudioSource source; 
+        public AudioSource source;
         public AudioObject[] audio;
     }
 
@@ -71,12 +76,41 @@ public class AudioController : MonoBehaviour
 
     private void OnDisable()
     {
-        Dispose();
+
+    }
+
+    private void Update()
+    {
+        IsPlaying();
+       
     }
 
     #endregion
 
     #region Public Functions
+
+    public void IsPlaying()
+    {
+        if (source != null)
+        {
+
+            if (source.isPlaying == true)
+            {
+              //  Debug.Log(" We are Currenely platying audio from : " + instance.name);
+                playingAudio = true;
+                return;
+            }
+            else
+            {
+                Debug.Log("We are not playing audio");
+                playingAudio = false;
+            }
+        }
+
+    }
+
+
+
 
     public void PlayAudio(AudioType type, bool fade = false, float delay = 0.0f, bool looping = false)
     {
@@ -136,6 +170,7 @@ public class AudioController : MonoBehaviour
     private void Configure()
     {
         instance = this;
+        Debug.Log(instance);
         AudioTable = new Hashtable();
         JobTable = new Hashtable();
         GenerateAudioTable();
@@ -229,9 +264,6 @@ public class AudioController : MonoBehaviour
             RemoveJob(conflictAudio);
         }
     }
-
-
-
     private void Log(string msg)
     {
         if (!debug) return;
@@ -250,6 +282,8 @@ public class AudioController : MonoBehaviour
 
         AudioTrack track = (AudioTrack)AudioTable[job.type];
         track.source.clip = GetAudioClipFromAudioTrack(job.type, track);
+        source = track.source;
+
 
         switch (job.action)
         {
@@ -292,10 +326,22 @@ public class AudioController : MonoBehaviour
         }
 
         JobTable.Remove(job.type);
+        Dispose();
+        OnDisable();
         Log("Current job count: " + JobTable.Count);
-
         yield return null;
     }
 
+
+    public void AudioFinished(AudioSource source)
+    {
+        if(source.isPlaying == true)
+        {
+            Debug.Log("Aduio is not done");
+        }
+        else
+            Debug.Log("Aduio is done");
+
+    }
     #endregion
 }

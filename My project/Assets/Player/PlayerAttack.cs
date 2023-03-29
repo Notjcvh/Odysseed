@@ -36,6 +36,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerManger playerManger;
     private PlayerMovement playerMovement;
     private PlayerInput playerInput;
+    private AudioController audioController;
 
     [Header("Hit Detectetion")]
     public LayerMask whatIsHittable;
@@ -98,6 +99,7 @@ public class PlayerAttack : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponentInChildren<Animator>();
+        audioController = GetComponent<AudioController>();
         //Pass Variable
         playerCollionMask = playerMovement.playerCollionMask;
         lerpToPosition = playerMovement.lerpToPosition;
@@ -198,6 +200,8 @@ public class PlayerAttack : MonoBehaviour
     {
         playerMovement.stopMovementEvent = true;
         playerManger.currentState = PlayerStates.Attacking;
+        audioController.PlayAudio(AudioType.MainMenu, true, 0, false);
+        
 
         //Light Attacks
         if (inputType == 0)

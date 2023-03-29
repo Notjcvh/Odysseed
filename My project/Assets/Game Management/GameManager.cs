@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
@@ -10,50 +8,41 @@ public class GameManager : MonoBehaviour
 {
 
     [Header("Referencing")]
+    public static GameManager instance;
+    public List<GameObject> allObjects = new List<GameObject>(); // all objects we want the game manager to keep
 
-    private static GameManager instance;
-    
-    public GameObject player;
-    private PlayerMovement playerMovement;
+   
 
+    public Vector3 startingPosition;
+    public Vector3 lastReachCheckpoint;
+    public Vector3 levelPosition;
 
-    public Vector3 position;
-    public Vector3 lastCheckPointPos;
-
-    private GameObject BoneYard; // the boneyard is basically the place where we move the enemies then destory them --> this is a test right now though
-    private Vector3 positionOfBoneyard;
-
-
-    public Level level;
     public SceneManager currentScene;
+    public int buildindex;
 
 
-    [Header("Scene Transitions")]
-    private GameObject sceneTransition;
-    public float textDisappearTimer = 1.3f;
-    public float countdown;
-    private bool sceneTransitonTextActive = false;
-    public TextMeshProUGUI displayText;
-
-
+    public bool loaded = false;
     public bool hasDied = false; // might be better to have as a number 
+    public bool Levelcompleted = false;
+
+    
+    
+    public bool playerHasDied;
+
+    Scene scene;
+
 
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
     public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
     private GameObject[] checkpoints = null;
-    
-    public bool loaded = false;
 
-    public bool playerHasDied;
 
-    private GameObject Boss;
-
-    public int buildindex;
 
     #region Unity Functions
     private void Awake()
     {
-        if (instance == null) // this makes sure we don't find multiple instances where we have multiple game managers in the scene 
+           // this makes sure we don't find multiple instances where we have multiple game managers in the scene 
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(instance);
@@ -61,118 +50,64 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        // Get Components 
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
-
-        //Instantiate
-      //  positionOfBoneyard = level.boneYard;
-      //  BoneYard = Instantiate(GameAssets.i.BoneYard, positionOfBoneyard, Quaternion.identity); // creates the boneyard based on Vector 3 saved in the Dungeon 1 Scriptable Object
-        sceneTransition = Instantiate(GameAssets.i.SceneTransitionCanvas);
-        
-        //Start Scene Transitions 
-        sceneTransitonTextActive = true;
-        countdown = textDisappearTimer;
-        DisplayText(sceneTransition);
-
-        //Find Checkpoints 
-        checkpoints = GameObject.FindGameObjectsWithTag("Checkpoints"); // for disabling all the checkpoint meshes
-        foreach (var item in checkpoints)
+        //buildindex = SceneManager.GetActiveScene().buildIndex;
+        scene = SceneManager.GetActiveScene();
+        if(scene.isLoaded)
         {
-            item.GetComponent<MeshRenderer>().enabled = false;
-        }
-
-        ReloadPosition();
-        Boss = GameObject.FindGameObjectWithTag("Boss");
-
+            Debug.Log("Scene Loaded");
+        }         
     }
+
     private void Update()
     {
-        
-
-
-
-        player = GameObject.FindGameObjectWithTag("Player");
-        if (sceneTransitonTextActive == true)
+        if(Input.GetKeyDown(KeyCode.Y))
         {
-            playerMovement.stopMovementEvent = true;
-            //  StartCoroutine(Transitioning());
-            if (countdown >= 0)
-            {
-                
-                countdown -= Time.deltaTime;
-                loaded = true;
-            }
-            if (countdown <= 0)
-            {
-                sceneTransitonTextActive = false;
-                loaded = false;
-                playerMovement.stopMovementEvent = false;
-                countdown = textDisappearTimer;
-               
-            }
+            ReloadScene();
         }
+    }
+    #endregion
 
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            checkpoints = GameObject.FindGameObjectsWithTag("Checkpoints"); // for disabling all the checkpoint meshes
-            foreach (var item in checkpoints)
-            {
-                item.GetComponent<MeshRenderer>().enabled = true;
-            }
-        }
+    //If the player runs into Scene trasition collider load that scene
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+        buildindex = SceneManager.GetActiveScene().buildIndex;
+        Debug.Log("This is the scene name : " + sceneName + " this is the build index : " + buildindex);
     }
 
 
-    #endregion
-
-    #region Scene Transitions 
-    public void DisplayText(GameObject scene)
+    //If the player dies reload the current scene 
+    void ReloadScene()
     {
-        if (sceneTransition != null)
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function
+    }
+
+    public void SetPlayerPosition(Vector3 position)
+    {
+        if (hasSet.Count > 0)
         {
-            foreach (Transform t in scene.transform)
-               t.gameObject.SetActive(true); // setting the pannel and TMP GUI prefab to active 
-            
-            displayText = scene.GetComponentInChildren<TextMeshProUGUI>(); 
-            displayText.SetText(level.levelName);
+            startingPosition = lastReachCheckpoint;
         }
         else
-            return;       
+        {
+            startingPosition = position;
+        }
+            
     }
-    #endregion
-
 
 
     public void PlayerHasDied() // called in Player Manager 
     {
         hasDied = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function
-
-        Debug.Log("loading");
+        ReloadScene();
     }
-
     public void Convert()
     {
+        
         triggeredPoints = new List<Vector3>(hasSet);
+        Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
+        lastReachCheckpoint = b;
     }
-    public void ReloadPosition()
-    {
-        // if the player is null then 
-        if (hasSet.Count > 0)
-        {
-            Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
-            Debug.Log(b);
-            lastCheckPointPos = b;
-            position = lastCheckPointPos;
-        }
-        else
-        {
-            position = player.transform.position;
-        }
-    }
+
   
-
-
-
 }
