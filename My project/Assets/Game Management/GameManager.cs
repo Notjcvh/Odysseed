@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public List<GameObject> allObjects = new List<GameObject>(); // all objects we want the game manager to keep
 
-   
-
     public Vector3 startingPosition;
     public Vector3 lastReachCheckpoint;
     public Vector3 levelPosition;

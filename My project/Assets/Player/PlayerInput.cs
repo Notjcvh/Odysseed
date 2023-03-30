@@ -28,12 +28,9 @@ public class PlayerInput : MonoBehaviour
 
     public bool interact { get; private set; }
 
-    public bool activateSpecial { get; private set; }
-
-    public bool activateUltimate { get; private set; }
-
-    public bool activateSeedWheel { get; private set; }
-
+    public bool activateWaterSpecial { get; private set; }
+    public bool activateEarthSpecial { get; private set; }
+    public bool activateSunSpecial { get; private set; }
 
     /// <summary>
     /// e to interact 
@@ -75,13 +72,10 @@ public class PlayerInput : MonoBehaviour
 
         interact = Input.GetButtonDown("Interact"); // number 19
 
-        activateSpecial = Input.GetButton("Activate Special"); // number 20
+        activateWaterSpecial = Input.GetButton("Activate Water Special"); // number 20
 
-        activateUltimate = Input.GetButton("Activate Ultimate"); // number 21
+        activateEarthSpecial = Input.GetButton("Activate Earth Special"); // number 21
 
-        activateSeedWheel = Input.GetButtonDown("Activate Seed Wheel"); // number 22
-
-
-        
+        activateSunSpecial = Input.GetButtonDown("Activate Sun Special"); // number 22
     }
 }

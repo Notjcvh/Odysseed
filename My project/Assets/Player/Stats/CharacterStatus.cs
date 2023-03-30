@@ -31,17 +31,4 @@ public class CharacterStatus : ScriptableObject
         seedsList = newSeedList;
     }
 
-    public void SwitchSeed()
-    {
-        int[] modifers = {speed, attackSpeed, strength, knockbackValue, stun};
-        if(seedsList[seedId] != null)
-        {
-            int[] newModifers = seedsList[seedId].GetAttributes();
-            for (int i = 0; i < 5; i++)
-            {
-                modifers[i] = newModifers[i];
-            }
-        }
-    }
-
 }
