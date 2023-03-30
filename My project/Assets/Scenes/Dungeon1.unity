@@ -1562,8 +1562,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: Vineyard
-  playerPosition: {x: 0, y: 0, z: 0}
-  room: {fileID: 11400000, guid: 75a8544fd22598d40b1053397a2235eb, type: 2}
   gameManager: {fileID: 0}
 --- !u!1 &225304499
 GameObject:
@@ -2339,6 +2337,8 @@ MonoBehaviour:
   MasterVolumeSlider: {fileID: 0}
   MusicVolumeSlider: {fileID: 0}
   SFXVolumeSlider: {fileID: 0}
+  source: {fileID: 0}
+  playingAudio: 0
   debug: 0
   tracks:
   - source: {fileID: 285381190}
