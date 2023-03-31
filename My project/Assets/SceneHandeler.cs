@@ -58,7 +58,7 @@ public class SceneHandeler : MonoBehaviour
             if (audioJobSent == false)
             {
                 audioJobSent = true;
-                audioController.PlayAudio(backgroundMusic, false, 4, false);
+                audioController.PlayAudio(backgroundMusic, false, 0, true);
                 StartCoroutine(WaitAndPlayAgain());
             }
         }
