@@ -58,13 +58,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ce288d85c5ffe4786a18f84e734a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  position: {x: 0, y: 0, z: 0}
-  lastCheckPointPos: {x: 0, y: 0, z: 0}
-  level: {fileID: 11400000, guid: 75ba29431a42ce246b8dc2eeed5e13f8, type: 2}
-  textDisappearTimer: 2
-  countdown: 0
-  displayText: {fileID: 0}
-  hasDied: 0
-  triggeredPoints: []
+  allObjects: []
+  startingPosition: {x: 0, y: 0, z: 0}
+  lastReachCheckpoint: {x: 0, y: 0, z: 0}
+  levelPosition: {x: 0, y: 0, z: 0}
+  buildindex: 0
   loaded: 0
+  hasDied: 0
+  Levelcompleted: 0
+  playerHasDied: 0
+  mixer: {fileID: 24100000, guid: 876a73ca8a973034e8d955868cabfd96, type: 2}
+  triggeredPoints: []

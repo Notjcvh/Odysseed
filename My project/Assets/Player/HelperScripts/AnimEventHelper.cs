@@ -5,22 +5,32 @@ using UnityEngine;
 public class AnimEventHelper : MonoBehaviour
 {
   
-        // Triggers
-        [SerializeField] private PlayerEvents TriggerEvent;
-        [SerializeField] private PlayerEvents EndAnimationEvent;
-        [SerializeField] private PlayerEvents callBehaviours;
-        [SerializeField] private PlayerEvents finishBehaviours;
+        // Event calls
 
-        protected Animator animator;
+        // Player Animation Events --> Subscribers: Player Attack 
+        [SerializeField] private PlayerEvent TriggerEvent;
+        [SerializeField] private PlayerEvent hasAnimationEnded;
+        [SerializeField] private PlayerEvent stopRotation;
+
+
+        [SerializeField] private PlayerEvent callBehaviours;
+        [SerializeField] private PlayerEvent finishBehaviours;
+        
+
 
         public void AnimationTrigger()
         {
             TriggerEvent?.Raise();
         }
 
-        public void AnimationEventEnded()
+        public void AnimationEndedEvent()
         {
-            EndAnimationEvent?.Raise();
+            hasAnimationEnded?.Raise();
+        }
+
+        public void StopAnimationRotation()
+        {
+            stopRotation?.Raise();
         }
 
         public void CallBehaviours()

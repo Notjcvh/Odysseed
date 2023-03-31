@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "PlayerEvents", menuName = "Events/Player Events")]
-public class PlayerEvents : ScriptableObject
+[CreateAssetMenu(fileName = "PlayerEvent", menuName = "Events/Player Event")]
+public class PlayerEvent : ScriptableObject
 {
     private readonly List<GameEventListener> eventListeners = new List<GameEventListener>(); //can only be accesed not modified
 
@@ -12,7 +12,7 @@ public class PlayerEvents : ScriptableObject
     public void Raise()
     {
         for (int i = eventListeners.Count - 1; i >= 0; i--) // this for loop runs in reverse 
-            eventListeners[i].OnEventRaised();
+            eventListeners[i].OnPlayerEventRaised(this);
     }
 
     // add to list on enabled, play event when raised, then remove listener from the list 

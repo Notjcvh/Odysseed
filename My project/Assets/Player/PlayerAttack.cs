@@ -45,24 +45,30 @@ public class PlayerAttack : MonoBehaviour
     public int inputType;
     public float chargeSpeed;
     public float chargeTime;
-    public bool Charged;
+    public bool chargedAttack;
+
+    private CameraController cam;
+    private Quaternion targetRotation;
+   
+
 
     [Header("States")]
     public bool isInAir;
     public bool isAnimationActive;
+    public bool canRotate = true;
 
     [Header("In Combo")]
     // These are the counters that will be set to the animator Attack Type parameter
     public int lightAttackCounter;
     public int heavyAttackCounter;
-    // Set these to the amount states(light or heavy) in the ground or air attack strings 
+
+    // Set these to the amount states(light or heavy) in the ground or air or charged attack strings 
     [SerializeField] private int lightAttackMaxGround;[SerializeField] private int lightAttackMaxAir;
-    [SerializeField] private int heavyAttackMaxGround;[SerializeField] private int heavyAttackMaxAir;
+    [SerializeField] private int heavyAttackMaxGround;[SerializeField] private int heavyAttackMaxAir; 
     public float comboLifeCounter = 0;
-    [Range(0, 10)] public float animMultiplier;
+    [Range(0, 5)] public float animMultiplier;
 
     [Header("Attack Behaviours")]
-
     //Does Merlot Slide foreward ?
     private Transform lerpToPosition;
     public float lerpduration;
@@ -96,13 +102,11 @@ public class PlayerAttack : MonoBehaviour
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        cam = GetComponent<CameraController>();
         playerInput = GetComponent<PlayerInput>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponentInChildren<Animator>();
         audioController = GetComponent<AudioController>();
-        //Pass Variable
-        playerCollionMask = playerMovement.playerCollionMask;
-        lerpToPosition = playerMovement.lerpToPosition;
     }
 
     void Update()
@@ -121,35 +125,61 @@ public class PlayerAttack : MonoBehaviour
             animator.SetTrigger("Input Pressed");
             Attack(inputType);
         }
-        else if (playerInput.secondaryAttack && isAnimationActive == false)
+        else if (playerInput.secondaryAttack && chargeTime <= 1.5 && isAnimationActive == false)
         {
-          //  Debug.Log("Not Charging");
-            
+           
             animator.SetBool("isRunning", false);
             animator.SetBool("Attacking", true);
-            inputType = 1; //1 represents the roght mouse button 
+            inputType = 1; //1 represents the right mouse button 
             animator.SetInteger("Mouse Input", inputType);
             animator.SetTrigger("Input Pressed");
             Attack(inputType);
+            chargeTime = 0;
+            chargedAttack = false;
         }
-        
-        
-     /*   if (playerInput.chargedSecondaryAttack && chargeTime < 2 && isAnimationActive == false)
+
+        if (playerInput.chargedSecondaryAttack && comboLifeCounter <= 0)
         {
             Debug.Log("Charging");
             bool isCharging = true;
             if(isCharging == true)
             {
-                chargeTime += Time.deltaTime * chargeSpeed;
+                chargeTime += Time.deltaTime;
             }
+            if(chargeTime > 1.7)
+            {
+                Rotate();
+            }
+            if(chargeTime > 2)
+            {
+                chargedAttack = true;
+            }
+        }
 
-        }*/
-
-      /*if(chargeTime >2)
+        if(chargedAttack == true && !playerInput.chargedSecondaryAttack && isAnimationActive == false)
         {
+            animator.SetBool("isRunning", false);
+            animator.SetBool("Attacking", true);
+            inputType = 1; //1 represents the right mouse button 
+            animator.SetInteger("Mouse Input", inputType);
+            animator.SetTrigger("Input Pressed");
             chargeTime = 0;
-        }*/
+            Attack(inputType);
+            chargedAttack = false;
+        }
         #endregion
+
+        if (isAnimationActive == true)
+        {
+            playerMovement.stopMovementEvent = true;
+            Rotate();
+        }
+        else
+            playerMovement.stopMovementEvent = false;
+
+
+
+
 
         #region Handeling Starting and Ending Combo
         if (comboLifeCounter > 0)  //begin countdown 
@@ -198,10 +228,13 @@ public class PlayerAttack : MonoBehaviour
     #region Attacks and Combos
     private void Attack(int inputType)
     {
-        playerMovement.stopMovementEvent = true;
+       
         playerManger.currentState = PlayerStates.Attacking;
         audioController.PlayAudio(AudioType.MainMenu, true, 0, false);
-        
+
+
+       
+
 
         //Light Attacks
         if (inputType == 0)
@@ -214,7 +247,6 @@ public class PlayerAttack : MonoBehaviour
                     animator.SetFloat("Starter Type", 0);
                     Set(inputType, lightAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
-
                     break;
                 case (1, true):
                     lightAttackCounter++;
@@ -224,7 +256,7 @@ public class PlayerAttack : MonoBehaviour
                 case (2, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockback, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
                     break;
                 #endregion
                 #region Air Light Attacks 
@@ -240,28 +272,40 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            switch (heavyAttackCounter, playerMovement.IsGrounded())
+            switch (heavyAttackCounter, playerMovement.IsGrounded(),chargedAttack)
             {
                 #region Ground Heavy Attacks
-                case (0, true):
-                    animator.SetFloat("Starter Type", 1);
-                    heavyAttackCounter++;
-                    Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 3f, 5));
+                case (0, true, false):
+                     Debug.Log("Secondary Attack");
+                     animator.SetFloat("Starter Type", 1);
+                     heavyAttackCounter++;
+                     Set(inputType, heavyAttackCounter, 5f);
+                    // SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 3f, 5));
                     break;
-                case (1, true):
+                case (1, true, false):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 30, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
                     break;
-                case (2, true):
+                case (2, true, false):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 30, 1));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
                     break;
                 #endregion
+
+                #region Charged Starter
+                case (0, true, true):
+                    Debug.Log("Charged Attack");
+                    animator.SetFloat("Starter Type", 2);
+                    heavyAttackCounter++;
+                    Set(inputType, heavyAttackCounter, 0.1f);
+                    break;
+
+                #endregion
+
                 #region Air Heavy Attacks 
-                case (0, false):
+                case (0, false, false):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockdown, 20, 30, 10));
@@ -280,35 +324,34 @@ public class PlayerAttack : MonoBehaviour
         else // heavy attack 
             lightAttackCounter++;
 
-
         animator.SetFloat("ComboLifetime", combolifetime);
         animator.SetInteger("Attack Type", attacktype);
         isAnimationActive = true;
+       
     }
 
     private void SendValues(string myCollider, PlayerCollider values)
     {
-        
         if(colliders.ContainsKey(myCollider))
         {
             HitCollider calledCollider = colliders[myCollider];
             calledCollider.MyBehaviour(values);
         }
-
     }
+    #endregion
 
-    
     //This is called by the animation trigger
     public void isAnimationFinished()
     {
         Debug.Log("Animation is Finished");
-        playerMovement.stopMovementEvent = false;
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
         isAnimationActive = false;
+        canRotate = true;
         
         //Checking if the player has hit the combo finisher  
-        if (lightAttackCounter == lightAttackMaxGround && playerMovement.IsGrounded() == true || heavyAttackCounter == heavyAttackMaxGround && playerMovement.IsGrounded() == true) // Finisher end of the Combo grounded
+        if (lightAttackCounter == lightAttackMaxGround && playerMovement.IsGrounded() == true || 
+            heavyAttackCounter == heavyAttackMaxGround && playerMovement.IsGrounded() == true ) // Finisher end of the Combo grounded
             ResetCombo();
         else if (lightAttackCounter == lightAttackMaxAir && playerMovement.IsGrounded() != true)
             ResetCombo();
@@ -360,6 +403,23 @@ public class PlayerAttack : MonoBehaviour
         }
     }
     #endregion
-    #endregion
+   
+
+    public void StopAnimRotation()
+    {
+        canRotate = false;
+    }
+
+    void Rotate()
+    {
+        if (canRotate == true)
+        {
+            Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
+            Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
+            targetRotation = cameraPlannerRotation;
+            Quaternion lerp = Quaternion.Lerp(this.transform.rotation, targetRotation, Time.deltaTime * 10);
+            transform.rotation = lerp;
+        }
+    }
 }
 
