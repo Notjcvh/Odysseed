@@ -3986,12 +3986,12 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 95564be34ebdffa47a6181fe0ed8f479, type: 2}
-  m_TreeDistance: 5000
-  m_TreeBillboardDistance: 50
+  m_TreeDistance: 2500
+  m_TreeBillboardDistance: 100
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
-  m_DetailObjectDensity: 1
+  m_DetailObjectDistance: 100
+  m_DetailObjectDensity: 0.69
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000
   m_HeightmapMaximumLOD: 0
@@ -8189,16 +8189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8b96895a0ec4ba685178a052544251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: 2dc5cc3854d45c24f991af7a5ce6723a, type: 3}
-  m_PreserveAspect: 0
 --- !u!1 &652612772480234658
 GameObject:
   m_ObjectHideFlags: 0
@@ -8564,7 +8554,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerEvent: {fileID: 11400000, guid: 16c10078207f42a43acca795a8ec73d3, type: 2}
-  EndAnimationEvent: {fileID: 11400000, guid: c444144f80ad2ed479f0e0e64e2de3fc, type: 2}
+  hasAnimationEnded: {fileID: 0}
+  stopRotation: {fileID: 0}
   callBehaviours: {fileID: 11400000, guid: 78014948763535748ab210b72d1d5309, type: 2}
   finishBehaviours: {fileID: 11400000, guid: 568de5868d13383419d55a68150a2d01, type: 2}
 --- !u!114 &1711363796420625896
@@ -8579,24 +8570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: c444144f80ad2ed479f0e0e64e2de3fc, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8485797575807615655}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
-        m_MethodName: isAnimationFinished
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!114 &1711363796420625903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8609,24 +8584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: 16c10078207f42a43acca795a8ec73d3, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8485797575807615655}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
-        m_MethodName: SlideForward
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!1 &1711363797033120698
 GameObject:
   m_ObjectHideFlags: 0
@@ -8693,24 +8652,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: 78014948763535748ab210b72d1d5309, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1711363797241336036}
-        m_TargetAssemblyTypeName: HitCollider, Assembly-CSharp
-        m_MethodName: ActivateAdditionalBehaviours
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!1 &1751435053504429979
 GameObject:
   m_ObjectHideFlags: 0
@@ -9290,36 +9233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: c444144f80ad2ed479f0e0e64e2de3fc, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8485797575807615655}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
-        m_MethodName: isAnimationFinished
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1711363797241336036}
-        m_TargetAssemblyTypeName: HitCollider, Assembly-CSharp
-        m_MethodName: ClearList
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!4 &4141960909585394927
 Transform:
   m_ObjectHideFlags: 0
@@ -9956,16 +9871,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8b96895a0ec4ba685178a052544251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: 670dfc7a77c66d049844f27e70810928, type: 3}
-  m_PreserveAspect: 0
 --- !u!1 &5171633550557397291
 GameObject:
   m_ObjectHideFlags: 0
@@ -10159,33 +10064,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5480514506a5a443b8167d58e6aff91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBody: {fileID: 8485797575673912982}
-  lungePosition: {fileID: 5558898325530209861}
-  distanceToGround: {fileID: 8485797574991283076}
   audioController: {fileID: 7197283672012612806}
+  playerBody: {fileID: 8485797575673912982}
+  distanceToGround: {fileID: 8485797574991283076}
   newVelocity: {x: 0, y: 0, z: 0}
   rbRefVelocity: {x: 0, y: 0, z: 0}
+  movementVector: {x: 0, y: 0, z: 0}
   targetSpeed: 0
-  runSpeed: 10
   stopMovementEvent: 0
   isTalking: 0
   isRestricted: 0
   isFalling: 0
   isJumping: 0
-  JumpForce: 10
+  gravityValueCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  gravityMultiplier: 0
   Ground:
     serializedVersion: 2
     m_Bits: 256
-  currentJumpTime: 0
-  fallMultiplier: 2.3
-  lowFallMultiplier: 1
-  verticalVelocity: 15
-  gravitySpeed: 0
-  gravity: 0
-  playerVerticalVelocity: {x: 0, y: 0, z: 0}
   isDashing: 0
-  lerpToPosition: {fileID: 5558898325530209861}
-  dashStartValue: 1
   dashValueCurve:
     serializedVersion: 2
     m_Curve:
@@ -10219,14 +10120,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  dashAnimationLifetime: 0
   force: 0
   numberOfUsedDashes: 0
   dashResetTimer: 0
   lerpduration: 0.5
-  playerCollionMask:
-    serializedVersion: 2
-    m_Bits: 3200
   targetingEnemy: 0
   target: {fileID: 0}
   range: 200
@@ -10497,16 +10394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8b96895a0ec4ba685178a052544251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7f8b27329e03df94293a43d6ac86cb40, type: 3}
-  m_PreserveAspect: 0
 --- !u!1 &7129685734599805684
 GameObject:
   m_ObjectHideFlags: 0
@@ -10680,9 +10567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 848b30b790fd2cb4789553f43ae2cd62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MasterVolumeSlider: {fileID: 0}
-  MusicVolumeSlider: {fileID: 0}
-  SFXVolumeSlider: {fileID: 0}
   source: {fileID: 0}
   playingAudio: 0
   debug: 0
@@ -11075,7 +10959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8485797574762135935}
   currentState: 5
-  inputsEnable: 0
+  inputsEnable: 1
   maxHealth: 5
   currentHealth: 5
   numberOfHearts: 5
@@ -11288,9 +11172,10 @@ MonoBehaviour:
   inputType: 0
   chargeSpeed: 0
   chargeTime: 0
-  Charged: 0
+  chargedAttack: 0
   isInAir: 0
   isAnimationActive: 0
+  canRotate: 1
   lightAttackCounter: 0
   heavyAttackCounter: 0
   lightAttackMaxGround: 3
