@@ -7,10 +7,10 @@ using UnityEngine;
 public class AnimationStateHandler : MonoBehaviour
 {
     // Triggers
-    public PlayerEvents TriggerEvent; 
-    public PlayerEvents EndEvent;
-    public PlayerEvents canKnockUp;
-    public PlayerEvents canKnockBack;
+    public PlayerEvent TriggerEvent; 
+    public PlayerEvent EndEvent;
+    public PlayerEvent canKnockUp;
+    public PlayerEvent canKnockBack;
 
     protected Animator animator;
 

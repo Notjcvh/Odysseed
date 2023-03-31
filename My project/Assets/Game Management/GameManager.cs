@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 using System;
 
 public class GameManager : MonoBehaviour
@@ -27,12 +28,12 @@ public class GameManager : MonoBehaviour
     
     public bool playerHasDied;
 
-    Scene scene;
+    public Scene scene;
 
 
+    public AudioMixer mixer;
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
     public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
-    private GameObject[] checkpoints = null;
 
 
 
@@ -48,7 +49,6 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        //buildindex = SceneManager.GetActiveScene().buildIndex;
         scene = SceneManager.GetActiveScene();
         if(scene.isLoaded)
         {
@@ -64,6 +64,25 @@ public class GameManager : MonoBehaviour
         }
     }
     #endregion
+
+
+    public void SetMasterVolume(float sliderValue)
+    {
+        mixer.SetFloat("Master", Mathf.Log10(sliderValue) * 20);
+    }
+
+    public void SetMusicVolume(float sliderValue)
+    {
+        mixer.SetFloat("Music", Mathf.Log10(sliderValue) * 20);
+    }
+
+    public void SetSoundEffectVolume(float sliderValue)
+    {
+        mixer.SetFloat("SoundEffects", Mathf.Log10(sliderValue) * 20);
+    }
+
+
+
 
     //If the player runs into Scene trasition collider load that scene
     public void LoadScene(string sceneName)

@@ -8,7 +8,7 @@ public class WaterWave : Abilites
     public Transform abilitySpawner;
     public override void Ability()
     {
-        Instantiate(WaveAttack, abilitySpawner, false);
+        Instantiate(WaveAttack, abilitySpawner);
         Debug.Log("water ability");
     }
 }

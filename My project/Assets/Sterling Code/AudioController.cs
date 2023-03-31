@@ -9,9 +9,6 @@ public class AudioController : MonoBehaviour
     //members
 
     public static AudioController instance;
-    [SerializeField] Slider MasterVolumeSlider; // Maybe we can ge the slider value f
-    [SerializeField] Slider MusicVolumeSlider;
-    [SerializeField] Slider SFXVolumeSlider;
 
     public AudioSource source;
     public bool playingAudio;
@@ -81,7 +78,6 @@ public class AudioController : MonoBehaviour
 
     private void Update()
     {
-        IsPlaying();
        
     }
 
@@ -139,30 +135,6 @@ public class AudioController : MonoBehaviour
 
         return null;
     }
-
-    public void ChangeMasterVolume()
-    {
-        AudioListener.volume = MasterVolumeSlider.value;
-        Debug.Log("Master Volume Slider set to: " + MasterVolumeSlider.value);
-        Debug.Log("Master Volume Source set to: " + AudioListener.volume);
-
-    }
-
-    public void ChangeMusicVolume()
-    {
-       // MusicVolume.volume = MusicVolumeSlider.value;
-        //MusicVolumeSlider.value = MusicVolume.volume;
-        Log("Music Volume Slider set to: " + MusicVolumeSlider.value);
-      //  Log("Music Volume Source set to: " + MusicVolume.volume);
-    }
-
-    public void ChangeSFXVolume()
-    {
-        Log("SFX Volume Slider set to: " + SFXVolumeSlider.value);
-       // Log("SFX Volume Source set to: " + SFXVolume.volume);
-    }
-
-
     #endregion
 
     #region Private Functions
@@ -170,7 +142,6 @@ public class AudioController : MonoBehaviour
     private void Configure()
     {
         instance = this;
-        Debug.Log(instance);
         AudioTable = new Hashtable();
         JobTable = new Hashtable();
         GenerateAudioTable();
@@ -327,7 +298,7 @@ public class AudioController : MonoBehaviour
 
         JobTable.Remove(job.type);
         Dispose();
-        OnDisable();
+      //  OnDisable();
         Log("Current job count: " + JobTable.Count);
         yield return null;
     }

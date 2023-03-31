@@ -15,40 +15,72 @@ using UnityEngine.Events;
 
 public class GameEventListener : MonoBehaviour
 {
-    public List<GameEvent> Event; // Game Event to register with
-    public List<PlayerEvents> playerEvents;
+    public GameEvents[] myGameEvent;
+    public PlayerEvents[] myPlayerEvent;   
+   
 
-    public UnityEvent Response; // response to invoke when event is raised in the inspector 
 
+    [System.Serializable]
+    public class GameEvents
+    {
+        public GameEvent Event;
+        public UnityEvent Response;
+    }
+
+    [System.Serializable]
+    public class PlayerEvents
+    {
+        public PlayerEvent Event;
+        public UnityEvent Response;
+    }
     private void OnEnable()
     {
-        foreach (var item in Event)
+        foreach (GameEvents item in myGameEvent)
         {
-            item?.RegisterListener(this);
+            item.Event?.RegisterListener(this);
         }
-
-        foreach (var item in playerEvents)
+        foreach (PlayerEvents item in myPlayerEvent)
         {
-            item?.RegisterListener(this);
+            item.Event?.RegisterListener(this);
         }
     }
 
     private void OnDisable()
     {
-        foreach (var item in Event)
-        {
-            item?.UnregisterListener(this);
-        }
 
-        foreach (var item in playerEvents)
+        foreach (GameEvents item in myGameEvent)
         {
-            item?.RegisterListener(this);
+            item.Event?.UnregisterListener(this);
+        }
+        foreach (PlayerEvents item in myPlayerEvent)
+        {
+            item.Event?.UnregisterListener(this);
         }
     }
 
-    public void OnEventRaised()
+
+    #region CallEvents
+    public void OnGameEventRaised(GameEvent gameEvent)
     {
-        Response.Invoke(); // calls the code do something 
+        foreach (GameEvents item in myGameEvent)
+        {
+            if(item.Event.name == gameEvent.name)
+            {
+                item.Response.Invoke();
+                return;
+            }
+        }
     }
-
+    public void OnPlayerEventRaised(PlayerEvent playerEvent)
+    {
+        foreach (PlayerEvents item in myPlayerEvent)
+        {
+            if(item.Event.name == playerEvent.name)
+            {
+                item.Response.Invoke();
+                return;
+            }
+        }
+    }
+    #endregion
 }

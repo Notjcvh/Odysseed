@@ -22,7 +22,7 @@ public class GameEvent : ScriptableObject
     public void Raise()
     {
         for (int i = eventListeners.Count - 1; i >= 0; i--) // this for loop runs in reverse 
-            eventListeners[i].OnEventRaised();
+            eventListeners[i].OnGameEventRaised(this);
     }
 
     // add to list on enabled, play event when raised, then remove listener from the list 

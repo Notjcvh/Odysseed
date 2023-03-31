@@ -11,6 +11,7 @@ public class SceneHandeler : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private PlayerManger playerManger;
     [SerializeField] private AudioController audioController;
+    [SerializeField] private AudioType backgroundMusic;
 
     [Header("Scene Transitions")]
     public GameObject sceneTransition;
@@ -34,11 +35,13 @@ public class SceneHandeler : MonoBehaviour
         audioController = GetComponent<AudioController>();
 
         IntializeScene();
-        audioController.RestartAudio(AudioType.PlayerAttack, false, 0, true);
+        //
+
     }
 
     private void Update()
     {
+       // Debug.Log(audioJobSent);
         if (sceneTransition.activeInHierarchy == true)
         {
             playerManger.inputsEnable = false;
@@ -49,31 +52,32 @@ public class SceneHandeler : MonoBehaviour
            
         }
 
-        if (audioController.source != null)
+
+        if (source.isPlaying == false)
         {
-            audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
-         
-
-            if (audioController.source.isPlaying == true)
+            if (audioJobSent == false)
             {
-                Debug.Log("Playign Audio");
                 audioJobSent = true;
+                audioController.PlayAudio(backgroundMusic, false, 4, false);
+                StartCoroutine(WaitAndPlayAgain());
             }
-            else
-            {
-                Debug.Log("Not playing audio");
-
-                audioJobSent = false;
-            }
-
-
         }
+      
+    }
+    #endregion
+
+    #region Sound looping
+
+    IEnumerator WaitAndPlayAgain()
+    {
+        yield return new WaitForSecondsRealtime(4);
+        audioJobSent = false;
     }
     #endregion
 
     void IntializeScene()
     {
-        if (gameManager.buildindex > 1) //the player is active after scene 1
+        if (gameManager.buildindex >= 0) //the player is active after scene 1
         {
             sceneTransition.SetActive(true);
             DisplaySceneTransitionUI(sceneTransition);
@@ -93,13 +97,24 @@ public class SceneHandeler : MonoBehaviour
             // setting the pannel and TMP GUI prefab to active 
             displayText = scene.GetComponentsInChildren<TextMeshProUGUI>();
 
-            for (int i = 0; i < displayText.Length; i++)
+            string currentSceneName = gameManager.scene.name;
+
+            foreach (var level in levels)
             {
-                if (i == 0)
-                    displayText[i].SetText(levels[gameManager.buildindex].levelName);
+                if (level.sceneName != currentSceneName)
+                    continue;
                 else
-                    displayText[i].SetText(levels[gameManager.buildindex].description);
+                {
+                    for (int i = 0; i < displayText.Length; i++)
+                    {
+                        if (i == 0)
+                            displayText[i].SetText(level.levelName);
+                        else
+                            displayText[i].SetText(level.description);
+                    }
+                }
             }
+            
         }
         else
             return;

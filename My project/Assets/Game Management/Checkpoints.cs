@@ -39,11 +39,6 @@ public class Checkpoints : MonoBehaviour
             gameManager.Convert();
             reached = true;
         }
-
-        foreach (Vector3 item in gameManager.hasSet)
-        {
-            Debug.Log(item);
-        }
     }
 
 }

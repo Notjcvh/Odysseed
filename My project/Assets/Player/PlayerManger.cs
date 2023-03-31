@@ -40,6 +40,13 @@ public class PlayerManger : MonoBehaviour
     }
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            inputsEnable = true;
+        }
+
+
+
         if (inputsEnable == true)
             playerInput.enabled = true;
         else

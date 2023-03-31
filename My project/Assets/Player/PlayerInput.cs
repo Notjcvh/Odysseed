@@ -48,7 +48,6 @@ public class PlayerInput : MonoBehaviour
         ///  All Inputs will be labeled by number of where they appear
         /// </summary>
         
-
         //Basic Movement 
         float horizontal = Input.GetAxis("Horizontal"); // number 1
         float vertical = Input.GetAxis("Vertical"); // number 2
@@ -60,13 +59,14 @@ public class PlayerInput : MonoBehaviour
         chargedSecondaryAttack = Input.GetMouseButton(1);
 
         //Jumping 
-        jumpInput = Input.GetButton("Jump");// number 6
+        jumpInput = Input.GetButtonDown("Jump");// number 6
 
         // Camera Movement 
         mouseX = Input.GetAxisRaw("Mouse X"); // number 7
         mouseY = Input.GetAxisRaw("Mouse Y"); // number 8
-
-        dash = Input.GetButton("Dash"); // number 17
+    
+        //Dashing
+        dash = Input.GetButtonDown("Dash"); // number 17
 
         target = Input.GetButton("Target"); // Mouse 3
 
