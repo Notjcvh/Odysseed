@@ -5,7 +5,6 @@ using UnityEngine;
 public class WavePhysics : MonoBehaviour
 {
     public Rigidbody rb;
-    public Vector3 direction;
     public Transform player;
     public float lifetime;
     // Start is called before the first frame update
@@ -19,6 +18,6 @@ public class WavePhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = direction;
+        rb.velocity = player.forward * 10;
     }
 }
