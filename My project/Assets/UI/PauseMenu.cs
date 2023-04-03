@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     private GameManager gameManager;
+    private PlayerInput playerInput;
+   
+
 
     public bool gamePaused = false;
     public GameObject pauseMenuUI;
@@ -25,18 +28,22 @@ public class PauseMenu : MonoBehaviour
     {
         layoutGroup = pauseMenuUI.GetComponentInChildren<VerticalLayoutGroup>();
         gameManager = GetComponent<GameManager>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
 
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if(playerInput != null)
         {
-            pauseMenuUI.SetActive(!pauseMenuUI.activeSelf);
-            gamePaused = pauseMenuUI.activeSelf;
-
+            if (playerInput.pause == true)
+            {
+                pauseMenuUI.SetActive(!pauseMenuUI.activeSelf);
+                gamePaused = pauseMenuUI.activeSelf;
+            }
         }
+       
 
         if (gamePaused == true)
         {
@@ -46,10 +53,6 @@ public class PauseMenu : MonoBehaviour
         {
             Resume();
         }
-
-
-
-
     }
 
     //Pause and resume Game
