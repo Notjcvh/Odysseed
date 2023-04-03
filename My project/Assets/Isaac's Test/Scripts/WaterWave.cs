@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class WaterWave : Abilites
 {
-    public GameObject WaveAttack;
+    public GameObject waveAttack;
     public Transform abilitySpawner;
     public override void Ability()
     {
-        Instantiate(WaveAttack, abilitySpawner);
+        GameObject wave = Instantiate(waveAttack,abilitySpawner,true) as GameObject;
         Debug.Log("water ability");
     }
 }

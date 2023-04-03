@@ -442,36 +442,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: c444144f80ad2ed479f0e0e64e2de3fc, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5528353741485287906}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
-        m_MethodName: isAnimationFinished
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3370046908944120737}
-        m_TargetAssemblyTypeName: HitCollider, Assembly-CSharp
-        m_MethodName: ClearList
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!1 &360570179
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,17 +638,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &457128156 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 801358488122441055, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-  m_PrefabInstance: {fileID: 3897057212632407567}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &514653812
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,17 +669,6 @@ Transform:
   m_Father: {fileID: 8385173726301645276}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &787713628 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2041792063050509231, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-  m_PrefabInstance: {fileID: 3897057212632407567}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &826237528
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,17 +767,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &869511039 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7867276251593793871, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-  m_PrefabInstance: {fileID: 3897057212632407567}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &883965841
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,7 +892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Water Wave
   cooldownTime: 1
-  WaveAttack: {fileID: 1189832652567041986, guid: d7507efc91e7568408d6ce86da155785, type: 3}
+  waveAttack: {fileID: 8135981257883719653, guid: d7507efc91e7568408d6ce86da155785, type: 3}
   abilitySpawner: {fileID: 1284763594}
 --- !u!114 &966746056
 MonoBehaviour:
@@ -967,7 +906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5826ffa4bf44914091b8382a637c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityList: []
+  abilityList:
+  - {fileID: 966746055}
   abilitesToAdd:
   - {fileID: 966746055}
   - {fileID: 966746058}
@@ -1469,17 +1409,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cfa5e05a6ad4cc48b564682367333a2, type: 3}
---- !u!114 &1756790254 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2317584065652565123, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-  m_PrefabInstance: {fileID: 3897057212632407567}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1795116065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1591,17 +1520,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1968702525 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2219396056558067625, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-  m_PrefabInstance: {fileID: 3897057212632407567}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &119668313475384037
 Transform:
   m_ObjectHideFlags: 0
@@ -2262,7 +2180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerEvent: {fileID: 11400000, guid: 16c10078207f42a43acca795a8ec73d3, type: 2}
-  EndAnimationEvent: {fileID: 11400000, guid: c444144f80ad2ed479f0e0e64e2de3fc, type: 2}
+  hasAnimationEnded: {fileID: 0}
+  stopRotation: {fileID: 0}
   callBehaviours: {fileID: 11400000, guid: 78014948763535748ab210b72d1d5309, type: 2}
   finishBehaviours: {fileID: 11400000, guid: 568de5868d13383419d55a68150a2d01, type: 2}
 --- !u!114 &3370046907988668074
@@ -2277,24 +2196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: 16c10078207f42a43acca795a8ec73d3, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5528353741485287906}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
-        m_MethodName: SlideForward
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!114 &3370046907988668077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2307,24 +2210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: c444144f80ad2ed479f0e0e64e2de3fc, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5528353741485287906}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
-        m_MethodName: isAnimationFinished
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!4 &3370046908735396094
 Transform:
   m_ObjectHideFlags: 0
@@ -2391,24 +2278,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: []
-  playerEvents:
-  - {fileID: 11400000, guid: 78014948763535748ab210b72d1d5309, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3370046908944120737}
-        m_TargetAssemblyTypeName: HitCollider, Assembly-CSharp
-        m_MethodName: ActivateAdditionalBehaviours
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  myGameEvent: []
+  myPlayerEvent: []
 --- !u!4 &3387192794465567405
 Transform:
   m_ObjectHideFlags: 0
@@ -2922,33 +2793,6 @@ Transform:
   m_Father: {fileID: 8385173726301645276}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5528353740084727191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db34a3a09ad3f7044a9ddc535a67de86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 5528353740439775802}
-  currentState: 5
-  inputsEnable: 1
-  maxHealth: 8
-  currentHealth: 8
-  numberOfHearts: 0
-  hearts:
-  - {fileID: 787713628}
-  - {fileID: 457128156}
-  - {fileID: 869511039}
-  - {fileID: 1756790254}
-  - {fileID: 1968702525}
-  fullHeart: {fileID: 21300000, guid: 7734b3e44bbc8e44193153e982455161, type: 3}
-  emptyHeart: {fileID: 21300000, guid: 450b3886b87ae8643980717db9a17ea1, type: 3}
-  seeds: {fileID: 0}
 --- !u!4 &5528353740200608496
 Transform:
   m_ObjectHideFlags: 0
@@ -3129,39 +2973,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &5528353741485287906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7189a76d8ba5bd64d89f76204661a87b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPos: {fileID: 0}
-  enmeyPosition: {fileID: 0}
-  whatIsHittable:
-    serializedVersion: 2
-    m_Bits: 2176
-  inputType: 0
-  chargeSpeed: 0
-  chargeTime: 0
-  Charged: 0
-  isInAir: 0
-  isAnimationActive: 0
-  lightAttackCounter: 0
-  heavyAttackCounter: 0
-  lightAttackMaxGround: 3
-  lightAttackMaxAir: 2
-  heavyAttackMaxGround: 3
-  heavyAttackMaxAir: 0
-  comboLifeCounter: 0
-  animMultiplier: 0
-  lerpduration: 0.2
-  activateCollidersAcive: 0
 --- !u!1 &5650640362451275415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,141 +3119,6 @@ Transform:
   m_Father: {fileID: 5964125309068023138}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0.00000059375236, y: 0.000013724343, z: -4.9542975}
---- !u!114 &6528760259279523715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848b30b790fd2cb4789553f43ae2cd62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MasterVolumeSlider: {fileID: 0}
-  MusicVolumeSlider: {fileID: 0}
-  SFXVolumeSlider: {fileID: 0}
-  source: {fileID: 0}
-  playingAudio: 0
-  debug: 0
-  tracks:
-  - source: {fileID: 6528760259279523717}
-    audio:
-    - type: 4
-      clip: {fileID: 8300000, guid: caa325981d658854aab1bc3003eb4482, type: 3}
---- !u!82 &6528760259279523717
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &6528760259279523768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea2aff672df76384aa96d768bea5892b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pushableLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  strength: 10
 --- !u!1 &6587243418508780199
 GameObject:
   m_ObjectHideFlags: 0
@@ -3669,126 +3345,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8385173726301645217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd5df28c24b3c9d43ad7bc4a96aa98b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 422682264}
-  followObj: {fileID: 3370046908735396094}
-  minVerticalAngle: -30
-  maxVerticalAngle: 90
-  maxVerticalAngleRef: 0
-  minVertivalAngleRef: 0
-  camPriority: 0
-  defeaultDistance: 10
-  combatCamDistance: 15
-  newDistanceFromPlayer: 10
-  newDistanceFromPlayerInCombat: 0
-  rotationSharpness: 60
-  planDirectionRef: {x: 0, y: 0, z: 0}
-  testAngle: 0
-  obstructionMasks:
-    serializedVersion: 2
-    m_Bits: 352
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  isWallCollisionDetected: 0
-  cameraSphereRadius: 2
-  cameraCollisionOffset: 0.5
-  minimumCollisionOffset: 1
---- !u!114 &8385173726301645219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385173726301645273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5480514506a5a443b8167d58e6aff91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerBody: {fileID: 5528353741350565331}
-  lungePosition: {fileID: 8385173725488678144}
-  distanceToGround: {fileID: 5528353740667939009}
-  audioController: {fileID: 6528760259279523715}
-  newVelocity: {x: 0, y: 0, z: 0}
-  rbRefVelocity: {x: 0, y: 0, z: 0}
-  targetSpeed: 0
-  runSpeed: 10
-  stopMovementEvent: 0
-  isTalking: 0
-  isRestricted: 0
-  isFalling: 0
-  isJumping: 0
-  JumpForce: 10
-  Ground:
-    serializedVersion: 2
-    m_Bits: 256
-  currentJumpTime: 0
-  fallMultiplier: 2.3
-  lowFallMultiplier: 1
-  verticalVelocity: 15
-  gravitySpeed: 0
-  gravity: 0
-  playerVerticalVelocity: {x: 0, y: 0, z: 0}
-  isDashing: 0
-  lerpToPosition: {fileID: 8385173725488678144}
-  dashStartValue: 1
-  dashValueCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1000
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.09
-      value: 1000
-      inSlope: -72.16348
-      outSlope: -72.16348
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.27945372
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.2
-      value: 0
-      inSlope: -9090.909
-      outSlope: -9090.909
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  dashAnimationLifetime: 0
-  force: 0
-  numberOfUsedDashes: 0
-  dashResetTimer: 0
-  lerpduration: 0.5
-  playerCollionMask:
-    serializedVersion: 2
-    m_Bits: 3200
-  targetingEnemy: 0
-  target: {fileID: 0}
-  range: 200
-  seedId: 0
 --- !u!1 &8385173726301645273
 GameObject:
   m_ObjectHideFlags: 0
@@ -3801,14 +3357,7 @@ GameObject:
   - component: {fileID: 5528353741350565331}
   - component: {fileID: 5528353741350565330}
   - component: {fileID: 5528353740254904309}
-  - component: {fileID: 8385173726301645217}
   - component: {fileID: 2336037821758343619}
-  - component: {fileID: 5528353740084727191}
-  - component: {fileID: 8385173726301645219}
-  - component: {fileID: 5528353741485287906}
-  - component: {fileID: 6528760259279523768}
-  - component: {fileID: 6528760259279523717}
-  - component: {fileID: 6528760259279523715}
   m_Layer: 3
   m_Name: 'Test_Player '
   m_TagString: Player
@@ -3823,8 +3372,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8385173726301645273}
-  m_LocalRotation: {x: 0.008236591, y: 0.015231924, z: -0.0070894747, w: 0.99982494}
-  m_LocalPosition: {x: -4.03, y: 1.05, z: -105.58}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.0547853, y: 1.0517393, z: -105.66497}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3840,7 +3389,7 @@ Transform:
   - {fileID: 1284763594}
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0.956, y: 1.739, z: -0.798}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &8803919377556702604
 Transform:
   m_ObjectHideFlags: 0
