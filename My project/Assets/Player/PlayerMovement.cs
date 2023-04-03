@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        print(stopMovementEvent);
+      //  print(stopMovementEvent);
 
         if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true) // The player is moving 
         {

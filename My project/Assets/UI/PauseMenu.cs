@@ -6,22 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GamePaused = false;
+    private GameManager gameManager;
+
+    public bool gamePaused = false;
     public GameObject pauseMenuUI;
     private VerticalLayoutGroup layoutGroup;
-    public float lerpduration = 3;
-   public bool optionsOpened;
+    public bool optionsOpened;
 
 
     public GameObject menuScreen;
     public GameObject audioMenuScreen;
+    public GameObject statsMenu;
 
-    public GameObject audioButton;
+    public GameObject[] optionButtons;
 
 
     private void Start()
     {
         layoutGroup = pauseMenuUI.GetComponentInChildren<VerticalLayoutGroup>();
+        gameManager = GetComponent<GameManager>();
     }
 
 
@@ -31,8 +34,43 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             pauseMenuUI.SetActive(!pauseMenuUI.activeSelf);
+            gamePaused = pauseMenuUI.activeSelf;
+
         }
+
+        if (gamePaused == true)
+        {
+            Pause();
+        }
+        else
+        {
+            Resume();
+        }
+
+
+
+
     }
+
+    //Pause and resume Game
+    private void Pause()
+    {
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0f;
+        gamePaused = true;
+        Cursor.visible = true;
+    }
+
+    public void Resume()
+    {
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+        gamePaused = false;
+        Cursor.visible = false;
+        BackButton();
+
+    }
+
 
     //Pause Menu Options
 
@@ -40,43 +78,51 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("Options Selected");
         //Start Couritine loop through
-      
-        if(optionsOpened != true)
+
+        if (optionsOpened == true)
         {
-            StartCoroutine(OpenOptionSubMenu());
-            optionsOpened = true;
+            StartCoroutine(CloseOptionSubMenu());
         }
         else
         {
-            Debug.Log("Options closed");
-            StartCoroutine(CloseOptionSubMenu());
-            optionsOpened = false;
+            StartCoroutine(OpenOptionSubMenu());
         }
     }
 
     IEnumerator OpenOptionSubMenu()
     {
+        optionsOpened = true;
+        float startTime = Time.realtimeSinceStartup;
         float timeElapsed = 0;
-        while(timeElapsed < lerpduration)
+        while (timeElapsed < 1)
         {
-            layoutGroup.spacing = Mathf.Lerp(layoutGroup.spacing, -25, timeElapsed / lerpduration);
-            timeElapsed += Time.deltaTime;
-            if(layoutGroup.spacing > -100)
-                audioButton.SetActive(true);
+            layoutGroup.spacing = Mathf.Lerp(layoutGroup.spacing, 267, timeElapsed);
+            timeElapsed += Time.realtimeSinceStartup - startTime;
+            if (layoutGroup.spacing > -100)
+                foreach (var item in optionButtons)
+                {
+                    item.SetActive(true);
+                }
+
             yield return null;
         }
     }
 
     IEnumerator CloseOptionSubMenu()
     {
+        optionsOpened = false;
         float timeElapsed = 0;
-        while (timeElapsed < lerpduration)
+        float startTime = Time.realtimeSinceStartup;
+        while (timeElapsed < 1)
         {
-            layoutGroup.spacing = Mathf.Lerp(layoutGroup.spacing, -150, timeElapsed / lerpduration);
-            timeElapsed += Time.deltaTime;
+            layoutGroup.spacing = Mathf.Lerp(layoutGroup.spacing, -150, timeElapsed);
+            timeElapsed += Time.realtimeSinceStartup - startTime;
 
             if (layoutGroup.spacing < -40)
-                audioButton.SetActive(false);
+                foreach (var item in optionButtons)
+                {
+                    item.SetActive(false);
+                }
             yield return null;
         }
     }
@@ -86,26 +132,36 @@ public class PauseMenu : MonoBehaviour
     {
         menuScreen.SetActive(false);
         audioMenuScreen.SetActive(true);
+        StartCoroutine(CloseOptionSubMenu());
+    }
+
+    public void OpenStatsMenu()
+    {
+        StartCoroutine(CloseOptionSubMenu());
+        menuScreen.SetActive(false);
+        statsMenu.SetActive(true);
+
+    }
+
+
+    public void BackButton()
+    {
+        menuScreen.SetActive(true);
+        audioMenuScreen.SetActive(false);
+        statsMenu.SetActive(false);
+    }
+
+    public void EndGame()
+    {
+        gameManager.QuitGame();
     }
 
 
 
 
 
-    /*  public void Resume()
-      {
-          pauseMenuUI.SetActive(false);
-          Time.timeScale = 1f;
-          GamePaused = false;
-          Cursor.visible = false;
 
-      }
+   
 
-      void Pause()
-      {
-          pauseMenuUI.SetActive(true);
-          Time.timeScale = 0f;
-          GamePaused = true;
-          Cursor.visible = true;
-      }*/
+ 
 }

@@ -34055,11 +34055,11 @@ PrefabInstance:
       objectReference: {fileID: 4141960910216822656}
     - target: {fileID: 6528760259279523832, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: defeaultDistance
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523832, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: minVerticalAngle
-      value: -10
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523834, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: dashValueCurve.m_Curve.Array.data[0].time
@@ -34651,7 +34651,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camControl: {fileID: 1552827076}
   contactPoint: 0
-  isCollisionDetected: 0
+  detectionDistance: 0
+  defaultDistanceMax: 0
+  defaultDistanceMin: 0
+  newCamDist: 0
+  isGroundCollisionDetected: 0
+  isWallCollisionDetected: 0
+  isCeilingCollisionDetected: 0
 --- !u!135 &4141960910216822660
 SphereCollider:
   m_ObjectHideFlags: 0

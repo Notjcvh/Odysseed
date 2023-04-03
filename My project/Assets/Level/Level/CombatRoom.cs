@@ -71,8 +71,6 @@ public class CombatRoom : MonoBehaviour
         if (other.CompareTag(tags[0]))
         {
             isRoomActive = false;
-            StopCoroutine(currentCoroutine);
-            cam.camPriority = 0;
         }
         if (other.CompareTag(tags[2]) || other.CompareTag(tags[3])) // enemies 
         {
