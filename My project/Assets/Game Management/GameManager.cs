@@ -126,5 +126,20 @@ public class GameManager : MonoBehaviour
         lastReachCheckpoint = b;
     }
 
+
+
+    public void  QuitGame()
+    {
+        if(Application.isEditor)
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
+        else
+        {
+            // Play Something first then quit
+            Application.Quit();
+        }
+    }
+
   
 }

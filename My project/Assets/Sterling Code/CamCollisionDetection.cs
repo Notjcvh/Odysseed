@@ -13,120 +13,222 @@ public class CamCollisionDetection : MonoBehaviour
 
     private int groundLayer = (1 << 8);
     private int wallLayer = (1 << 10);
+    private int ceilingLayer = (1 << 14);
 
 
     public float contactPoint;
+    public float detectionDistance;
 
 
+    private float defaultMaxVertivalAngle;
+    private float defaultMinVerticalAngle;
+
+
+
+    public float defaultDistanceMax;
+    public float defaultDistanceMin;
+    public float newCamDist;
     //Methods
     [Header("Camera Collision")]
-    //public LayerMask collisionMask;
-    public bool isCollisionDetected = false;
-
+    public bool isGroundCollisionDetected = false;
+    public bool isWallCollisionDetected = false;
+    public bool isCeilingCollisionDetected = false;
+ 
     void OnDrawGizmos()
     {
         //  Vector3 direct = Vector3.Normalize(camControl.followObj.position - transform.position);
         // float distance = Mathf.Ceil((transform.position - camControl.followObj.position).magnitude);
         //print(distance);
         //Gizmos.DrawRay(transform.position, direct);
-
-        if(isCollisionDetected == true)
-        {
-            Gizmos.color = Color.green;
-            Vector3 followObjUp = Vector3.up;
-            Gizmos.DrawRay(camControl.followObj.position, followObjUp);
-            Gizmos.color = Color.blue;
-            Vector3 directtoCam = Vector3.Normalize(transform.position - camControl.followObj.position);
-            Gizmos.DrawRay(camControl.followObj.position, directtoCam);
-        }
     }
     private void Start()
     {
         camControl = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraController>();
+        defaultDistanceMax = camControl.DefaultDistanceMax;
+        defaultDistanceMin = camControl.DefaultDistanceMin;
+
+        defaultMaxVertivalAngle = camControl.maxVerticalAngleRef;
+        defaultMinVerticalAngle = camControl.minVerticalAngleRef;
     }
 
     private void OnTriggerEnter(Collider collision)
     {
+        Debug.Log("Started Colliding");
         // Run the checks 
         if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
         {
-            isCollisionDetected = true;
+          isGroundCollisionDetected = true;
         }
 
-        else if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
+        if(ceilingLayer == (ceilingLayer &(1 << collision.gameObject.layer)))
         {
-            Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
-            Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
-            Debug.Log("Hit wall");
-            camControl.isWallCollisionDetected = true;
-            camControl.newDistanceFromPlayer -= 1;
+            isCeilingCollisionDetected = true;
         }
-    }
-    private void OnTriggerStay(Collider collision)
-    {
-        if(isCollisionDetected == true)
-        {
-            RaycastHit hit;
-            Ray downRay = new Ray(transform.position, Vector3.down);
-            if (Physics.Raycast(downRay, out hit, groundLayer))
-            {
-                #region  Checking For Distance from Ground
-                //B
-                Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
-                float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
-                //A
-                float distanceToGround = (transform.position - hit.point).magnitude; 
-                //C
-                Vector3 directionToGround = Vector3.Normalize(hit.point - camControl.followObj.position);
-                float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
-            
-                float angleInRadians = Mathf.Atan(distanceToGround / distancePlayerToCam); //arctan(a/b
-                float angleInDegrees = angleInRadians * Mathf.Rad2Deg;
 
-                //CamController
-                  Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
-                  Debug.DrawRay(transform.position, Vector3.down * distanceToGround, Color.green);
-                  Debug.DrawRay(camControl.followObj.position, directionToGround * distancePlayerToGround, Color.red);
-
-                if (angleInDegrees < 2)
-                {
-                   // print("too low");
-                    HandleGroundCollision(hit);
-                }
-                #endregion
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider collision)
-    {
         if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
         {
             Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
             Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
             Debug.Log("Hit wall");
-            camControl.isWallCollisionDetected = false;
-            
+            isWallCollisionDetected = true;
         }
     }
-    void HandleGroundCollision(RaycastHit hit)
+    private void OnTriggerStay(Collider collision)
+    {
+        if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
+        {
+            isGroundCollisionDetected = true;
+            RaycastHit hit;
+            Ray downRay = new Ray(transform.position, Vector3.down);
+            if (Physics.Raycast(downRay, out hit, groundLayer))
+            {
+                #region  Checking For Distance from Ground
+
+                //A
+                float distanceToGround = (transform.position - hit.point).magnitude;
+                //B
+                Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
+                float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
+
+                //C
+                Vector3 directionToGround = Vector3.Normalize(hit.point - camControl.followObj.position);
+                float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
+
+                //CamController
+                Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
+                Debug.DrawRay(transform.position, Vector3.down * distanceToGround, Color.green);
+                Debug.DrawRay(camControl.followObj.position, directionToGround * distancePlayerToGround, Color.red);
+
+                HandleGroundCollision(hit.point.y);
+
+                #endregion
+            }
+        }
+
+        if (ceilingLayer == (ceilingLayer & (1 << collision.gameObject.layer)))
+        {
+            RaycastHit hit;
+            Ray upRay = new Ray(transform.position, Vector3.up);
+            if (Physics.Raycast(upRay, out hit, groundLayer))
+            {
+                float distanceToCeiling = (transform.position - hit.point).magnitude;
+
+                Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
+                float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
+
+                //C
+                Vector3 directionToCeiling = Vector3.Normalize(hit.point - camControl.followObj.position);
+                float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
+
+                Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
+                Debug.DrawRay(transform.position, Vector3.up * distanceToCeiling, Color.green);
+                Debug.DrawRay(camControl.followObj.position, directionToCeiling * distancePlayerToGround, Color.red);
+
+                HandleCeilingCollision(hit.point.y);
+            }
+
+        }
+
+
+        if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
+        {
+            isWallCollisionDetected = true;
+            RaycastHit hit;
+            Vector3[] points = new Vector3[0];
+
+            Vector3 point = collision.ClosestPoint(this.transform.position); // for some reason this returns two points however we just want the point shooting out horizontally
+            Vector3 closestPointHorizontal = new Vector3(point.x, transform.position.y, point.z); //this gets that for us
+            Vector3 direction = (closestPointHorizontal - this.transform.position);
+
+            float horizontaldistance = (transform.position - closestPointHorizontal).magnitude;
+            if (horizontaldistance < 1)
+            {
+                newCamDist = camControl.defeaultDistance - horizontaldistance;
+                StartCoroutine(AlterCameraDistance(2f));
+            }
+
+            Debug.DrawRay(this.transform.position, direction.normalized * horizontaldistance, Color.red);
+
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        Debug.Log("Stopped Colliding");
+        // Run the checks 
+        if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
+        {
+            camControl.minVerticalAngle = defaultMinVerticalAngle;
+            isGroundCollisionDetected = false;
+        }
+
+        if (ceilingLayer == (ceilingLayer & (1 << collision.gameObject.layer)))
+        {
+            isCeilingCollisionDetected = false;
+        }
+
+        if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
+        {
+            StartCoroutine(ReturnCamToNormal(2f));
+            isWallCollisionDetected = false;
+        }
+    }
+    void HandleGroundCollision(float hitObjectY)
     {    
         Vector3 followObjUp = camControl.followObj.up;
         Vector3 directtoCam = Vector3.Normalize(transform.position - camControl.followObj.position);
-   
         float dot = Vector3.Dot(directtoCam, followObjUp);
         dot = Mathf.Clamp(dot, -1, 1);
-
-        float angleRad = Mathf.Acos(dot) * Mathf.Rad2Deg;
-        float degree = camControl.maxVerticalAngleRef - angleRad;
-      //  print(degree);
-    //    if(degree <= -14)
-      //  {
-        //    camControl.minVertivalAngleRef = -14;
-         //   Debug.Log(camControl.minVertivalAngleRef);
-        //}
+        float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+        float degree = (-camControl.minVerticalAngleRef) - angle;
+        float differenceInTheY = this.transform.position.y - hitObjectY;
+        if(differenceInTheY <= 1)
+        {
+            camControl.minVerticalAngle = degree;
+        }
     }
 
+    void HandleCeilingCollision(float hitObjectY)
+    {
+        Vector3 followObjUp = camControl.followObj.up;
+        Vector3 directtoCam = Vector3.Normalize(transform.position - camControl.followObj.position);
+        float dot = Vector3.Dot(directtoCam, -followObjUp);
+        dot = Mathf.Clamp(dot, -1, 1);
+        float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+        float degree =  angle - camControl.maxVerticalAngleRef ;
+        float differenceInTheY = hitObjectY - transform.position.y;
+        print(differenceInTheY);
+        if (differenceInTheY <= 1)
+        {
+            camControl.maxVerticalAngle = degree;
+        }
+
+    }
+
+    IEnumerator AlterCameraDistance(float time)
+    {
+        float timeElapsed = 0;
+        while(timeElapsed < 1)
+        {
+            if (newCamDist > defaultDistanceMin)
+                camControl.defeaultDistance = Mathf.Lerp(camControl.defeaultDistance, newCamDist, timeElapsed);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }    
+    }
+
+    IEnumerator ReturnCamToNormal(float time)
+    {
+        float timeElapsed = 0;
+        while (timeElapsed < 1)
+        {
+            camControl.defeaultDistance = Mathf.Lerp(newCamDist, defaultDistanceMax, timeElapsed);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+  
+    }
     /*
     [Header("Camera Obstruction")]
     public LayerMask obstructionMasks; // This layermask will be inverted to choose what layers to ignore. 

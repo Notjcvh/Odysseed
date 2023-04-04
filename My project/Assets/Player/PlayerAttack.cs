@@ -343,7 +343,7 @@ public class PlayerAttack : MonoBehaviour
     //This is called by the animation trigger
     public void isAnimationFinished()
     {
-        Debug.Log("Animation is Finished");
+      //  Debug.Log("Animation is Finished");
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
         isAnimationActive = false;

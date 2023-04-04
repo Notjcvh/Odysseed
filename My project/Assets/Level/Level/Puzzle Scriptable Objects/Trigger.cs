@@ -7,7 +7,7 @@ public class Trigger : MonoBehaviour
     [Header("Refrencing")]
 
     public GameObject puzzleHolder;
-    public PuzzleRoom whichPuzzleInScene;
+//    public PuzzleRoom whichPuzzleInScene;
     public PuzzleDataManager whichPuzzle;
 
     public string[] tags = { "Player", "Key" };
@@ -18,7 +18,7 @@ public class Trigger : MonoBehaviour
 
     private void Start()
     {
-        whichPuzzleInScene = puzzleHolder.gameObject.GetComponent<PuzzleRoom>();
+     //   whichPuzzleInScene = puzzleHolder.gameObject.GetComponent<PuzzleRoom>();
     }
     
 
@@ -55,7 +55,7 @@ public class Trigger : MonoBehaviour
             {
                
                 numberOfCorrectMatchesInPuzzle = - 1;
-                whichPuzzleInScene.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
+               // whichPuzzleInScene.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
             }
       
     }
@@ -72,7 +72,7 @@ public class Trigger : MonoBehaviour
             {
                
                 numberOfCorrectMatchesInPuzzle = 1;
-                whichPuzzleInScene.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
+                //whichPuzzleInScene.GetTriggeredValue(numberOfCorrectMatchesInPuzzle);
             }
         }
     }
