@@ -13,11 +13,12 @@ public class WavePhysics : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         Destroy(this.gameObject, lifetime);
+        rb.velocity = player.forward * 10;
     }
 
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = player.forward * 10;
+        
     }
 }

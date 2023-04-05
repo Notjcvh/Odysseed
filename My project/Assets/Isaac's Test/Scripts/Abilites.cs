@@ -9,6 +9,7 @@ public abstract class Abilites : MonoBehaviour
     [Header("Ability Info")]
     public string title;
     public float cooldownTime = 1;
+    public AbilityCooldown abilityCooldown;
     private bool canUse = true;
     public void TriggerAbility()
     {
@@ -24,6 +25,8 @@ public abstract class Abilites : MonoBehaviour
     void StartCooldown()
     {
         StartCoroutine(Cooldown());
+        abilityCooldown.cooldownTime = cooldownTime;
+        abilityCooldown.UseSpell();
         IEnumerator Cooldown()
         {
             canUse = false;

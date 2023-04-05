@@ -73,13 +73,6 @@ public class HitCollider : MonoBehaviour
                     item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
                     item.SendMessage("TakeDamage", damage / 10); 
                     break;
-                case ("SpecialEnemy"):
-                    DamagePopUp.Create(item.transform.position, damage);
-                    item.SendMessage("DisableAI");
-                    item.gameObject.GetComponent<SpecialEnemy>().ModifiyHealth(damage / 10);
-                    item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
-                    item.SendMessage("TakeDamage", damage / 10);
-                    break;
                 case ("Boss"):
                     item.SendMessage("TakeDamage", damage / 10);
                     break;
