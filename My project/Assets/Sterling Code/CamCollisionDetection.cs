@@ -67,9 +67,9 @@ public class CamCollisionDetection : MonoBehaviour
 
         if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
         {
-            Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
-            Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
-            Debug.Log("Hit wall");
+         //   Debug.Log(Convert.ToString(wallLayer, 2).PadLeft(32, '0'));
+           // Debug.Log(Convert.ToString(collision.gameObject.layer, 2).PadLeft(32, '0'));
+           // Debug.Log("Hit wall");
             isWallCollisionDetected = true;
         }
     }
@@ -154,7 +154,7 @@ public class CamCollisionDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        Debug.Log("Stopped Colliding");
+      //  Debug.Log("Stopped Colliding");
         // Run the checks 
         if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
         {
@@ -197,7 +197,7 @@ public class CamCollisionDetection : MonoBehaviour
         float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
         float degree =  angle - camControl.maxVerticalAngleRef ;
         float differenceInTheY = hitObjectY - transform.position.y;
-        print(differenceInTheY);
+        //print(differenceInTheY);
         if (differenceInTheY <= 1)
         {
             camControl.maxVerticalAngle = degree;

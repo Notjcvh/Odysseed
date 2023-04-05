@@ -7,11 +7,14 @@ public class AnimEventHelper : MonoBehaviour
   
         // Event calls
 
-        // Player Animation Events --> Subscribers: Player Attack 
+        // Player Animation Events --> Subscribers: Player Attack, Player Movement
         [SerializeField] private PlayerEvent TriggerEvent;
-        [SerializeField] private PlayerEvent hasAnimationEnded;
+        [SerializeField] private PlayerEvent hasAttackAnimationEnded;
         [SerializeField] private PlayerEvent stopRotation;
-
+        [SerializeField] private PlayerEvent hasJumpAnimationPlayed;
+        [SerializeField] private PlayerEvent hasFallAnimationPlayed;
+        [SerializeField] private PlayerEvent hasDashAnimationPlayed;
+        
 
         [SerializeField] private PlayerEvent callBehaviours;
         [SerializeField] private PlayerEvent finishBehaviours;
@@ -23,14 +26,29 @@ public class AnimEventHelper : MonoBehaviour
             TriggerEvent?.Raise();
         }
 
-        public void AnimationEndedEvent()
+        public void AttackAnimationEndEvent()
         {
-            hasAnimationEnded?.Raise();
+            hasAttackAnimationEnded?.Raise();
         }
 
         public void StopAnimationRotation()
         {
             stopRotation?.Raise();
+        }
+        
+        public void JumpAnimationPlayed()
+        { 
+            hasJumpAnimationPlayed?.Raise();
+        }
+        
+        public void FallingAnimationPlayed()
+        {
+            hasFallAnimationPlayed?.Raise();
+        }
+
+        public void DashANimationPlayed()
+        {
+           hasDashAnimationPlayed?.Raise();
         }
 
         public void CallBehaviours()

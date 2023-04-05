@@ -36,7 +36,11 @@ public class PlayerMovement : MonoBehaviour
     public float gravityMultiplier = 0;
     private IEnumerator jumpCorutine;
     public LayerMask Ground;
-    private float verticalVelocity;
+    public float lastPlayerPosY;
+    public float jumpTime;
+    public float jumpForce;
+    public float jumpElapsedTime;
+
 
     [Header("Dash")]
     public bool isDashing = false;
@@ -72,6 +76,10 @@ public class PlayerMovement : MonoBehaviour
         stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
 
 
+        Keyframe[] keys = gravityValueCurve.keys;
+        Keyframe lastKey = keys[keys.Length - 1];
+        float end = lastKey.time;
+        jumpTime = end;
 
 
         //We want to make sure when the game starters the animator recognizes the player is on the groun
@@ -92,56 +100,53 @@ public class PlayerMovement : MonoBehaviour
         {
             isMoving = false;
             playerManger.currentState = PlayerStates.Idle;
-
         }
         //Dashing
-        if (playerInput.dash)
+        if (playerInput.dash && isDashing == false)
         {
-
+            isDashing = true;
             Debug.Log("Dash");
             playerManger.currentState = PlayerStates.Dashing;
-            isDashing = true;
             stopMovementEvent = true;
             animator.SetBool("isDashing", isDashing);
+            stopMovementEvent = true;
         }
+
+
+
+
 
         // create a function to set velocity at one place
         #region Locomotion Inputs
-      
-        else // The player is Idle 
-        {
-        }
-        //   else if (playerInput.jumpInput && IsGrounded() || playerInput.jumpInput && IsGrounded() == false && currentJumpTime <= maxJumpTim
-
-
-
+  
         if (IsGrounded() == true)
         {
             animator.SetBool("isGrounded", IsGrounded());
-            isFalling = false;
-            if (playerInput.jumpInput)
-            {
-                playerBody.AddForce(Vector3.up * 10, ForceMode.Impulse);
-                isJumping = true;
-                //ref the animator
-            }
+            jumpElapsedTime = 0;
         }
         else
         {
+            animator.SetBool("isGrounded", IsGrounded());
             isFalling = true;
-            // ref animator
+            animator.SetBool("isFalling", isFalling);
         }
 
-   
+        if (playerInput.jumpInput && IsGrounded() == true)
+        {
+            isJumping = true;
+            animator.SetBool("isJumping", isJumping);
+            playerBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+
+
+        checkYVelocity();
 
         #endregion
-
         //Enemy Targetting 
         if (playerInput.target)
             UpdateTarget();
         if (targetingEnemy)
             this.gameObject.transform.LookAt(target);
-        //SetVelocity(playerBody.velocity, rbRefVelocity);
     }
 
     private void FixedUpdate()
@@ -155,26 +160,19 @@ public class PlayerMovement : MonoBehaviour
             playerManger.currentState = PlayerStates.Idle;
             animator.SetBool("isRunning", false);
             isMoving = false;
-        }
-        if (isJumping == true)
+        }      
+       
+        if(isJumping == true)
         {
-            Keyframe[] keys = gravityValueCurve.keys;
-            Keyframe lastKey = keys[keys.Length - 1];
-            float end = lastKey.time;
-            float jumpAnimationEndTime = end;
-
-            jumpCorutine = Jump(jumpAnimationEndTime);
+            jumpCorutine = ApplyGravity(jumpTime);
             StartCoroutine(jumpCorutine);
         }
 
         if (isDashing == true)
         {
-            stopMovementEvent = true;
             Keyframe[] keys = dashValueCurve.keys;
             Keyframe lastKey = keys[keys.Length - 1];
-
             float end = lastKey.time;
-
             //Setting to the end of the animation 
             float dashAnimationEndTime = end;
             dashCorutine = Dash(dashAnimationEndTime);
@@ -182,21 +180,28 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            animator.SetBool("isDashing", isDashing);
-            stopMovementEvent = false;
+          
         }
     }
 
-
-    private void SetVelocity()
+    private void checkYVelocity()
     {
-        // add velocities then cap them
-        if (playerBody.velocity.y > 0)
-            playerBody.velocity += Vector3.up * gravityMultiplier * Time.deltaTime;
-        animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);       
+        if(transform.hasChanged)
+        {
+            // Set blend tree threasholds
+            float start = transform.position.y;
+            float jumpApexTime = jumpTime/2;          
+            if (transform.position.y > lastPlayerPosY && IsGrounded() == false)
+            {
+               animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+            }
+            else if (transform.position.y < lastPlayerPosY)
+            {
+                animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+            }
+            lastPlayerPosY = transform.position.y;
+        }     
     }
-
-
 
     #region Moving and Idle
     private void CanMove()
@@ -207,11 +212,11 @@ public class PlayerMovement : MonoBehaviour
         Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
         //Aligning movement in relation to the camera
         movementVector = cameraPlannerRotation * movementVector;
+        
         // checking for inputs from Player
         float speed = movementVector != Vector3.zero ? targetSpeed : 0;
 
         playerBody.MovePosition(transform.position + movementVector * Time.deltaTime * speed);
-
         if (speed != 0 && isDashing == false)
         {
             animator.SetBool("isRunning", true);
@@ -234,18 +239,28 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Jumping     
-    private IEnumerator Jump(float fullJumpTime)
+    private IEnumerator ApplyGravity(float fullJumpTime)
     {
-       
         float timeElapsed = 0;
         while (timeElapsed < fullJumpTime)
         {
             gravityMultiplier = gravityValueCurve.Evaluate(timeElapsed);
-            print(gravityMultiplier);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+    }
+
+
+    public void JumpAnimationEnded()
+    {
         isJumping = false;
+        animator.SetBool("isJumping", isJumping);
+    }
+
+    public void FallingAnimationEnded()
+    {
+        isFalling = false;
+        animator.SetBool("isFalling", isFalling);
     }
     #endregion
 
@@ -254,7 +269,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float timeElapsed = 0;
         Vector3 dir = transform.rotation * Vector3.forward;
-        while (timeElapsed < fullDashTime)
+        while (timeElapsed <= fullDashTime)
         {
             force = dashValueCurve.Evaluate(timeElapsed);
             playerBody.AddForce(dir * force * Time.deltaTime, ForceMode.Impulse);
@@ -262,9 +277,17 @@ public class PlayerMovement : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+        Debug.Log("Dash Eneded");
+        force = 0;
         isDashing = false;
-     
+        stopMovementEvent = false;
     }
+
+    public void DashAnimationEnded()
+    {
+        animator.SetBool("isDashing", false);
+    }
+
     #endregion
 
 
