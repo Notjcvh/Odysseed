@@ -13,6 +13,8 @@ public class SceneHandeler : MonoBehaviour
     [SerializeField] private AudioController audioController;
     [SerializeField] private AudioType backgroundMusic;
 
+    private AudioClip clip;
+
     [Header("Scene Transitions")]
     public GameObject sceneTransition;
     public TextMeshProUGUI[] displayText;
@@ -41,36 +43,27 @@ public class SceneHandeler : MonoBehaviour
 
     private void Update()
     {
-       // Debug.Log(audioJobSent);
-        if (sceneTransition.activeInHierarchy == true)
-        {
-            playerManger.inputsEnable = false;
-        }
-        else
-        {
-            playerManger.inputsEnable = true;
-           
-        }
-
-
         if (source.isPlaying == false)
         {
             if (audioJobSent == false)
             {
                 audioJobSent = true;
                 audioController.PlayAudio(backgroundMusic, false, 0, true);
-                StartCoroutine(WaitAndPlayAgain());
             }
+        }
+        else
+        {
+            float length = audioController.source.clip.length;
+            StartCoroutine(WaitAndPlayAgain(length));
         }
       
     }
     #endregion
 
     #region Sound looping
-
-    IEnumerator WaitAndPlayAgain()
+    IEnumerator WaitAndPlayAgain(float time)
     {
-        yield return new WaitForSecondsRealtime(4);
+        yield return new WaitForSecondsRealtime(time);
         audioJobSent = false;
     }
     #endregion
@@ -87,6 +80,8 @@ public class SceneHandeler : MonoBehaviour
         //Load the player position
         spawnPosition = gameManager.startingPosition;
         player.transform.position = spawnPosition;
+
+        ActivatePlayer();
     }
 
     #region Scene Transition UI
@@ -120,5 +115,10 @@ public class SceneHandeler : MonoBehaviour
             return;
     }
     #endregion
+
+    void ActivatePlayer()
+    {
+        playerManger.inputsEnable = true;
+    }
 
 }

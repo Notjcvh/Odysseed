@@ -21,7 +21,6 @@ public class CombatRoom : MonoBehaviour
     public List<GameObject> enemies = null; // this is what the room will check to open 
 
   //private float timer = 1;
-    Coroutine currentCoroutine = null;
 
     private void Awake()
     {

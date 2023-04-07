@@ -6,10 +6,15 @@ public class PlayerInput : MonoBehaviour
 {
     //Paused and Settings 
 
+    public PlayerManger playerManger;
+
     public bool pause { get; private set; }
+
+    public bool mouseClick { get; private set; }
 
 
     //InGame Player 
+    
     public Vector3 movementInput { get; private set; }
     public bool jumpInput { get; private set; }
     public bool attack { get; private set; }
@@ -40,41 +45,49 @@ public class PlayerInput : MonoBehaviour
         /// </summary>
 
 
-        // Camera Movement 
-        mouseX = Input.GetAxisRaw("Mouse X"); // number 7
-        mouseY = Input.GetAxisRaw("Mouse Y"); // number 8
-
-        //Basic Movement
-        float horizontal = Input.GetAxis("Horizontal"); // number 1
-        float vertical = Input.GetAxis("Vertical"); // number 2
-        movementInput = new Vector3(horizontal, 0, vertical).normalized;
-
-        //Jumping 
-        jumpInput = Input.GetButtonDown("Jump");// number 6
-    
-        //Dashing
-        dash = Input.GetButtonDown("Dash"); // number 17
-
-        //Attacking 
-        attack = Input.GetMouseButtonDown(0);
-        secondaryAttack = Input.GetMouseButtonUp(1);
-        chargedSecondaryAttack = Input.GetMouseButton(1);
-
-        //Targeting
-        target = Input.GetButton("Target"); // Mouse 3
-
-        //Interact
-        interact = Input.GetButtonDown("Interact"); // number 19
-
-        //Water Special 
-        activateWaterSpecial = Input.GetButton("Activate Water Special"); // number 20
-
-        activateEarthSpecial = Input.GetButton("Activate Earth Special"); // number 21
-
-        activateSunSpecial = Input.GetButtonDown("Activate Sun Special"); // number 22
-
-
         //Pausing
         pause = Input.GetButtonDown("Pause");
+
+        mouseClick = Input.GetMouseButtonDown(0);
+
+        if (playerManger.inputsEnable == true)
+        {
+            // Camera Movement 
+            mouseX = Input.GetAxisRaw("Mouse X"); // number 7
+            mouseY = Input.GetAxisRaw("Mouse Y"); // number 8
+
+            //Basic Movement
+            float horizontal = Input.GetAxis("Horizontal"); // number 1
+            float vertical = Input.GetAxis("Vertical"); // number 2
+            movementInput = new Vector3(horizontal, 0, vertical).normalized;
+
+            //Jumping 
+            jumpInput = Input.GetButtonDown("Jump");// number 6
+
+            //Dashing
+            dash = Input.GetButtonDown("Dash"); // number 17
+
+            //Attacking 
+            attack = Input.GetMouseButtonDown(0);
+            secondaryAttack = Input.GetMouseButtonUp(1);
+            chargedSecondaryAttack = Input.GetMouseButton(1);
+
+            //Targeting
+            target = Input.GetButton("Target"); // Mouse 3
+
+            //Interact
+            interact = Input.GetButtonDown("Interact"); // number 19
+
+            //Water Special 
+            activateWaterSpecial = Input.GetButton("Activate Water Special"); // number 20
+
+            activateEarthSpecial = Input.GetButton("Activate Earth Special"); // number 21
+
+            activateSunSpecial = Input.GetButtonDown("Activate Sun Special"); // number 22
+
+
+          
+        }
+       ;
     }
 }

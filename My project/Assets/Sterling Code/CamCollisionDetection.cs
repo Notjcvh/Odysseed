@@ -133,7 +133,6 @@ public class CamCollisionDetection : MonoBehaviour
         if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
         {
             isWallCollisionDetected = true;
-            RaycastHit hit;
             Vector3[] points = new Vector3[0];
 
             Vector3 point = collision.ClosestPoint(this.transform.position); // for some reason this returns two points however we just want the point shooting out horizontally
