@@ -178,9 +178,6 @@ public class PlayerAttack : MonoBehaviour
             playerMovement.stopMovementEvent = false;
 
 
-
-
-
         #region Handeling Starting and Ending Combo
         if (comboLifeCounter > 0)  //begin countdown 
         {

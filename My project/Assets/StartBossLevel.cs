@@ -8,6 +8,7 @@ public class StartBossLevel : MonoBehaviour
     public Transform startingPosition;
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         player.transform.position = startingPosition.position;
     }
 }
