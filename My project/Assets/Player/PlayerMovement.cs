@@ -14,27 +14,18 @@ public class PlayerMovement : MonoBehaviour
     public AudioController audioController;
     [SerializeField] private Rigidbody playerBody;
     [SerializeField] private Transform distanceToGround;
-
-
-    public Vector3 newVelocity; // new setter 
-    public Vector3 rbRefVelocity; // calculation passer 
  
     [Header("Movement")]
-    private bool isMoving;
     public Vector3 movementVector;
     private Quaternion targetRotation;
     public float targetSpeed;
     public bool stopMovementEvent;
-    public bool isTalking = false;
-    public bool isRestricted = false;
 
     [Header("Jumping")]
-    public bool isFalling;
-    public bool isJumping;
     private float gravity;
     public AnimationCurve gravityValueCurve;
     public float gravityMultiplier = 0;
-    private IEnumerator jumpCorutine;
+    private IEnumerator gravityCorutine;
     public LayerMask Ground;
     public float lastPlayerPosY;
     public float jumpTime;
@@ -43,14 +34,12 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Dash")]
-    public bool isDashing = false;
     public AnimationCurve dashValueCurve;
     public float force;
-  //  private int numberOfDashes = 2;
-    public int numberOfUsedDashes;
     public float dashResetTimer = 0;
     public float lerpduration;
     private IEnumerator dashCorutine;
+    private bool isDashing = false;
 
     [Header("Targeting")]
     public bool targetingEnemy;
@@ -60,12 +49,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Seeds")]
     public int seedId;
 
-    [Header("Animation States")] // Right these are for playing animations not conected to transitions in the animator 
-    const string Player_Jump = "Player_Jump";
-    const string Player_Dash = "Player_Dash";
 
-
-    private string currentAnimation;
     private void Awake()
     {
         cam = GetComponent<CameraController>();
@@ -73,8 +57,6 @@ public class PlayerMovement : MonoBehaviour
         playerBody = GetComponentInChildren<Rigidbody>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponent<PlayerManger>().animator;
-        stopMovementEvent = !stopMovementEvent; //negating the bool value to invert the value of true and false 
-
 
         Keyframe[] keys = gravityValueCurve.keys;
         Keyframe lastKey = keys[keys.Length - 1];
@@ -89,59 +71,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-      //  print(stopMovementEvent);
-
-        if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true) // The player is moving 
-        {
-            isMoving = true;
-            playerManger.currentState = PlayerStates.Moving;
-        }
-        else
-        {
-            isMoving = false;
-            playerManger.currentState = PlayerStates.Idle;
-        }
-        //Dashing
-        if (playerInput.dash && isDashing == false)
-        {
-            isDashing = true;
-            Debug.Log("Dash");
-            playerManger.currentState = PlayerStates.Dashing;
-            stopMovementEvent = true;
-            animator.SetBool("isDashing", isDashing);
-            stopMovementEvent = true;
-        }
-
-
-
-
-
-        // create a function to set velocity at one place
-        #region Locomotion Inputs
-  
+        
+        //Ground Checking
         if (IsGrounded() == true)
         {
             animator.SetBool("isGrounded", IsGrounded());
             jumpElapsedTime = 0;
+            gravityMultiplier = 0;
         }
         else
         {
             animator.SetBool("isGrounded", IsGrounded());
-            isFalling = true;
-            animator.SetBool("isFalling", isFalling);
+        //    gravityCorutine = ApplyGravity();
+            
+            
+            //StartCoroutine(gravityCorutine);
         }
 
-        if (playerInput.jumpInput && IsGrounded() == true)
+        //Dashing 
+        if (playerManger.currentState == PlayerStates.Dashing)
         {
-            isJumping = true;
-            animator.SetBool("isJumping", isJumping);
-            playerBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+     
+            if(!isDashing)
+            {
+                dashCorutine = Dash();
+                StartCoroutine(dashCorutine);
+                isDashing = true;
+            }
+            
         }
 
-
-        checkYVelocity();
-
-        #endregion
         //Enemy Targetting 
         if (playerInput.target)
             UpdateTarget();
@@ -151,59 +110,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isMoving == true)
+        if (playerManger.currentState == PlayerStates.Moving || playerManger.currentState == PlayerStates.JumpingAndMoving || playerManger.currentState == PlayerStates.FallingAndMoving)
         {
             CanMove();
         }
-        else
-        {
-            playerManger.currentState = PlayerStates.Idle;
-            animator.SetBool("isRunning", false);
-            isMoving = false;
-        }      
-       
-        if(isJumping == true)
-        {
-            jumpCorutine = ApplyGravity(jumpTime);
-            StartCoroutine(jumpCorutine);
-        }
-
-        if (isDashing == true)
-        {
-            Keyframe[] keys = dashValueCurve.keys;
-            Keyframe lastKey = keys[keys.Length - 1];
-            float end = lastKey.time;
-            //Setting to the end of the animation 
-            float dashAnimationEndTime = end;
-            dashCorutine = Dash(dashAnimationEndTime);
-            StartCoroutine(dashCorutine);
-        }
-        else
-        {
-          
-        }
     }
 
-    private void checkYVelocity()
-    {
-        if(transform.hasChanged)
-        {
-            // Set blend tree threasholds
-            float start = transform.position.y;
-            float jumpApexTime = jumpTime/2;          
-            if (transform.position.y > lastPlayerPosY && IsGrounded() == false)
-            {
-               animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-            }
-            else if (transform.position.y < lastPlayerPosY)
-            {
-                animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-            }
-            lastPlayerPosY = transform.position.y;
-        }     
-    }
 
-    #region Moving and Idle
+
+    #region Moving
     private void CanMove()
     {
         // if we have input that is either vertical or horizontal then is moving is true 
@@ -217,9 +132,8 @@ public class PlayerMovement : MonoBehaviour
         float speed = movementVector != Vector3.zero ? targetSpeed : 0;
 
         playerBody.MovePosition(transform.position + movementVector * Time.deltaTime * speed);
-        if (speed != 0 && isDashing == false)
-        {
-            animator.SetBool("isRunning", true);
+        if (speed != 0 && playerManger.isDashing == false)
+        { 
             targetRotation = Quaternion.LookRotation(movementVector);
             transform.rotation = targetRotation;
         }
@@ -231,67 +145,111 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 direction = Vector3.down;
         RaycastHit hit;
-        if (Physics.Raycast(distanceToGround.position, direction, out hit, .1f, Ground))
+        if (Physics.Raycast(distanceToGround.position, direction, out hit, .2f, Ground))
             return true;
         else
             return false;
     }
+
+    //Checking the change in the position of the player 
+    public PlayerStates checkYVelocity(PlayerStates currentState)
+    {
+        if (transform.hasChanged && IsGrounded() == false && playerInput.movementInput == Vector3.zero)
+        {
+            if (transform.position.y > lastPlayerPosY)
+            {
+                currentState = PlayerStates.Jumping;
+            }
+            else if (transform.position.y < lastPlayerPosY)
+            {
+                currentState = PlayerStates.Falling;
+            }
+        }
+        else if (transform.hasChanged && IsGrounded() == false && playerInput.movementInput != Vector3.zero)
+        {
+            if (transform.position.y > lastPlayerPosY)
+            {
+                currentState = PlayerStates.JumpingAndMoving;
+            }
+            else if (transform.position.y < lastPlayerPosY)
+            {
+                currentState = PlayerStates.FallingAndMoving;
+            }
+        }
+        lastPlayerPosY = transform.position.y;
+
+        return currentState;
+    }
+
+
+    //Calling an animation envent to stop anim form looping 
+    public void FallingAnimationEnded()
+    {
+        animator.SetBool("isFalling", false);
+    }
     #endregion
 
-    #region Jumping     
-    private IEnumerator ApplyGravity(float fullJumpTime)
+    #region Apply Gravity 
+    private IEnumerator ApplyGravity()
     {
         float timeElapsed = 0;
-        while (timeElapsed < fullJumpTime)
+        while (IsGrounded() == false)
         {
             gravityMultiplier = gravityValueCurve.Evaluate(timeElapsed);
+
+            playerBody.AddForce(Vector3.down * Time.deltaTime * -gravityMultiplier, ForceMode.Acceleration);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
     }
+    #endregion
 
-
-    public void JumpAnimationEnded()
+    #region Jump
+    public void InitateJump()
     {
-        isJumping = false;
-        animator.SetBool("isJumping", isJumping);
+        playerBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    public void FallingAnimationEnded()
+    //Calling an animation envent to stop anim form looping 
+    public void JumpAnimationEnded()
     {
-        isFalling = false;
-        animator.SetBool("isFalling", isFalling);
+        animator.SetBool("isJumping", false);
     }
     #endregion
 
     #region Dashing
-    private IEnumerator Dash(float fullDashTime)
+    private IEnumerator Dash()
     {
+        Keyframe[] keys = dashValueCurve.keys;
+        Keyframe lastKey = keys[keys.Length - 1];
+        float end = lastKey.time;
+        //Setting to the end of the animation 
+        
+        int count = 0;
         float timeElapsed = 0;
         Vector3 dir = transform.rotation * Vector3.forward;
-        while (timeElapsed <= fullDashTime)
+        while (timeElapsed < end)
         {
             force = dashValueCurve.Evaluate(timeElapsed);
-            playerBody.AddForce(dir * force * Time.deltaTime, ForceMode.Impulse);
+            playerBody.AddForce(dir * force * Time.deltaTime, ForceMode.VelocityChange);
             playerBody.AddForce(playerBody.velocity * -10f * Time.deltaTime);
             timeElapsed += Time.deltaTime;
+            count += 1;
+            print("this is my count" + count + " this is the time elapsed " + timeElapsed + "this is my force" + force);
+
             yield return null;
         }
-        Debug.Log("Dash Eneded");
-        force = 0;
-        isDashing = false;
+        playerBody.velocity = Vector3.zero;
+        playerManger.isDashing = false;
         stopMovementEvent = false;
+        isDashing = false;
     }
 
     public void DashAnimationEnded()
     {
         animator.SetBool("isDashing", false);
     }
-
     #endregion
-
-
-
 
     #region Player Targeting 
     void UpdateTarget()
@@ -321,31 +279,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
     #endregion
-
-
-    private void OnDrawGizmos()
-    {
-        float range = 2f;
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * range));
-
-        Gizmos.color = Color.black;
-        //add movement vector and vector 3.zero 
-        Vector3 c = new Vector3(movementVector.x + 0, movementVector.y + 1, movementVector.z + 0);
-        /*Gizmos.DrawRay(distanceToGround.position, c.normalized * 10);
-        if (currentJumpTime <= maxJumpTime)
-        {
-            //calculate a direction from ground
-            Vector3 direction = Vector3.Normalize(playerBody.position - distanceToGround.position);
-
-            float multiplier = jumpCurve.Evaluate(currentJumpTime / (maxJumpTime * jumpHieghtMultiplier));
-
-            Vector3 jumpVector = new Vector3(0, direction.y * multiplier * jumpForce, 0);
-
-            Gizmos.DrawRay(jumpVector, direction);
-
-            //playerBody.AddForce(jumpVector, ForceMode.Impulse);*/
-
-    }   
+ 
 }
 
 

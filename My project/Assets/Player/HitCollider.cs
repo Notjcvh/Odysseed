@@ -79,10 +79,8 @@ public class HitCollider : MonoBehaviour
                 default:
                     break;
             }
-        }
 
-        foreach (var item in hittableObjects)
-        {
+            
             switch (behaviours)
             {
                 case PhysicsBehaviours.Knockback:
@@ -101,7 +99,12 @@ public class HitCollider : MonoBehaviour
             }
         }
 
-        ClearList();
+        foreach (var item in hittableObjects)
+        {
+           
+        }
+
+       // ClearList();
     }
 
      public void ActivateAdditionalBehaviours()

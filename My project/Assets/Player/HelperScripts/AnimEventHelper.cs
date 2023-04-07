@@ -14,6 +14,7 @@ public class AnimEventHelper : MonoBehaviour
         [SerializeField] private PlayerEvent hasJumpAnimationPlayed;
         [SerializeField] private PlayerEvent hasFallAnimationPlayed;
         [SerializeField] private PlayerEvent hasDashAnimationPlayed;
+        [SerializeField] private PlayerEvent endWindUp;
         
 
         [SerializeField] private PlayerEvent callBehaviours;
@@ -46,9 +47,14 @@ public class AnimEventHelper : MonoBehaviour
             hasFallAnimationPlayed?.Raise();
         }
 
-        public void DashANimationPlayed()
+        public void DashAnimationPlayed()
         {
            hasDashAnimationPlayed?.Raise();
+        }
+
+        public void EndWindUp()
+        {
+           endWindUp?.Raise();
         }
 
         public void CallBehaviours()

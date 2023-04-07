@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     public bool hasDied = false; // might be better to have as a number 
     public bool Levelcompleted = false;
 
-    
-    
+    public bool gamePaused = false;
+
     public bool playerHasDied;
 
     public Scene scene;
@@ -58,10 +58,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            ReloadScene();
-        }
+       // if(Input.GetKeyDown(KeyCode.Y))
+        //{
+         //   ReloadScene();
+        //}
     }
     #endregion
 
@@ -116,6 +116,11 @@ public class GameManager : MonoBehaviour
     public void PlayerHasDied() // called in Player Manager 
     {
         hasDied = true;
+        
+
+
+
+
         ReloadScene();
     }
     public void Convert()

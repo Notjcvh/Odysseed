@@ -7,10 +7,12 @@ public class GrapeGruntBehavior : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     private NavMeshAgent navMeshAge;
+    private AudioController audioController;
 
     [Header("Animation")]
     public Animator animator;
 
+   
     [Header("Combat")]
     public float attackRange;
     public float attackSpeed;
@@ -56,11 +58,18 @@ public class GrapeGruntBehavior : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
         currentAttackPos = player.transform;
         //currentAttackPos = attackPoints[0].GetComponent<Transform>();
+
+        audioController = GetComponent<AudioController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(audioController != null)
+        {
+            audioController.PlayAudio(AudioType.RotEnemyNoise, false, 0, false);
+        }
+
         if (thisEnemy.isStunned)
         {
             DisableAI(stunDuration);
@@ -69,6 +78,7 @@ public class GrapeGruntBehavior : MonoBehaviour
         else
         {
             distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
+     
             attackCooldown -= Time.deltaTime;
             attackLifetime -= Time.deltaTime;
             animator.SetFloat("Speed", rb.velocity.magnitude);
@@ -112,8 +122,6 @@ public class GrapeGruntBehavior : MonoBehaviour
                 navMeshAge.speed = idleSpeed;
             }
         }
-
-   
     }
 
     public void DisableAI(float duration)
@@ -130,4 +138,16 @@ public class GrapeGruntBehavior : MonoBehaviour
         isStunned = false;
         this.navMeshAge.enabled = true;
     }
+
+
+    void PlayAudio(AudioType audioType)
+    {
+        audioController.PlayAudio(audioType, false, 0, false);
+    }
+
+
+
+
+
+
 }

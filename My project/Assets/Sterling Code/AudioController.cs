@@ -69,6 +69,8 @@ public class AudioController : MonoBehaviour
     private void Awake()
     {
         Configure();
+
+        source = this.GetComponent<AudioSource>();
     }
 
     private void OnDisable()
@@ -84,28 +86,6 @@ public class AudioController : MonoBehaviour
     #endregion
 
     #region Public Functions
-
-    public void IsPlaying()
-    {
-        if (source != null)
-        {
-
-            if (source.isPlaying == true)
-            {
-              //  Debug.Log(" We are Currenely platying audio from : " + instance.name);
-                playingAudio = true;
-                return;
-            }
-            else
-            {
-                Debug.Log("We are not playing audio");
-                playingAudio = false;
-            }
-        }
-
-    }
-
-
 
 
     public void PlayAudio(AudioType type, bool fade = false, float delay = 0.0f, bool looping = false)
@@ -253,7 +233,7 @@ public class AudioController : MonoBehaviour
 
         AudioTrack track = (AudioTrack)AudioTable[job.type];
         track.source.clip = GetAudioClipFromAudioTrack(job.type, track);
-        source = track.source;
+        source.clip = track.source.clip;
 
 
         switch (job.action)
