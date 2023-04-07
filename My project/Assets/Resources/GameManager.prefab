@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2538145067693232676}
   - component: {fileID: 1482087284}
   - component: {fileID: 1482087288}
+  - component: {fileID: 7320244891792705897}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Game Manager
@@ -62,10 +63,31 @@ MonoBehaviour:
   startingPosition: {x: 0, y: 0, z: 0}
   lastReachCheckpoint: {x: 0, y: 0, z: 0}
   levelPosition: {x: 0, y: 0, z: 0}
-  buildindex: 0
+  buildindex: 2
   loaded: 0
   hasDied: 0
   Levelcompleted: 0
   playerHasDied: 0
+  scene:
+    m_Handle: 0
   mixer: {fileID: 24100000, guid: 876a73ca8a973034e8d955868cabfd96, type: 2}
   triggeredPoints: []
+--- !u!114 &7320244891792705897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538145067693232677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e8295b566d03f43a1d47edadbd6a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamePaused: 0
+  pauseMenuUI: {fileID: 0}
+  optionsOpened: 0
+  menuScreen: {fileID: 0}
+  audioMenuScreen: {fileID: 0}
+  statsMenu: {fileID: 0}
+  optionButtons: []

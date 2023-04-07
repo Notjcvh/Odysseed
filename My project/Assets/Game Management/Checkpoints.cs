@@ -31,7 +31,6 @@ public class Checkpoints : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Hit");
         if (other.CompareTag("Player"))
         {
             //gameManager.lastCheckPointPos = transform.position;

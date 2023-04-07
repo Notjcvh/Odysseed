@@ -42,14 +42,13 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask whatIsHittable;
 
     [Header("Inputs")]
-    public int inputType;
-    public float chargeSpeed;
-    public float chargeTime;
+
+    public float timeOfCharge;
     public bool chargedAttack;
 
     private CameraController cam;
     private Quaternion targetRotation;
-   
+    public float chargedAttackMultiplier = 1.4f;
 
 
     [Header("States")]
@@ -79,6 +78,8 @@ public class PlayerAttack : MonoBehaviour
     public Dictionary<string, HitCollider> colliders = new Dictionary<string, HitCollider>();
     public bool activateCollidersAcive;
 
+
+    private int count = 0;
     public class PlayerCollider
     {
         public Transform origin;
@@ -111,74 +112,36 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-      
-        #region Handling Mouse Inputs
-        if (playerInput.attack && isAnimationActive == false)
-        {
-            animator.SetBool("isRunning", false);
-            animator.SetBool("Attacking", true);
-            inputType = 0; // 0 represents the left mouse button 
-            animator.SetInteger("Mouse Input", inputType);
-
-            // if the trigger is not set then the animation will not run
-            // this also stops animation from looping in the air
-            animator.SetTrigger("Input Pressed");
-            Attack(inputType);
-        }
-        else if (playerInput.secondaryAttack && chargeTime <= 1.5 && isAnimationActive == false)
-        {
-           
-            animator.SetBool("isRunning", false);
-            animator.SetBool("Attacking", true);
-            inputType = 1; //1 represents the right mouse button 
-            animator.SetInteger("Mouse Input", inputType);
-            animator.SetTrigger("Input Pressed");
-            Attack(inputType);
-            chargeTime = 0;
-            chargedAttack = false;
-        }
-
-        if (playerInput.chargedSecondaryAttack && comboLifeCounter <= 0)
-        {
-            Debug.Log("Charging");
-            bool isCharging = true;
-            if(isCharging == true)
-            {
-                chargeTime += Time.deltaTime;
-            }
-            if(chargeTime > 1.7)
-            {
-                Rotate();
-            }
-            if(chargeTime > 2)
-            {
-                chargedAttack = true;
-            }
-        }
-
-        if(chargedAttack == true && !playerInput.chargedSecondaryAttack && isAnimationActive == false)
-        {
-            animator.SetBool("isRunning", false);
-            animator.SetBool("Attacking", true);
-            inputType = 1; //1 represents the right mouse button 
-            animator.SetInteger("Mouse Input", inputType);
-            animator.SetTrigger("Input Pressed");
-            chargeTime = 0;
-            Attack(inputType);
-            chargedAttack = false;
-        }
-        #endregion
-
         if (isAnimationActive == true)
         {
             playerMovement.stopMovementEvent = true;
-            Rotate();
         }
         else
             playerMovement.stopMovementEvent = false;
 
 
 
+        if(playerManger.currentState == PlayerStates.ChargingAttack)
+        {
+            timeOfCharge += Time.deltaTime;
+            float intervalDuration = 0.25f;
+            if (timeOfCharge >= intervalDuration && playerManger.chargeTime <= 2)
+            {
+                chargedAttackMultiplier += 0.2f;
+                timeOfCharge = 0;
+                count += 1;
+            }
+
+            if(playerManger.chargeTime > 1.98f  && playerManger.chargeTime < 2 && count < 4)
+            {
+                count += 1;
+                chargedAttackMultiplier += 0.2f;
+             
+            }
+        }
+
+        if (playerManger.currentState == PlayerStates.LaunchChargedAttack)
+            count = 0;
 
 
         #region Handeling Starting and Ending Combo
@@ -217,7 +180,7 @@ public class PlayerAttack : MonoBehaviour
         #endregion
 
 
-        if(playerMovement.isDashing == true)
+        if(playerManger.isDashing == true)
         {
             animator.SetBool("Attacking", false);
             isAnimationActive = false;
@@ -225,17 +188,29 @@ public class PlayerAttack : MonoBehaviour
     }
     #endregion
 
+    #region Launch Attack
+
+    public void LaunchAttack(int inputType)
+    {
+        animator.SetInteger("Mouse Input", inputType);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("Attacking", true);
+
+        if(inputType <= 1)
+        {
+            // if the trigger is not set then the animation will not run
+            // this also stops animation from looping in the air
+            animator.SetTrigger("Input Pressed");
+        }
+       
+        Attack(inputType);
+    }
+    #endregion
+
+
     #region Attacks and Combos
     private void Attack(int inputType)
     {
-       
-        playerManger.currentState = PlayerStates.Attacking;
-        audioController.PlayAudio(AudioType.MainMenu, true, 0, false);
-
-
-       
-
-
         //Light Attacks
         if (inputType == 0)
         {
@@ -246,12 +221,12 @@ public class PlayerAttack : MonoBehaviour
                     lightAttackCounter++;
                     animator.SetFloat("Starter Type", 0);
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 10));
                     break;
                 case (1, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 10));
                     break;
                 case (2, true):
                     lightAttackCounter++;
@@ -270,54 +245,53 @@ public class PlayerAttack : MonoBehaviour
                     break;
             }
         }
-        else
+        else if(inputType == 1)
         {
-            switch (heavyAttackCounter, playerMovement.IsGrounded(),chargedAttack)
+            switch (heavyAttackCounter, playerMovement.IsGrounded())
             {
                 #region Ground Heavy Attacks
-                case (0, true, false):
+                case (0, true):
                      Debug.Log("Secondary Attack");
                      animator.SetFloat("Starter Type", 1);
                      heavyAttackCounter++;
                      Set(inputType, heavyAttackCounter, 5f);
-                    // SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 3f, 5));
+                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 3f, 5));
                     break;
-                case (1, true, false):
+                case (1, true):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 25, 5f, 10));
                     break;
-                case (2, true, false):
+                case (2, true):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 30, 5f, 10));
                     break;
                 #endregion
-
-                #region Charged Starter
-                case (0, true, true):
-                    Debug.Log("Charged Attack");
-                    animator.SetFloat("Starter Type", 2);
-                    heavyAttackCounter++;
-                    Set(inputType, heavyAttackCounter, 0.1f);
-                    break;
-
-                #endregion
-
                 #region Air Heavy Attacks 
-                case (0, false, false):
+                case (0, false):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockdown, 20, 30, 10));
                     break;
                 default:
                     break;
+                #endregion
             }
         }
+        else
+        {
+            int attackRating = (int)Math.Ceiling(20 * chargedAttackMultiplier);
+            SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, attackRating, 3f, 10));
+            Set(inputType, 0, 0);
+            ResetCombo();
+        }
+
     }
 
     private void Set(int inputType, int attacktype, float combolifetime)
     {
+        audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
         //increase the attack counters
         if (inputType == 0) // light attack 
             heavyAttackCounter++;
@@ -346,7 +320,7 @@ public class PlayerAttack : MonoBehaviour
       //  Debug.Log("Animation is Finished");
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
-        isAnimationActive = false;
+        playerManger.isAttackAnimationActive = false;
         canRotate = true;
         
         //Checking if the player has hit the combo finisher  
@@ -361,6 +335,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void ResetCombo()
     {
+
         lightAttackCounter = 0;
         heavyAttackCounter = 0;
         animator.SetInteger("Attack Type", 0);
@@ -371,7 +346,7 @@ public class PlayerAttack : MonoBehaviour
         animator.SetFloat("ComboLifetime", comboLifeCounter);
         comboLifeCounter = 0;
     }
-    #endregion
+
 
     #region Sliding Forward When Attacking 
     public void SlideForward()
@@ -410,7 +385,12 @@ public class PlayerAttack : MonoBehaviour
         canRotate = false;
     }
 
-    void Rotate()
+    public void EndWindUp()
+    {
+        animator.SetBool("Attacking", false);
+    }
+
+    public void Rotate()
     {
         if (canRotate == true)
         {

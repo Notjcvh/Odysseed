@@ -6,12 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    private GameManager gameManager;
-    private PlayerInput playerInput;
+    public GameManager gameManager;
+
    
 
-
-    public bool gamePaused = false;
     public GameObject pauseMenuUI;
     private VerticalLayoutGroup layoutGroup;
     public bool optionsOpened;
@@ -28,24 +26,17 @@ public class PauseMenu : MonoBehaviour
     {
         layoutGroup = pauseMenuUI.GetComponentInChildren<VerticalLayoutGroup>();
         gameManager = GetComponent<GameManager>();
-        playerInput = GetComponent<PlayerInput>();
+
     }
 
 
 
     void Update()
     {
-        if(playerInput != null)
-        {
-            if (playerInput.pause == true)
-            {
-                pauseMenuUI.SetActive(!pauseMenuUI.activeSelf);
-                gamePaused = pauseMenuUI.activeSelf;
-            }
-        }
+       
        
 
-        if (gamePaused == true)
+        if (gameManager.gamePaused == true)
         {
             Pause();
         }
@@ -60,18 +51,18 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
-        gamePaused = true;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
 
     public void Resume()
     {
+        gameManager.gamePaused = false;
         pauseMenuUI.SetActive(false);
+     
         Time.timeScale = 1f;
-        gamePaused = false;
         Cursor.visible = false;
         BackButton();
-
     }
 
 
