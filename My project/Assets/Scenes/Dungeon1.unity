@@ -19968,7 +19968,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f51d8b30f7170934e813b46a2e4675a7, type: 2}
+  - {fileID: 2100000, guid: 0cd3fab8dc633b845a5d967d1fa3752f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -26578,6 +26578,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
   m_PrefabInstance: {fileID: 1711363795766052673}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1552827083 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7096661054290996174, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
+  m_PrefabInstance: {fileID: 1711363795766052673}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db34a3a09ad3f7044a9ddc535a67de86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1556906478 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8756267978922567777, guid: c8489c0c6bebf2040957958547286050, type: 3}
@@ -36286,6 +36297,10 @@ PrefabInstance:
       propertyPath: virtualCamera
       value: 
       objectReference: {fileID: 4141960911434970008}
+    - target: {fileID: 1058215942794145690, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
+      propertyPath: playerManger
+      value: 
+      objectReference: {fileID: 1552827083}
     - target: {fileID: 6528760259279523712, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_Name
       value: 'Test_Player '
