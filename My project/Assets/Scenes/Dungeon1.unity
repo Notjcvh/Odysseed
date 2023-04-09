@@ -3727,7 +3727,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223652201}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.1705154, y: 1, z: 0.99999946}
@@ -3810,7 +3810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: Vineyard
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 688083904}
 --- !u!4 &224728077 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9191238742560176942, guid: 2b15f9589420368419f870ac5e1971ba, type: 3}
@@ -11604,6 +11604,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 832d531b032929545bfafc2f428ed500, type: 3}
+--- !u!114 &688083904 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1482087288, guid: 832d531b032929545bfafc2f428ed500, type: 3}
+  m_PrefabInstance: {fileID: 688083903}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285381186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1ce288d85c5ffe4786a18f84e734a44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &690519009
 PrefabInstance:
   m_ObjectHideFlags: 0
