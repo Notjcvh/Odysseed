@@ -94,7 +94,11 @@ public class PlayerManger : MonoBehaviour
             gameManager.gamePaused = (!gameManager.gamePaused);
             inputsEnable = !inputsEnable;            
         }
-        
+
+        if (Input.GetKey(KeyCode.M))
+            inputsEnable = true;
+
+
         if(inputsEnable == true)
         {
             if (playerMovement.IsGrounded())
@@ -116,16 +120,25 @@ public class PlayerManger : MonoBehaviour
                 animator.SetBool("isJumping", true);
             }
 
-            if (playerInput.dash && isDashing == false)
+            if (playerInput.dash && playerMovement.isDashing == false)
             {
-                isDashing = true;
-                animator.SetBool("isDashing", true);
+               animator.SetBool("isDashing", true);
+                playerMovement.isDashing = true;
+
+                StartCoroutine(playerMovement.Dash());
             }
 
-            if (isDashing == true)
+            if (playerMovement.isDashing == true)
             {
-                currentState = PlayerStates.Dashing;
+                PlayerStates state;
+
+                if (playerMovement.IsGrounded() == true)
+                    state = PlayerStates.GroundedDash;
+                else
+                    state = PlayerStates.InAirDash;
+               SetPlayerState(state);
             }
+
 
 
             //Attacking 
@@ -160,8 +173,6 @@ public class PlayerManger : MonoBehaviour
                 }
             }
 
-        
-
             if (!playerInput.chargedSecondaryAttack && chargeTime > 1f)
             {
                 animator.SetTrigger("LaunchChargedAttack");
@@ -181,6 +192,7 @@ public class PlayerManger : MonoBehaviour
         {
             case (PlayerStates.Idle):
                 animator.SetBool("isRunning", false);
+                stopMovementEvent = false;
                 break;
             case (PlayerStates.Moving):
                 animator.SetBool("isRunning", true);
@@ -193,8 +205,9 @@ public class PlayerManger : MonoBehaviour
                 animator.SetBool("isFalling", true);
                 animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
                 break;
-            case (PlayerStates.Dashing):
+            case (PlayerStates.GroundedDash):
                 SetPlayerState(currentState);
+                stopMovementEvent = true;
                 break;
             case (PlayerStates.FallingAndMoving):
                 animator.SetBool("isFalling", true);
@@ -227,15 +240,18 @@ public class PlayerManger : MonoBehaviour
     #endregion
 
 
-    void SetPlayerState(PlayerStates newState)
+    public void SetPlayerState(PlayerStates newState)
     {
         if(newState != currentState)
         {
-            //On Leave
+            //On Leave from previous State
             switch (currentState)
             {
-                //call that here
-                case PlayerStates.Jumping:
+                case PlayerStates.InAirDash:
+                    if(playerMovement.isDashing == false)
+                    {
+                        Debug.Log("Called");
+                    }
                     break;
             }
             currentState = newState;
@@ -264,6 +280,9 @@ public class PlayerManger : MonoBehaviour
                     break;
                 case PlayerStates.Dying:
                     animator.SetTrigger("Death");
+                    break;
+                case PlayerStates.Landing:
+                    playerBody.velocity = Vector3.zero;
                     break;
 
             }
@@ -368,7 +387,8 @@ public enum PlayerStates
     Landing,
     Jumping,
     JumpingAndMoving,
-    Dashing,
+    GroundedDash,
+    InAirDash,
     Falling,
     FallingAndMoving,
     Dying,
