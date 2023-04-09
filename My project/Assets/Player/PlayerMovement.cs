@@ -34,12 +34,11 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Dash")]
-    public AnimationCurve dashValueCurve;
+    public AnimationCurve groundedDashValueCurve;
+    public AnimationCurve inAirDashValueCurve;
     public float force;
-    public float dashResetTimer = 0;
-    public float lerpduration;
     private IEnumerator dashCorutine;
-    private bool isDashing = false;
+    public bool isDashing = false;
 
     [Header("Targeting")]
     public bool targetingEnemy;
@@ -49,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Seeds")]
     public int seedId;
 
+
+    private bool isFalling = false;
 
     private void Awake()
     {
@@ -62,7 +63,6 @@ public class PlayerMovement : MonoBehaviour
         Keyframe lastKey = keys[keys.Length - 1];
         float end = lastKey.time;
         jumpTime = end;
-
 
         //We want to make sure when the game starters the animator recognizes the player is on the groun
         animator.SetBool("isGrounded", IsGrounded());
@@ -78,6 +78,12 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isGrounded", IsGrounded());
             jumpElapsedTime = 0;
             gravityMultiplier = 0;
+
+            if (isFalling == true)
+            {
+                playerManger.SetPlayerState(PlayerStates.Landing);
+                isFalling = false;
+            }
         }
         else
         {
@@ -86,19 +92,6 @@ public class PlayerMovement : MonoBehaviour
             
             
             //StartCoroutine(gravityCorutine);
-        }
-
-        //Dashing 
-        if (playerManger.currentState == PlayerStates.Dashing)
-        {
-     
-            if(!isDashing)
-            {
-                dashCorutine = Dash();
-                StartCoroutine(dashCorutine);
-                isDashing = true;
-            }
-            
         }
 
         //Enemy Targetting 
@@ -163,6 +156,7 @@ public class PlayerMovement : MonoBehaviour
             else if (transform.position.y < lastPlayerPosY)
             {
                 currentState = PlayerStates.Falling;
+                isFalling = true;
             }
         }
         else if (transform.hasChanged && IsGrounded() == false && playerInput.movementInput != Vector3.zero)
@@ -174,6 +168,7 @@ public class PlayerMovement : MonoBehaviour
             else if (transform.position.y < lastPlayerPosY)
             {
                 currentState = PlayerStates.FallingAndMoving;
+                isFalling = true;
             }
         }
         lastPlayerPosY = transform.position.y;
@@ -218,31 +213,51 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Dashing
-    private IEnumerator Dash()
+    public IEnumerator Dash()
     {
-        Keyframe[] keys = dashValueCurve.keys;
+
+        Keyframe[] keys;
+        PlayerStates dashType;
+        AnimationCurve curveToEvaluate;
+        if (IsGrounded() == true)
+        {
+            dashType = PlayerStates.GroundedDash;
+            keys = groundedDashValueCurve.keys;
+            curveToEvaluate = groundedDashValueCurve;
+            print("A");
+        }
+        else
+        {
+            dashType = PlayerStates.InAirDash;
+            keys = inAirDashValueCurve.keys;
+            curveToEvaluate = inAirDashValueCurve;
+            print("B");
+        }
         Keyframe lastKey = keys[keys.Length - 1];
         float end = lastKey.time;
         //Setting to the end of the animation 
-        
-        int count = 0;
+
         float timeElapsed = 0;
-        Vector3 dir = transform.rotation * Vector3.forward;
+     
         while (timeElapsed < end)
         {
-            force = dashValueCurve.Evaluate(timeElapsed);
+            Vector3 dir = transform.rotation * Vector3.forward;
+            force = curveToEvaluate.Evaluate(timeElapsed);
             playerBody.AddForce(dir * force * Time.deltaTime, ForceMode.VelocityChange);
             playerBody.AddForce(playerBody.velocity * -10f * Time.deltaTime);
             timeElapsed += Time.deltaTime;
-            count += 1;
-            print("this is my count" + count + " this is the time elapsed " + timeElapsed + "this is my force" + force);
-
             yield return null;
         }
-        playerBody.velocity = Vector3.zero;
-        playerManger.isDashing = false;
-        stopMovementEvent = false;
+
         isDashing = false;
+        if (dashType == PlayerStates.GroundedDash)
+            playerBody.velocity = Vector3.zero; // Stop player speed instantly 
+        else
+            playerManger.SetPlayerState(PlayerStates.FallingAndMoving);
+    
+        
+        force = 0;
+
     }
 
     public void DashAnimationEnded()
