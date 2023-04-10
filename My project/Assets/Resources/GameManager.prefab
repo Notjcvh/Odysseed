@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1482087288}
   - component: {fileID: 7320244891792705897}
   - component: {fileID: 308276308}
-  - component: {fileID: 4444859371877774803}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Game Manager
@@ -128,27 +127,39 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - Event: {fileID: 11400000, guid: 4e95082c0f972d945b7a6024c73558e0, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1482087288}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+          m_MethodName: Reload
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 5d67679786058354db8fb940f5318c2f, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1482087288}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+          m_MethodName: QuitGame
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   myPlayerEvent: []
---- !u!114 &4444859371877774803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2538145067693232677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c1b3e59d8c613942ac926bec0aae184, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 0}
-  uiElements: []
-  instructionText: {fileID: 0}
-  gameOverIncremented: 0
-  continueButton: {fileID: 0}
-  endButton: {fileID: 0}
-  continueButtonText: 
-  endButtonText: 
 --- !u!1001 &987733423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -440,6 +451,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8945360158745904376, guid: fa3c8210363bb164e94ac3893ebbc818, type: 3}
+      propertyPath: quit
+      value: 
+      objectReference: {fileID: 11400000, guid: 5d67679786058354db8fb940f5318c2f, type: 2}
+    - target: {fileID: 8945360158745904376, guid: fa3c8210363bb164e94ac3893ebbc818, type: 3}
+      propertyPath: restart
+      value: 
+      objectReference: {fileID: 11400000, guid: 4e95082c0f972d945b7a6024c73558e0, type: 2}
     - target: {fileID: 8945360158745904377, guid: fa3c8210363bb164e94ac3893ebbc818, type: 3}
       propertyPath: m_RootOrder
       value: 1
