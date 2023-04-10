@@ -65,27 +65,27 @@ public class PlayerManger : MonoBehaviour
 
 
         //Set up Health Bar
-        if (playerUi == null)
-        {
+        //if (playerUi == null)
+        //{
         
-            var childrenList = new List<Image>();
-            playerUi = GameObject.FindGameObjectWithTag("PlayerUI");
+        //    var childrenList = new List<Image>();
+        //    playerUi = GameObject.FindGameObjectWithTag("PlayerUI");
 
-            // the string name needs to be exact for the function to work
-            Transform root = playerUi.transform;
-            Hud = GetChildByName(root, "Hud").GetComponent<Image>();
-            Transform heartHolder = GetChildByName(root, "Heart Holder");
+        //    // the string name needs to be exact for the function to work
+        //    Transform root = playerUi.transform;
+        //    Hud = GetChildByName(root, "Hud").GetComponent<Image>();
+        //    Transform heartHolder = GetChildByName(root, "Heart Holder");
 
-            if(heartHolder != null)
-            {
-                foreach (Transform child in heartHolder.transform)
-                {
-                    Image i = child.GetComponent<Image>();
-                    childrenList.Add(i);
-                    hearts = childrenList.ToArray();
-                }
-            }
-        }
+        //    if(heartHolder != null)
+        //    {
+        //        foreach (Transform child in heartHolder.transform)
+        //        {
+        //            Image i = child.GetComponent<Image>();
+        //            childrenList.Add(i);
+        //            hearts = childrenList.ToArray();
+        //        }
+        //    }
+        //}
     }
     private void Update()
     {
