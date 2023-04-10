@@ -13,7 +13,7 @@ public enum PhysicsBehaviours
     #endregion
 
     #region Add a Single Physics Behaviour 
-    Knockback,
+    AggresiveKnockback,
     KnockUp,
     Knockdown,
     #endregion
@@ -221,24 +221,24 @@ public class PlayerAttack : MonoBehaviour
                     lightAttackCounter++;
                     animator.SetFloat("Starter Type", 0);
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 1));
                     break;
                 case (1, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 1));
                     break;
                 case (2, true):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 20, 5f, 20));
                     break;
                 #endregion
                 #region Air Light Attacks 
                 case (0, false):
                     lightAttackCounter++;
                     Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockback, 20, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
                     break;
                 #endregion
                 default:
@@ -255,17 +255,17 @@ public class PlayerAttack : MonoBehaviour
                      animator.SetFloat("Starter Type", 1);
                      heavyAttackCounter++;
                      Set(inputType, heavyAttackCounter, 5f);
-                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 20, 3f, 5));
+                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 3f, 1));
                     break;
                 case (1, true):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 25, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 25, 5f, 1));
                     break;
                 case (2, true):
                     heavyAttackCounter++;
                     Set(inputType, heavyAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 30, 5f, 10));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 30, 5f, 10));
                     break;
                 #endregion
                 #region Air Heavy Attacks 
@@ -291,7 +291,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void Set(int inputType, int attacktype, float combolifetime)
     {
-        audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
+      //  audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
         //increase the attack counters
         if (inputType == 0) // light attack 
             heavyAttackCounter++;
@@ -395,9 +395,8 @@ public class PlayerAttack : MonoBehaviour
         if (canRotate == true)
         {
             Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
-            Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
-            targetRotation = cameraPlannerRotation;
-            Quaternion lerp = Quaternion.Lerp(this.transform.rotation, targetRotation, Time.deltaTime * 10);
+            Quaternion cameraPlannerRotation = Quaternion.LookRotation(playerMovement.movementVector);
+            Quaternion lerp = Quaternion.Lerp(this.transform.rotation, cameraPlannerRotation, Time.deltaTime * 10);
             transform.rotation = lerp;
         }
     }

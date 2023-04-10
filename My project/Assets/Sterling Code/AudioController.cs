@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 
 public class AudioController : MonoBehaviour
@@ -10,15 +9,13 @@ public class AudioController : MonoBehaviour
 
     public static AudioController instance;
 
-    public AudioSource source;
-    public bool playingAudio;
-
-
     public bool debug;
-    public AudioTrack[] tracks;
+  
 
     private Hashtable AudioTable; //relationship between audio types (key) and audio tracks (value)
     private Hashtable JobTable; //relationship between audio types (key) and jobs (value) (Coroutine,IEnumerator)
+
+    public AudioTrack[] tracks;
 
 
     [System.Serializable]
@@ -69,8 +66,6 @@ public class AudioController : MonoBehaviour
     private void Awake()
     {
         Configure();
-
-        source = this.GetComponent<AudioSource>();
     }
 
     private void OnDisable()
@@ -233,8 +228,6 @@ public class AudioController : MonoBehaviour
 
         AudioTrack track = (AudioTrack)AudioTable[job.type];
         track.source.clip = GetAudioClipFromAudioTrack(job.type, track);
-        source.clip = track.source.clip;
-
 
         switch (job.action)
         {

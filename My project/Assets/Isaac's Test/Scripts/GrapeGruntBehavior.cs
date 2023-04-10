@@ -67,7 +67,7 @@ public class GrapeGruntBehavior : MonoBehaviour
     {
         if(audioController != null)
         {
-            audioController.PlayAudio(AudioType.RotEnemyNoise, false, 0, false);
+           //audioController.PlayAudio(AudioType.RotEnemyNoise, false, 0, false);
         }
 
         if (thisEnemy.isStunned)

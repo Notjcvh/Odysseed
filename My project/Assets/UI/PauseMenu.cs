@@ -33,9 +33,6 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-       
-       
-
         if (gameManager.gamePaused == true)
         {
             Pause();

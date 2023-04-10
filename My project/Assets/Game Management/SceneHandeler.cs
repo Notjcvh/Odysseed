@@ -11,10 +11,8 @@ public class SceneHandeler : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private PlayerManger playerManger;
     [SerializeField] private AudioController audioController;
-    [SerializeField] private AudioType backgroundMusic;
 
-    private AudioClip clip;
-
+  
     [Header("Scene Transitions")]
     public GameObject sceneTransition;
     public TextMeshProUGUI[] displayText;
@@ -22,9 +20,14 @@ public class SceneHandeler : MonoBehaviour
 
     public Vector3 spawnPosition;
 
-
-    public AudioSource source;
-    public bool audioJobSent = false; 
+    [Header("Background Audio Caller")]
+    public AudioType playingAudio; // the currently playing audio
+    [SerializeField] private AudioType queueAudio; // the next audio to play
+    private AudioSource audioSource;
+    public AudioClip clip;
+    public bool audioJobSent = false; // if job sent is true then it won't play
+    private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
 
     #region Unity Functions
     private void Start()
@@ -35,33 +38,70 @@ public class SceneHandeler : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         gameManager.SetPlayerPosition(player.transform.position);
         audioController = GetComponent<AudioController>();
+        audioSource = GetComponent<AudioSource>();
 
         IntializeScene();
-        //
-
     }
 
     private void Update()
     {
-        if (source.isPlaying == false)
+        if (audioJobSent == false )
         {
-            if (audioJobSent == false)
-            {
-                audioJobSent = true;
-                audioController.PlayAudio(backgroundMusic, false, 0, true);
-            }
+            audioJobSent = true;    
+            ManageAudio(queueAudio);
+            StartCoroutine(WaitToPlay(clip.length));
         }
-        else
-        {
-            float length = audioController.source.clip.length;
-            StartCoroutine(WaitAndPlayAgain(length));
-        }
-      
     }
     #endregion
 
     #region Sound looping
-    IEnumerator WaitAndPlayAgain(float time)
+    // Call this function if we want to stop the currently playing audio 
+    void StopAudio(AudioType audioType) 
+    {
+        if(audioSource.isPlaying)
+        {
+            audioController.StopAudio(audioType, true, 0, false);
+            audioJobSent = false;
+        }
+    }
+    // Call this function if we want to change audio 
+    void QueueAudio(AudioType audioType)
+    {
+        queueAudio = audioType;
+    }
+
+    void ManageAudio(AudioType type)
+    {
+       if(ourAudio.Count < 1)
+       {
+            // Loop through each audio track
+            foreach (AudioController.AudioTrack track in audioController.tracks)
+            {
+                // Access the audio objects in each track
+                audioObjects.AddRange(track.audio);
+                // Loop through each audio object in the track
+                foreach (AudioController.AudioObject audioObject in audioObjects)
+                {
+                    // this should add all our audio to the dictionary
+                    ourAudio.Add(audioObject.type, audioObject.clip);
+                }
+            }
+       }
+        if (ourAudio.ContainsKey(type))
+        {
+            clip = ourAudio[type];
+        }
+        if (type != playingAudio)
+        {
+            audioController.PlayAudio(type, false, 0, false);
+            playingAudio = type;
+        }
+        else
+        {
+            audioController.PlayAudio(playingAudio, false, 0, false);
+        }
+    }
+    IEnumerator WaitToPlay(float time)
     {
         yield return new WaitForSecondsRealtime(time);
         audioJobSent = false;
@@ -119,6 +159,11 @@ public class SceneHandeler : MonoBehaviour
     void ActivatePlayer()
     {
         playerManger.inputsEnable = true;
+    }
+
+    public void DeactivatePlayer()
+    {
+       playerManger.inputsEnable = false;
     }
 
 }

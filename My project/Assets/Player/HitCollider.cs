@@ -20,8 +20,10 @@ public class HitCollider : MonoBehaviour
     public PlayerAttack playerAttack;  // use this member to determine the origin from target to enemy 
 
     public List<Rigidbody> hittableObjects;
-    public TargetGroup targetGroup; 
+    public TargetGroup targetGroup;
 
+    int callCounter;
+     
     private void Awake()
     {
         playerAttack = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack>();
@@ -30,6 +32,8 @@ public class HitCollider : MonoBehaviour
             playerAttack.colliders.Add(gameObject.name, this);
         }
         targetGroup = GameObject.FindGameObjectWithTag("TargetGroup").GetComponent<TargetGroup>();
+
+        callCounter = 0;
     }
 
     public void MyBehaviour(PlayerAttack.PlayerCollider collider)
@@ -46,68 +50,75 @@ public class HitCollider : MonoBehaviour
     {
         if (whatIsHittable == (whatIsHittable | (1 << other.transform.gameObject.layer))) // Bitwise equation: layermask == (layermask | 1 << layermask)
         {
-            //Check for all gameobjects 
-            hittableObjects.Add(other.gameObject.GetComponent<Rigidbody>());
-            HitSomething(hittableObjects);
+            if(!hittableObjects.Contains(other.attachedRigidbody))
+            {
+                hittableObjects.Add(other.gameObject.GetComponent<Rigidbody>());
+            }
         }
+
+        for (int i = 0; i < hittableObjects.Count; i++)
+        {
+           // Debug.Log("Object " + (i + 1) + ": " + hittableObjects[i].gameObject.name);
+            HitSomething(hittableObjects[i]);
+        }
+
+       
     }
 
-   public void ClearList()
-   {
+
+
+
+
+
+
+
+
+    private void HitSomething(Rigidbody obj)
+    {
+        Debug.Log("Object " + obj.gameObject.name + "belongs to group " + obj.tag);
+        switch (obj.tag)
+        {
+            case ("Enemy"):
+            
+                obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+                break;
+            case ("Boss"):
+                obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+                break;
+            default:
+                break;
+        }
+        switch (behaviours)
+        {
+            case PhysicsBehaviours.None:
+                AddKnockback(obj);
+                break;
+            case PhysicsBehaviours.AggresiveKnockback:
+                AddKnockback(obj);
+                break;
+            case PhysicsBehaviours.KnockUp:
+                AddKnockUp(obj);
+                break;
+            case PhysicsBehaviours.ContinousKnockback:
+                break;
+            case PhysicsBehaviours.Knockdown:
+                AddKnockdown(obj);
+                break;
+            default:
+                break;
+        }
+
+        ClearList();
+    }
+
+
+    public void ClearList()
+    {
         hittableObjects.Clear();
         Debug.Log("List Cleared");
-   }
-
-    private void HitSomething(List<Rigidbody> objs)
-    {
-        //Deal Damage 
-        foreach (var item in objs)
-        {
-            print(item.name);
-            switch (item.tag)
-            {
-                case("Enemy"):
-                    DamagePopUp.Create(item.transform.position, damage);
-                    item.SendMessage("DisableAI", 100);
-                    item.gameObject.GetComponent<Enemy>().ModifiyHealth(damage / 10);
-                    item.gameObject.GetComponent<EnemyStats>().VisualizeDamage(item);
-                    item.SendMessage("TakeDamage", damage / 10); 
-                    break;
-                case ("Boss"):
-                    item.SendMessage("TakeDamage", damage / 10);
-                    break;
-                default:
-                    break;
-            }
-
-            
-            switch (behaviours)
-            {
-                case PhysicsBehaviours.Knockback:
-                    AddKnockback(item);
-                    break;
-                case PhysicsBehaviours.KnockUp:
-                    AddKnockUp(item);
-                    break;
-                case PhysicsBehaviours.ContinousKnockback:
-                    break;
-                case PhysicsBehaviours.Knockdown:
-                    AddKnockdown(item);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        foreach (var item in hittableObjects)
-        {
-           
-        }
-
-       // ClearList();
     }
 
-     public void ActivateAdditionalBehaviours()
+    public void ActivateAdditionalBehaviours()
     {
         Debug.Log("Activated");
         //doing other things
@@ -126,10 +137,9 @@ public class HitCollider : MonoBehaviour
     private void AddKnockUp(Rigidbody body)
     {   
         body.AddForce(Vector3.up * strength, ForceMode.Impulse);
-        targetGroup.Add(body.transform);
-        targetGroup.timer = timer;
+       // targetGroup.Add(body.transform);
+       // targetGroup.timer = timer;
     }
-
     private void AddKnockdown(Rigidbody body)
     {
         body.AddForce(Vector3.down * strength, ForceMode.Impulse);

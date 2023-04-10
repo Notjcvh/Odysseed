@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
     {
         GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
         Destroy(hiteffs, 2f);
-        currentHealth -= amount;
+        currentHealth =currentHealth - amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
         OnHealthPercentChange(currentHealthPercent);
     }
@@ -72,7 +72,18 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         animator.SetBool("TakingDamage", true);
-        this.currentHealth += damage;
+      //  this.currentHealth += damage;
+
+        Debug.Log("I was hit was in my name " + this.gameObject.name);
+        DamagePopUp.Create(this.transform.position, damage);
+        ModifiyHealth(damage);
+        DisableAI();
+
+
+       // GetComponent<EnemyStats>().VisualizeDamage(this.gameObject);
+
+
+
     }
     public void DisableAI()
     {

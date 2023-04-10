@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
     public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
 
-
+    public GameObject gameOverUI;
 
     #region Unity Functions
     private void Awake()
@@ -113,14 +113,8 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void PlayerHasDied() // called in Player Manager 
+    public void Reload() // called in Player Manager 
     {
-        hasDied = true;
-        
-
-
-
-
         ReloadScene();
     }
     public void Convert()
@@ -129,6 +123,15 @@ public class GameManager : MonoBehaviour
         triggeredPoints = new List<Vector3>(hasSet);
         Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
         lastReachCheckpoint = b;
+    }
+
+    //activate game over Ui
+    public void PlayerHasDied()
+    {
+        
+        if (gameOverUI.activeSelf == false)
+            gameOverUI.SetActive(true);
+        Debug.Log("PlayerHasDied");
     }
 
 
@@ -145,6 +148,4 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
-
-  
 }

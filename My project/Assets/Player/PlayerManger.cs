@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class PlayerManger : MonoBehaviour
 {
@@ -12,12 +13,18 @@ public class PlayerManger : MonoBehaviour
     private AudioController audioController;
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
-    [SerializeField] private Rigidbody playerBody;
+    private Rigidbody playerBody;
+
+    public GameEvent iDied;
 
     [Header("Player States")]
     public PlayerStates currentState;
     public bool inputsEnable;
     public bool playerInputsEnable;
+    public bool stopMovementEvent;
+    public bool isDashing = false;
+    public bool isTalking = false;
+    public bool isDying = false;
 
     [Header("Initial Start Position")]
     private Vector3 intialStartPos;
@@ -31,7 +38,6 @@ public class PlayerManger : MonoBehaviour
     [SerializeField] private Image Hud; 
     [SerializeField] private int numberOfHearts;
     public Image[] hearts; // the full array of hearts in the game
-
     //Hud
     [SerializeField] private Sprite[] allHuds;
     //hearts
@@ -41,10 +47,6 @@ public class PlayerManger : MonoBehaviour
     [Header("Seeds")]
     public Seeds seeds;
 
-    public bool stopMovementEvent;
-    public bool isDashing = false;
-    public bool isTalking = false;
-    #region Unity Functions
 
     [Header("Attacking")]
     public float chargeTime;
@@ -52,6 +54,16 @@ public class PlayerManger : MonoBehaviour
     public bool isAttackAnimationActive;
     public int inputType;
 
+    [Header("Audio Caller")]
+    public AudioType playingAudio; // the currently playing audio
+    [SerializeField] private AudioType queueAudio; // the next audio to play
+    public AudioClip clip;
+    public bool audioJobSent = false; // if job sent is true then it won't play
+    private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
+
+
+    #region Unity Functions
     private void Start()
     {
         currentHealth = maxHealth;
@@ -62,7 +74,6 @@ public class PlayerManger : MonoBehaviour
         playerBody = GetComponent<Rigidbody>();
         playerAttack = GetComponent<PlayerAttack>();
         audioController = GetComponent<AudioController>();
-
 
         //Set up Health Bar
         //if (playerUi == null)
@@ -99,12 +110,16 @@ public class PlayerManger : MonoBehaviour
             inputsEnable = true;
 
 
-        if(inputsEnable == true)
+        if (inputsEnable == true)
         {
             if (playerMovement.IsGrounded())
             {
                 if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false)
+                {
                     SetPlayerState(PlayerStates.Moving);
+                    ManageAudio(AudioType.PlayerAttack);
+                }
+                    
                 else if (playerInput.movementInput == Vector3.zero && playerMovement.IsGrounded() == true && isDashing == false && isAttackAnimationActive == false)
                     SetPlayerState(PlayerStates.Idle);
             }
@@ -122,7 +137,7 @@ public class PlayerManger : MonoBehaviour
 
             if (playerInput.dash && playerMovement.isDashing == false)
             {
-               animator.SetBool("isDashing", true);
+                animator.SetBool("isDashing", true);
                 playerMovement.isDashing = true;
 
                 StartCoroutine(playerMovement.Dash());
@@ -136,56 +151,73 @@ public class PlayerManger : MonoBehaviour
                     state = PlayerStates.GroundedDash;
                 else
                     state = PlayerStates.InAirDash;
-               SetPlayerState(state);
+                SetPlayerState(state);
             }
 
 
-
-            //Attacking 
-            if (playerInput.attack)
+            if (playerMovement.IsGrounded())
             {
-                SetPlayerState(PlayerStates.PrimaryAttack);
-                isAttackAnimationActive = true;
-            }
 
-            if (playerInput.secondaryAttack && chargeTime <= 1f)
-            {
-                SetPlayerState(PlayerStates.SecondaryAttack);
-                isAttackAnimationActive = true;
-            }
-
-            if (playerInput.chargedSecondaryAttack)
-            {
-                chargeTime += Time.deltaTime;
-
-                animator.SetTrigger("Charging");
-                playerAttack.Rotate();
-          
-                if(chargeTime > 1)
+                if (playerInput.attack)
                 {
-                    animator.SetInteger("Mouse Input", 2);
-                    SetPlayerState(PlayerStates.ChargingAttack);
-                    if(!chargedAttack)
+                    SetPlayerState(PlayerStates.PrimaryAttack);
+                    isAttackAnimationActive = true;
+                }
+
+                if (playerInput.secondaryAttack && chargeTime <= 1f)
+                {
+                    SetPlayerState(PlayerStates.SecondaryAttack);
+                    isAttackAnimationActive = true;
+                }
+
+                if (playerInput.chargedSecondaryAttack)
+                {
+                    chargeTime += Time.deltaTime;
+
+                    animator.SetTrigger("Charging");
+                    playerAttack.Rotate();
+
+                    if (chargeTime > 1)
                     {
-                        chargedAttack = true;
-                        animator.SetBool("Attacking", true);
+                        animator.SetInteger("Mouse Input", 2);
+                        SetPlayerState(PlayerStates.ChargingAttack);
+                        if (!chargedAttack)
+                        {
+                            chargedAttack = true;
+                            animator.SetBool("Attacking", true);
+                        }
                     }
                 }
+
+                if (!playerInput.chargedSecondaryAttack && chargeTime > 1f)
+                {
+                    animator.SetTrigger("LaunchChargedAttack");
+                    animator.ResetTrigger("InputPressed");
+                    animator.ResetTrigger("Charging");
+                    chargedAttack = false;
+                    isAttackAnimationActive = true;
+                    SetPlayerState(PlayerStates.LaunchChargedAttack);
+                }
+
+
+            }
+            else
+            {
+
             }
 
-            if (!playerInput.chargedSecondaryAttack && chargeTime > 1f)
+
+
+            if (playerMovement.movementVector != Vector3.zero && playerInput.attack)
             {
-                animator.SetTrigger("LaunchChargedAttack");
-                animator.ResetTrigger("InputPressed");
-                animator.ResetTrigger("Charging");
-                chargedAttack = false;
-                isAttackAnimationActive = true;
-                SetPlayerState(PlayerStates.LaunchChargedAttack);
+                SetPlayerState(PlayerStates.DirectionalAttack);
             }
+
+
+            //Debug.Log(currentState);
         }
 
-
-     
+        
 
         // Current StateHandling 
         switch (currentState)
@@ -196,7 +228,12 @@ public class PlayerManger : MonoBehaviour
                 break;
             case (PlayerStates.Moving):
                 animator.SetBool("isRunning", true);
-                audioController.PlayAudio(AudioType.PlayerWalk, false, 0, false);
+                if (audioJobSent == false)
+                {
+                    ManageAudio(AudioType.PlayerWalk);
+                    audioJobSent = true;
+                    StartCoroutine(WaitToPlay(clip.length));
+                }
                 break;
             case (PlayerStates.Jumping):
                 animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
@@ -216,6 +253,9 @@ public class PlayerManger : MonoBehaviour
             case (PlayerStates.JumpingAndMoving):
                 animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
                 break;
+            case (PlayerStates.DirectionalAttack):
+                isAttackAnimationActive = true;
+                break;
         }
 
 
@@ -229,11 +269,11 @@ public class PlayerManger : MonoBehaviour
         }
 
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && isDying == false)
         {
             SetPlayerState(PlayerStates.Dying);
-            gameManager.PlayerHasDied();
-            Destroy(this.gameObject);
+            isDying = true;  
+            //play death Animation
         }
         #endregion
     }
@@ -262,6 +302,7 @@ public class PlayerManger : MonoBehaviour
                 case PlayerStates.PrimaryAttack:
                     inputType = 0;
                     playerAttack.LaunchAttack(inputType);
+                    audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
                     break;
                 case PlayerStates.SecondaryAttack:
                     inputType = 1;
@@ -269,6 +310,7 @@ public class PlayerManger : MonoBehaviour
                     playerAttack.timeOfCharge = 0;
                     playerAttack.chargedAttackMultiplier = 1.4f;
                     playerAttack.LaunchAttack(inputType);
+                    audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
                     break;
                 case PlayerStates.LaunchChargedAttack:
                     inputType = 2;
@@ -277,18 +319,60 @@ public class PlayerManger : MonoBehaviour
                     chargeTime = 0;
                     playerAttack.timeOfCharge = 0;
                     playerAttack.chargedAttackMultiplier = 1.4f;
+                    audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
                     break;
                 case PlayerStates.Dying:
                     animator.SetTrigger("Death");
+                    gameManager.PlayerHasDied();
+                    iDied.Raise();
                     break;
                 case PlayerStates.Landing:
                     playerBody.velocity = Vector3.zero;
                     break;
-
             }
         }
     }
 
+    #region Sound looping
+    void ManageAudio(AudioType type)
+    {
+        if (ourAudio.Count < 1)
+        {
+            // Loop through each audio track
+            foreach (AudioController.AudioTrack track in audioController.tracks)
+            {
+                // Access the audio objects in each track
+                audioObjects.AddRange(track.audio);
+                // Loop through each audio object in the track
+                foreach (AudioController.AudioObject audioObject in audioObjects)
+                {
+                    // this should add all our audio to the dictionary
+                    ourAudio.Add(audioObject.type, audioObject.clip);
+                }
+            }
+        }
+        if (ourAudio.ContainsKey(type))
+        {
+            clip = ourAudio[type];
+        }
+        if (type != playingAudio)
+        {
+            audioController.PlayAudio(type, false, 0, false);
+            playingAudio = type;
+        }
+        else
+        {
+            audioController.PlayAudio(playingAudio, false, 0, false);
+        }
+    }
+
+    IEnumerator WaitToPlay(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        audioJobSent = false;
+    }
+
+    #endregion
 
 
 
