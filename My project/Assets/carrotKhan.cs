@@ -83,18 +83,21 @@ public class carrotKhan : MonoBehaviour
     {
         Debug.Log("Im whirlwinding");
         animator.SetBool("isWhirlwinding", true);
+        attackCounter += 1;
         isAttacking = true;
     }
     public void Charge()
     {
         Debug.Log("Im charging");
         animator.SetBool("isCharging", true);
+        attackCounter += 1;
         isAttacking = true;
     }
     public void WaterSlicer()
     {
         Debug.Log("Im slicing");
         animator.SetBool("isSlicing", true);
+        attackCounter = 0;
         isAttacking = true;
     }
     public void Explode()
