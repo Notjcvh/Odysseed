@@ -103,9 +103,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerManger.currentState == PlayerStates.Moving || playerManger.currentState == PlayerStates.JumpingAndMoving || playerManger.currentState == PlayerStates.FallingAndMoving)
+        if (playerManger.currentState == PlayerStates.Moving || playerManger.currentState == PlayerStates.JumpingAndMoving || playerManger.currentState == PlayerStates.FallingAndMoving )
         {
-            CanMove();
+            if(playerManger.isAttackAnimationActive == false)
+                 CanMove();
         }
     }
 
@@ -147,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
     //Checking the change in the position of the player 
     public PlayerStates checkYVelocity(PlayerStates currentState)
     {
+        
         if (transform.hasChanged && IsGrounded() == false && playerInput.movementInput == Vector3.zero)
         {
             if (transform.position.y > lastPlayerPosY)

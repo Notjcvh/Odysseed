@@ -25,7 +25,7 @@ public class EnemyStats : MonoBehaviour
     }
     */
 
-    public void VisualizeDamage(Rigidbody obj)
+    public void VisualizeDamage(GameObject obj)
     {
         myMaterial = obj.gameObject.GetComponent<Renderer>().material;
 
