@@ -20,6 +20,8 @@ public class PotatoKing : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform spawner;
     public float projectileSpeed;
+    [Header("Charge Attack")]
+    public float chargeSpeed;
     [Header("Phase 2")]
     private Animator animator;
 
@@ -87,6 +89,8 @@ public class PotatoKing : MonoBehaviour
         animator.SetBool("isCharging", true);
         attackCounter += 1;
         isAttacking = true;
+        //public Vector3 target = new Vector3(PlayerAttack.)
+
     }
     public void WaterSlicer()
     {
