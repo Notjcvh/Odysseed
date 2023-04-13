@@ -5,6 +5,7 @@ using UnityEngine;
 public class PotatoKing : MonoBehaviour
 {
     private Rigidbody rb;
+    private Animator animator;
     private GameObject player;
     [Header("Basic attributes")]
     public int attackCounter = 0;
@@ -12,18 +13,26 @@ public class PotatoKing : MonoBehaviour
     public int healthThreshold = 50;
     public Enemy enemyScript;
     public bool isStunned;
-    public bool isBuried;
+    public bool isIdle;
+    public float groundYLevel;
+    public float stunDuration;
     [Header("Roots Attack")]
     public GameObject roots;
     public float rootsLifetime;
+    public float rootsYLevel;
     [Header("Projectile attributes")]
     public GameObject projectilePrefab;
     public Transform spawner;
     public float projectileSpeed;
     [Header("Charge Attack")]
     public float chargeSpeed;
-    [Header("Phase 2")]
-    private Animator animator;
+    public float chargeWaitBeforeCharging;
+    public GameObject burrowMoveEffect;
+    public GameObject unborrowEffect; 
+    public float chargeYLevel;
+    [Header("Burrow")]
+    public List<Transform> unborrowLocations;
+    public float timeToUnborrow;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +45,7 @@ public class PotatoKing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isAttacking && !isStunned)
+        if (!isAttacking && !isStunned && !isIdle)
         {
             switch (attackCounter)
             {
@@ -50,10 +59,14 @@ public class PotatoKing : MonoBehaviour
                     Charge();
                     break;
                 case (3):
-                    WaterSlicer();
+                    Burrow();
                     break;
                 default:
                     break;
+            }
+            if(isStunned)
+            {
+                IsStunned(stunDuration);
             }
         }
 
@@ -79,44 +92,52 @@ public class PotatoKing : MonoBehaviour
         animator.SetBool("isWhirlwinding", true);
         attackCounter += 1;
         isAttacking = true;
-        Vector3 spawnLocation = new Vector3(player.transform.position.x, 20, player.transform.position.z);
+        Vector3 spawnLocation = new Vector3(player.transform.position.x, rootsYLevel, player.transform.position.z);
         GameObject inGameAttack1 = Instantiate(roots, spawnLocation, player.transform.rotation);
         Destroy(inGameAttack1, rootsLifetime);
     }
     public void Charge()
     {
-        Debug.Log("Im charging");
-        animator.SetBool("isCharging", true);
+        animator.SetBool("imBurrowing", true);
         attackCounter += 1;
         isAttacking = true;
-        //public Vector3 target = new Vector3(PlayerAttack.)
+        StartCoroutine("ChargeMotion",(chargeWaitBeforeCharging));
+    }
+    IEnumerator ChargeMotion(float secs)
+    {
+        yield return new WaitForSeconds(secs);
+        Vector3 originalLocation = new Vector3(player.transform.position.x, chargeYLevel, player.transform.position.z);
+        Vector3 burrowLocation = new Vector3(player.transform.position.x, chargeYLevel, player.transform.position.z);
+        this.transform.position = Vector3.Lerp(originalLocation, burrowLocation, chargeSpeed);
+    }
+    public void Burrow()
+    {
+        Debug.Log("Im Burrowing");
+        animator.SetBool("imBurrowing", true);
+        attackCounter += 1;
+        int unborrowLocation = Random.Range(0,unborrowLocations.Count);
+        this.transform.position = unborrowLocations[unborrowLocation].position;
+        StartCoroutine("UnBorrow", timeToUnborrow);
+        isAttacking = true;
+    }
+    IEnumerator UnBorrow(float secs)
+    {
+        yield return new WaitForSeconds(secs);
+        animator.SetBool("imBurrowing", true);
+        isStunned = true;
+    }
 
-    }
-    public void WaterSlicer()
+    public void IsStunned(float stunDuration)
     {
-        Debug.Log("Im slicing");
-        animator.SetBool("isSlicing", true);
-        attackCounter = 0;
-        isAttacking = true;
+        animator.SetBool("isStunned", true);
+        StartCoroutine("GetUnStunned", stunDuration);
     }
-    public void Explode()
+    IEnumerator GetUnStunned(float secs)
     {
-        Debug.Log("Im exploding");
-        animator.SetBool("imExploding", true);
-        isAttacking = true;
+        yield return new WaitForSeconds(secs);
+        isStunned = true;
     }
-    public void SlamAttack()
-    {
-        Debug.Log("Im slamming");
-        animator.SetBool("isSlamming", true);
-        isAttacking = true;
-    }
-    public void LazerBeam()
-    {
-        Debug.Log("Im firin mah lazer");
-        animator.SetBool("isFiringLazer", true);
-        isAttacking = true;
-    }
+
     public void Death()
     {
         Debug.Log("Im Dying");
