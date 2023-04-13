@@ -8,7 +8,11 @@ public class Attack : MonoBehaviour
     public PlayerManger playerHealth;
 
     public bool hitAlready;
-    private void OnTriggerEnter(Collider other)
+    private void OnEnable()
+    {
+        hitAlready = false;
+    }
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player" && !hitAlready)
         {
