@@ -27,8 +27,6 @@ public class LazerBeam : MonoBehaviour
                 if (lineRenderer.enabled)
                 {
                     lineRenderer.enabled = false;
-                    //impactEffect.Stop();
-                    //impactLight.enabled = false;
                 }
             }
             return;
@@ -46,18 +44,10 @@ public class LazerBeam : MonoBehaviour
         if (!lineRenderer.enabled)
         {
             lineRenderer.enabled = true;
-            //impactEffect.Play();
-            //impactLight.enabled = true;
         }
-
         lineRenderer.SetPosition(0, lazerStart.transform.position);
         lineRenderer.SetPosition(1, target.transform.position);
-
         Vector3 dir = this.transform.position - target.transform.position;
-
-        //impactEffect.transform.position = target.transform.position + dir.normalized;
-
-        //impactEffect.transform.rotation = Quaternion.LookRotation(dir);
     }
     void LockOnTarget()
         {
