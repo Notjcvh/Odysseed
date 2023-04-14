@@ -12,11 +12,7 @@ public class SceneHandeler : MonoBehaviour
     [SerializeField] private PlayerManger playerManger;
     [SerializeField] private AudioController audioController;
 
-  
-    [Header("Scene Transitions")]
-    public GameObject sceneTransition;
-    public TextMeshProUGUI[] displayText;
-    public Level[] levels;
+    public bool sceneActivated = false;
 
     public Vector3 spawnPosition;
 
@@ -39,36 +35,56 @@ public class SceneHandeler : MonoBehaviour
         gameManager.SetPlayerPosition(player.transform.position);
         audioController = GetComponent<AudioController>();
         audioSource = GetComponent<AudioSource>();
-
-        IntializeScene();
     }
 
     private void Update()
     {
-        if (audioJobSent == false )
+        if(sceneActivated == true)
         {
-            audioJobSent = true;    
-            ManageAudio(queueAudio);
-            StartCoroutine(WaitToPlay(clip.length));
+           if (audioJobSent == false)
+           {
+                audioJobSent = true;
+                ManageAudio(queueAudio);
+                StartCoroutine(WaitToPlay(clip.length));
+           }
         }
+
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            StopAudio();
+        }      
     }
     #endregion
 
     #region Sound looping
     // Call this function if we want to stop the currently playing audio 
-    void StopAudio(AudioType audioType) 
+     public void StopAudio() 
     {
+        StopCoroutine(WaitToPlay(clip.length));
         if(audioSource.isPlaying)
         {
-            audioController.StopAudio(audioType, true, 0, false);
-            audioJobSent = false;
+            audioController.StopAudio(playingAudio, false, 0, false);
+            StartCoroutine(WaitToPlay(3));
         }
     }
     // Call this function if we want to change audio 
-    void QueueAudio(AudioType audioType)
-    {
-        queueAudio = audioType;
-    }
+   public void QueueAudio(SceneEvent sceneEvent)
+   {
+        switch (sceneEvent.name)
+        {
+            case ("Audio_DungeonOne"):
+                queueAudio = AudioType.DungeonOne;
+                break;
+            case ("Audio_RotBoss"):
+                queueAudio = AudioType.RotBoss;
+                break;
+            case ("Audio_MainMenu"):
+                queueAudio = AudioType.MainMenu;
+                break;
+            default:
+                break;
+        }
+   }
 
     void ManageAudio(AudioType type)
     {
@@ -108,57 +124,31 @@ public class SceneHandeler : MonoBehaviour
     }
     #endregion
 
-    void IntializeScene()
+    public void IntializeScene()
     {
-        if (gameManager.buildindex >= 0) //the player is active after scene 1
-        {
-            sceneTransition.SetActive(true);
-            DisplaySceneTransitionUI(sceneTransition);
+        sceneActivated = true;
+       // if (gameManager.buildindex >= 0) //the player is active after scene 1
+       // {
             player = GameObject.FindGameObjectWithTag("Player");
-        }
+      //  }
 
+        
         //Load the player position
         spawnPosition = gameManager.startingPosition;
         player.transform.position = spawnPosition;
 
+
+        playerManger.CreateHealthBar();
         ActivatePlayer();
     }
 
-    #region Scene Transition UI
-    public void DisplaySceneTransitionUI(GameObject scene)
-    {
-        if (sceneTransition.activeInHierarchy)
-        {
-            // setting the pannel and TMP GUI prefab to active 
-            displayText = scene.GetComponentsInChildren<TextMeshProUGUI>();
+   
 
-            string currentSceneName = gameManager.scene.name;
-
-            foreach (var level in levels)
-            {
-                if (level.sceneName != currentSceneName)
-                    continue;
-                else
-                {
-                    for (int i = 0; i < displayText.Length; i++)
-                    {
-                        if (i == 0)
-                            displayText[i].SetText(level.levelName);
-                        else
-                            displayText[i].SetText(level.description);
-                    }
-                }
-            }
-            
-        }
-        else
-            return;
-    }
-    #endregion
 
     void ActivatePlayer()
     {
         playerManger.inputsEnable = true;
+       
     }
 
     public void DeactivatePlayer()

@@ -1,41 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
-using System;
+using UnityEngine.UI;
+using TMPro;
+using UnityEditor;
+
 
 public class GameManager : MonoBehaviour
 {
 
     [Header("Referencing")]
     public static GameManager instance;
-    public List<GameObject> allObjects = new List<GameObject>(); // all objects we want the game manager to keep
+
+    [Header("Game Events")]
+    [SerializeField] private GameEvent initializeScene;
+
+
+    [Header("Scene Management")]
+    public Level levelToLoad;
+    public Scene scene;
+    public int buildindex;
+    public GameObject sceneTransition;
+    public TextMeshProUGUI[] displayText;
+    public Level[] levels;
+
+  
+
+    [Header("UI Game Objects")]
+    public GameObject gameOverUI;
+    public GameObject loadingScreenUI;
+    public Slider loadingSlider;
+    private float sliderTarget;
+    public Image loadingScreenImage;
+    public Sprite[] loadingScreenSprites;
+
+
+    public string currentScene;
 
     public Vector3 startingPosition;
     public Vector3 lastReachCheckpoint;
     public Vector3 levelPosition;
 
-    public SceneManager currentScene;
-    public int buildindex;
-
+  
 
     public bool loaded = false;
     public bool hasDied = false; // might be better to have as a number 
-    public bool Levelcompleted = false;
 
     public bool gamePaused = false;
 
-    public bool playerHasDied;
 
-    public Scene scene;
 
+  
 
     public AudioMixer mixer;
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
     public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
 
-    public GameObject gameOverUI;
+ 
 
     #region Unity Functions
     private void Awake()
@@ -48,56 +72,81 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
-
-        scene = SceneManager.GetActiveScene();
-        if(scene.isLoaded)
-        {
-            Debug.Log("Scene Loaded");
-        }         
     }
 
+    private void Start()
+    {
+        LoadLevel(SceneManager.GetActiveScene());
+        currentScene = SceneManager.GetActiveScene().name;
+
+    }
     private void Update()
     {
-       // if(Input.GetKeyDown(KeyCode.Y))
-        //{
-         //   ReloadScene();
-        //}
+       if(Input.GetKeyDown(KeyCode.Y))
+       {
+            LoadLevel(SceneManager.GetActiveScene());
+       }
+
+
     }
     #endregion
 
 
-    public void SetMasterVolume(float sliderValue)
+    public void LoadLevel(Scene calledScene)
     {
-        mixer.SetFloat("Master", Mathf.Log10(sliderValue) * 20);
-    }
-
-    public void SetMusicVolume(float sliderValue)
-    {
-        mixer.SetFloat("Music", Mathf.Log10(sliderValue) * 20);
-    }
-
-    public void SetSoundEffectVolume(float sliderValue)
-    {
-        mixer.SetFloat("SoundEffects", Mathf.Log10(sliderValue) * 20);
+        StartCoroutine(LoadAsycnchronously(calledScene.name));
     }
 
 
-
-
-    //If the player runs into Scene trasition collider load that scene
-    public void LoadScene(string sceneName)
+    IEnumerator LoadAsycnchronously(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
-        buildindex = SceneManager.GetActiveScene().buildIndex;
-        Debug.Log("This is the scene name : " + sceneName + " this is the build index : " + buildindex);
+       
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+
+
+        //choose image
+        if (loadingScreenSprites?.Length != 0)
+        {
+            int spriteIndex = UnityEngine.Random.Range(0, loadingScreenSprites.Length);
+            loadingScreenImage.sprite = loadingScreenSprites[spriteIndex];
+        }
+
+        loadingScreenUI.SetActive(true);
+        loadingSlider.value = 0;
+
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01(operation.progress / 0.9f);
+            sliderTarget = progress;
+            // Additional check to exit the loop
+            yield return null;
+
+            if (operation.progress >= 0.9f && !operation.allowSceneActivation)
+            {
+                // If the scene loading progress reaches 90% and scene activation is not allowed,
+                // force scene activation to complete the loading process and exit the loop.
+                operation.allowSceneActivation = true;
+            }
+        }
+
+        while (loadingSlider.value != sliderTarget)
+        { 
+            loadingSlider.value = Mathf.MoveTowards(loadingSlider.value, sliderTarget, .75f * Time.deltaTime);
+            yield return null;
+        }
+
+        loadingScreenUI.SetActive(false);
+
+        scene = SceneManager.GetActiveScene();
+
+        if (scene.isLoaded)
+        {
+            buildindex = scene.buildIndex;
+            DisplaySceneTransitionUI(scene);
+            initializeScene?.Raise();
+        }
     }
 
-
-    //If the player dies reload the current scene 
-    void ReloadScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // look inside the player manager start function
-    }
 
     public void SetPlayerPosition(Vector3 position)
     {
@@ -111,39 +160,85 @@ public class GameManager : MonoBehaviour
         }
             
     }
-
-
-    public void Reload() // called in Player Manager 
-    {
-        ReloadScene();
-    }
     public void Convert()
     {
-        
         triggeredPoints = new List<Vector3>(hasSet);
         Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
         lastReachCheckpoint = b;
     }
 
-    //activate game over Ui
+    #region Recieving Game Event Calls 
+    //activate game over Ui --> Listening for playerhasDied GameEvent
     public void PlayerHasDied()
     {
-        
         if (gameOverUI.activeSelf == false)
             gameOverUI.SetActive(true);
-        Debug.Log("PlayerHasDied");
     }
-
-
+    
+    //If the player dies reload the current scene by calling the event
+    public void ReloadLevel()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        LoadLevel(scene);
+    }
 
     public void  QuitGame()
     {
-// struck the if/else for isEditor, as this makes Unity very mad if you try to build the game. - Thomas
- //       if(Application.isEditor)
- //       {
- //           UnityEditor.EditorApplication.isPlaying = false;
- //       }
-            // Play Something first then quit
-            Application.Quit();
+       // struck the if/else for isEditor, as this makes Unity very mad if you try to build the game. - Thomas
+       if(Application.isEditor)
+       {
+          EditorApplication.isPlaying = false;
+       }
+
+        Application.Quit();
+           
     }
+    #endregion
+
+    #region Audio Settings
+    public void SetMasterVolume(float sliderValue)
+    {
+        mixer.SetFloat("Master", Mathf.Log10(sliderValue) * 20);
+    }
+    public void SetMusicVolume(float sliderValue)
+    {
+        mixer.SetFloat("Music", Mathf.Log10(sliderValue) * 20);
+    }
+    public void SetSoundEffectVolume(float sliderValue)
+    {
+        mixer.SetFloat("SoundEffects", Mathf.Log10(sliderValue) * 20);
+    }
+    #endregion
+
+    #region Scene Transition UI
+    public void DisplaySceneTransitionUI(Scene scene)
+    {
+        sceneTransition.SetActive(true);
+        displayText = sceneTransition.GetComponentsInChildren<TextMeshProUGUI>();
+        if (sceneTransition.activeInHierarchy)
+        {
+            // setting the pannel and TMP GUI prefab to active 
+            string currentSceneName = scene.name;
+
+            foreach (var level in levels)
+            {
+                if (level.sceneName != currentSceneName)
+                    continue;
+                else
+                {
+                    for (int i = 0; i < displayText.Length; i++)
+                    {
+                        if (i == 0)
+                            displayText[i].SetText(level.levelName);
+                        else
+                            displayText[i].SetText(level.description);
+                    }
+                }
+            }
+
+        }
+        else
+            return;
+    }
+    #endregion
 }

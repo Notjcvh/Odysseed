@@ -296,7 +296,56 @@ public class PlayerMovement : MonoBehaviour
 
     }
     #endregion
- 
+
+
+
+
+    #region Sound looping
+    public void SelectAudio(int type)
+    {
+        if (type == 0)
+        {
+            AudioType sendingAudio = AudioType.None;
+            int numberOfRandomNumbers = 5; // Number of random numbers to generate
+            int minRange = 1; // Minimum value for random numbers
+            int maxRange = 5;
+            for (int i = 0; i < numberOfRandomNumbers; i++)
+            {
+                int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
+                Debug.Log("Random Number " + (i + 1) + ": " + randomNumber); // Print the generated random number
+
+                switch (randomNumber)
+                {
+                    case (1):
+                        sendingAudio = AudioType.PlayerWalk1;
+                        break;
+                    case (2):
+                        sendingAudio = AudioType.PlayerWalk2;
+                        break;
+                    case (3):
+                        sendingAudio = AudioType.PlayerWalk3;
+                        break;
+                    case (4):
+                        sendingAudio = AudioType.PlayerWalk4;
+                        break;
+                    case (5):
+                        sendingAudio = AudioType.PlayerWalk5;
+                        break;
+                  default:
+                        break;
+                }
+            }
+            playerManger.ManageAudio(sendingAudio);
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    #endregion
+
+
 }
 
 

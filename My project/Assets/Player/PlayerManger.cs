@@ -15,7 +15,7 @@ public class PlayerManger : MonoBehaviour
     private PlayerAttack playerAttack;
     private Rigidbody playerBody;
 
-    public GameEvent iDied;
+
 
     [Header("Player States")]
     public PlayerStates currentState;
@@ -35,11 +35,12 @@ public class PlayerManger : MonoBehaviour
 
     [Header("UI")]
     public GameObject playerUi;
+    private bool isUICreated;
     [SerializeField] private Image Hud; 
     [SerializeField] private int numberOfHearts;
-    public Image[] hearts; // the full array of hearts in the game
+    private Image[] hearts; // the full array of hearts in the game
     //Hud
-    [SerializeField] private Sprite[] allHuds;
+     private Sprite[] allHuds;
     //hearts
     [SerializeField] private Sprite fullHeart;
     [SerializeField] private Sprite emptyHeart;
@@ -74,29 +75,6 @@ public class PlayerManger : MonoBehaviour
         playerBody = GetComponent<Rigidbody>();
         playerAttack = GetComponent<PlayerAttack>();
         audioController = GetComponent<AudioController>();
-
-        //Set up Health Bar
-        //if (playerUi == null)
-        //{
-        
-        //    var childrenList = new List<Image>();
-        //    playerUi = GameObject.FindGameObjectWithTag("PlayerUI");
-
-        //    // the string name needs to be exact for the function to work
-        //    Transform root = playerUi.transform;
-        //    Hud = GetChildByName(root, "Hud").GetComponent<Image>();
-        //    Transform heartHolder = GetChildByName(root, "Heart Holder");
-
-        //    if(heartHolder != null)
-        //    {
-        //        foreach (Transform child in heartHolder.transform)
-        //        {
-        //            Image i = child.GetComponent<Image>();
-        //            childrenList.Add(i);
-        //            hearts = childrenList.ToArray();
-        //        }
-        //    }
-        //}
     }
     private void Update()
     {
@@ -106,9 +84,6 @@ public class PlayerManger : MonoBehaviour
             inputsEnable = !inputsEnable;            
         }
 
-        if (Input.GetKey(KeyCode.M))
-            inputsEnable = true;
-
 
         if (inputsEnable == true)
         {
@@ -117,7 +92,6 @@ public class PlayerManger : MonoBehaviour
                 if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false)
                 {
                     SetPlayerState(PlayerStates.Moving);
-                    ManageAudio(AudioType.PlayerAttack);
                 }
                     
                 else if (playerInput.movementInput == Vector3.zero && playerMovement.IsGrounded() == true && isDashing == false && isAttackAnimationActive == false)
@@ -155,9 +129,8 @@ public class PlayerManger : MonoBehaviour
             }
 
 
-            if (playerMovement.IsGrounded())
+            if (playerMovement.IsGrounded() )
             {
-
                 if (playerInput.attack)
                 {
                     SetPlayerState(PlayerStates.PrimaryAttack);
@@ -198,23 +171,11 @@ public class PlayerManger : MonoBehaviour
                     isAttackAnimationActive = true;
                     SetPlayerState(PlayerStates.LaunchChargedAttack);
                 }
-
-
             }
             else
             {
 
             }
-
-
-
-            if (playerMovement.movementVector != Vector3.zero && playerInput.attack)
-            {
-                SetPlayerState(PlayerStates.DirectionalAttack);
-            }
-
-
-            //Debug.Log(currentState);
         }
 
         
@@ -228,12 +189,6 @@ public class PlayerManger : MonoBehaviour
                 break;
             case (PlayerStates.Moving):
                 animator.SetBool("isRunning", true);
-                if (audioJobSent == false)
-                {
-                    ManageAudio(AudioType.PlayerWalk);
-                    audioJobSent = true;
-                    StartCoroutine(WaitToPlay(clip.length));
-                }
                 break;
             case (PlayerStates.Jumping):
                 animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
@@ -260,21 +215,16 @@ public class PlayerManger : MonoBehaviour
 
 
         #region Handeling Player Health 
-
-        VisualizeHealth();
-
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            currentHealth = 0;
-        }
-
-
-        if (currentHealth <= 0 && isDying == false)
+        animator.SetInteger("Health", currentHealth);
+        if (isUICreated == true)
+            VisualizeHealth();
+        if (currentHealth <= 0)
         {
             SetPlayerState(PlayerStates.Dying);
-            isDying = true;  
-            //play death Animation
+            isDying = true;
         }
+        
+        
         #endregion
     }
     #endregion
@@ -290,7 +240,7 @@ public class PlayerManger : MonoBehaviour
                 case PlayerStates.InAirDash:
                     if(playerMovement.isDashing == false)
                     {
-                        Debug.Log("Called");
+                      
                     }
                     break;
             }
@@ -302,7 +252,6 @@ public class PlayerManger : MonoBehaviour
                 case PlayerStates.PrimaryAttack:
                     inputType = 0;
                     playerAttack.LaunchAttack(inputType);
-                    audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
                     break;
                 case PlayerStates.SecondaryAttack:
                     inputType = 1;
@@ -310,7 +259,6 @@ public class PlayerManger : MonoBehaviour
                     playerAttack.timeOfCharge = 0;
                     playerAttack.chargedAttackMultiplier = 1.4f;
                     playerAttack.LaunchAttack(inputType);
-                    audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
                     break;
                 case PlayerStates.LaunchChargedAttack:
                     inputType = 2;
@@ -319,12 +267,9 @@ public class PlayerManger : MonoBehaviour
                     chargeTime = 0;
                     playerAttack.timeOfCharge = 0;
                     playerAttack.chargedAttackMultiplier = 1.4f;
-                    audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
                     break;
                 case PlayerStates.Dying:
-                    animator.SetTrigger("Death");
-                    gameManager.PlayerHasDied();
-                    iDied.Raise();
+                    stopMovementEvent = true;
                     break;
                 case PlayerStates.Landing:
                     playerBody.velocity = Vector3.zero;
@@ -334,7 +279,7 @@ public class PlayerManger : MonoBehaviour
     }
 
     #region Sound looping
-    void ManageAudio(AudioType type)
+    public void ManageAudio(AudioType type)
     {
         if (ourAudio.Count < 1)
         {
@@ -388,6 +333,42 @@ public class PlayerManger : MonoBehaviour
     }
     #endregion 
 
+
+
+    public void CreateHealthBar()
+    {
+        playerUi.SetActive(true);
+        //Set up Health Bar
+        if (playerUi != null)
+        {
+            var childrenList = new List<Image>();
+   
+            // the string name needs to be exact for the function to work
+            Transform root = playerUi.transform;
+            Hud = GetChildByName(root, "Hud").GetComponent<Image>();
+            Transform heartHolder = GetChildByName(root, "Heart Holder");
+
+            if (heartHolder != null)
+            {
+                foreach (Transform child in heartHolder.transform)
+                {
+                    Image i = child.GetComponent<Image>();
+                    childrenList.Add(i);
+                }
+                hearts = childrenList.ToArray();
+                childrenList.Clear();
+                isUICreated = true;
+            }
+        }
+        else
+        {
+            Debug.Log("Player Ui is null");
+            return;
+        }
+       
+        
+    }
+
     #region Player Restore Health or Taking Damgage
     public void TakeDamage(int damage)
     {
@@ -436,9 +417,6 @@ public class PlayerManger : MonoBehaviour
     }
 
 
-
-
-
     void VisualizeHealth()
     {
         for (int i = 0; i < hearts.Length; i++)
@@ -455,7 +433,6 @@ public class PlayerManger : MonoBehaviour
             else
                 hearts[i].sprite = emptyHeart;
         }
-
         // Saftey net check making sure our hearts equal the current health
         if (numberOfHearts < currentHealth)
         {

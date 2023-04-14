@@ -5,6 +5,7 @@ using UnityEngine;
 public class Checkpoints : MonoBehaviour
 {
     private GameManager gameManager;
+    public SceneEvent scene;
     public Collider Trigger;
     public bool reached = false;
 
@@ -37,6 +38,7 @@ public class Checkpoints : MonoBehaviour
             gameManager.hasSet.Add(this.transform.position);
             gameManager.Convert();
             reached = true;
+            scene.Raise();
         }
     }
 

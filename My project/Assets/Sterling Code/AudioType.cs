@@ -13,7 +13,11 @@ public enum AudioType
     #region Character Sounds
     //Merlot
     PlayerAttack,
-    PlayerWalk,
+    PlayerWalk1,
+    PlayerWalk2,
+    PlayerWalk3,
+    PlayerWalk4,
+    PlayerWalk5,
     PlayerDeath,
 
     #endregion

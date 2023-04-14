@@ -8,7 +8,7 @@ public class DoorHandler : MonoBehaviour
 
     [Header("Animations")]
     public Animator door;
-    public  AnimationClip[] doorClips = new AnimationClip[2];
+
 
     public bool locked = true;
     
