@@ -34,7 +34,7 @@ public class TriggerHolder : MonoBehaviour
       
         if (needMatchesToSolvePuzzle == totalvalue)
             {
-                puzzleDialouge.puzzleCompleted = true; 
+                //puzzleDialouge.puzzleCompleted = true; 
                 door.Play(clips[0].name, 0, 0);
 
             // I want this to be able to wait before activating the Door Open Animation 
