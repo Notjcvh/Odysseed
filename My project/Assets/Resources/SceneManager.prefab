@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8036716337707442957}
   - component: {fileID: 1130789477}
   - component: {fileID: 1130789478}
+  - component: {fileID: 1761687039}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Scene Handler
@@ -50,16 +51,11 @@ MonoBehaviour:
   player: {fileID: 0}
   playerManger: {fileID: 0}
   audioController: {fileID: 0}
-  backgroundMusic: 4
-  sceneTransition: {fileID: 0}
-  displayText: []
-  levels:
-  - {fileID: 11400000, guid: 8cc42dbfca8061f48ae75a52e6fd48f9, type: 2}
-  - {fileID: 11400000, guid: ed69ca728b8beda43be9d44d3d22de74, type: 2}
-  - {fileID: 11400000, guid: 0d5afdac1f1a572418ca1cb9027fc4c9, type: 2}
-  - {fileID: 11400000, guid: 75a8544fd22598d40b1053397a2235eb, type: 2}
+  sceneActivated: 0
   spawnPosition: {x: 0, y: 0, z: 0}
-  source: {fileID: 1130789477}
+  playingAudio: 0
+  queueAudio: 3
+  clip: {fileID: 0}
   audioJobSent: 0
 --- !u!82 &1130789477
 AudioSource:
@@ -169,11 +165,108 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 848b30b790fd2cb4789553f43ae2cd62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source: {fileID: 0}
-  playingAudio: 0
   debug: 0
   tracks:
   - source: {fileID: 1130789477}
     audio:
-    - type: 5
-      clip: {fileID: 8300000, guid: 9a8c7c89019f1b540878a17349cd85c0, type: 3}
+    - type: 1
+      clip: {fileID: 8300000, guid: 5ba51021b37297a46b1d181de7e52fe2, type: 3}
+    - type: 3
+      clip: {fileID: 8300000, guid: 92ac2300e2e71c447837d3d173c1c619, type: 3}
+    - type: 2
+      clip: {fileID: 8300000, guid: 300161631f8bdae418982882a63c90cd, type: 3}
+--- !u!114 &1761687039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8036716337707442959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28521192e76d11641ae39583a35aa66a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myGameEvent:
+  - Event: {fileID: 11400000, guid: 90f72be55dcd8c24f8547dba1e4a1a6a, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: IntializeScene
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  mySceneEvent:
+  - Event: {fileID: 11400000, guid: 2021f6894c9790a44b5644323a6ad83d, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 2021f6894c9790a44b5644323a6ad83d, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: ade01ec16ca450a4b8613939717cb227, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: ade01ec16ca450a4b8613939717cb227, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 300b6e3547006494dbd2b21ab2b19b61, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 300b6e3547006494dbd2b21ab2b19b61, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  myPlayerEvent:
+  - Event: {fileID: 11400000, guid: 920494a0455e44c4f97fc168fde086d4, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: DeactivatePlayer
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

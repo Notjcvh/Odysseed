@@ -6,51 +6,31 @@ using TMPro;
 
 public class NPC : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-    private PlayerMovement playerController;
-    private NavMeshAgent navMeshAge;
-    private GameObject talkingIndicator;
-    private bool isTalking;
-    private int dialoguePointer;
     public bool hasTalked;
     public GameObject dialogue;
-    private TextMeshProUGUI myDialouge;
     public string[] dialogueList;
-    
-    public bool person;
-    public bool puzzleCompleted;
-    public float distanceFromPlayer;
+    public LayerMask whatIsPlayer;
     public float talkRange;
 
-
+    public GameObject talkingIndicator;
+    public bool isTalking;
+    public int dialoguePointer;
+    public bool playerInTalkRange;
+    public TextMeshProUGUI myDialouge;
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         isTalking = false;
         myDialouge = dialogue.GetComponentInChildren<TextMeshProUGUI>();
-        playerController = player.GetComponent<PlayerMovement>();
         talkingIndicator = GameObject.FindGameObjectWithTag("TalkingIndicator");
         hasTalked = false;
     }
     void Update()
     {
-        distanceFromPlayer = Vector3.Distance(this.transform.position, player.position);
-        dialogue.SetActive(isTalking);
         talkingIndicator.SetActive(!hasTalked);
-        //playerController.isTalking = isTalking;
-        if (Input.GetKeyDown(KeyCode.E) && distanceFromPlayer < talkRange && !person)
+        playerInTalkRange = Physics.CheckSphere(transform.position, talkRange, whatIsPlayer);
+        if (Input.GetKeyDown(KeyCode.E) && playerInTalkRange && !isTalking)
         {
-            if (!isTalking)
-            {
-                StartDialouge();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.E) && puzzleCompleted && distanceFromPlayer < talkRange)
-        {
-            if (!isTalking)
-            {
-                StartDialouge();
-            }
+             StartDialouge();
         }
         if(isTalking && Input.GetKeyDown(KeyCode.E))
         {
@@ -65,12 +45,14 @@ public class NPC : MonoBehaviour
     public void StartDialouge()
     {
         isTalking = true;
+        dialogue.SetActive(isTalking);
         dialoguePointer = 0;
     }
     public void EndDialouge()
     {
         isTalking = false;
         hasTalked = true;
+        dialogue.SetActive(isTalking);
         dialoguePointer = 0;
     }
 }

@@ -19,8 +19,8 @@ public class GameOverUI : MonoBehaviour
 
     public bool gameOverIncremented = false; // to check if the game over has started
 
-   [SerializeField] private Button continueButton;
-   [SerializeField] private Button endButton;
+    [SerializeField] private Button continueButton;
+    [SerializeField] private Button endButton;
 
 
     [TextAreaAttribute] public string continueButtonText;
@@ -47,20 +47,15 @@ public class GameOverUI : MonoBehaviour
         StartCoroutine(ActivateUi((float)videoPlayer.length));
     }
 
-
     IEnumerator ActivateUi(float time)
     {
-  
         yield return new WaitForSeconds(time/2);
         for (int i = 0; i < uiElements.Length; i++)
         {
             uiElements[i].SetActive(true);
-           
         }
-
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-
     }
 
     void HandleButtonHover(GameObject obj, bool isHovering)
@@ -105,7 +100,6 @@ public class GameOverUI : MonoBehaviour
         for (int i = 0; i < uiElements.Length; i++)
         {
             uiElements[i].SetActive(false);
-
         }
     }
 }

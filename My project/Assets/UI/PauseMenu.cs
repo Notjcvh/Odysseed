@@ -46,6 +46,7 @@ public class PauseMenu : MonoBehaviour
     //Pause and resume Game
     private void Pause()
     {
+        Debug.Log("Pause");
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.Confined;
@@ -54,6 +55,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        Debug.Log("Resume");
         gameManager.gamePaused = false;
         pauseMenuUI.SetActive(false);
      
@@ -61,6 +63,8 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = false;
         BackButton();
     }
+
+    
 
 
     //Pause Menu Options

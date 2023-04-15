@@ -53,7 +53,7 @@ ModelImporter:
     second: FinalMerlot_Attack 3
   - first:
       74: -3707889720027913893
-    second: FinalMerlot_Upward Attack (WindUp)
+    second: FinalMerlot_Upward Attack
   - first:
       74: 1718898822612684999
     second: FinalMerlot_Dash
@@ -81,6 +81,15 @@ ModelImporter:
   - first:
       74: -9200551988043408666
     second: FinalMerlot_Upward Attack(Attack)
+  - first:
+      74: -4657736989422764726
+    second: ChargeAttack (WindUP)
+  - first:
+      74: -4400236481821874012
+    second: ChargeAttack (Hold)
+  - first:
+      74: -8527351856643242066
+    second: ChargeAttack (Attack)
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -163,7 +172,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.15285875
+        functionName: SelectAudio
+        data: PlayerWalk
+        objectReferenceParameter: {fileID: 11500000, guid: d5480514506a5a443b8167d58e6aff91, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.58523744
+        functionName: SelectAudio
+        data: PlayerWalk
+        objectReferenceParameter: {fileID: 11500000, guid: d5480514506a5a443b8167d58e6aff91, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -256,11 +279,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: FinalMerlot_Upward Attack (WindUp)
+      name: FinalMerlot_Upward Attack
       takeName: Take 001
       internalID: 0
       firstFrame: 440
-      lastFrame: 450
+      lastFrame: 470
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -466,11 +489,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: FinalMerlot_Upward Attack(Charging)
+      name: ChargeAttack (WindUP)
       takeName: Take 001
       internalID: 0
-      firstFrame: 450
-      lastFrame: 451
+      firstFrame: 390
+      lastFrame: 413
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -495,11 +518,40 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: FinalMerlot_Upward Attack(Attack)
+      name: ChargeAttack (Hold)
       takeName: Take 001
       internalID: 0
-      firstFrame: 450
-      lastFrame: 470
+      firstFrame: 413
+      lastFrame: 414
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: ChargeAttack (Attack)
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 414
+      lastFrame: 440
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

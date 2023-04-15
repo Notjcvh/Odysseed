@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class GameAssets : MonoBehaviour
 {
@@ -19,8 +20,7 @@ public class GameAssets : MonoBehaviour
     }
 
     public Transform DamageTextHolder;
-    public GameObject gruntEnemies;
-    public GameObject playerUI;
-    public GameObject SceneTransitionCanvas;
     public GameObject hit1;
+    public GameObject smokePoof;
+
 }

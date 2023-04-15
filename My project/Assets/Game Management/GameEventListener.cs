@@ -16,7 +16,9 @@ using UnityEngine.Events;
 public class GameEventListener : MonoBehaviour
 {
     public GameEvents[] myGameEvent;
+    public SceneEvents[] mySceneEvent;
     public PlayerEvents[] myPlayerEvent;   
+  
    
 
 
@@ -24,6 +26,13 @@ public class GameEventListener : MonoBehaviour
     public class GameEvents
     {
         public GameEvent Event;
+        public UnityEvent Response;
+    }
+
+    [System.Serializable]
+    public class SceneEvents
+    {
+        public SceneEvent Event;
         public UnityEvent Response;
     }
 
@@ -39,6 +48,12 @@ public class GameEventListener : MonoBehaviour
         {
             item.Event?.RegisterListener(this);
         }
+
+        foreach (SceneEvents item in mySceneEvent)
+        {
+            item.Event?.RegisterListener(this);
+        }
+
         foreach (PlayerEvents item in myPlayerEvent)
         {
             item.Event?.RegisterListener(this);
@@ -49,6 +64,10 @@ public class GameEventListener : MonoBehaviour
     {
 
         foreach (GameEvents item in myGameEvent)
+        {
+            item.Event?.UnregisterListener(this);
+        }
+        foreach(SceneEvents item in mySceneEvent)
         {
             item.Event?.UnregisterListener(this);
         }
@@ -71,6 +90,19 @@ public class GameEventListener : MonoBehaviour
             }
         }
     }
+
+    public void OnSceneEventRaised(SceneEvent sceneEvent)
+    {
+        foreach (SceneEvents item in mySceneEvent)
+        {
+            if (item.Event.name == sceneEvent.name)
+            {
+                item.Response.Invoke();
+                return;
+            }
+        }
+    }
+
     public void OnPlayerEventRaised(PlayerEvent playerEvent)
     {
         foreach (PlayerEvents item in myPlayerEvent)
