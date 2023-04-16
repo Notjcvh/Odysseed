@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 8849513975035428568}
   - component: {fileID: 1222135458668825228}
   - component: {fileID: 9063073064426147889}
+  - component: {fileID: 1475647293936412874}
   m_Layer: 0
   m_Name: JailhouseDoorframe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &8849513975035428568
 Transform:
@@ -83,6 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1475647293936412874
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214432155550307399}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2954858793080512207, guid: 9a5fd124afc70744491515bcc3e397e4, type: 3}
 --- !u!1 &3637192351302669058
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +147,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &2001627427075602714
 Transform:
