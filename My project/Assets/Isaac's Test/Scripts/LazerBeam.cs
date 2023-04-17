@@ -38,6 +38,10 @@ public class LazerBeam : MonoBehaviour
         {
             Laser();
         }
+        else
+        {
+            lineRenderer.enabled = false;
+        }
     }
     void Laser()
     {

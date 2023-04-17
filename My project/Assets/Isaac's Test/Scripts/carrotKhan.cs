@@ -21,6 +21,9 @@ public class carrotKhan : MonoBehaviour
     public int healthThreshold = 50;
     private Enemy enemyScript;
     public LayerMask whatIsPlayer;
+    [Header("LazerBeam")]
+    private LazerBeam lb;
+    public LineRenderer lr;
     [Header("Phase 2")]
     public bool hasExploded = false;
     private Animator animator;
@@ -32,6 +35,7 @@ public class carrotKhan : MonoBehaviour
         enemyScript = this.GetComponent<Enemy>();
         player = GameObject.FindGameObjectWithTag("Player");
         age = this.GetComponent<NavMeshAgent>();
+        lb = this.GetComponent<LazerBeam>();
     }
 
     // Update is called once per frame
@@ -73,16 +77,22 @@ public class carrotKhan : MonoBehaviour
             switch (attackCounter)
             {
                 case(0):
-                    Taunt();
+                    Idle2();
                     break;
                 case (1):
-                    Whirlwind();
-                    break;
-                case (2):
                     Charge();
                     break;
+                case (2):
+                    SlamAttack();
+                    break;
                 case (3):
-                    Slashing();
+                    Run2();
+                    break;
+                case (4):
+                    Punching();
+                    break;
+                case (5):
+                    LazerBeam();
                     break;
                 default:
                     break;
@@ -91,7 +101,7 @@ public class carrotKhan : MonoBehaviour
         if(!isMoving)
         {
             age.SetDestination(player.transform.position);
-            age.speed = 0.1f;
+            age.speed = 0f;
         }
         else
         {
@@ -109,6 +119,7 @@ public class carrotKhan : MonoBehaviour
         newTarget.y = 0;
         transform.LookAt(newTarget);
     }
+    //Phase 1
     #region Taunt
     public void Taunt()
     {
@@ -183,33 +194,97 @@ public class carrotKhan : MonoBehaviour
     }
     #endregion
 
+    //Phase 2
+    #region Explode
     public void Explode()
     {
         Debug.Log("Im exploding");
-        animator.SetBool("imExploding", true);
-        hasExploded = true;
+        animator.SetBool("isExploding", true);
+        isMoving = false;
         isAttacking = true;
     }
+    public void ExplodeEnd()
+    {
+        hasExploded = true;
+        attackCounter = 0;
+        isAttacking = false;
+        animator.SetBool("isIdling", false);
+        animator.SetBool("isTaunting", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isSlashing", false);
+        animator.SetBool("isWhirlwinding", false);
+        animator.SetBool("isOvrSwinging", false);
+        animator.SetBool("isExploding", false);
+    }
+    #endregion
+    #region Charge
     public void Charge()
     {
         Debug.Log("Im charging");
         animator.SetBool("isCharging", true);
-        attackCounter += 1;
+        age.speed = chargeSpeed;
+        isMoving = true;
         isAttacking = true;
     }
+    #endregion
+    #region SlamAttack
     public void SlamAttack()
     {
         Debug.Log("Im slamming");
         animator.SetBool("isSlamming", true);
         isAttacking = true;
     }
+    public void EnableSlamHitbox()
+    {
+        attackHitboxes[3].SetActive(true);
+    }
+    public void DIsableSlamHitbox()
+    {
+        attackHitboxes[3].SetActive(false);
+    }
+    #endregion
+    #region Run2
+    public void Run2()
+    {
+        Debug.Log("Im running");
+        animator.SetBool("isRunning2", true);
+        age.speed = movementSpeed;
+        playerNearbyEndsAnimation = true;
+        isMoving = true;
+        isAttacking = true;
+    }
+    #endregion
+    #region Punching
+    public void Punching()
+    {
+        animator.SetBool("isPunching", true);
+        isAttacking = true;
+    }
+    public void EnablePunchHitbox()
+    {
+        attackHitboxes[4].SetActive(true);
+    }
+    public void DIsablePunchHitbox()
+    {
+        attackHitboxes[4].SetActive(false);
+    }
+    #endregion
+    #region Lazer
     public void LazerBeam()
     {
         Debug.Log("Im firin mah lazer");
-        animator.SetBool("isIdling2", false);
         animator.SetBool("isFiringLazer", true);
         isAttacking = true;
     }
+    public void SpawnLazer()
+    {
+        this.lb.useLaser = true;
+    }
+    public void DisableLazer()
+    {
+        this.lb.useLaser = false;
+    }
+    #endregion
     public void Death()
     {
         Debug.Log("Im Dying");
@@ -221,18 +296,6 @@ public class carrotKhan : MonoBehaviour
         animator.SetBool("isPunching", false);
         animator.SetBool("isDying", true);
         isAttacking = true;
-    }
-    public void Idle()
-    {
-        attackCounter += 1;
-        isAttacking = false;
-        isMoving = false;
-        animator.SetBool("isIdling", false);
-        animator.SetBool("isTaunting", false);
-        animator.SetBool("isRunning", false);
-        animator.SetBool("isSlashing", false);
-        animator.SetBool("isWhirlwinding", false);
-        animator.SetBool("isOvrSwinging", false);
     }
     public void Idles()
     {
@@ -249,6 +312,12 @@ public class carrotKhan : MonoBehaviour
         animator.SetBool("isSlashing", false);
         animator.SetBool("isWhirlwinding", false);
         animator.SetBool("isOvrSwinging", false);
+        animator.SetBool("isIdling2", false);
+        animator.SetBool("isCharging", false);
+        animator.SetBool("isSlamming", false);
+        animator.SetBool("isRunning2", false);
+        animator.SetBool("isFiringLazer", false);
+        animator.SetBool("isPunching", false);
     }
     public void endIdle()
     {
@@ -258,10 +327,31 @@ public class carrotKhan : MonoBehaviour
     public void Idle2()
     {
         animator.SetBool("isIdling2", true);
+        isAttacking = true;
     }
     public void endIdle2()
     {
+        attackCounter += 1;
         isAttacking = false;
+        isMoving = false;
+        animator.SetBool("isIdling2", false);
+        animator.SetBool("isCharging", false);
+        animator.SetBool("isSlamming", false);
+        animator.SetBool("isRunning2", false);
+        animator.SetBool("isPunching", false);
+        animator.SetBool("isFiringLazer", false);
+    }
+    public void Idle()
+    {
+        attackCounter += 1;
+        isAttacking = false;
+        isMoving = false;
+        animator.SetBool("isIdling", false);
+        animator.SetBool("isTaunting", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isSlashing", false);
+        animator.SetBool("isWhirlwinding", false);
+        animator.SetBool("isOvrSwinging", false);
     }
 }
 
