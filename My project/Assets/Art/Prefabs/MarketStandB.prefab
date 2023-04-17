@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 1684352397554637673}
   - component: {fileID: 3496186242666770339}
   - component: {fileID: 8861279936327890565}
+  - component: {fileID: 1201059999269341820}
   m_Layer: 0
   m_Name: MarketStandB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &2364352427867329740
 Transform:
@@ -101,6 +102,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5246891, y: 0.3054248, z: 0.21576509}
   m_Center: {x: 0.000021352786, y: 0.1527124, z: -0.009716209}
+--- !u!208 &1201059999269341820
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3135647376755986038}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.26200002, y: 0.15300001, z: 0.108}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.15300001, z: -0.010000001}
+  m_TimeToStationary: 0.5
 --- !u!1001 &2829781725605979840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171,6 +188,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
       propertyPath: m_Name
       value: BasketBread (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
@@ -249,6 +270,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 2764f4d695e1e1e449f036ada7b620f3, type: 3}
       propertyPath: m_Name
       value: BasketFull
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2764f4d695e1e1e449f036ada7b620f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2764f4d695e1e1e449f036ada7b620f3, type: 3}
@@ -346,6 +371,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasketBread (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
 --- !u!4 &2364352427901866895 stripped
@@ -423,6 +452,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
       propertyPath: m_Name
       value: BasketBread
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d20973537bb71fa4cae42c82f8fa1b61, type: 3}
