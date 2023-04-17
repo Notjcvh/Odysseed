@@ -45,7 +45,7 @@ public class SceneHandeler : MonoBehaviour
            {
                 audioJobSent = true;
                 ManageAudio(queueAudio);
-                StartCoroutine(WaitToPlay(clip.length));
+                //StartCoroutine(WaitToPlay(clip.length));
            }
         }
 
