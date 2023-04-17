@@ -83,17 +83,20 @@ public class PlayerManger : MonoBehaviour
             gameManager.gamePaused = (!gameManager.gamePaused);
             inputsEnable = !inputsEnable;            
         }
-
-
+        
         if (inputsEnable == true)
         {
             if (playerMovement.IsGrounded())
             {
+                if(playerInput.movementInput == Vector3.zero)
+                {
+                    Debug.Log(playerInput.movementInput);
+                }
+
                 if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false && isDashing == false)
                 {
                     SetPlayerState(PlayerStates.Moving);
                 }
-                    
                 else if (playerInput.movementInput == Vector3.zero && playerMovement.IsGrounded() == true && isDashing == false && isAttackAnimationActive == false)
                     SetPlayerState(PlayerStates.Idle);
             }
@@ -176,8 +179,6 @@ public class PlayerManger : MonoBehaviour
 
             }
         }
-
-        
 
         // Current StateHandling 
         switch (currentState)
@@ -278,6 +279,141 @@ public class PlayerManger : MonoBehaviour
     }
 
     #region Sound looping
+
+    public void SelectAudio(string type)
+    {
+        //PlayerAttack
+        //ChargedAttack
+        if (type == "Walk")
+        {
+            AudioType sendingAudio = AudioType.None;
+            int numberOfRandomNumbers = 4; // Number of random numbers to generate
+            int minRange = 1; // Minimum value for random numbers
+            int maxRange = 5;
+            for (int i = 0; i < numberOfRandomNumbers; i++)
+            {
+                int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
+                switch (randomNumber)
+                {
+                    case (1):
+                        sendingAudio = AudioType.PlayerWalk1;
+                        break;
+                    case (2):
+                        sendingAudio = AudioType.PlayerWalk2;
+                        break;
+                    case (3):
+                        sendingAudio = AudioType.PlayerWalk3;
+                        break;
+                    case (4):
+                        sendingAudio = AudioType.PlayerWalk4;
+                        break;
+                    case (5):
+                        sendingAudio = AudioType.PlayerWalk5;
+                        break;
+                    default:
+                        break;
+                }
+            }
+           ManageAudio(sendingAudio);
+        }
+        else if (type == "Death")
+        {
+            AudioType sendingAudio = AudioType.None;
+            sendingAudio = AudioType.PlayerDeath;
+            ManageAudio(sendingAudio);
+        }
+        else if (type == "Attack")
+        {
+            AudioType sendingAudio = AudioType.None;
+            int numberOfRandomNumbers =4; // Number of random numbers to generate
+            int minRange = 1; // Minimum value for random numbers
+            int maxRange = 5;
+            int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
+            for (int i = 0; i < numberOfRandomNumbers; i++)
+            {
+                switch (randomNumber)
+                {
+                    case (1):
+                        sendingAudio = AudioType.PlayerAttack1;
+                        break;
+                    case (2):
+                        sendingAudio = AudioType.PlayerAttack2;
+                        break;
+                    case (3):
+                        sendingAudio = AudioType.PlayerAttack3;
+                        break;
+                    case (4):
+                        sendingAudio = AudioType.PlayerAttack4;
+                        break;
+                    case (5):
+                        sendingAudio = AudioType.PlayerAttack5;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            ManageAudio(sendingAudio);
+        }
+        else if(type == "ChargedAttack")
+        {
+            AudioType sendingAudio = AudioType.PlayerChargedAttack1;
+            /*
+            AudioType sendingAudio = AudioType.None;
+            int numberOfRandomNumbers = 1; // Number of random numbers to generate
+            int minRange = 1; // Minimum value for random numbers
+            int maxRange = 5;
+            int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
+            for (int i = 0; i < numberOfRandomNumbers; i++)
+            {
+                switch (randomNumber)
+                {
+                    case (1):
+                        
+                        break;
+                    case (2):
+                        sendingAudio = AudioType.PlayerChargedAttack2;
+                        break;
+                    default:
+                        break;
+                }
+            }*/
+            ManageAudio(sendingAudio);
+
+        }
+        else if(type == "Damaged")
+        {
+            AudioType sendingAudio = AudioType.None;
+            int numberOfRandomNumbers = 4; // Number of random numbers to generate
+            int minRange = 1; // Minimum value for random numbers
+            int maxRange = 5;
+            int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
+            for (int i = 0; i < numberOfRandomNumbers; i++)
+            {
+                switch (randomNumber)
+                {
+                    case (1):
+                        sendingAudio = AudioType.PlayerDamaged1;
+                        break;
+                    case (2):
+                        sendingAudio = AudioType.PlayerDamaged2;
+                        break;
+                    case (3):
+                        sendingAudio = AudioType.PlayerDamaged3;
+                        break;
+                    case (4):
+                        sendingAudio = AudioType.PlayerDamaged4;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            ManageAudio(sendingAudio);
+        }
+        else
+        {
+            return;
+        }
+    }
     public void ManageAudio(AudioType type)
     {
         if (ourAudio.Count < 1)
@@ -317,13 +453,6 @@ public class PlayerManger : MonoBehaviour
     }
 
     #endregion
-
-
-
-
-
-
-
 
     #region Disable All Inputs
     public void DisableAllInputs()
@@ -372,6 +501,8 @@ public class PlayerManger : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        SelectAudio("Damage");
+
     }
 
     public void RestoreHealth()

@@ -126,6 +126,7 @@ public class SceneHandeler : MonoBehaviour
 
     public void IntializeScene()
     {
+
         sceneActivated = true;
        // if (gameManager.buildindex >= 0) //the player is active after scene 1
        // {
