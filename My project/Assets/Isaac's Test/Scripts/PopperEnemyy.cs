@@ -32,6 +32,16 @@ public class PopperEnemyy : MonoBehaviour
     // Start is called before the first frame update
 
 
+
+    [Header("Audio Caller")]
+    public AudioController audioController;
+    public AudioType playingAudio; // the currently playing audio
+    [SerializeField] private AudioType queueAudio; // the next audio to play
+    public AudioClip clip;
+    public bool audioJobSent = false; // if job sent is true then it won't play
+    private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
+
     void Awake()
     {
         currentWaypoint = this.transform;
@@ -114,4 +124,40 @@ public class PopperEnemyy : MonoBehaviour
         isStunned = false;
         this.navMeshAge.enabled = true;
     }
+
+
+
+    public void ManageAudio(AudioType type)
+    {
+        if (ourAudio.Count < 1)
+        {
+            // Loop through each audio track
+            foreach (AudioController.AudioTrack track in audioController.tracks)
+            {
+                // Access the audio objects in each track
+                audioObjects.AddRange(track.audio);
+                // Loop through each audio object in the track
+                foreach (AudioController.AudioObject audioObject in audioObjects)
+                {
+                    // this should add all our audio to the dictionary
+                    ourAudio.Add(audioObject.type, audioObject.clip);
+                }
+            }
+        }
+        if (ourAudio.ContainsKey(type))
+        {
+            clip = ourAudio[type];
+        }
+        if (type != playingAudio)
+        {
+            audioController.PlayAudio(type, false, 0, false);
+            playingAudio = type;
+        }
+        else
+        {
+            audioController.PlayAudio(playingAudio, false, 0, false);
+        }
+    }
+
+
 }

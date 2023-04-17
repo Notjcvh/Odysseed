@@ -2,13 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SceneData
+{
+    None,
+    #region BuildScenes
+    Title,
+    Vineyard,
+    Dungeon1,
+    Vineyard2,
+    PotatoLands,
+    Dungeon2,
+    CarrotKhanate,
+    Dungeon3,
+    #endregion
+    #region Testing Scenes 
+    Sterling_PlayerTestScene,
 
+    #endregion 
+}
 
-[CreateAssetMenu(menuName = "Scenes/StartingPosition")]
+[CreateAssetMenu(fileName = "Level",menuName = "Scenes/LevelData")]
 public class Level: ScriptableObject
 {
 
-    public string sceneName;
+    public SceneData sceneName;
     public string levelName;
 
     [TextArea]

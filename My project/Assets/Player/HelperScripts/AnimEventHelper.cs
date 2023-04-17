@@ -78,6 +78,10 @@ public class AnimEventHelper : MonoBehaviour
 
     public void SelectAudio(string type)
     {
+        //PlayerAttack
+        //ChargedAttack
+
+
         if (type == "PlayerWalk")
         {
             AudioType sendingAudio = AudioType.None;
@@ -115,7 +119,6 @@ public class AnimEventHelper : MonoBehaviour
             AudioType sendingAudio = AudioType.None;
             sendingAudio = AudioType.PlayerDeath;
             playerManger.ManageAudio(sendingAudio);
-
         }
         else
         {

@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    public string sceneToLoad;
+    public SceneData sceneToLoad;
+    public Scene scene;
     public GameManager gameManager;
 
 
@@ -15,11 +16,11 @@ public class SceneTransition : MonoBehaviour
         {
             gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
 
-            Scene scene = SceneManager.GetSceneByName(sceneToLoad);
-           gameManager.LoadLevel(scene);
+            string sceneName = sceneToLoad.ToString();
+      
+            print(sceneName + "    " + scene.name);
+            gameManager.LoadLevel(sceneName);
         }
-
-
     }
 
 

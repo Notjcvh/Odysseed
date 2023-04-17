@@ -91,12 +91,15 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    public void LoadLevel(string sceneName)
+    {
+        StartCoroutine(LoadAsycnchronously(sceneName));
+    }
 
     public void LoadLevel(Scene calledScene)
     {
         StartCoroutine(LoadAsycnchronously(calledScene.name));
     }
-
 
     IEnumerator LoadAsycnchronously(string sceneName)
     {
@@ -222,7 +225,7 @@ public class GameManager : MonoBehaviour
 
             foreach (var level in levels)
             {
-                if (level.sceneName != currentSceneName)
+                if (level.sceneName.ToString() != currentSceneName)
                     continue;
                 else
                 {

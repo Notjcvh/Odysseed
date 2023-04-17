@@ -758,6 +758,7 @@ MonoBehaviour:
   impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
   playerHealth: {fileID: 0}
   hitAlready: 0
+  hitShield: 0
 --- !u!1 &4805589847024103410
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,7 +776,7 @@ GameObject:
   - component: {fileID: 599578100386350052}
   - component: {fileID: 7835859164656997281}
   - component: {fileID: 1395607387881129785}
-  - component: {fileID: 369512475068664147}
+  - component: {fileID: 604716891}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Enemy
@@ -829,6 +830,10 @@ MonoBehaviour:
   queueAudio: 0
   clip: {fileID: 0}
   audioJobSent: 0
+  blinkIntensity: 0
+  blinkDuration: 0
+  mats:
+  - {fileID: 4955149797318592851}
 --- !u!114 &8551943598438948127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,10 +1051,10 @@ MonoBehaviour:
   - source: {fileID: 7835859164656997281}
     audio:
     - type: 13
-      clip: {fileID: 8300000, guid: ab50b79d09a6454459ca020d382526bf, type: 3}
+      clip: {fileID: 8300000, guid: 7e471c8c45f35e3409e2c1228ab6222b, type: 3}
     - type: 14
-      clip: {fileID: 8300000, guid: 243295491510ce54f8edadf097c187d4, type: 3}
---- !u!114 &369512475068664147
+      clip: {fileID: 8300000, guid: 2dfa75c351437e64bb892878248dfaeb, type: 3}
+--- !u!114 &604716891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1058,14 +1063,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4805589847024103410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e3d0a97f39ea6a4aa69eabeda38470b, type: 3}
+  m_Script: {fileID: 11500000, guid: 620bcf88e8d07334cb91a086cf95c936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 4805589847024103405}
-  type1: 0d0000000e000000
+  type1: 
   maxDelay: 0.5
   minDelay: 10
   calledAudio: 0
+  enemy: {fileID: 4805589847024103405}
 --- !u!1 &4923285493864345399
 GameObject:
   m_ObjectHideFlags: 0

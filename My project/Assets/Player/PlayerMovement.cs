@@ -11,9 +11,10 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerManger playerManger;
     private Animator animator;
+    private CapsuleCollider collider;
     public AudioController audioController;
     [SerializeField] private Rigidbody playerBody;
-    [SerializeField] private Transform distanceToGround;
+
  
     [Header("Movement")]
     public Vector3 movementVector;
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpElapsedTime;
 
+    public float distanceToGround;
 
     [Header("Dash")]
     public AnimationCurve groundedDashValueCurve;
@@ -48,8 +50,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Seeds")]
     public int seedId;
 
-
-    private bool isFalling = false;
+    public bool isGrounded;
+    public bool isFalling = false;
 
     private void Awake()
     {
@@ -58,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         playerBody = GetComponentInChildren<Rigidbody>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponent<PlayerManger>().animator;
+        collider = GetComponent<CapsuleCollider>();
 
         Keyframe[] keys = gravityValueCurve.keys;
         Keyframe lastKey = keys[keys.Length - 1];
@@ -75,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
         //Ground Checking
         if (IsGrounded() == true)
         {
+            isGrounded = true;
             animator.SetBool("isGrounded", IsGrounded());
             jumpElapsedTime = 0;
             gravityMultiplier = 0;
@@ -87,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            isGrounded = false;
             animator.SetBool("isGrounded", IsGrounded());
         //    gravityCorutine = ApplyGravity();
             
@@ -139,7 +144,9 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 direction = Vector3.down;
         RaycastHit hit;
-        if (Physics.Raycast(distanceToGround.position, direction, out hit, .2f, Ground))
+        float distanceCheck = collider.bounds.extents.y + distanceToGround;
+        Debug.DrawRay(collider.bounds.center, Vector3.down * distanceCheck);
+        if (Physics.Raycast(collider.bounds.center, direction, out hit, distanceCheck, Ground))
             return true;
         else
             return false;
@@ -252,6 +259,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         isDashing = false;
+        animator.SetBool("isDashing", false);
         if (dashType == PlayerStates.GroundedDash)
             playerBody.velocity = Vector3.zero; // Stop player speed instantly 
         else
@@ -264,7 +272,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void DashAnimationEnded()
     {
-        animator.SetBool("isDashing", false);
+       // animator.SetBool("isDashing", false);
     }
     #endregion
 

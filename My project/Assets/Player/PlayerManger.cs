@@ -89,7 +89,7 @@ public class PlayerManger : MonoBehaviour
         {
             if (playerMovement.IsGrounded())
             {
-                if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false)
+                if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false && isDashing == false)
                 {
                     SetPlayerState(PlayerStates.Moving);
                 }
@@ -113,7 +113,6 @@ public class PlayerManger : MonoBehaviour
             {
                 animator.SetBool("isDashing", true);
                 playerMovement.isDashing = true;
-
                 StartCoroutine(playerMovement.Dash());
             }
 

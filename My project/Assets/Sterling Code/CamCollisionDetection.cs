@@ -37,6 +37,11 @@ public class CamCollisionDetection : MonoBehaviour
     public bool isWallCollisionDetected = false;
     public bool isCeilingCollisionDetected = false;
 
+    private Coroutine alterCamDistance;
+    private Coroutine returnCamDistance;
+
+
+    private bool isCoroutineRunning = false;
 
     public bool isTriggerEntered;
     public List<Collider> collider;
@@ -154,9 +159,7 @@ public class CamCollisionDetection : MonoBehaviour
                         HandleCeilingCollision(hit.point.y);
                     }
                 }
-
-
-                /*
+                
                 if (wallLayer == (wallLayer & (1 << obj.gameObject.layer)))
                 {
                     isWallCollisionDetected = true;
@@ -170,11 +173,22 @@ public class CamCollisionDetection : MonoBehaviour
                     if (horizontaldistance < 1)
                     {
                         newCamDist = camControl.defeaultDistance - horizontaldistance;
-                        StartCoroutine(AlterCameraDistance(2f));
+                        if(returnCamDistance != null)
+                        {
+                            StopCoroutine(returnCamDistance);
+                            returnCamDistance = null;
+                        }
+                        
+                        if(!isCoroutineRunning)
+                        {
+                            isCoroutineRunning = true;
+                            alterCamDistance = StartCoroutine(AlterCameraDistance(1f));
+                           
+                        }
                     }
 
                     Debug.DrawRay(this.transform.position, direction.normalized * horizontaldistance, Color.red);
-                }*/
+                }
             }
           
         }
@@ -196,12 +210,12 @@ public class CamCollisionDetection : MonoBehaviour
             isCeilingCollisionDetected = false;
         }
 
-     /*   if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
+        if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
         {
             isWallCollisionDetected = false;
-            StartCoroutine(ReturnCamToNormal());
-           
-        }*/
+          
+            returnCamDistance =  StartCoroutine(ReturnCamToNormal());
+        }
         collider.Remove(collision);
     }
     void HandleGroundCollision(float hitObjectY)
@@ -242,27 +256,40 @@ public class CamCollisionDetection : MonoBehaviour
 
     IEnumerator AlterCameraDistance(float time)
     {
+        Debug.Log("zoom in");
+        //calculate interpolation value
         float timeElapsed = 0;
-        while(timeElapsed < 1)
+        while (timeElapsed < 1)
         {
+            // Calculate the interpolation factor based on the current distance of the camera
+            float interpolationFactor = Mathf.InverseLerp(camControl.defeaultDistance,newCamDist, time);
+
+            // Use the interpolation factor to adjust the time for interpolation
+            float adjustedTime = interpolationFactor;
+
             if (newCamDist > defaultDistanceMin)
                 camControl.defeaultDistance = Mathf.Lerp(camControl.defeaultDistance, newCamDist, timeElapsed);
-            timeElapsed += Time.deltaTime;
+            timeElapsed += Time.deltaTime * adjustedTime;
             yield return null;
-        }    
+        }
+        isCoroutineRunning = false;
     }
 
     IEnumerator ReturnCamToNormal()
     {
+        Debug.Log("Zoom out");
         float timeElapsed = 0;
-        while (timeElapsed < 1 && isWallCollisionDetected != true)
+        while (timeElapsed < 1)
         {
+                        // Calculate the interpolation factor based on the current distance of the camera
+            float interpolationFactor = Mathf.InverseLerp(camControl.defeaultDistance, newCamDist, 1);
+
+            // Use the interpolation factor to adjust the time for interpolation
+            float adjustedTime = interpolationFactor;
             camControl.defeaultDistance = Mathf.Lerp(newCamDist, defaultDistanceMax, timeElapsed);
             timeElapsed += Time.deltaTime;
             yield return null;
-        }
-
-  
+        } 
     }
     /*
     [Header("Camera Obstruction")]
