@@ -279,16 +279,20 @@ public class PlayerAttack : MonoBehaviour
                 #endregion
             }
         }
-        else
+        else if(inputType == 2)
         {
             int attackRating = (int)Math.Ceiling(20 * chargedAttackMultiplier);
             SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, attackRating, 3f, 10));
             Set(inputType, 0, 0);
             ResetCombo();
         }
+        else if( inputType == 3)
+        {
+            Set(inputType, 0, 0);
+            ResetCombo();
+        }
 
     }
-
     private void Set(int inputType, int attacktype, float combolifetime)
     {
       //  audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
@@ -303,7 +307,6 @@ public class PlayerAttack : MonoBehaviour
         isAnimationActive = true;
        
     }
-
     private void SendValues(string myCollider, PlayerCollider values)
     {
         if(colliders.ContainsKey(myCollider))

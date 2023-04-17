@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [Header("Game Events")]
     [SerializeField] private GameEvent initializeScene;
 
+    public AudioSource audioSource;
+    public AudioClip audioClip;
 
     [Header("Scene Management")]
     public Level levelToLoad;
@@ -37,23 +39,16 @@ public class GameManager : MonoBehaviour
     public Image loadingScreenImage;
     public Sprite[] loadingScreenSprites;
 
-
     public string currentScene;
 
     public Vector3 startingPosition;
     public Vector3 lastReachCheckpoint;
     public Vector3 levelPosition;
-
-  
-
+     
     public bool loaded = false;
     public bool hasDied = false; // might be better to have as a number 
 
     public bool gamePaused = false;
-
-
-
-  
 
     public AudioMixer mixer;
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
@@ -76,9 +71,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        LoadLevel(SceneManager.GetActiveScene());
-        currentScene = SceneManager.GetActiveScene().name;
-
+        audioSource.clip = audioClip;
     }
     private void Update()
     {
@@ -153,6 +146,7 @@ public class GameManager : MonoBehaviour
 
     public void SetPlayerPosition(Vector3 position)
     {
+      
         if (hasSet.Count > 0)
         {
             startingPosition = lastReachCheckpoint;
@@ -161,7 +155,7 @@ public class GameManager : MonoBehaviour
         {
             startingPosition = position;
         }
-            
+        initializeScene?.Raise();
     }
     public void Convert()
     {

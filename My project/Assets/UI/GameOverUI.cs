@@ -10,6 +10,7 @@ using UnityEngine.Video;
 
 public class GameOverUI : MonoBehaviour
 {
+    public GameManager gameManager;
     public GameEvent restart;
     public GameEvent quit;
  
@@ -39,7 +40,10 @@ public class GameOverUI : MonoBehaviour
     }
 
 
-
+    public void PlayAudio()
+    {
+        gameManager.audioSource.Play();
+    }
 
     void PlayVideo()
     {

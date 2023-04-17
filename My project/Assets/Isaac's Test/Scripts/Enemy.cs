@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
             this.gameObject.SetActive(false);
 
             Destroy(smokeEffect, 1.5f);
+            SelectAudio("Death");
             Destroy(this.gameObject);
               
 
@@ -124,6 +125,21 @@ public class Enemy : MonoBehaviour
     }
 
 
+    #region Sound looping
+    public void SelectAudio(string type)
+    {
+        if(type == "Bark")
+        {
+            float delay =  0;
+            delay = Random.Range(0.5F, 10);
+            ManageAudio(AudioType.RotEnemyNoise);
+            StartCoroutine(WaitToPlay(delay));
+        }
+        else if(type == "Death")
+        {
+            ManageAudio(AudioType.RotDeath);
+        }
+    }
     public void ManageAudio(AudioType type)
     {
         if (ourAudio.Count < 1)
@@ -156,6 +172,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    IEnumerator WaitToPlay(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        audioJobSent = false;
+    }
 
-
+    #endregion
 }

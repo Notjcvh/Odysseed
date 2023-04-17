@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 07fc67afe3ef7af459211a7c350509ef, type: 2}
 --- !u!1 &6537399
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d772967a0944e488c2a32c929cfaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: PotatoLands
+  sceneToLoad: 0
+  scene:
+    m_Handle: 0
   gameManager: {fileID: 69644491}
 --- !u!65 &6537401
 BoxCollider:
@@ -755,31 +757,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 234.1
+      value: 311
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 115.4
+      value: 97.5
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 183.1
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99982494
+      value: 0.7071067
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.008236591
+      value: 0.01216176
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.015231924
+      value: -0.70700216
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0070894747
+      value: -0.0003639893
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -787,11 +789,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.739
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523717, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.798
+      value: -1.015
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523832, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: cam

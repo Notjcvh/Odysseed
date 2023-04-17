@@ -5537,6 +5537,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1482087288, guid: 832d531b032929545bfafc2f428ed500, type: 3}
+      propertyPath: audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3c7cb3735c28ffa4ba70b9db6227f9eb, type: 3}
+    - target: {fileID: 1482087288, guid: 832d531b032929545bfafc2f428ed500, type: 3}
       propertyPath: levelToLoad
       value: 
       objectReference: {fileID: 11400000, guid: 8bab5ef657c53904792d0689d725b4aa, type: 2}
@@ -5544,6 +5548,10 @@ PrefabInstance:
       propertyPath: levels.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1170840659728265733, guid: 832d531b032929545bfafc2f428ed500, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -9045977102421720465, guid: 919b491efd24cee42b53fb5778575b23, type: 2}
     - target: {fileID: 2538145067693232676, guid: 832d531b032929545bfafc2f428ed500, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -6096,7 +6104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6528760259279523834, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: distanceToGround
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 6796876873378023449, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6176,7 +6184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: tracks.Array.data[0].audio.Array.size
-      value: 15
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: tracks.Array.data[0].audio.Array.data[0].clip
@@ -6297,6 +6305,22 @@ PrefabInstance:
     - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: tracks.Array.data[0].audio.Array.data[14].type
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
+      propertyPath: tracks.Array.data[0].audio.Array.data[15].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: feca38df8cbf8074dad3e01920e8c45b, type: 3}
+    - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
+      propertyPath: tracks.Array.data[0].audio.Array.data[15].type
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
+      propertyPath: tracks.Array.data[0].audio.Array.data[16].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: ae595e9e671425c4aacc059418c8ca9a, type: 3}
+    - target: {fileID: 8385173726301645274, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
+      propertyPath: tracks.Array.data[0].audio.Array.data[16].type
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 8426400718959723014, guid: f48c9442355ef064ab9ec924db70d150, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
