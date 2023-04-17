@@ -1151,7 +1151,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioController: {fileID: 8385173726301645274}
   playerBody: {fileID: 8385173726301645285}
-  distanceToGround: {fileID: 7096661056148737688}
   movementVector: {x: 0, y: 0, z: 0}
   targetSpeed: 10
   stopMovementEvent: 0
@@ -1196,6 +1195,7 @@ MonoBehaviour:
   jumpTime: 0
   jumpForce: 10
   jumpElapsedTime: 0
+  distanceToGround: 0.7
   groundedDashValueCurve:
     serializedVersion: 2
     m_Curve:
@@ -1277,6 +1277,8 @@ MonoBehaviour:
   target: {fileID: 0}
   range: 200
   seedId: 0
+  isGrounded: 0
+  isFalling: 0
 --- !u!114 &7096661055354458043
 MonoBehaviour:
   m_ObjectHideFlags: 0
