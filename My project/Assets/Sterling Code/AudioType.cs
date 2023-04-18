@@ -59,8 +59,14 @@ public enum AudioType
 
     #region Music Tracks
     MainMenu,
-    RotBoss,
+    VineyardTheme,
+    PotatoLands,
+    KarrotLands,
     DungeonOne,
+    PrisonTheme,
+    DungeonTheme_2,
+    RotBoss,
+    PotatoKingMusic,
     #endregion
 
     #region NPCs
@@ -72,6 +78,5 @@ public enum AudioType
     NpcDialouge6,
     PotatoMurmur1
     #endregion
-
 }
 //Audio files under the same audioSource cannot play at the same time. They can only be handled one at a time.

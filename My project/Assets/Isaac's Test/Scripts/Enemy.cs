@@ -13,11 +13,14 @@ public class Enemy : MonoBehaviour
     [Header("Animation")]
     public Animator animator;
 
+
+
     [Header("EnemyStatus")]
     public bool isStunned = false;
     public bool isTargeted = true;
     public EnemyHealthbar myHealthbar;
     public event System.Action<float> OnHealthPercentChange = delegate { };
+    private BossEvents bossEvents;
 
     [Header("Rooms")]
     public CombatRoom myRoom;
@@ -42,6 +45,15 @@ public class Enemy : MonoBehaviour
     {
         currentHealth = maxHealth;
         audioController = GetComponent<AudioController>();
+
+        if(this.tag == "Boss")
+        {
+          bossEvents = GetComponent<BossEvents>();
+            if(bossEvents == null)
+            {
+                Debug.Log("you need to add boss events to change audio or spawn seed");
+            }
+        }
     }
 
 
@@ -57,7 +69,9 @@ public class Enemy : MonoBehaviour
             }
             if (this.tag == "Boss")
             {
+
                 animator.SetBool("IsDying", true);
+                Destroy(myHealthbar.gameObject);
             }
            /* else
             {
@@ -65,7 +79,12 @@ public class Enemy : MonoBehaviour
                 DestroyImmediate(this.gameObject);
             }*/
             this.gameObject.SetActive(false);
+            if(bossEvents != null)
+            {
+                     bossEvents.Call();
+            }
 
+      
             Destroy(smokeEffect, 1.5f);
             SelectAudio("Death");
             Destroy(this.gameObject);
@@ -128,13 +147,9 @@ public class Enemy : MonoBehaviour
 
 
     #region Sound Caller
-
     public void SelectAudio(string type)
     {
-        if (type == "Death")
-        {
-            ManageAudio(AudioType.RotDeath);
-        }
+       
     }
 
     public void ManageAudio(AudioType type)

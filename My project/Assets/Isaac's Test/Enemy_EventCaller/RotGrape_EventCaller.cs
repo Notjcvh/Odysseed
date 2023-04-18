@@ -19,6 +19,10 @@ public class RotGrape_EventCaller : EnemyEventCaller
                 StartCoroutine(WaitToPlay(delay));
             }
         }
+        else if (audioType == "Death")
+        {
+           enemy.ManageAudio(AudioType.RotDeath);
+        }
     }
 
     IEnumerator WaitToPlay(float time)

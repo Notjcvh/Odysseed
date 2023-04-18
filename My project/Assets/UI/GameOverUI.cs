@@ -40,10 +40,10 @@ public class GameOverUI : MonoBehaviour
     }
 
 
-    public void PlayAudio()
+   /* public void PlayAudio()
     {
         gameManager.audioSource.Play();
-    }
+    }*/
 
     void PlayVideo()
     {
