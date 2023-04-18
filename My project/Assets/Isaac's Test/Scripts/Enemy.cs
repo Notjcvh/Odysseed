@@ -118,8 +118,11 @@ public class Enemy : MonoBehaviour
 
     public void ModifiyHealth(int amount)
     {
-        GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
-        Destroy(hiteffs, 2f);
+        if (hitEffect != null)
+        {
+            GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
+            Destroy(hiteffs, 2f);
+        }
         currentHealth =currentHealth - amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
 

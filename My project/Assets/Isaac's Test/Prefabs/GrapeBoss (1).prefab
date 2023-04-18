@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 8633926705082632790}
   - component: {fileID: 3773737583950523445}
   - component: {fileID: 542712628775258959}
+  - component: {fileID: 4143475470773209091}
   m_Layer: 11
   m_Name: GrapeBoss (1)
   m_TagString: Boss
@@ -175,12 +176,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1986e8c424c04a24ab7f9d5de3696ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 30
+  maxHealth: 100
   currentHealth: 0
   hitEffect: {fileID: 1014210819661757414, guid: 09c7af6e75624494e92d661a082fab8b, type: 3}
   animator: {fileID: 8633926705082632788}
   isStunned: 0
   isTargeted: 1
+  myHealthbar: {fileID: 0}
   myRoom: {fileID: 0}
   audioController: {fileID: 0}
   playingAudio: 0
@@ -358,6 +360,19 @@ MonoBehaviour:
       clip: {fileID: 8300000, guid: a4972a11508d0474c9175c45b50cd885, type: 3}
     - type: 16
       clip: {fileID: 8300000, guid: fdcac9cb3e7142e4ea3c801c488adce3, type: 3}
+--- !u!114 &4143475470773209091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8633926705082632793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f164f555daac8ca4a86ac60c7314bcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obj: {fileID: 4843382836873249623, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
 --- !u!1 &8633926705093850171
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,6 +1021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
   playerHealth: {fileID: 0}
+  damage: 1
   hitAlready: 0
   hitShield: 0
 --- !u!1 &8633926705325797832
