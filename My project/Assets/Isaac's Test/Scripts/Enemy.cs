@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     [Header("EnemyStatus")]
     public bool isStunned = false;
     public bool isTargeted = true;
+    public EnemyHealthbar myHealthbar;
     public event System.Action<float> OnHealthPercentChange = delegate { };
 
     [Header("Rooms")]
@@ -102,7 +103,8 @@ public class Enemy : MonoBehaviour
         Destroy(hiteffs, 2f);
         currentHealth =currentHealth - amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
-        OnHealthPercentChange(currentHealthPercent);
+
+        myHealthbar.HandleHealthChange(currentHealthPercent);
     }
 
     public void TakeDamage(int damage)
@@ -125,21 +127,16 @@ public class Enemy : MonoBehaviour
     }
 
 
-    #region Sound looping
+    #region Sound Caller
+
     public void SelectAudio(string type)
     {
-        if(type == "Bark")
-        {
-            float delay =  0;
-            delay = Random.Range(0.5F, 10);
-            ManageAudio(AudioType.RotEnemyNoise);
-            StartCoroutine(WaitToPlay(delay));
-        }
-        else if(type == "Death")
+        if (type == "Death")
         {
             ManageAudio(AudioType.RotDeath);
         }
     }
+
     public void ManageAudio(AudioType type)
     {
         if (ourAudio.Count < 1)
@@ -172,10 +169,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator WaitToPlay(float time)
+    IEnumerator WaitToPlay(float time, AudioType type)
     {
+        float count = 0;
+        count += 1;
         yield return new WaitForSecondsRealtime(time);
-        audioJobSent = false;
+        ManageAudio(type);
+        Debug.Log("count " + count);
     }
 
     #endregion

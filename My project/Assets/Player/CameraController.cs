@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
     public float minVerticalAngleRef { get; private set; }
 
     [Header("Distance from Target")]
-    [Range(4, 20)] [SerializeField] public float defeaultDistance;
+    [Range(4, 10)] [SerializeField] public float defeaultDistance;
     public float DefaultDistanceMax { get; private set; }
     public float DefaultDistanceMin { get; private set; }
 

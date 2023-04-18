@@ -15,7 +15,7 @@ public class CamCollisionDetection : MonoBehaviour
     private int wallLayer = (1 << 10);
     private int ceilingLayer = (1 << 14);
 
-    public LayerMask collideAblrLayers;
+    public LayerMask collidableLayers;
 
 
     public float contactPoint;
@@ -68,7 +68,7 @@ public class CamCollisionDetection : MonoBehaviour
     }
     private void OnTriggerEnter(Collider collision)
     {
-        if (((1 << collision.gameObject.layer) & collideAblrLayers) != 0)
+        if (((1 << collision.gameObject.layer) & collidableLayers) != 0)
         {
             if (!collider.Contains(collision))
             {
@@ -80,7 +80,7 @@ public class CamCollisionDetection : MonoBehaviour
 
     private void OnTriggerStay(Collider collision)
     {
-        if (((1 << collision.gameObject.layer) & collideAblrLayers) != 0)
+        if (((1 << collision.gameObject.layer) & collidableLayers) != 0)
         {
             if (!collider.Contains(collision))
             {

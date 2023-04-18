@@ -52,7 +52,17 @@ public class SceneHandeler : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.G))
         {
             StopAudio();
-        }      
+        }
+
+        if (gameManager.gamePaused == true)
+        {
+            DeactivatePlayer();
+        }
+        else
+        {
+            ActivatePlayer();
+        }
+
     }
     #endregion
 
