@@ -82,14 +82,14 @@ GameObject:
   - component: {fileID: 8633926705082632790}
   - component: {fileID: 3773737583950523445}
   - component: {fileID: 542712628775258959}
-  - component: {fileID: 4143475470773209091}
+  - component: {fileID: 9077312938437580883}
   m_Layer: 11
   m_Name: GrapeBoss (1)
   m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8633926705082632791
 Transform:
   m_ObjectHideFlags: 0
@@ -360,7 +360,7 @@ MonoBehaviour:
       clip: {fileID: 8300000, guid: a4972a11508d0474c9175c45b50cd885, type: 3}
     - type: 16
       clip: {fileID: 8300000, guid: fdcac9cb3e7142e4ea3c801c488adce3, type: 3}
---- !u!114 &4143475470773209091
+--- !u!114 &9077312938437580883
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -369,10 +369,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8633926705082632793}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f164f555daac8ca4a86ac60c7314bcd5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bbc42c470e998f468b79388c913c870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 4843382836873249623, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+  sceneEvents:
+  - {fileID: 11400000, guid: 0a93ff5c40d8d4e4185865b741c55a31, type: 2}
+  gameEvents:
+  - {fileID: 11400000, guid: e3eb5fcac149c5d45a9831e230fd4448, type: 2}
 --- !u!1 &8633926705093850171
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,9 +12,16 @@ public class SeedPickup : MonoBehaviour
         abilityHandler = GameObject.FindGameObjectWithTag("AbilityHandler").GetComponent<AbilityHandler>();
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
-        abilityHandler.AddAbility(abilityIndex);
-        Destroy(this.gameObject);
+        Debug.Log(other.gameObject.tag);
+        if (other.gameObject.tag == "Player")
+        {
+            //abilityHandler.AddAbility(abilityIndex);
+            Destroy(this.gameObject);
+        }
     }
+
+  
 }
