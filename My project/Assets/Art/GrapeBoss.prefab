@@ -4346,7 +4346,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
   playerHealth: {fileID: 0}
+  damage: 1
   hitAlready: 0
+  hitShield: 0
 --- !u!1 &5835922351134023216
 GameObject:
   m_ObjectHideFlags: 0
@@ -5320,6 +5322,7 @@ GameObject:
   - component: {fileID: 8041149789703505540}
   - component: {fileID: 8041149789703505545}
   - component: {fileID: 8041149789703505546}
+  - component: {fileID: 2607457467574327434}
   m_Layer: 11
   m_Name: GrapeBoss
   m_TagString: Boss
@@ -5419,7 +5422,16 @@ MonoBehaviour:
   animator: {fileID: 8041149789703505547}
   isStunned: 0
   isTargeted: 1
+  myHealthbar: {fileID: 0}
   myRoom: {fileID: 0}
+  audioController: {fileID: 0}
+  playingAudio: 0
+  queueAudio: 0
+  clip: {fileID: 0}
+  audioJobSent: 0
+  blinkIntensity: 0
+  blinkDuration: 0
+  mats: []
 --- !u!195 &8041149789703505545
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5458,6 +5470,19 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &2607457467574327434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7267744981061491764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f164f555daac8ca4a86ac60c7314bcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obj: {fileID: 4843382836873249623, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
 --- !u!1 &7305114947798742023
 GameObject:
   m_ObjectHideFlags: 0

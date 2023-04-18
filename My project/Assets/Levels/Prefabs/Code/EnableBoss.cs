@@ -10,9 +10,12 @@ public class EnableBoss : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        boss.SetActive(true);
-        bossHealth.SetActive(true);
-        sceneEvent?.Raise();
-        this.gameObject.SetActive(false);
+        if (other.tag == "Player")
+        {
+            boss.SetActive(true);
+            bossHealth.SetActive(true);
+            sceneEvent?.Raise();
+            this.gameObject.SetActive(false);
+        }
     }
 }
