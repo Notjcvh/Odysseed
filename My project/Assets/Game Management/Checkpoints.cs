@@ -5,7 +5,6 @@ using UnityEngine;
 public class Checkpoints : MonoBehaviour
 {
     private GameManager gameManager;
-    public SceneEvent scene;
     public Collider Trigger;
     public bool reached = false;
 
@@ -14,19 +13,17 @@ public class Checkpoints : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
     }
 
-    public void CheckMyPoints()
+    public void Update()
     {
-        bool beenReached = reached;
-        if (beenReached == true)
+        if (reached == true)
         {
             this.gameObject.SetActive(false);
-            Trigger.enabled = false;
+
         }
         else
         {
             this.gameObject.SetActive(true);
         }
-       // Debug.Log(beenReached);
     }
 
 
@@ -38,7 +35,6 @@ public class Checkpoints : MonoBehaviour
             gameManager.hasSet.Add(this.transform.position);
             gameManager.Convert();
             reached = true;
-            scene.Raise();
         }
     }
 

@@ -112,7 +112,7 @@ public class PlayerManger : MonoBehaviour
                 animator.SetBool("isJumping", true);
             }
 
-            if (playerInput.dash && playerMovement.isDashing == false)
+           if (playerInput.dash && playerMovement.isDashing == false)
             {
                 animator.SetBool("isDashing", true);
                 playerMovement.isDashing = true;
