@@ -6,7 +6,7 @@ public class Attack : MonoBehaviour
 {
     public GameObject impactEffect;
     public PlayerManger playerHealth;
-
+    public int damage = 1;
     public bool hitAlready;
     public bool hitShield;
     private void OnEnable()
@@ -32,7 +32,7 @@ public class Attack : MonoBehaviour
         {
             GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
             playerHealth = other.GetComponent<PlayerManger>();
-            playerHealth.TakeDamage(1);
+            playerHealth.TakeDamage(damage);
             hitAlready = true;
             Destroy(effectIns, 2f);
         }

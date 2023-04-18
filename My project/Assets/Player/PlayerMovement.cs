@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     #region Moving
-    private void CanMove()
+    public void CanMove()
     {
         // if we have input that is either vertical or horizontal then is moving is true 
         movementVector = playerInput.movementInput;
@@ -233,14 +233,12 @@ public class PlayerMovement : MonoBehaviour
             dashType = PlayerStates.GroundedDash;
             keys = groundedDashValueCurve.keys;
             curveToEvaluate = groundedDashValueCurve;
-            print("A");
         }
         else
         {
             dashType = PlayerStates.InAirDash;
             keys = inAirDashValueCurve.keys;
             curveToEvaluate = inAirDashValueCurve;
-            print("B");
         }
         Keyframe lastKey = keys[keys.Length - 1];
         float end = lastKey.time;

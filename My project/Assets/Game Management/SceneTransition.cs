@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class SceneTransition : MonoBehaviour
 {
     public SceneData sceneToLoad;
-    public Scene scene;
     public GameManager gameManager;
 
 
@@ -15,10 +14,7 @@ public class SceneTransition : MonoBehaviour
         if(other.CompareTag("Player") && !other.isTrigger)
         {
             gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-
             string sceneName = sceneToLoad.ToString();
-      
-            print(sceneName + "    " + scene.name);
             gameManager.LoadLevel(sceneName);
         }
     }

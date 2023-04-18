@@ -5,8 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public GameManager gameManager;
+    public SceneData scenetoLoad;
+    private void Start()
+    {
+        gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+    }
+
+
     public void StartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        gameManager.LoadLevel(scenetoLoad.ToString());
     }
+
+    public void OpenSettings()
+    {
+        gameManager.gamePaused = true;
+        //we want to puase the game to open up the pause menu
+    }
+
+    public void Quit()
+    {
+        gameManager.QuitGame();
+    }
+
+
 }
