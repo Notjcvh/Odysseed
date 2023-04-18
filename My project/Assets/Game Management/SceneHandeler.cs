@@ -45,26 +45,29 @@ public class SceneHandeler : MonoBehaviour
            {
                 audioJobSent = true;
                 ManageAudio(queueAudio);
-                //StartCoroutine(WaitToPlay(clip.length));
+                StartCoroutine(WaitToPlay(clip.length));
            }
         }
-
-        if(Input.GetKeyDown(KeyCode.G))
+        if (gameManager.gamePaused == true)
         {
-            StopAudio();
-        }      
+            DeactivatePlayer();
+        }
+        else
+        {
+            ActivatePlayer();
+        }
     }
     #endregion
 
     #region Sound looping
     // Call this function if we want to stop the currently playing audio 
-     public void StopAudio() 
+     public void StopAudio(float delay) 
     {
         StopCoroutine(WaitToPlay(clip.length));
         if(audioSource.isPlaying)
         {
             audioController.StopAudio(playingAudio, false, 0, false);
-            StartCoroutine(WaitToPlay(3));
+            StartCoroutine(WaitToPlay(delay));
         }
     }
     // Call this function if we want to change audio 
@@ -72,14 +75,20 @@ public class SceneHandeler : MonoBehaviour
    {
         switch (sceneEvent.name)
         {
-            case ("Audio_DungeonOne"):
-                queueAudio = AudioType.DungeonOne;
-                break;
             case ("Audio_RotBoss"):
                 queueAudio = AudioType.RotBoss;
                 break;
-            case ("Audio_MainMenu"):
-                queueAudio = AudioType.MainMenu;
+            case ("Audio_PotatoKingBoss"):
+                queueAudio = AudioType.PotatoKingMusic;
+                break;
+            case ("Audio_Dungeon1"):
+                queueAudio = AudioType.DungeonOne;
+                break;
+            case ("Audio_Dungeon2"):
+                queueAudio = AudioType.DungeonTheme_2;
+                break;
+            case ("Audio_PrisonTheme"):
+                queueAudio = AudioType.PrisonTheme;
                 break;
             default:
                 break;

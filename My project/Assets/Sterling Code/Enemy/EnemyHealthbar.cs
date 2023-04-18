@@ -16,16 +16,11 @@ public class EnemyHealthbar : MonoBehaviour
     private void Awake()
     {
         //GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
-        if (GetComponentInParent<Enemy>() != null)
-        {
-            enemy = GetComponentInParent<Enemy>();
-            GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
-        }
 
     }
     
 
-    private void HandleHealthChange(float percent)
+    public void HandleHealthChange(float percent)
     {
         // using coroutine for smoothing 
         StartCoroutine(ChangeToPercent(percent));
