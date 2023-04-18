@@ -79,7 +79,6 @@ public class HitCollider : MonoBehaviour
         switch (obj.tag)
         {
             case ("Enemy"):
-            
                 obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
                 break;
             case ("Boss"):

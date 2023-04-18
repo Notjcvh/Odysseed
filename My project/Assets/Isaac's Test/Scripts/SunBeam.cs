@@ -18,7 +18,7 @@ public class SunBeam : Abilites
 
     private void Update()
     {
-        if(useLaser)
+        if(useLaser && target != null)
         {
             lineRenderer.SetPosition(0, lazerStart.transform.position);
             lineRenderer.SetPosition(1, target.position);

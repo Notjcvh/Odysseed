@@ -23,7 +23,6 @@ public class carrotKhan : MonoBehaviour
     public LayerMask whatIsPlayer;
     [Header("LazerBeam")]
     private LazerBeam lb;
-    public LineRenderer lr;
     [Header("Phase 2")]
     public bool hasExploded = false;
     private Animator animator;

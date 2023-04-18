@@ -6,6 +6,7 @@ public class EarthPull : MonoBehaviour
 {
     public float range = 30f;
     public bool hasPulled = false;
+    public float pullSpeed;
     public List<LineRenderer> newLineRenderer;
     public GameObject tendral;
     // Start is called before the first frame update
@@ -30,17 +31,15 @@ public class EarthPull : MonoBehaviour
                     EarthTendral tendralScript = tendralGO.GetComponent<EarthTendral>();
                     tendralScript.SetEnemy(enemy.transform);
                     //Pull enemies after a while
-                    PullEnemies();
+                    PullEnemies(enemy);
                 }
             }
             hasPulled = true;
         }
-
-        //pull all nearby enemies towards this gameobject
     }
 
-    public void PullEnemies()
+    public void PullEnemies(GameObject enemy)
     {
-        //Lerp enemy positions towards the center
+        enemy.transform.position = Vector3.Lerp(enemy.transform.position, this.transform.position, pullSpeed);
     }
 }
