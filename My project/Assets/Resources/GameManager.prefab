@@ -167,8 +167,8 @@ MonoBehaviour:
   initializeScene: {fileID: 11400000, guid: 90f72be55dcd8c24f8547dba1e4a1a6a, type: 2}
   audioSource: {fileID: 1170840659728265733}
   audioClip: {fileID: 8300000, guid: 3c7cb3735c28ffa4ba70b9db6227f9eb, type: 3}
-  levelToLoad: {fileID: 0}
-  scene:
+  levelToLoad: {fileID: 11400000, guid: 8bab5ef657c53904792d0689d725b4aa, type: 2}
+  currentScene:
     m_Handle: 0
   buildindex: 0
   sceneTransition: {fileID: 6288726008470370916}
@@ -183,11 +183,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 71ee6faa9ae68af4faacada858b9bf1f, type: 3}
   - {fileID: 21300000, guid: e48b679c280cd814eac0103b935ebc22, type: 3}
   - {fileID: 21300000, guid: 7ac6c49c882786a45bf57cfadc475692, type: 3}
-  currentScene: 
   startingPosition: {x: 0, y: 0, z: 0}
   lastReachCheckpoint: {x: 0, y: 0, z: 0}
-  levelPosition: {x: 0, y: 0, z: 0}
   loaded: 0
+  backTracking: 1
   hasDied: 0
   gamePaused: 0
   mixer: {fileID: 24100000, guid: 876a73ca8a973034e8d955868cabfd96, type: 2}
@@ -250,6 +249,22 @@ MonoBehaviour:
         - m_Target: {fileID: 1482087288}
           m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
           m_MethodName: ReloadLevel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 4094e79300794404884c6b1ad890d473, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1482087288}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+          m_MethodName: ToNextLevel
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1087,6 +1102,10 @@ PrefabInstance:
     - target: {fileID: 4389850001143216548, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_Name
       value: PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 4389850001143216548, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4597356160700450380, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

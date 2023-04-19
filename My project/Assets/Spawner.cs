@@ -9,6 +9,6 @@ public class Spawner : MonoBehaviour
     public void SpawnObj()
     {
         Instantiate(obj, this.transform.position, this.transform.rotation, this.transform);
-        obj.GetComponent<Rigidbody>().AddForce(Vector3.up * 2, ForceMode.Impulse);
+       // obj.GetComponent<Rigidbody>().AddForce(Vector3.up * 2, ForceMode.Impulse);
     }
 }
