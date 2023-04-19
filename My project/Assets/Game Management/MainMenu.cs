@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+        Cursor.visible = true;
     }
 
 
