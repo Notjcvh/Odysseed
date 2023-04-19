@@ -182,10 +182,10 @@ public class GameManager : MonoBehaviour
     public void  QuitGame()
     {
        // struck the if/else for isEditor, as this makes Unity very mad if you try to build the game. - Thomas
-       if(Application.isEditor)
-       {
-          EditorApplication.isPlaying = false;
-       }
+       //if(Application.isEditor)
+       //{
+       //   EditorApplication.isPlaying = false;
+       //}
 
         Application.Quit();
            
