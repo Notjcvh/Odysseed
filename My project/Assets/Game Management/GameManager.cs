@@ -75,10 +75,10 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-       if(Input.GetKeyDown(KeyCode.Y))
+      /* if(Input.GetKeyDown(KeyCode.Y))
        {
             LoadLevel(SceneManager.GetActiveScene());
-       }
+       }*/
 
 
     }
