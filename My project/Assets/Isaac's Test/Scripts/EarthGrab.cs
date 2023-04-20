@@ -6,13 +6,13 @@ public class EarthGrab : Abilites
 {
     public GameObject earthPull;
     public Transform player;
+    public Transform abilitySpawner;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
     public override void Ability()
     {
-        GameObject earthPull = Instantiate(this.earthPull, player.position, player.rotation) as GameObject;
-        Debug.Log("SAJHDGFBASJHDJASHDKAJSHDKJH");
+        GameObject earthPull = Instantiate(this.earthPull, abilitySpawner.position, player.rotation) as GameObject;
     }
 }

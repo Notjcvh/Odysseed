@@ -1423,7 +1423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d772967a0944e488c2a32c929cfaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clearCheckpoints: {fileID: 0}
   sceneToLoad: 3
+  intialPosition: {fileID: 0}
   gameManager: {fileID: 0}
 --- !u!4 &200864668 stripped
 Transform:
@@ -3295,6 +3297,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1996390428}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: whatIsPlayer.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[0]
       value: Hello!
       objectReference: {fileID: 0}
@@ -4801,6 +4807,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1468764402964890807, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: abilityList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3610525586784891215, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -8392,7 +8402,7 @@ PrefabInstance:
       objectReference: {fileID: 1996390428}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: talkRange
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: puzzleCompleted
@@ -8418,6 +8428,10 @@ PrefabInstance:
       propertyPath: dialogueList.Array.data[2]
       value: "Don\u2019t Forget to head into that cave we talked about! Granny needs
         her Morphitalic gems!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264587, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264589, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: m_RootOrder

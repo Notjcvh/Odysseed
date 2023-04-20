@@ -14,15 +14,15 @@ public class AbilityHandler : MonoBehaviour
     }
     void Update()
     {
-        if(playerInput.activateWaterSpecial && abilityList.Count == 1)
+        if(playerInput.activateWaterSpecial && abilityList.Count >= 1)
         {
             abilityList[0].TriggerAbility();
         }
-        if (playerInput.activateEarthSpecial && abilityList.Count == 2)
+        if (playerInput.activateEarthSpecial && abilityList.Count >= 2)
         {
             abilityList[1].TriggerAbility();
         }
-        if (playerInput.activateSunSpecial && abilityList.Count == 3)
+        if (playerInput.activateSunSpecial && abilityList.Count >= 3)
         {
             abilityList[2].TriggerAbility();
         }

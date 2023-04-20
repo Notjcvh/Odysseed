@@ -90,7 +90,7 @@ public class PlayerManger : MonoBehaviour
             {
                 if(playerInput.movementInput == Vector3.zero)
                 {
-                    Debug.Log(playerInput.movementInput);
+                    //Debug.Log(playerInput.movementInput);
                 }
 
                 if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false && isDashing == false)

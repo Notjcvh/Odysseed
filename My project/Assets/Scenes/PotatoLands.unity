@@ -10907,6 +10907,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1468764402964890805, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: earthPull
+      value: 
+      objectReference: {fileID: 2513412263395287818, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
+    - target: {fileID: 1468764402964890805, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: cooldownTime
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1468764402964890805, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: abilitySpawner
+      value: 
+      objectReference: {fileID: 1394182874}
+    - target: {fileID: 1468764402964890807, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: abilityList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1468764402964890807, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: abilityList.Array.data[1]
+      value: 
+      objectReference: {fileID: 1394182873}
+    - target: {fileID: 1468764402964890808, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: cooldownTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3610525586784891215, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -10973,6 +10997,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+--- !u!114 &1394182873 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1468764402964890805, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+  m_PrefabInstance: {fileID: 1394182872}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73017e96b155ee242809202e31f2444b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1394182874 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5442568676606704182, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+  m_PrefabInstance: {fileID: 1394182872}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1395892957
 PrefabInstance:
   m_ObjectHideFlags: 0
