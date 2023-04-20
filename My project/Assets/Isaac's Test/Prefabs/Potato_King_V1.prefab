@@ -820,13 +820,14 @@ GameObject:
   - component: {fileID: 5597614184794150191}
   - component: {fileID: 4715217821990840444}
   - component: {fileID: 5597614184794150190}
+  - component: {fileID: 424677450}
   m_Layer: 11
   m_Name: Potato_King_V1
   m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5108604650868150163
 Transform:
   m_ObjectHideFlags: 0
@@ -948,12 +949,12 @@ MonoBehaviour:
   enemyScript: {fileID: 0}
   isStunned: 0
   isIdle: 0
-  groundYLevel: 0
+  groundYLevel: -21
   stunDuration: 1
   roots: {fileID: 1752070861442606341, guid: deb22564aa2548b4aa852938bf3e1b0d, type: 3}
   rootsAttackSpeed: 100
   rootsLifetime: 3
-  rootsYLevel: 0
+  rootsYLevel: -21
   projectilePrefab: {fileID: 1968334642422721648, guid: e403a460e3885bd4682c40352345bafc, type: 3}
   spawner: {fileID: 4715217820503959421}
   projectileSpeed: 50
@@ -962,7 +963,7 @@ MonoBehaviour:
   chargeWaitBeforeCharging: 1
   burrowMoveEffect: {fileID: 0}
   unborrowEffect: {fileID: 0}
-  chargeYLevel: 0
+  chargeYLevel: -21
   unborrowLocations:
   - {fileID: 0}
   - {fileID: 0}
@@ -1002,6 +1003,22 @@ MonoBehaviour:
   blinkIntensity: 0
   blinkDuration: 0
   mats: []
+--- !u!114 &424677450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5597614184794150185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbc42c470e998f468b79388c913c870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneEvents:
+  - {fileID: 11400000, guid: 58d086cfd1e08ae4dadd436abe642d34, type: 2}
+  gameEvents:
+  - {fileID: 11400000, guid: e3eb5fcac149c5d45a9831e230fd4448, type: 2}
 --- !u!1 &7123802310101576846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,7 +1413,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4812430622028277476, guid: 1db4a68292f2eff40bd1e3039f0aadaf, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5096912322884917624, guid: 1db4a68292f2eff40bd1e3039f0aadaf, type: 3}
       propertyPath: m_Name
