@@ -190,6 +190,12 @@ public class GameManager : MonoBehaviour
         Application.Quit();
            
     }
+
+    public void ClearCheckpoints()
+    {
+        hasSet.Clear();
+        triggeredPoints.Clear();
+    }
     #endregion
 
     #region Audio Settings

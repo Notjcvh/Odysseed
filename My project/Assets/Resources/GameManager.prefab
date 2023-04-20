@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 308276308}
   - component: {fileID: 69644494}
   - component: {fileID: 69644493}
+  - component: {fileID: 5842212416608639363}
+  - component: {fileID: 6855287925424422548}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Game Manager
@@ -168,7 +170,7 @@ MonoBehaviour:
   audioSource: {fileID: 1170840659728265733}
   audioClip: {fileID: 8300000, guid: 3c7cb3735c28ffa4ba70b9db6227f9eb, type: 3}
   levelToLoad: {fileID: 11400000, guid: 8bab5ef657c53904792d0689d725b4aa, type: 2}
-  currentScene:
+  scene:
     m_Handle: 0
   buildindex: 0
   sceneTransition: {fileID: 6288726008470370916}
@@ -183,10 +185,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 71ee6faa9ae68af4faacada858b9bf1f, type: 3}
   - {fileID: 21300000, guid: e48b679c280cd814eac0103b935ebc22, type: 3}
   - {fileID: 21300000, guid: 7ac6c49c882786a45bf57cfadc475692, type: 3}
+  currentScene: 
   startingPosition: {x: 0, y: 0, z: 0}
   lastReachCheckpoint: {x: 0, y: 0, z: 0}
+  levelPosition: {x: 0, y: 0, z: 0}
   loaded: 0
-  backTracking: 1
   hasDied: 0
   gamePaused: 0
   mixer: {fileID: 24100000, guid: 876a73ca8a973034e8d955868cabfd96, type: 2}
@@ -264,7 +267,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1482087288}
           m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-          m_MethodName: ToNextLevel
+          m_MethodName: ClearCheckpoints
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -403,6 +406,120 @@ MonoBehaviour:
   debug: 0
   tracks:
   - source: {fileID: 69644494}
+    audio:
+    - type: 3
+      clip: {fileID: 8300000, guid: 92ac2300e2e71c447837d3d173c1c619, type: 3}
+--- !u!82 &5842212416608639363
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538145067693232677}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6855287925424422548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538145067693232677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848b30b790fd2cb4789553f43ae2cd62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
+  tracks:
+  - source: {fileID: 5842212416608639363}
     audio:
     - type: 3
       clip: {fileID: 8300000, guid: 92ac2300e2e71c447837d3d173c1c619, type: 3}
