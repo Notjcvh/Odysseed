@@ -7,6 +7,8 @@ public class WavePhysics : MonoBehaviour
     public Rigidbody rb;
     public Transform player;
     public float lifetime;
+    public int damage;
+    public float strength;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,9 +18,33 @@ public class WavePhysics : MonoBehaviour
         rb.velocity = player.forward * 10;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        
+        HitSomething(collision);
+    }
+
+    private void HitSomething(Collision obj)
+    {
+        switch (obj.gameObject.tag)
+        {
+            case ("Enemy"):
+                obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+                AddKnockback(obj.rigidbody);
+                break;
+            case ("Boss"):
+                obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+                break;
+            default:
+                break;
+        }
+    }
+    private void AddKnockback(Rigidbody body)
+    {
+        //Dot product
+        Vector3 targetDirection = (body.position - this.transform.position).normalized;
+        // float dotProduct = Vector3.Dot(targetDirection, origin.position);
+
+        targetDirection.y = 0;
+        body.AddForce(targetDirection * strength, ForceMode.Impulse);
     }
 }

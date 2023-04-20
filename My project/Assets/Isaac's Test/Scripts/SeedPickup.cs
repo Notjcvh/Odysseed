@@ -18,7 +18,7 @@ public class SeedPickup : MonoBehaviour
         Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == "Player")
         {
-            //abilityHandler.AddAbility(abilityIndex);
+            abilityHandler.AddAbility(abilityIndex);
             Destroy(this.gameObject);
         }
     }

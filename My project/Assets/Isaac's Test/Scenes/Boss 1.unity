@@ -1391,8 +1391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c5700add167bcc4e91911a167167ed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  startingPosition: {fileID: 888761194}
 --- !u!114 &902417188 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3967945164325192606, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
@@ -1402,17 +1400,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b599b78fc62f8043b2aec87a5ba925e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &907807849 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1041316786223776191, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-  m_PrefabInstance: {fileID: 288790575}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fb328127245a42498f7d84b862d2168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &951804764 stripped
@@ -1454,6 +1441,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 57536475, guid: f9af8591577f4864a8c7bca79fefb3b2, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8281145372905091958, guid: f9af8591577f4864a8c7bca79fefb3b2, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1501,6 +1492,10 @@ PrefabInstance:
     - target: {fileID: 8766073587868166604, guid: f9af8591577f4864a8c7bca79fefb3b2, type: 3}
       propertyPath: m_Name
       value: Enemy_Carrot_Soldier_spear_v1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766073587868166604, guid: f9af8591577f4864a8c7bca79fefb3b2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9af8591577f4864a8c7bca79fefb3b2, type: 3}
@@ -2748,9 +2743,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarrotKhan
       objectReference: {fileID: 0}
+    - target: {fileID: 7536114446765932145, guid: 8a3ac321a499b0743859b583fc31fbfe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7536114446765932146, guid: 8a3ac321a499b0743859b583fc31fbfe, type: 3}
       propertyPath: myHealthbar
       value: 
-      objectReference: {fileID: 907807849}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a3ac321a499b0743859b583fc31fbfe, type: 3}

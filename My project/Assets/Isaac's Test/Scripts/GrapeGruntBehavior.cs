@@ -72,7 +72,7 @@ public class GrapeGruntBehavior : MonoBehaviour
 
         if (thisEnemy.isStunned)
         {
-            DisableAI(stunDuration);
+            //DisableAI(stunDuration);
             thisEnemy.isStunned = false;
         }
         else
@@ -124,20 +124,20 @@ public class GrapeGruntBehavior : MonoBehaviour
         }
     }
 
-    public void DisableAI(float duration)
-    {
-        this.navMeshAge.enabled = false;
-        attackCooldown = 99999f;
-        isStunned = true;
-        Invoke("EnableAI", Time.deltaTime * duration);
-    }
+    //public void DisableAI(float duration)
+    //{
+    //    this.navMeshAge.enabled = false;
+    //    attackCooldown = 99999f;
+    //    isStunned = true;
+    //    Invoke("EnableAI", Time.deltaTime * duration);
+    //}
 
-    public void EnableAI()
-    {
-        attackCooldown = attackSpeed;
-        isStunned = false;
-        this.navMeshAge.enabled = true;
-    }
+    //public void EnableAI()
+    //{
+    //    attackCooldown = attackSpeed;
+    //    isStunned = false;
+    //    this.navMeshAge.enabled = true;
+    //}
 
 
     void PlayAudio(AudioType audioType)
