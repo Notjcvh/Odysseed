@@ -9,6 +9,7 @@ public class EarthTendral : MonoBehaviour
     void Start()
     {
         lr = gameObject.GetComponent<LineRenderer>();
+        Destroy(this.gameObject, 3f);
     }
 
     // Update is called once per frame

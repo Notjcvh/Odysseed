@@ -15,6 +15,6 @@ public class WaterWave : Abilites
 
     public override void Ability()
     {
-        GameObject wave = Instantiate(waveAttack,abilitySpawner.position,player.transform.rotation) as GameObject;
+        GameObject wave = Instantiate(waveAttack, abilitySpawner.position, player.transform.rotation) as GameObject;
     }
 }

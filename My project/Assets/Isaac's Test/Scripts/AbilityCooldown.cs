@@ -10,6 +10,8 @@ public class AbilityCooldown : MonoBehaviour
     private Image imageCooldown;
     [SerializeField]
     private TMP_Text textCooldown;
+    private Image item;
+    public bool isActive = false;
 
     public bool isCooldown = false;
     public float cooldownTime = 10f;
@@ -20,6 +22,7 @@ public class AbilityCooldown : MonoBehaviour
     {
         textCooldown.gameObject.SetActive(false);
         imageCooldown.fillAmount = 0.0f;
+        item = this.GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -29,6 +32,7 @@ public class AbilityCooldown : MonoBehaviour
         {
             ApplyCooldown();
         }
+        item.enabled = isActive;
     }
     public void ApplyCooldown()
     {

@@ -754,6 +754,17 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &262591189 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7381370481764095788, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
+  m_PrefabInstance: {fileID: 1915061986}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262591181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73017e96b155ee242809202e31f2444b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &288790575
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2108,11 +2119,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1819321703472478218, guid: 42cc1b517b4559349bfd60b2e1985b91, type: 3}
   m_PrefabInstance: {fileID: 1819321704162468211}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1630776570 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2513412263395287818, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-  m_PrefabInstance: {fileID: 2513412264992362480}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1814730778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2260,25 +2266,37 @@ PrefabInstance:
       value: AbilityHandler
       objectReference: {fileID: 0}
     - target: {fileID: 7381370481764095788, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
+      propertyPath: title
+      value: Earth Pull
+      objectReference: {fileID: 0}
+    - target: {fileID: 7381370481764095788, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
       propertyPath: earthPull
       value: 
-      objectReference: {fileID: 1630776570}
+      objectReference: {fileID: 2513412263395287818, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
     - target: {fileID: 7381370481764095788, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
       propertyPath: cooldownTime
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7381370481764095788, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
+      propertyPath: abilitySpawner
+      value: 
+      objectReference: {fileID: 1872265682}
     - target: {fileID: 7381370481764095788, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
       propertyPath: abilityCooldown
       value: 
       objectReference: {fileID: 247922570}
     - target: {fileID: 7381370481764095790, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
       propertyPath: abilityList.Array.size
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7381370481764095790, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
+      propertyPath: abilityList.Array.data[0]
+      value: 
+      objectReference: {fileID: 262591185}
     - target: {fileID: 7381370481764095790, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
       propertyPath: abilityList.Array.data[1]
       value: 
-      objectReference: {fileID: 262591185}
+      objectReference: {fileID: 262591189}
     - target: {fileID: 7381370481764095790, guid: f0d41ce77403c524ba764d28515bd24e, type: 3}
       propertyPath: abilityList.Array.data[2]
       value: 
@@ -2445,67 +2463,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42cc1b517b4559349bfd60b2e1985b91, type: 3}
---- !u!1001 &2513412264992362480
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2513412263395287818, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_Name
-      value: EarthPullCenter
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287819, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: pullSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_RootOrder
-      value: 19
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 15.71
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -11.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513412263395287820, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 15ee5cc38001d424abe12cf313c8d845, type: 3}
 --- !u!1001 &3833736146600475390
 PrefabInstance:
   m_ObjectHideFlags: 0
