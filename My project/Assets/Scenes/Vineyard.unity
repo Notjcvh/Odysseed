@@ -2317,13 +2317,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3798040104528015277, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 1500
+    - target: {fileID: 3798040104528015276, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3798040104528015277, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 600
+    - target: {fileID: 3905026109155082750, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_TagString
+      value: ChatNext
+      objectReference: {fileID: 0}
+    - target: {fileID: 3921392659155912698, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_TagString
+      value: NameTag
       objectReference: {fileID: 0}
     - target: {fileID: 5555648250390313033, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_Pivot.x
@@ -3961,6 +3965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a964c9c76c82fc1498505c534a384761, type: 3}
+<<<<<<< Updated upstream
 --- !u!1001 &577018870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4018,6 +4023,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 455edba515868f74ea067732e2d3701b, type: 3}
+=======
+--- !u!1 &587058933 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3905026109155082750, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+  m_PrefabInstance: {fileID: 224723537}
+  m_PrefabAsset: {fileID: 0}
+>>>>>>> Stashed changes
 --- !u!1001 &593738015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4034,9 +4046,21 @@ PrefabInstance:
       value: NPC
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: NPCName
+      value: Kiko
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: NameTag
+      value: 
+      objectReference: {fileID: 2019591214}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogue
       value: 
       objectReference: {fileID: 1996390428}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: nextChat
+      value: 
+      objectReference: {fileID: 587058933}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: whatIsPlayer.m_Bits
       value: 8
@@ -10638,9 +10662,21 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: NPCName
+      value: Arda
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: NameTag
+      value: 
+      objectReference: {fileID: 2019591214}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogue
       value: 
       objectReference: {fileID: 1996390428}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: nextChat
+      value: 
+      objectReference: {fileID: 587058933}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: talkRange
       value: 10
@@ -13738,6 +13774,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6198915871819469491, guid: 3da702890d664534a9a3a2cc9cbeae1d, type: 3}
   m_PrefabInstance: {fileID: 1605953600}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 --- !u!1001 &2024380891
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13795,6 +13832,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 455edba515868f74ea067732e2d3701b, type: 3}
+=======
+--- !u!114 &2019591214 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9203819840514546559, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+  m_PrefabInstance: {fileID: 224723537}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+>>>>>>> Stashed changes
 --- !u!4 &2026507329 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2776705360288115503, guid: fce78a738ffa70245b721f3d5ec70cfa, type: 3}

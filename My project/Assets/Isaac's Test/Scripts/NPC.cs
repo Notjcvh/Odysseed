@@ -6,17 +6,20 @@ using TMPro;
 
 public class NPC : MonoBehaviour
 {
+    public string NPCName;
+    public TextMeshProUGUI NameTag;
     public bool hasTalked;
     public GameObject dialogue;
     public string[] dialogueList;
-    public GameObject player;
+    private GameObject player;
+    public GameObject nextChat;
     public float talkRange;
-    public float distanceToPlayer;
-    public GameObject talkingIndicator;
-    public bool isTalking;
-    public int dialoguePointer;
-    public bool playerInTalkRange;
-    public TextMeshProUGUI myDialouge;
+    private float distanceToPlayer;
+    private GameObject talkingIndicator;
+    private bool isTalking;
+    private int dialoguePointer;
+    private bool playerInTalkRange;
+    private TextMeshProUGUI myDialouge;
     private void Awake()
     {
         isTalking = false;
@@ -50,18 +53,24 @@ public class NPC : MonoBehaviour
             }
             myDialouge.text = dialogueList[dialoguePointer];
         }
+        if(dialoguePointer < dialogueList.Length)
+        {
+            nextChat.SetActive(true);
+        }
     }
     public void StartDialouge()
     {
         isTalking = true;
         dialogue.SetActive(isTalking);
         dialoguePointer = 0;
+        NameTag.text = NPCName;
     }
     public void EndDialouge()
     {
         isTalking = false;
         hasTalked = true;
         dialogue.SetActive(isTalking);
+        nextChat.SetActive(false);
         dialoguePointer = 0;
         ZeroText();
     }
