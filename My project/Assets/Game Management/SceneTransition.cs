@@ -7,7 +7,6 @@ public class SceneTransition : MonoBehaviour
 {
     public GameEvent clearCheckpoints;
     public SceneData sceneToLoad;
-    public VectorValue intialPosition;
     public GameManager gameManager;
 
     private void OnTriggerEnter(Collider other)

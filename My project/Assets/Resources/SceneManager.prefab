@@ -54,7 +54,7 @@ MonoBehaviour:
   sceneActivated: 0
   spawnPosition: {x: 0, y: 0, z: 0}
   playingAudio: 0
-  queueAudio: 47
+  queueAudio: 44
   clip: {fileID: 0}
   audioJobSent: 0
 --- !u!82 &1130789477
@@ -241,7 +241,7 @@ MonoBehaviour:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
-            m_FloatArgument: 0
+            m_FloatArgument: 1
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
@@ -321,6 +321,50 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
           m_MethodName: StopAudio
           m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 9ed7e370f1f909e488a1858b618b44a2, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 9ed7e370f1f909e488a1858b618b44a2, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: StopAudio
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: d6b31135bf82d454d9257d23df330d81, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: ActivatePlayer
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

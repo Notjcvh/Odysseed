@@ -25,14 +25,7 @@ public class Enemy : MonoBehaviour
     [Header("Rooms")]
     public CombatRoom myRoom;
 
-    [Header("Audio Caller")]
-    public AudioController audioController;
-    public AudioType playingAudio; // the currently playing audio
-    [SerializeField] private AudioType queueAudio; // the next audio to play
-    public AudioClip clip;
-    public bool audioJobSent = false; // if job sent is true then it won't play
-    private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
-    private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
+   
 
     [Header("Hit Effect")]
     public float blinkIntensity;
@@ -44,7 +37,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
-        audioController = GetComponent<AudioController>();
+        
 
         if(this.tag == "Boss")
         {
@@ -84,12 +77,9 @@ public class Enemy : MonoBehaviour
                      bossEvents.Call();
             }
 
-      
-            Destroy(smokeEffect, 1.5f);
-            SelectAudio("Death");
-            Destroy(this.gameObject);
-              
 
+            Destroy(smokeEffect, 1.5f);
+            Destroy(this.gameObject);
         }
 
 
@@ -149,52 +139,4 @@ public class Enemy : MonoBehaviour
     }
 
 
-    #region Sound Caller
-    public void SelectAudio(string type)
-    {
-       
-    }
-
-    public void ManageAudio(AudioType type)
-    {
-        if (ourAudio.Count < 1)
-        {
-            // Loop through each audio track
-            foreach (AudioController.AudioTrack track in audioController.tracks)
-            {
-                // Access the audio objects in each track
-                audioObjects.AddRange(track.audio);
-                // Loop through each audio object in the track
-                foreach (AudioController.AudioObject audioObject in audioObjects)
-                {
-                    // this should add all our audio to the dictionary
-                    ourAudio.Add(audioObject.type, audioObject.clip);
-                }
-            }
-        }
-        if (ourAudio.ContainsKey(type))
-        {
-            clip = ourAudio[type];
-        }
-        if (type != playingAudio)
-        {
-            audioController.PlayAudio(type, false, 0, false);
-            playingAudio = type;
-        }
-        else
-        {
-            audioController.PlayAudio(playingAudio, false, 0, false);
-        }
-    }
-
-    IEnumerator WaitToPlay(float time, AudioType type)
-    {
-        float count = 0;
-        count += 1;
-        yield return new WaitForSecondsRealtime(time);
-        ManageAudio(type);
-        Debug.Log("count " + count);
-    }
-
-    #endregion
 }

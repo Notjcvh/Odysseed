@@ -5,7 +5,7 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     public GameObject impactEffect;
-    public PlayerManger playerHealth;
+    public PlayerManger playerManager;
     public int damage = 1;
     public bool hitAlready;
     public bool hitShield;
@@ -16,14 +16,16 @@ public class Attack : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
+
+        Debug.Log(other.name);
         if (other.gameObject.tag == "Shield" && !hitAlready && !hitShield)
         {
             //instatiate shield hit effect
             //GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
 
-            //find shield script and damge it
-            //playerHealth = other.GetComponent<PlayerManger>();
-            //playerHealth.TakeDamage(1);
+            Debug.Log("attacked");
+            Rigidbody body = this.GetComponent<Rigidbody>();
+            playerManager.Blocked(body);
             hitAlready = true;
             hitShield = true;
             //Destroy(effectIns, 2f);
@@ -31,8 +33,8 @@ public class Attack : MonoBehaviour
         if (other.gameObject.tag == "Player" && !hitAlready && !hitShield)
         {
             GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
-            playerHealth = other.GetComponent<PlayerManger>();
-            playerHealth.TakeDamage(damage);
+            playerManager = other.GetComponent<PlayerManger>();
+            playerManager.TakeDamage(damage);
             hitAlready = true;
             Destroy(effectIns, 2f);
         }

@@ -26,14 +26,13 @@ public class GameManager : MonoBehaviour
     public Scene scene;
     public int buildindex;
     public GameObject sceneTransition;
-    public TextMeshProUGUI[] displayText;
-    public Level[] levels;
 
   
 
     [Header("UI Game Objects")]
     public GameObject gameOverUI;
     public GameObject loadingScreenUI;
+    public GameObject Cursor;
     public Slider loadingSlider;
     private float sliderTarget;
     public Image loadingScreenImage;
@@ -72,15 +71,21 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         audioSource.clip = audioClip;
+        
+        
+        LoadLevel(SceneManager.GetActiveScene());
     }
     private void Update()
     {
-      /* if(Input.GetKeyDown(KeyCode.Y))
-       {
-            LoadLevel(SceneManager.GetActiveScene());
-       }*/
-
-
+       
+        if(gamePaused == true)
+        {
+            Cursor.SetActive(true);
+        }
+        else if(gamePaused == false)
+        {
+            Cursor.SetActive(false);
+        }
     }
     #endregion
 
@@ -135,18 +140,17 @@ public class GameManager : MonoBehaviour
 
         scene = SceneManager.GetActiveScene();
 
-        if (scene.isLoaded)
+        if (scene.isLoaded && loadingScreenUI.activeSelf == false)
         {
             buildindex = scene.buildIndex;
             DisplaySceneTransitionUI(scene);
-            initializeScene?.Raise();
+           // initializeScene?.Raise();
         }
     }
 
 
     public void SetPlayerPosition(Vector3 position)
     {
-      
         if (hasSet.Count > 0)
         {
             startingPosition = lastReachCheckpoint;
@@ -155,7 +159,7 @@ public class GameManager : MonoBehaviour
         {
             startingPosition = position;
         }
-        initializeScene?.Raise();
+      
     }
     public void Convert()
     {
@@ -217,31 +221,64 @@ public class GameManager : MonoBehaviour
     public void DisplaySceneTransitionUI(Scene scene)
     {
         sceneTransition.SetActive(true);
-        displayText = sceneTransition.GetComponentsInChildren<TextMeshProUGUI>();
-        if (sceneTransition.activeInHierarchy)
+        foreach (Transform item in sceneTransition.transform)
         {
-            // setting the pannel and TMP GUI prefab to active 
-            string currentSceneName = scene.name;
-
-            foreach (var level in levels)
+            ObjData data = item.GetComponent<ObjData>();
+            if (data == null || scene.name != data.myData.ToString())
             {
-                if (level.sceneName.ToString() != currentSceneName)
-                    continue;
-                else
-                {
-                    for (int i = 0; i < displayText.Length; i++)
-                    {
-                        if (i == 0)
-                            displayText[i].SetText(level.levelName);
-                        else
-                            displayText[i].SetText(level.description);
-                    }
-                }
+                continue;
             }
-
+            else
+            {
+                item.gameObject.SetActive(true);
+                StartCoroutine(ColorLerp(item.GetComponent<Image>(), data.myCurve));
+            }
         }
-        else
-            return;
+        //initializeScene?.Raise();
+    }
+
+
+    IEnumerator ColorLerp(Image image, AnimationCurve animationCurve)
+    {
+        float timeElapsed = 0;
+        Keyframe[] keys = animationCurve.keys;
+        Keyframe lastKey = keys[keys.Length - 1];
+        float end = lastKey.time;
+        Color startColor = image.color; // Get the starting color from the image
+        Color alphaColor = startColor;
+        alphaColor.a = 0;
+        Debug.Log(end);
+        while (timeElapsed < end)
+        {
+            float t = animationCurve.Evaluate(timeElapsed); // Evaluate the animation curve at the current time
+            Color lerpedColor = Color.Lerp(startColor, alphaColor, t); // Interpolate between the starting color and alphaColor
+            image.color = lerpedColor; // Set the lerped color to the image'
+            Debug.Log(image.color + " this is the time" + timeElapsed);
+            
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        initializeScene?.Raise();
     }
     #endregion
 }
+
+public enum SceneData
+{
+    None,
+    #region BuildScenes
+    Title,
+    Vineyard,
+    Dungeon1,
+    Vineyard2,
+    PotatoLands,
+    Dungeon2,
+    CarrotKhanate,
+    Dungeon3,
+    TreeOfLife,
+    #endregion
+    #region Testing Scenes 
+    Sterling_PlayerTestScene,
+    #endregion 
+}
+

@@ -200,7 +200,7 @@ public class CamCollisionDetection : MonoBehaviour
         if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
         {
             camControl.minVerticalAngle = defaultMinVerticalAngle;
-            print("Default min vertical: " + camControl.minVerticalAngle);
+        //    print("Default min vertical: " + camControl.minVerticalAngle);
             isGroundCollisionDetected = false;
         }
         collider.Remove(collision);
@@ -277,7 +277,7 @@ public class CamCollisionDetection : MonoBehaviour
 
     IEnumerator ReturnCamToNormal()
     {
-        Debug.Log("Zoom out");
+        //Debug.Log("Zoom out");
         float timeElapsed = 0;
         while (timeElapsed < 1)
         {

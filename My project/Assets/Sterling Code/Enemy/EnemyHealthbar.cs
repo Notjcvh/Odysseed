@@ -16,7 +16,6 @@ public class EnemyHealthbar : MonoBehaviour
     private void Awake()
     {
         //GetComponentInParent<Enemy>().OnHealthPercentChange += HandleHealthChange;
-
     }
     
 
@@ -28,27 +27,19 @@ public class EnemyHealthbar : MonoBehaviour
 
     private IEnumerator ChangeToPercent(float percent)
     {
-
         float percentChange = foregroundImage.fillAmount;
         float percentChange2 = middlegroundImage.fillAmount;
-
         float elapsed = 0f;
-
         while(elapsed < updateSpeedInSeconds2)
         {
-            
             elapsed += Time.deltaTime;
             foregroundImage.fillAmount = Mathf.Lerp(percentChange, percent, elapsed / updateSpeedInSeconds1);
             middlegroundImage.fillAmount = Mathf.Lerp(percentChange2, percent, elapsed / updateSpeedInSeconds2);
             yield return null;
         }
-
        foregroundImage.fillAmount = percent;
        middlegroundImage.fillAmount = percent;
-
-
     }
-
 
     private void LateUpdate()
     {
@@ -58,9 +49,4 @@ public class EnemyHealthbar : MonoBehaviour
             transform.Rotate(0, 180, 0);
         }
     }
-
-
-
-
-
 }

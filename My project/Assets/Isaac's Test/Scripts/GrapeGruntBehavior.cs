@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class GrapeGruntBehavior : MonoBehaviour
 {
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject playerShield;
     private NavMeshAgent navMeshAge;
     private AudioController audioController;
 
@@ -15,6 +16,7 @@ public class GrapeGruntBehavior : MonoBehaviour
    
     [Header("Combat")]
     public float attackRange;
+    public float shieldAttackRange;
     public float attackSpeed;
     public float attackLife;
     public float attackPosChangeTimer;
@@ -26,6 +28,7 @@ public class GrapeGruntBehavior : MonoBehaviour
     public float aggroRange;
     public float deaggroRange;
     private float distanceFromPlayer;
+    private float distanceFromShield;
     public GameObject attackHitbox;
     public float stunDuration = 10;
     public bool isTargeted;
@@ -44,6 +47,14 @@ public class GrapeGruntBehavior : MonoBehaviour
     public Rigidbody rb;
     // Start is called before the first frame update
 
+    [Header("Audio Caller")]
+    public AudioType playingAudio; // the currently playing audio
+    [SerializeField] private AudioType queueAudio; // the next audio to play
+    public AudioClip clip;
+    public bool audioJobSent = false; // if job sent is true then it won't play
+    private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
+
 
     void Awake()
     {
@@ -54,6 +65,7 @@ public class GrapeGruntBehavior : MonoBehaviour
         attackCooldown = attackSpeed;
         tempAttackMoveSpeed = attackMoveSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
+      
         attackPoints = GameObject.FindGameObjectsWithTag("AttackPoints");
         rb = this.GetComponent<Rigidbody>();
         currentAttackPos = player.transform;
@@ -78,7 +90,15 @@ public class GrapeGruntBehavior : MonoBehaviour
         else
         {
             distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
-     
+
+            //For the shield
+            playerShield = GameObject.FindGameObjectWithTag("Shield");
+            if (playerShield != null && playerShield.activeInHierarchy == true)
+            {
+                distanceFromShield = Vector3.Distance(this.transform.position, playerShield.transform.position);
+               // Debug.Log(distanceFromPlayer);
+            }
+
             attackCooldown -= Time.deltaTime;
             attackLifetime -= Time.deltaTime;
             animator.SetFloat("Speed", rb.velocity.magnitude);
@@ -93,6 +113,23 @@ public class GrapeGruntBehavior : MonoBehaviour
                 attackScript.hitAlready = false;
                 tempAttackMoveSpeed = attackMoveSpeed;
             }
+
+            if(distanceFromShield <= shieldAttackRange && playerShield != null)
+            {
+                //if the enemy is in attack range do this
+                navMeshAge.speed = tempAttackMoveSpeed;
+                transform.LookAt(player.transform);
+                navMeshAge.destination = playerShield.transform.position;
+                if (attackCooldown <= 0)
+                {
+                    attackHitbox.SetActive(true);
+                    animator.SetBool("IsAttacking", true);
+                    tempAttackMoveSpeed = 0;
+                    attackLifetime = attackLife;
+                    attackCooldown = attackSpeed;
+                }
+            }
+
             if (distanceFromPlayer <= attackRange)
             {
                 //if the enemy is in attack range do this
@@ -111,6 +148,8 @@ public class GrapeGruntBehavior : MonoBehaviour
             else if (distanceFromPlayer < aggroRange)
             {
                 //if the enemy sees the player but is not in attack range
+
+                //Debug.Log("Deaggro");
                 aggroRange = deaggroRange;
                 navMeshAge.speed = tempAttackMoveSpeed;
                 navMeshAge.destination = currentAttackPos.position;
@@ -118,6 +157,7 @@ public class GrapeGruntBehavior : MonoBehaviour
             else
             {
                 //if enemy does not see the player do this
+               // Debug.Log("Can't see the player ");
                 navMeshAge.destination = currentWaypoint.position;
                 navMeshAge.speed = idleSpeed;
             }
@@ -140,14 +180,49 @@ public class GrapeGruntBehavior : MonoBehaviour
     //}
 
 
-    void PlayAudio(AudioType audioType)
+
+    #region Sound Caller
+
+    public void ManageAudio(AudioType type)
     {
-        audioController.PlayAudio(audioType, false, 0, false);
+        if (ourAudio.Count < 1)
+        {
+            // Loop through each audio track
+            foreach (AudioController.AudioTrack track in audioController.tracks)
+            {
+                // Access the audio objects in each track
+                audioObjects.AddRange(track.audio);
+                // Loop through each audio object in the track
+                foreach (AudioController.AudioObject audioObject in audioObjects)
+                {
+                    // this should add all our audio to the dictionary
+                    ourAudio.Add(audioObject.type, audioObject.clip);
+                }
+            }
+        }
+        if (ourAudio.ContainsKey(type))
+        {
+            clip = ourAudio[type];
+        }
+        if (type != playingAudio)
+        {
+            audioController.PlayAudio(type, false, 0, false);
+            playingAudio = type;
+        }
+        else
+        {
+            audioController.PlayAudio(playingAudio, false, 0, false);
+        }
     }
 
+    IEnumerator WaitToPlay(float time, AudioType type)
+    {
+        float count = 0;
+        count += 1;
+        yield return new WaitForSecondsRealtime(time);
+        ManageAudio(type);
+        Debug.Log("count " + count);
+    }
 
-
-
-
-
+    #endregion
 }

@@ -62,7 +62,7 @@ ModelImporter:
     second: FinalMerlot_JumpUp
   - first:
       74: 6775031936348113677
-    second: FinalMerlot_Push
+    second: FinalMerlot_Block
   - first:
       74: 543844157061520620
     second: FinalMerlot_Downward Air Attack
@@ -74,7 +74,7 @@ ModelImporter:
     second: FinalMerlot_Land
   - first:
       74: 1827226128182048838
-    second: Take 001
+    second: FinalMerlot_AirAttack(Fall)
   - first:
       74: -8748073449207146619
     second: FinalMerlot_Upward Attack(Charging)
@@ -90,6 +90,24 @@ ModelImporter:
   - first:
       74: -8527351856643242066
     second: ChargeAttack (Attack)
+  - first:
+      74: 6056488877348280423
+    second: FinalMerlot_ChargeAttack (WindUP)
+  - first:
+      74: -8370604497234069087
+    second: FinalMerlot_ChargeAttack (Hold)
+  - first:
+      74: -6790900672314441287
+    second: FinalMerlot_ChargeAttack (Attack)
+  - first:
+      74: 7191136001025341881
+    second: FinalMerlot_AirAttack(Land)
+  - first:
+      74: 3168027292315886351
+    second: FinalMerlot_AirAttack(Recover)
+  - first:
+      74: 1827226128182048838
+    second: FinalMerlot_Block(End)
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -373,11 +391,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: FinalMerlot_Push
+      name: FinalMerlot_Block
       takeName: Take 001
       internalID: 0
       firstFrame: 505
-      lastFrame: 558
+      lastFrame: 509
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -406,7 +424,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 0
       firstFrame: 560
-      lastFrame: 572
+      lastFrame: 567
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -489,7 +507,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ChargeAttack (WindUP)
+      name: FinalMerlot_ChargeAttack (WindUP)
       takeName: Take 001
       internalID: 0
       firstFrame: 390
@@ -518,7 +536,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ChargeAttack (Hold)
+      name: FinalMerlot_ChargeAttack (Hold)
       takeName: Take 001
       internalID: 0
       firstFrame: 413
@@ -547,11 +565,69 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ChargeAttack (Attack)
+      name: FinalMerlot_ChargeAttack (Attack)
       takeName: Take 001
       internalID: 0
       firstFrame: 414
       lastFrame: 440
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: FinalMerlot_AirAttack(Recover)
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 568
+      lastFrame: 572
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: FinalMerlot_Block(End)
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 553
+      lastFrame: 558
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

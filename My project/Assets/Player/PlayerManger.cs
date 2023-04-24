@@ -2,58 +2,77 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEditor;
+
 
 public class PlayerManger : MonoBehaviour
 {
+
+
     // members
     [Header("Refrences")]
-    private PlayerInput playerInput;
     private GameManager gameManager;
+    private PlayerInput playerInput;
+    private CameraController cam;
     public Animator animator;
     private AudioController audioController;
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
-    private Rigidbody playerBody;
-
-
-
-    [Header("Player States")]
-    public PlayerStates currentState;
-    public bool inputsEnable;
-    public bool playerInputsEnable;
-    public bool stopMovementEvent;
-    public bool isDashing = false;
-    public bool isTalking = false;
-    public bool isDying = false;
+    public Rigidbody playerBody;
+    public SphereCollider sphereCollider;
+    private PlayerBlock playerBlock;
+    private PlayerUI playerUI;
 
     [Header("Initial Start Position")]
     private Vector3 intialStartPos;
+
+    [Header("Player States")]
+    public PlayerStates currentState;
+    public SuperStates superStates;
+    public SubStates subStates;
+
+    public bool inputsEnable;
+    [SerializeField] private bool stopMovementEvent;
+    [SerializeField] private bool isUICreated = false;
+    [SerializeField] private bool isDashing = false;
+    public bool isTalking = false;
+    [SerializeField] private bool isGrounded = false;
+    public bool isDying = false;
+    public bool isAttacking = false;
 
     [Header("Health")]
     public int maxHealth = 5;
     public int currentHealth;
 
-    [Header("UI")]
-    public GameObject playerUi;
-    private bool isUICreated;
-    [SerializeField] private Image Hud; 
-    [SerializeField] private int numberOfHearts;
-    private Image[] hearts; // the full array of hearts in the game
-    //Hud
-     private Sprite[] allHuds;
-    //hearts
-    [SerializeField] private Sprite fullHeart;
-    [SerializeField] private Sprite emptyHeart;
+    [Header("Movement")]
+    [SerializeField] private Vector3 movementVector;
+    [SerializeField] private Quaternion targetRotation;
+    [SerializeField] private float targetSpeed;
+
+    [Header("GroundCheck")]
+    public LayerMask Ground;
+    public float distanceToGround;
+    public float lastPlayerPosY;
+    [SerializeField] private float jumpForce;
+    private float gravity;
+    public AnimationCurve gravityValueCurve;
+    public float gravityMultiplier = 0;
+    private IEnumerator gravityCorutine;
+
+    [Header("Dash")]
+    public float force;
+    private IEnumerator dashCorutine;
 
     [Header("Seeds")]
     public Seeds seeds;
-
 
     [Header("Attacking")]
     public float chargeTime;
     public bool chargedAttack = false;
     public bool isAttackAnimationActive;
-    public int inputType;
+    public float timeOfCharge;
+    private int count = 0;
+    public float chargedAttackMultiplier = 1.4f;
 
     [Header("Audio Caller")]
     public AudioType playingAudio; // the currently playing audio
@@ -63,220 +82,640 @@ public class PlayerManger : MonoBehaviour
     private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
     private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
 
+    //Getters and Setters
+    public int PlayerHealth { get { return currentHealth; } }
+    public Vector3 DirectionInput {get { return playerInput.movementInput; }}
+    public Vector3 MovementVector { get { return movementVector; } set { movementVector = value; } }
+    public Quaternion TargetRot { get { return targetRotation; } set { targetRotation = value; } }
+    public float TargetSpeed { get { return targetSpeed; } }
+    public float JumpForce { get { return jumpForce; } }
+    public CameraController CameraControl { get { return cam; } }
+    public bool UiCreated { get { return isUICreated; } set { isUICreated = value; } }
+    public bool IsDashing { get { return isDashing; } set { isDashing = value; } }
+    public bool StopMovement { get { return stopMovementEvent; } set{ stopMovementEvent = value; } }
 
     #region Unity Functions
     private void Start()
     {
-        currentHealth = maxHealth;
-        numberOfHearts = currentHealth;
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         playerInput = GetComponent<PlayerInput>();
         playerMovement = GetComponent<PlayerMovement>();
         playerBody = GetComponent<Rigidbody>();
         playerAttack = GetComponent<PlayerAttack>();
         audioController = GetComponent<AudioController>();
+        sphereCollider = GetComponent<SphereCollider>();
+        playerBlock = GetComponent<PlayerBlock>();
+        playerUI = GetComponent<PlayerUI>();
+        currentHealth = maxHealth;
+        animator.SetInteger("Health", currentHealth);
     }
     private void Update()
     {
-        if(playerInput.pause)
+        if (playerInput.pause)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
-            inputsEnable = !inputsEnable;            
+            inputsEnable = !inputsEnable;
         }
-        
+        if (IsGrounded() == true)
+        {
+            SetSuperState(SuperStates.Grounded);
+        }
+        else
+        {
+            //Check Y velocity to see if we are Rising or Falling
+            SetSuperState(checkYVelocity(superStates));
+            animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+        }
+        //StateHandling
+        switch (superStates)
+        {
+            case SuperStates.Falling:
+                animator.SetBool("isGrounded", IsGrounded());
+                break;
+            case SuperStates.Rising:
+                animator.SetBool("isGrounded", IsGrounded());
+                break;
+            case SuperStates.Grounded:
+                break;
+        }
         if (inputsEnable == true)
         {
-            if (playerMovement.IsGrounded())
+            HandleInputs();
+            switch (subStates)
             {
-                if(playerInput.movementInput == Vector3.zero)
-                {
-                    //Debug.Log(playerInput.movementInput);
-                }
+                case (SubStates.ChargingAttack):
+                    animator.SetTrigger("Charging");
+                    animator.SetFloat("ChargeTime", chargeTime);
+                    timeOfCharge += Time.deltaTime;
+                    float intervalDuration = 0.25f;
+                    if (timeOfCharge >= intervalDuration && chargeTime <= 2)
+                    {
+                        chargedAttackMultiplier += 0.2f;
+                        timeOfCharge = 0;
+                        count += 1;
+                    }
 
-                if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && isAttackAnimationActive == false && isDashing == false)
-                {
-                    SetPlayerState(PlayerStates.Moving);
-                }
-                else if (playerInput.movementInput == Vector3.zero && playerMovement.IsGrounded() == true && isDashing == false && isAttackAnimationActive == false)
-                    SetPlayerState(PlayerStates.Idle);
+                    if (chargeTime > 1.98f && chargeTime < 2 && count < 4)
+                    {
+                        count += 1;
+                        chargedAttackMultiplier += 0.2f;
+                    }
+                break;
+                case (SubStates.Guarding):
+                    animator.SetBool("Guarding", true);
+                    break;
             }
-            else
+
+            #region Handeling Player Health 
+           
+            if (isUICreated == true)
             {
-                SetPlayerState(playerMovement.checkYVelocity(currentState));
+                playerUI.VisualizeHealth();
+                animator.SetInteger("Health", currentHealth);
             }
+            if (currentHealth <= 0)
+            {
+                SetSuperState(SuperStates.Dying);
+            }
+            #endregion
+        }
+    }
 
-
-            if (playerInput.jumpInput && playerMovement.IsGrounded() == true)
+    #endregion
+    public void SetSuperState(SuperStates newState)
+    {
+        if (newState != superStates)
+        {
+            //On Leave from previous State
+            switch (superStates)
+            {
+                case SuperStates.Grounded:
+                    break;
+                case SuperStates.Falling:
+                    if(isDashing == true)
+                    {
+                        // Stop applying force to the rigidbody
+                        playerBody.velocity = Vector3.zero;
+                        isDashing = false;
+                        stopMovementEvent = false;
+                    }
+                    if(isAttacking == true)
+                    {
+                        animator.SetBool("Attacking", false);
+                        StartCoroutine(playerMovement.ApplyGravity());
+                        playerBody.useGravity = true;
+                        isAttacking = false;
+                        stopMovementEvent = false;
+                    }
+                    break;
+                case SuperStates.Rising:
+                    break;
+            }
+            superStates = newState;
+            //On Enter
+            switch (superStates)
+            {
+                case SuperStates.Grounded:
+                    animator.SetFloat("PlayerYVelocity", 0);
+                    animator.SetBool("isGrounded", IsGrounded());
+                    animator.SetBool("isFalling", false);
+                    break;
+                case SuperStates.Falling:
+                    animator.SetBool("isFalling", true);
+                    animator.SetBool("isRunning", false);
+                    break;
+                case SuperStates.Rising:
+                    animator.SetBool("isJumping", true);
+                    animator.SetBool("isRunning", false);
+                    playerAttack.ResetCombo();
+                    break;
+                case SuperStates.Dying:
+                    animator.SetTrigger("Death");
+                    break;
+            }
+        }
+    }
+    public void SetSubState(SubStates newState)
+    {
+        if (newState != subStates)
+        {
+            //On Leave from previous State
+            switch (subStates)
+            {
+                case SubStates.Idle:
+                    break;
+                case SubStates.Moving:
+                    break;
+                case SubStates.Attacking:
+                    break;
+                case SubStates.ChargingAttack:
+                    animator.ResetTrigger("Charging");
+                    break;
+                case SubStates.Dashing:
+                    break;
+                case SubStates.Guarding:
+                    animator.SetBool("Guarding", false);
+                    animator.ResetTrigger("StartGuard");
+                    stopMovementEvent = false;
+                    break;
+            }
+            subStates = newState;
+            //On Enter
+            switch (subStates)
+            {
+                case SubStates.Idle:
+                    break;
+                case SubStates.Moving:
+                    break;
+                case SubStates.Attacking:
+                    isAttacking = true;
+                    stopMovementEvent = true;
+                    chargeTime = 0;
+                    animator.SetFloat("ChargeTime", chargeTime);
+                    break;
+                case SubStates.ChargingAttack:
+                    animator.SetBool("Attacking", true);
+                    Debug.Log("Called Charge");
+                    break;
+                case SubStates.RunningJump:
+                    // SetSuperState(SuperStates.Rising);
+                    break;
+                case SubStates.Dashing:
+                    isDashing = true;
+                    animator.SetBool("isDashing", true);
+                    break;
+                case SubStates.LaunchChargedAttack:
+                    playerAttack.LaunchAttack(2);
+                    animator.SetTrigger("LaunchChargedAttack");
+                    chargeTime = 0;
+                    count = 0;
+                    chargedAttackMultiplier = 0;
+                    animator.SetFloat("ChargeTime", chargeTime);
+                    break;
+                case SubStates.Guarding:
+                    stopMovementEvent = true;
+                    animator.SetTrigger("StartGuard");
+                    animator.SetBool("Guarding", true);
+                    break;
+            }
+        }
+    }
+    void HandleInputs()
+    {
+        if (superStates == SuperStates.Grounded)
+        {
+            if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && !isAttacking)
+            {
+                SetSubState(SubStates.Moving);
+                animator.SetBool("isRunning", true);
+            }
+            else if (playerInput.attack && !isAttacking)
+            {
+                SetSubState(SubStates.Attacking);
+                playerAttack.LaunchAttack(0);
+            }
+            else if (playerInput.secondaryAttack && chargeTime < .5f && !isAttacking)
+            {
+                SetSubState(SubStates.Attacking);
+                animator.SetBool("isRunning", false);
+                playerAttack.LaunchAttack(1);
+            }
+            else if (playerInput.chargedSecondaryAttack && !isAttacking)
+            {
+                chargeTime += Time.deltaTime;
+                animator.SetFloat("ChargeTime", chargeTime);
+                SetSubState(SubStates.ChargingAttack);
+            }
+            else if (!playerInput.chargedSecondaryAttack && subStates == SubStates.ChargingAttack)
+            {
+                SetSubState(SubStates.LaunchChargedAttack);
+                isAttacking = true;
+            }
+            else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero)
             {
                 playerMovement.InitateJump();
-                animator.SetBool("isJumping", true);
+            }
+            else if (playerInput.dash && isDashing == false)
+            {
+                Debug.Log("Start Dash");
+                stopMovementEvent = true;
+                playerMovement.CreateDash(SuperStates.Grounded);
+                SetSubState(SubStates.Dashing);
+                
+            }
+            else if (Input.GetKey(KeyCode.F))
+            {
+                SetSubState(SubStates.Guarding);
+                playerBlock.MyBehaviour(new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 0, 5f, 40));
+            }
+            else if(!isDashing && !isAttacking)
+            {
+                SetSubState(SubStates.Idle);
+                animator.SetBool("isRunning", false);
             }
 
-           if (playerInput.dash && playerMovement.isDashing == false)
+            //for dashing and jumping we need the initial 
+            //combined inputs
+            if (playerInput.movementInput != Vector3.zero && playerInput.jumpInput && stopMovementEvent != true)
             {
-                animator.SetBool("isDashing", true);
-                playerMovement.isDashing = true;
-                StartCoroutine(playerMovement.Dash());
+                SetSubState(SubStates.RunningJump);
+                playerMovement.InitateJump();
             }
 
-            if (playerMovement.isDashing == true)
+            if (playerInput.movementInput != Vector3.zero && playerInput.dash && isDashing == false)
             {
-                PlayerStates state;
+                animator.SetBool("isRunning", false);
+                stopMovementEvent = true;
+                playerMovement.CreateDash(SuperStates.Grounded);
+                SetSubState(SubStates.Dashing);
+            }
 
-                if (playerMovement.IsGrounded() == true)
-                    state = PlayerStates.GroundedDash;
-                else
-                    state = PlayerStates.InAirDash;
-                SetPlayerState(state);
+            //Moving and Attacking 
+            if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
+            {
+                Debug.Log("Change Direction");
+                animator.SetBool("isRunning", false);
+                SetSubState(SubStates.Attacking);
+                playerAttack.LaunchAttack(0);
+            }
+        }
+
+        #region Rising and Falling SuperStates
+        else if (superStates == SuperStates.Falling)
+        {
+            if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true && !isAttacking)
+            {
+                SetSubState(SubStates.Moving);
+            }
+            else if (playerInput.attack && isAttackAnimationActive == false)
+            {
+                SetSubState(SubStates.Attacking);
+                isAttacking = true;
+                playerAttack.LaunchAttack(0);
+            }
+            else if (playerInput.secondaryAttack && chargeTime <= 1f && isAttackAnimationActive == false)
+            {
+                SetSubState(SubStates.Attacking);
+                playerAttack.LaunchAttack(1);
+            }
+            else if (playerInput.dash && isDashing == false)
+            {
+                Debug.Log("Start Dash");
+                stopMovementEvent = true;
+                playerMovement.CreateDash(SuperStates.Falling);
+                SetSubState(SubStates.Dashing);
+            }
+            else if (!isDashing && !isAttacking)
+            {
+                SetSubState(SubStates.Idle);
+            }
+
+            if (playerInput.movementInput != Vector3.zero && playerInput.dash && isDashing == false)
+            {
+                Debug.Log("Start Dash");
+                stopMovementEvent = true;
+                playerMovement.CreateDash(SuperStates.Grounded);
+                SetSubState(SubStates.Dashing);
+            }
+
+            if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
+            {
+                isAttacking = true;
+                stopMovementEvent = true;
+                SetSubState(SubStates.Attacking);
+                playerAttack.LaunchAttack(0);
+            }
+        }
+        else if (superStates == SuperStates.Rising)
+        {
+            if (playerInput.movementInput != Vector3.zero && stopMovementEvent != true)
+            {
+                SetSubState(SubStates.Moving);
+            }
+            else if (playerInput.attack && isAttackAnimationActive == false)
+            {
+                SetSubState(SubStates.Attacking);
+                isAttacking = true;
+                playerAttack.LaunchAttack(0);
+            }
+            else if (playerInput.secondaryAttack && chargeTime <= 1f && isAttackAnimationActive == false)
+            {
+                SetSubState(SubStates.Attacking);
+                playerAttack.LaunchAttack(1);
+            }
+           
+            else if (playerInput.dash && isDashing == false)
+            {
+                Debug.Log("Start Dash");
+                stopMovementEvent = true;
+                playerMovement.CreateDash(SuperStates.Rising);
+                SetSubState(SubStates.Dashing);
+            }
+            else if (!isDashing && !isAttacking)
+            {
+                SetSubState(SubStates.Idle);
+            }
+            //Moving and Dashing 
+            if (playerInput.movementInput != Vector3.zero && playerInput.dash && isDashing == false)
+            {
+                stopMovementEvent = true;
+                playerMovement.CreateDash(SuperStates.Grounded);
+                SetSubState(SubStates.Dashing);
+            }
+
+            //Moving and Attacking 
+            if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
+            {
+                stopMovementEvent = true;
+                isAttacking = true;
+                SetSubState(SubStates.Attacking);
+                playerAttack.LaunchAttack(0);
+            }
+        }
+        #endregion
+    }
+    public void Blocked(Rigidbody attacker)
+    {
+        playerBlock.HitSomething(attacker);
+    }
+
+        /*case (PlayerStates.Idle):
+              animator.SetBool("isRunning", false);
+              stopMovementEvent = false;
+              break;
+          case (PlayerStates.Moving):
+              animator.SetBool("isRunning", true);
+              break;
+          case (PlayerStates.Falling):
+              animator.SetBool("isFalling", true);
+              animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+              break;
+          case (PlayerStates.GroundedDash):
+              SetPlayerState(currentState);
+              stopMovementEvent = true;
+              break;
+          case (PlayerStates.FallingAndMoving):
+              animator.SetBool("isFalling", true);
+              animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+              break;
+          case (PlayerStates.JumpingAndMoving):
+              animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
+              break;
+          case (PlayerStates.DirectionalAttack):
+              isAttackAnimationActive = true;
+              break;*/
+
+
+        /*
+
+        if (playerInput.jumpInput && IsGrounded() == true)
+        {
+            playerMovement.InitateJump();
+            animator.SetBool("isJumping", true);
+        }
+
+       if (playerInput.dash && playerMovement.isDashing == false)
+        {
+            animator.SetBool("isDashing", true);
+            playerMovement.isDashing = true;
+            StartCoroutine(playerMovement.Dash());
+        }
+
+        if (playerMovement.isDashing == true)
+        {
+            PlayerStates state;
+
+            if (IsGrounded() == true)
+                state = PlayerStates.GroundedDash;
+            else
+                state = PlayerStates.InAirDash;
+            SetPlayerState(state);
+        }
+
+
+        if (IsGrounded() )
+        {
+            if (playerInput.attack)
+            {
+              //  SetPlayerState(PlayerStates.PrimaryAttack);
+                isAttackAnimationActive = true;
+            }
+
+            if (playerInput.secondaryAttack && chargeTime <= 1f)
+            {
+             //   SetPlayerState(PlayerStates.SecondaryAttack);
+                isAttackAnimationActive = true;
             }
 
 
-            if (playerMovement.IsGrounded() )
+
+            if (!playerInput.chargedSecondaryAttack && chargeTime > 1f)
             {
-                if (playerInput.attack)
+                animator.SetTrigger("LaunchChargedAttack");
+                animator.ResetTrigger("InputPressed");
+                animator.ResetTrigger("Charging");
+                chargedAttack = false;
+                isAttackAnimationActive = true;
+             //   SetPlayerState(PlayerStates.LaunchChargedAttack);
+            }
+        }
+        else
+        {
+
+        }*/
+
+        /*}   
+
+           case PlayerStates.PrimaryAttack:
+                        inputType = 0;
+                        playerAttack.LaunchAttack(inputType);
+                        break;
+                    case PlayerStates.SecondaryAttack:
+                        inputType = 1;
+                        chargeTime = 0;
+                        playerAttack.timeOfCharge = 0;
+                        playerAttack.chargedAttackMultiplier = 1.4f;
+                        playerAttack.LaunchAttack(inputType);
+                        break;
+                    case PlayerStates.LaunchChargedAttack:
+                        inputType = 2;
+                        chargedAttack = false;
+                        playerAttack.LaunchAttack(inputType);
+                        chargeTime = 0;
+                        playerAttack.timeOfCharge = 0;
+                        playerAttack.chargedAttackMultiplier = 1.4f;
+                        break;
+                    case PlayerStates.Dying:
+                        stopMovementEvent = true;
+                        break;
+                    case PlayerStates.Landing:
+                        playerBody.velocity = Vector3.zero;
+                        break;
+
+
+
+
+
+
+         */
+
+
+
+  #region Ground Check
+        public bool IsGrounded()
+        {
+            bool isHit;
+            Vector3 direction = Vector3.down;
+            RaycastHit hit;
+            float distanceCheck = sphereCollider.bounds.extents.y + distanceToGround;
+            //  Debug.DrawRay(collider.bounds.center, Vector3.down * distanceCheck);
+
+            Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
+
+            if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
+            {
+                isHit = true;
+                Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+                Ray ray2 = new Ray(hitPos, hit.normal * distanceToGround);
+                float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
+                if (angle > 0 && angle <= 25)
                 {
-                    SetPlayerState(PlayerStates.PrimaryAttack);
-                    isAttackAnimationActive = true;
+                   // Debug.Log("We are on a walkable slope");
+                    //  this.transform.rotation = Quaternion.RotateTowards(transform.rotation, angle, 1)
+
                 }
 
-                if (playerInput.secondaryAttack && chargeTime <= 1f)
-                {
-                    SetPlayerState(PlayerStates.SecondaryAttack);
-                    isAttackAnimationActive = true;
-                }
-
-                if (playerInput.chargedSecondaryAttack)
-                {
-                    chargeTime += Time.deltaTime;
-
-                    animator.SetTrigger("Charging");
-                    playerAttack.Rotate();
-
-                    if (chargeTime > 1)
-                    {
-                        animator.SetInteger("Mouse Input", 2);
-                        SetPlayerState(PlayerStates.ChargingAttack);
-                        if (!chargedAttack)
-                        {
-                            chargedAttack = true;
-                            animator.SetBool("Attacking", true);
-                        }
-                    }
-                }
-
-                if (!playerInput.chargedSecondaryAttack && chargeTime > 1f)
-                {
-                    animator.SetTrigger("LaunchChargedAttack");
-                    animator.ResetTrigger("InputPressed");
-                    animator.ResetTrigger("Charging");
-                    chargedAttack = false;
-                    isAttackAnimationActive = true;
-                    SetPlayerState(PlayerStates.LaunchChargedAttack);
-                }
+                return isHit;
             }
             else
             {
-
+                isHit = false;
+                return isHit;
             }
         }
 
-        // Current StateHandling 
-        switch (currentState)
+        //Checking the change in the position of the player 
+        public SuperStates checkYVelocity(SuperStates currentState)
         {
-            case (PlayerStates.Idle):
-                animator.SetBool("isRunning", false);
-                stopMovementEvent = false;
-                break;
-            case (PlayerStates.Moving):
-                animator.SetBool("isRunning", true);
-                break;
-            case (PlayerStates.Jumping):
-                animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-                break;
-            case (PlayerStates.Falling):
-                animator.SetBool("isFalling", true);
-                animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-                break;
-            case (PlayerStates.GroundedDash):
-                SetPlayerState(currentState);
-                stopMovementEvent = true;
-                break;
-            case (PlayerStates.FallingAndMoving):
-                animator.SetBool("isFalling", true);
-                animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-                break;
-            case (PlayerStates.JumpingAndMoving):
-                animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-                break;
-            case (PlayerStates.DirectionalAttack):
-                isAttackAnimationActive = true;
-                break;
+            if (transform.hasChanged)
+            {
+                if (transform.position.y > lastPlayerPosY)
+                {
+                    currentState = SuperStates.Rising;
+                }
+                else if (transform.position.y < lastPlayerPosY)
+                {
+                    currentState = SuperStates.Falling;
+                    //  isFalling = true;
+                }
+            }
+            lastPlayerPosY = transform.position.y;
+            return currentState;
         }
 
 
-        #region Handeling Player Health 
-        animator.SetInteger("Health", currentHealth);
-        if (isUICreated == true)
-            VisualizeHealth();
-        if (currentHealth <= 0)
+        //Calling an animation envent to stop anim form looping 
+        public void FallingAnimationEnded()
         {
-            SetPlayerState(PlayerStates.Dying);
-            isDying = true;
+            animator.SetBool("isFalling", false);
         }
-        
-        
         #endregion
+
+
+  #region Animation Finished Calls
+        public void JumpAnimationEnded()
+        {
+            animator.SetBool("isJumping", false);
+            playerBody.velocity = new Vector3(playerBody.velocity.x, 0, playerBody.velocity.z);
+        }
+
+        public void DashAnimationEnded()
+        {
+            animator.SetBool("isDashing", false);
+        }
+
+        public void CanRotate()
+        {
+        playerAttack.canRotate = false;
+        }
+
+
+        public void EndWindUp()
+        {
+            animator.SetBool("Attacking", false);
+        Debug.Log("Called");
+        }
+
+    #endregion
+
+  #region Disable All Inputs
+    public void DisableAllInputs()
+    {
+        playerInput.enabled = false;
     }
     #endregion
 
 
-    public void SetPlayerState(PlayerStates newState)
+
+
+  #region Player Restore Health or Taking Damgage
+     public void TakeDamage(int damage)
+     {
+         currentHealth -= damage;
+         SelectAudio("Damage");
+     }
+    public void RestoreHealth()
     {
-        if(newState != currentState)
-        {
-            //On Leave from previous State
-            switch (currentState)
-            {
-                case PlayerStates.InAirDash:
-                    if(playerMovement.isDashing == false)
-                    {
-                      
-                    }
-                    break;
-            }
-            currentState = newState;
-              
-            //On Enter
-            switch(currentState)
-            {
-                case PlayerStates.PrimaryAttack:
-                    inputType = 0;
-                    playerAttack.LaunchAttack(inputType);
-                    break;
-                case PlayerStates.SecondaryAttack:
-                    inputType = 1;
-                    chargeTime = 0;
-                    playerAttack.timeOfCharge = 0;
-                    playerAttack.chargedAttackMultiplier = 1.4f;
-                    playerAttack.LaunchAttack(inputType);
-                    break;
-                case PlayerStates.LaunchChargedAttack:
-                    inputType = 2;
-                    chargedAttack = false;
-                    playerAttack.LaunchAttack(inputType);
-                    chargeTime = 0;
-                    playerAttack.timeOfCharge = 0;
-                    playerAttack.chargedAttackMultiplier = 1.4f;
-                    break;
-                case PlayerStates.Dying:
-                    stopMovementEvent = true;
-                    break;
-                case PlayerStates.Landing:
-                    playerBody.velocity = Vector3.zero;
-                    break;
-            }
-        }
+       currentHealth = maxHealth;
     }
+
+    public void CallPlayerUi()
+    {
+        //Call whatever functions the player Ui needs to call
+        playerUI.CreateHealthBar();
+    }
+    #endregion
+
 
     #region Sound looping
 
@@ -314,7 +753,7 @@ public class PlayerManger : MonoBehaviour
                         break;
                 }
             }
-           ManageAudio(sendingAudio);
+            ManageAudio(sendingAudio);
         }
         else if (type == "Death")
         {
@@ -325,7 +764,7 @@ public class PlayerManger : MonoBehaviour
         else if (type == "Attack")
         {
             AudioType sendingAudio = AudioType.None;
-            int numberOfRandomNumbers =4; // Number of random numbers to generate
+            int numberOfRandomNumbers = 4; // Number of random numbers to generate
             int minRange = 1; // Minimum value for random numbers
             int maxRange = 5;
             int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
@@ -354,7 +793,7 @@ public class PlayerManger : MonoBehaviour
             }
             ManageAudio(sendingAudio);
         }
-        else if(type == "ChargedAttack")
+        else if (type == "ChargedAttack")
         {
             AudioType sendingAudio = AudioType.PlayerChargedAttack1;
             /*
@@ -368,7 +807,7 @@ public class PlayerManger : MonoBehaviour
                 switch (randomNumber)
                 {
                     case (1):
-                        
+
                         break;
                     case (2):
                         sendingAudio = AudioType.PlayerChargedAttack2;
@@ -380,7 +819,7 @@ public class PlayerManger : MonoBehaviour
             ManageAudio(sendingAudio);
 
         }
-        else if(type == "Damaged")
+        else if (type == "Damaged")
         {
             AudioType sendingAudio = AudioType.None;
             int numberOfRandomNumbers = 4; // Number of random numbers to generate
@@ -454,124 +893,78 @@ public class PlayerManger : MonoBehaviour
 
     #endregion
 
-    #region Disable All Inputs
-    public void DisableAllInputs()
+    void OnDrawGizmos()
     {
-        playerInput.enabled = false;
-    }
-    #endregion 
+       // Set the color of the gizmo
+        Gizmos.color = Color.yellow;
 
+        // Draw the box cast using Gizmos.DrawWireCube and Gizmos.DrawRay
+        Gizmos.DrawWireCube(sphereCollider.bounds.center, sphereCollider.bounds.size);
+        Gizmos.DrawRay(sphereCollider.bounds.center, Vector3.down * distanceToGround);
 
+        Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
 
-    public void CreateHealthBar()
-    {
-        playerUi.SetActive(true);
-        //Set up Health Bar
-        if (playerUi != null)
+        // Check if the box cast hits anything
+        RaycastHit hit;
+        if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
         {
-            var childrenList = new List<Image>();
-   
-            // the string name needs to be exact for the function to work
-            Transform root = playerUi.transform;
-            Hud = GetChildByName(root, "Hud").GetComponent<Image>();
-            Transform heartHolder = GetChildByName(root, "Heart Holder");
+            Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+            // Set the color of the gizmo to red if there is a hit
+            Gizmos.color = Color.red;
+            // Draw a sphere at the hit point using Gizmos.DrawSphere
+            Gizmos.DrawSphere(hitPos, 0.1f);
 
-            if (heartHolder != null)
-            {
-                foreach (Transform child in heartHolder.transform)
-                {
-                    Image i = child.GetComponent<Image>();
-                    childrenList.Add(i);
-                }
-                hearts = childrenList.ToArray();
-                childrenList.Clear();
-                isUICreated = true;
-            }
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(hitPos, hit.normal * distanceToGround);
+            Ray ray2 = new Ray(hitPos, hit.normal * distanceToGround);
+
+            float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
+
+            Gizmos.color = Color.blue;
+            Vector3 rotationAxis = Vector3.Cross(Vector3.up, hit.normal);
+            rotationAxis.z = 0;
+            rotationAxis.x = 0;
+            Quaternion rotation = Quaternion.AngleAxis(angle, rotationAxis);
+
+            Vector3 rotatedDirection = rotation * Vector3.forward;
+            Gizmos.DrawRay(hitPos, rotatedDirection * distanceToGround);
+        }
+
+
+
+
+        // Draw a ray to visualize the player's movement direction
+        Gizmos.color = Color.white;
+        Gizmos.DrawRay(transform.position, MovementVector);
+
+        // Cast a ray in front of the player to check for collisions
+        RaycastHit hit2;
+        float speed = MovementVector != Vector3.zero ? TargetSpeed : 0;
+        if (Physics.Raycast(transform.position, MovementVector, out hit2, speed * Time.fixedDeltaTime))
+        {
+            // If the ray hits something, draw a red line up to the point of collision
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, hit2.point - transform.position);
         }
         else
         {
-            Debug.Log("Player Ui is null");
-            return;
-        }
-       
-        
-    }
-
-    #region Player Restore Health or Taking Damgage
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        SelectAudio("Damage");
-
-    }
-
-    public void RestoreHealth()
-    {
-        currentHealth = maxHealth;
-    }
-    #endregion
-
-
-    Transform GetChildByName(Transform parent, string name)
-    {
-        // Base Case: If the parent has no children, return null
-        if (parent.childCount == 0)
-        {
-            return null;
-        }
-
-        // Check each child of the parent
-        for (int i = 0; i < parent.childCount; i++)
-        {
-            Transform child = parent.GetChild(i);
-
-            // If the child has the desired name, return it
-            if (child.name == name)
-            {
-                return child;
-            }
-
-            // If not, recursively search for the child in the children of the child
-            Transform result = GetChildByName(child, name);
-
-            // If the child is found in the recursive call, return it
-            if (result != null)
-            {
-                return result;
-            }
-        }
-
-        // If no child with the desired name is found, return null
-        Debug.Log("name must be wrong");
-        return null;
-    }
-
-
-    void VisualizeHealth()
-    {
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            //This is for creating our final health bar, change number of hearts to make amount visible in game 
-            if (i < numberOfHearts)
-                hearts[i].enabled = true;
-            else
-                hearts[i].enabled = false;
-
-            //Handling visually representing players health in realtion to number of hearts  
-            if (i < currentHealth)
-                hearts[i].sprite = fullHeart;
-            else
-                hearts[i].sprite = emptyHeart;
-        }
-        // Saftey net check making sure our hearts equal the current health
-        if (numberOfHearts < currentHealth)
-        {
-            numberOfHearts = currentHealth;
+            // If the ray doesn't hit anything, draw a green line up to the end of the movement vector
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(transform.position, MovementVector * Time.fixedDeltaTime * speed);
         }
     }
-}
+    
+ }
 public enum PlayerStates
 {
+
+    //Super States
+
+
+    //SubStates
+
+
     None,
     Idle,
     Moving,
@@ -598,4 +991,25 @@ public enum PlayerStates
     Stunned,
 }
 
+public enum SuperStates
+{
+    Falling,
+    Grounded, 
+    Rising, 
+    Dying,
+    Stunned
+}
+public enum SubStates
+{
+    None,
+    Moving,
+    Idle, 
+    Dashing,
+    Jumping,
+    Attacking,
+    Guarding,
+    ChargingAttack,
+    LaunchChargedAttack,
+    RunningJump,
 
+}

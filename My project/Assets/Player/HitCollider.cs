@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-
-
-
-
-
 public class HitCollider : MonoBehaviour
 {
     public Transform origin;
@@ -22,7 +17,6 @@ public class HitCollider : MonoBehaviour
     public List<Rigidbody> hittableObjects;
     public TargetGroup targetGroup;
 
-    int callCounter;
      
     private void Awake()
     {
@@ -32,11 +26,9 @@ public class HitCollider : MonoBehaviour
             playerAttack.colliders.Add(gameObject.name, this);
         }
         targetGroup = GameObject.FindGameObjectWithTag("TargetGroup").GetComponent<TargetGroup>();
-
-        callCounter = 0;
     }
 
-    public void MyBehaviour(PlayerAttack.PlayerCollider collider)
+    public virtual void MyBehaviour(PlayerAttack.PlayerCollider collider)
     {
         origin = this.transform;
        // whatIsHittable = collider.whatIsHittable;
@@ -45,6 +37,8 @@ public class HitCollider : MonoBehaviour
         timer = collider.timer;
         strength = collider.strength;
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -61,21 +55,11 @@ public class HitCollider : MonoBehaviour
            // Debug.Log("Object " + (i + 1) + ": " + hittableObjects[i].gameObject.name);
             HitSomething(hittableObjects[i]);
         }
-
-       
     }
 
-
-
-
-
-
-
-
-
-    private void HitSomething(Rigidbody obj)
+    public virtual void HitSomething(Rigidbody obj)
     {
-        Debug.Log("Object " + obj.gameObject.name + "belongs to group " + obj.tag);
+       // Debug.Log("Object " + obj.gameObject.name + "belongs to group " + obj.tag);
         switch (obj.tag)
         {
             case ("Enemy"):
@@ -106,7 +90,6 @@ public class HitCollider : MonoBehaviour
             default:
                 break;
         }
-
         ClearList();
     }
 
@@ -124,7 +107,7 @@ public class HitCollider : MonoBehaviour
        
     }
 
-    private void AddKnockback(Rigidbody body)
+    public virtual void AddKnockback(Rigidbody body)
     {
         //Dot product
             Vector3 targetDirection = (body.position - origin.position).normalized;

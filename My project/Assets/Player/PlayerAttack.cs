@@ -44,6 +44,7 @@ public class PlayerAttack : MonoBehaviour
     [Header("Inputs")]
 
     public float timeOfCharge;
+    private int count = 0;
     public bool chargedAttack;
 
     private CameraController cam;
@@ -78,8 +79,6 @@ public class PlayerAttack : MonoBehaviour
     public Dictionary<string, HitCollider> colliders = new Dictionary<string, HitCollider>();
     public bool activateCollidersAcive;
 
-
-    private int count = 0;
     public class PlayerCollider
     {
         public Transform origin;
@@ -112,38 +111,6 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        if (isAnimationActive == true)
-        {
-            playerMovement.stopMovementEvent = true;
-        }
-        else
-            playerMovement.stopMovementEvent = false;
-
-
-
-        if(playerManger.currentState == PlayerStates.ChargingAttack)
-        {
-            timeOfCharge += Time.deltaTime;
-            float intervalDuration = 0.25f;
-            if (timeOfCharge >= intervalDuration && playerManger.chargeTime <= 2)
-            {
-                chargedAttackMultiplier += 0.2f;
-                timeOfCharge = 0;
-                count += 1;
-            }
-
-            if(playerManger.chargeTime > 1.98f  && playerManger.chargeTime < 2 && count < 4)
-            {
-                count += 1;
-                chargedAttackMultiplier += 0.2f;
-             
-            }
-        }
-
-        if (playerManger.currentState == PlayerStates.LaunchChargedAttack)
-            count = 0;
-
-
         #region Handeling Starting and Ending Combo
         if (comboLifeCounter > 0)  //begin countdown 
         {
@@ -171,22 +138,34 @@ public class PlayerAttack : MonoBehaviour
                 isInAir = true;
                 ResetCombo();
             }
-            else if (playerMovement.IsGrounded() == true && playerManger.currentState == PlayerStates.Jumping) // if we land reset the combo 
+            else if (playerManger.IsGrounded() == true && playerManger.currentState == PlayerStates.Jumping) // if we land reset the combo 
             {
                 isInAir = true;
                 ResetCombo();
             }
         }
         #endregion
+    }
 
 
-        if(playerManger.isDashing == true)
+
+    private void FixedUpdate()
+    {
+        if (canRotate == true && playerManger.MovementVector != Vector3.zero)
         {
-            animator.SetBool("Attacking", false);
-            isAnimationActive = false;
+          //  Debug.Log("Rotation");
+            // if we have input that is either vertical or horizontal then is moving is true 
+            playerManger.MovementVector = playerInput.movementInput;
+            Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
+            Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
+            //Aligning movement in relation to the camera
+            playerManger.MovementVector = cameraPlannerRotation * playerManger.MovementVector;
+            playerManger.TargetRot = Quaternion.LookRotation(playerManger.MovementVector);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 10 * Time.fixedDeltaTime);
         }
     }
     #endregion
+
 
     #region Launch Attack
 
@@ -195,12 +174,13 @@ public class PlayerAttack : MonoBehaviour
         animator.SetInteger("Mouse Input", inputType);
         animator.SetBool("isRunning", false);
         animator.SetBool("Attacking", true);
+        animator.SetTrigger("Input Pressed");
 
-        if(inputType <= 1)
+        if (inputType <= 1)
         {
             // if the trigger is not set then the animation will not run
             // this also stops animation from looping in the air
-            animator.SetTrigger("Input Pressed");
+            
         }
        
         Attack(inputType);
@@ -214,31 +194,31 @@ public class PlayerAttack : MonoBehaviour
         //Light Attacks
         if (inputType == 0)
         {
-            switch (lightAttackCounter, playerMovement.IsGrounded())
+            switch (lightAttackCounter, playerManger.IsGrounded())
             {
                 #region Ground Light Attacks
                 case (0, true): // Starter
                     lightAttackCounter++;
                     animator.SetFloat("Starter Type", 0);
-                    Set(inputType, lightAttackCounter, 5f);
+                    SetCombo(inputType, lightAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 1));
+                    canRotate = true;
                     break;
                 case (1, true):
                     lightAttackCounter++;
-                    Set(inputType, lightAttackCounter, 5f);
+                    SetCombo(inputType, lightAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 1));
                     break;
                 case (2, true):
                     lightAttackCounter++;
-                    Set(inputType, lightAttackCounter, 5f);
+                    SetCombo(inputType, lightAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 20, 5f, 20));
                     break;
                 #endregion
                 #region Air Light Attacks 
                 case (0, false):
-                    lightAttackCounter++;
-                    Set(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 5f, 10));
+                    SetAttackBehaviour(0);
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 30, 5f, 50));
                     break;
                 #endregion
                 default:
@@ -247,31 +227,31 @@ public class PlayerAttack : MonoBehaviour
         }
         else if(inputType == 1)
         {
-            switch (heavyAttackCounter, playerMovement.IsGrounded())
+            switch (heavyAttackCounter, playerManger.IsGrounded())
             {
                 #region Ground Heavy Attacks
                 case (0, true):
                      Debug.Log("Secondary Attack");
                      animator.SetFloat("Starter Type", 1);
                      heavyAttackCounter++;
-                     Set(inputType, heavyAttackCounter, 5f);
+                     SetCombo(inputType, heavyAttackCounter, 5f);
                      SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 20, 3f, 1));
                     break;
                 case (1, true):
                     heavyAttackCounter++;
-                    Set(inputType, heavyAttackCounter, 5f);
+                    SetCombo(inputType, heavyAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 25, 5f, 1));
                     break;
                 case (2, true):
                     heavyAttackCounter++;
-                    Set(inputType, heavyAttackCounter, 5f);
+                    SetCombo(inputType, heavyAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, 30, 5f, 10));
                     break;
                 #endregion
                 #region Air Heavy Attacks 
                 case (0, false):
                     heavyAttackCounter++;
-                    Set(inputType, heavyAttackCounter, 5f);
+                    SetCombo(inputType, heavyAttackCounter, 5f);
                     SendValues("Sword", new PlayerCollider(PhysicsBehaviours.Knockdown, 20, 30, 10));
                     break;
                 default:
@@ -283,17 +263,17 @@ public class PlayerAttack : MonoBehaviour
         {
             int attackRating = (int)Math.Ceiling(20 * chargedAttackMultiplier);
             SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, attackRating, 3f, 10));
-            Set(inputType, 0, 0);
+            SetAttackBehaviour(2);
             ResetCombo();
         }
         else if( inputType == 3)
         {
-            Set(inputType, 0, 0);
+            SetAttackBehaviour(3);
             ResetCombo();
         }
 
     }
-    private void Set(int inputType, int attacktype, float combolifetime)
+    private void SetCombo(int inputType, int attacktype, float combolifetime)
     {
       //  audioController.PlayAudio(AudioType.PlayerAttack, false, 0, false);
         //increase the attack counters
@@ -305,8 +285,36 @@ public class PlayerAttack : MonoBehaviour
         animator.SetFloat("ComboLifetime", combolifetime);
         animator.SetInteger("Attack Type", attacktype);
         isAnimationActive = true;
-       
     }
+
+    private void SetAttackBehaviour(int inputTpye)
+    {
+        if (inputTpye == 0) //Light Air attack 
+        {
+            if(playerManger.superStates == SuperStates.Rising || playerManger.superStates == SuperStates.Falling)
+            {
+                playerManger.playerBody.velocity = Vector3.zero;
+     
+            }
+
+            playerManger.playerBody.useGravity = false;
+            //Apply Aggrasive Gravity
+            StartCoroutine(playerMovement.ApplyGravity());
+        }
+        else if (inputTpye == 1) //Heavy Air Attack
+        {
+            //call functions
+        }
+        else if (inputTpye == 2)// Charge Attack
+        {
+
+        }
+        else //Wave Attack
+        {
+
+        }
+    }
+
     private void SendValues(string myCollider, PlayerCollider values)
     {
         if(colliders.ContainsKey(myCollider))
@@ -320,17 +328,21 @@ public class PlayerAttack : MonoBehaviour
     //This is called by the animation trigger
     public void isAnimationFinished()
     {
-      //  Debug.Log("Animation is Finished");
+        playerManger.StopMovement = false;
+        Debug.Log("Animation is Finished");
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
+        animator.ResetTrigger("LaunchChargedAttack");
         playerManger.isAttackAnimationActive = false;
+      
+        playerManger.isAttacking = false;
         canRotate = true;
         
         //Checking if the player has hit the combo finisher  
-        if (lightAttackCounter == lightAttackMaxGround && playerMovement.IsGrounded() == true || 
-            heavyAttackCounter == heavyAttackMaxGround && playerMovement.IsGrounded() == true ) // Finisher end of the Combo grounded
+        if (lightAttackCounter == lightAttackMaxGround && playerManger.IsGrounded() == true || 
+            heavyAttackCounter == heavyAttackMaxGround && playerManger.IsGrounded() == true ) // Finisher end of the Combo grounded
             ResetCombo();
-        else if (lightAttackCounter == lightAttackMaxAir && playerMovement.IsGrounded() != true)
+        else if (lightAttackCounter == lightAttackMaxAir && playerManger.IsGrounded() != true)
             ResetCombo();
         else
             comboLifeCounter = animator.GetFloat("ComboLifetime");
@@ -354,7 +366,7 @@ public class PlayerAttack : MonoBehaviour
     #region Sliding Forward When Attacking 
     public void SlideForward()
     {
-        co = MoveForwardWhenAttacking(transform.position, lerpToPosition.position, lerpduration, playerMovement.IsGrounded());
+        co = MoveForwardWhenAttacking(transform.position, lerpToPosition.position, lerpduration, playerManger.IsGrounded());
         StartCoroutine(co);
     }
     private IEnumerator MoveForwardWhenAttacking(Vector3 currentPostion, Vector3 endPosition, float time, bool isGrounded)
@@ -388,20 +400,8 @@ public class PlayerAttack : MonoBehaviour
         canRotate = false;
     }
 
-    public void EndWindUp()
-    {
-        animator.SetBool("Attacking", false);
-    }
+  
 
-    public void Rotate()
-    {
-        if (canRotate == true)
-        {
-            Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
-            Quaternion cameraPlannerRotation = Quaternion.LookRotation(playerMovement.movementVector);
-            Quaternion lerp = Quaternion.Lerp(this.transform.rotation, cameraPlannerRotation, Time.deltaTime * 10);
-            transform.rotation = lerp;
-        }
-    }
+   
 }
 

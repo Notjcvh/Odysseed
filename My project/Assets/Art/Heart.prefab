@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8168306101914488689}
-  - component: {fileID: 6759580672383509636}
   - component: {fileID: 125733985}
   - component: {fileID: 125733984}
+  - component: {fileID: 1851595187}
   m_Layer: 0
   m_Name: Heart
   m_TagString: Untagged
@@ -35,25 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6759580672383509636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8437038544538000745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68fdf6d8a5ef3da42922cf3ae1c1b1b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 35
-  ForwardX: 0
-  ForwardY: 1
-  ForwardZ: 0
-  ReverseX: 0
-  ReverseY: 0
-  ReverseZ: 0
 --- !u!135 &125733985
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -65,7 +46,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.39
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &125733984
 MonoBehaviour:
@@ -79,6 +60,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60138fef7f32174e89d26cc6d8f5fef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collider: {fileID: 125733985}
+  rigidbody: {fileID: 1851595187}
+  ground:
+    serializedVersion: 2
+    m_Bits: 256
+  maxDistance: 60
+  speed: 300
+  ForwardX: 0
+  ForwardY: 1
+  ForwardZ: 0
+  ReverseX: 0
+  ReverseY: 0
+  ReverseZ: 0
+--- !u!54 &1851595187
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8437038544538000745}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &7131766667348483480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92,11 +102,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75767670c5e172949a32248ca7470b55, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.035
+      value: -0.047
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75767670c5e172949a32248ca7470b55, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0176
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75767670c5e172949a32248ca7470b55, type: 3}
       propertyPath: m_LocalPosition.z

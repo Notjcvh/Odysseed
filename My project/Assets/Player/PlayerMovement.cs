@@ -11,36 +11,21 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerManger playerManger;
     private Animator animator;
-    private CapsuleCollider collider;
-    public AudioController audioController;
+    public SphereCollider collider;
     [SerializeField] private Rigidbody playerBody;
 
- 
-    [Header("Movement")]
-    public Vector3 movementVector;
-    private Quaternion targetRotation;
-    public float targetSpeed;
-    public bool stopMovementEvent;
+    public LayerMask CollidableLayers;
 
-    [Header("Jumping")]
-    private float gravity;
-    public AnimationCurve gravityValueCurve;
-    public float gravityMultiplier = 0;
-    private IEnumerator gravityCorutine;
-    public LayerMask Ground;
-    public float lastPlayerPosY;
-    public float jumpTime;
-    public float jumpForce;
-    public float jumpElapsedTime;
+    private Vector3 movementVector;
+    public float force;
+    public Keyframe[] keys;
+    public AnimationCurve curveToEvaluate;
+    public Keyframe lastKey;
+    public  float end = 0;
 
-    public float distanceToGround;
-
-    [Header("Dash")]
     public AnimationCurve groundedDashValueCurve;
     public AnimationCurve inAirDashValueCurve;
-    public float force;
-    private IEnumerator dashCorutine;
-    public bool isDashing = false;
+
 
     [Header("Targeting")]
     public bool targetingEnemy;
@@ -50,8 +35,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Seeds")]
     public int seedId;
 
-    public bool isGrounded;
-    public bool isFalling = false;
+    private float gravity;
+    public AnimationCurve gravityValueCurve;
+    public float gravityMultiplier = 0;
+    private IEnumerator gravityCorutine;
+
+
 
     private void Awake()
     {
@@ -60,45 +49,20 @@ public class PlayerMovement : MonoBehaviour
         playerBody = GetComponentInChildren<Rigidbody>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponent<PlayerManger>().animator;
-        collider = GetComponent<CapsuleCollider>();
+        collider = GetComponent<SphereCollider>();
 
-        Keyframe[] keys = gravityValueCurve.keys;
+     /*   Keyframe[] keys = gravityValueCurve.keys;
         Keyframe lastKey = keys[keys.Length - 1];
         float end = lastKey.time;
-        jumpTime = end;
+        jumpTime = end;*/
 
         //We want to make sure when the game starters the animator recognizes the player is on the groun
-        animator.SetBool("isGrounded", IsGrounded());
+    //    animator.SetBool("isGrounded", IsGrounded());
     }
 
 
     private void Update()
     {
-        
-        //Ground Checking
-        if (IsGrounded() == true)
-        {
-            isGrounded = true;
-            animator.SetBool("isGrounded", IsGrounded());
-            jumpElapsedTime = 0;
-            gravityMultiplier = 0;
-
-            if (isFalling == true)
-            {
-                playerManger.SetPlayerState(PlayerStates.Landing);
-                isFalling = false;
-            }
-        }
-        else
-        {
-            isGrounded = false;
-            animator.SetBool("isGrounded", IsGrounded());
-        //    gravityCorutine = ApplyGravity();
-            
-            
-            //StartCoroutine(gravityCorutine);
-        }
-
         //Enemy Targetting 
         if (playerInput.target)
             UpdateTarget();
@@ -108,164 +72,139 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerManger.currentState == PlayerStates.Moving || playerManger.currentState == PlayerStates.JumpingAndMoving || playerManger.currentState == PlayerStates.FallingAndMoving )
+        
+
+        if (playerManger.subStates == SubStates.Moving)
         {
-            if(playerManger.isAttackAnimationActive == false)
-                 CanMove();
+            CanMove();
         }
     }
-
-
-
     #region Moving
     public void CanMove()
     {
         // if we have input that is either vertical or horizontal then is moving is true 
-        movementVector = playerInput.movementInput;
+       playerManger.MovementVector = playerInput.movementInput;
         Vector3 cameraPlannerDirection = cam.CameraPlannerDirection;
         Quaternion cameraPlannerRotation = Quaternion.LookRotation(cameraPlannerDirection);
         //Aligning movement in relation to the camera
-        movementVector = cameraPlannerRotation * movementVector;
+        playerManger.MovementVector = cameraPlannerRotation * playerManger.MovementVector;
         
         // checking for inputs from Player
-        float speed = movementVector != Vector3.zero ? targetSpeed : 0;
+        float speed = playerManger.MovementVector != Vector3.zero ? playerManger.TargetSpeed : 0;
 
-        playerBody.MovePosition(transform.position + movementVector * Time.deltaTime * speed);
-        if (speed != 0 && playerManger.isDashing == false)
-        { 
-            targetRotation = Quaternion.LookRotation(movementVector);
-            transform.rotation = targetRotation;
-        }
-    }
-    #endregion
-
-    #region Ground Check
-    public bool IsGrounded()
-    {
-        Vector3 direction = Vector3.down;
+        // Cast a ray in front of the player to check for collisions
         RaycastHit hit;
-        float distanceCheck = collider.bounds.extents.y + distanceToGround;
-        Debug.DrawRay(collider.bounds.center, Vector3.down * distanceCheck);
-        if (Physics.Raycast(collider.bounds.center, direction, out hit, distanceCheck, Ground))
-            return true;
+        if (Physics.Raycast(transform.position, playerManger.MovementVector, out hit, speed * Time.fixedDeltaTime, CollidableLayers))
+        {
+            // If the ray hits something, move the player up to the point of collision
+            playerBody.MovePosition(hit.point);
+            Debug.Log("Hit Something");
+        }
         else
-            return false;
-    }
-
-    //Checking the change in the position of the player 
-    public PlayerStates checkYVelocity(PlayerStates currentState)
-    {
-        
-        if (transform.hasChanged && IsGrounded() == false && playerInput.movementInput == Vector3.zero)
         {
-            if (transform.position.y > lastPlayerPosY)
-            {
-                currentState = PlayerStates.Jumping;
-            }
-            else if (transform.position.y < lastPlayerPosY)
-            {
-                currentState = PlayerStates.Falling;
-                isFalling = true;
-            }
+            // If the ray doesn't hit anything, move the player normally
+            playerBody.MovePosition(transform.position + playerManger.MovementVector * Time.fixedDeltaTime * speed);
         }
-        else if (transform.hasChanged && IsGrounded() == false && playerInput.movementInput != Vector3.zero)
+
+        if (speed != 0)
         {
-            if (transform.position.y > lastPlayerPosY)
-            {
-                currentState = PlayerStates.JumpingAndMoving;
-            }
-            else if (transform.position.y < lastPlayerPosY)
-            {
-                currentState = PlayerStates.FallingAndMoving;
-                isFalling = true;
-            }
+            playerManger.TargetRot = Quaternion.LookRotation(playerManger.MovementVector);
+            transform.rotation = playerManger.TargetRot;
         }
-        lastPlayerPosY = transform.position.y;
-
-        return currentState;
-    }
-
-
-    //Calling an animation envent to stop anim form looping 
-    public void FallingAnimationEnded()
-    {
-        animator.SetBool("isFalling", false);
     }
     #endregion
+
+
+    #region Rotate
+
+
+    #endregion
+
 
     #region Apply Gravity 
-    private IEnumerator ApplyGravity()
+    public IEnumerator ApplyGravity()
     {
         float timeElapsed = 0;
-        while (IsGrounded() == false)
+        while (playerManger.IsGrounded() == false && playerManger.subStates == SubStates.Attacking)
         {
             gravityMultiplier = gravityValueCurve.Evaluate(timeElapsed);
 
-            playerBody.AddForce(Vector3.down * Time.deltaTime * -gravityMultiplier, ForceMode.Acceleration);
+            playerBody.AddForce(Vector3.down * Time.deltaTime * gravityMultiplier, ForceMode.VelocityChange);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+        gravityMultiplier = 0;
     }
     #endregion
 
     #region Jump
     public void InitateJump()
     {
-        playerBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if(playerManger.IsGrounded())
+        {
+            playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
+        }
+      
     }
 
     //Calling an animation envent to stop anim form looping 
-    public void JumpAnimationEnded()
-    {
-        animator.SetBool("isJumping", false);
-    }
+ 
     #endregion
 
-    #region Dashing
-    public IEnumerator Dash()
+    #region Dashing'
+    public void CreateDash(SuperStates currentState)
     {
-
-        Keyframe[] keys;
-        PlayerStates dashType;
-        AnimationCurve curveToEvaluate;
-        if (IsGrounded() == true)
+        if (currentState== SuperStates.Grounded)
         {
-            dashType = PlayerStates.GroundedDash;
+            Debug.Log("ground Dash");
             keys = groundedDashValueCurve.keys;
             curveToEvaluate = groundedDashValueCurve;
+            lastKey = keys[keys.Length - 1];
+            end = lastKey.time;
         }
-        else
+        else if (currentState == SuperStates.Falling || playerManger.superStates == SuperStates.Rising)
         {
-            dashType = PlayerStates.InAirDash;
+            Debug.Log("air Dash");
             keys = inAirDashValueCurve.keys;
             curveToEvaluate = inAirDashValueCurve;
+            lastKey = keys[keys.Length - 1];
+            end = lastKey.time;
         }
-        Keyframe lastKey = keys[keys.Length - 1];
-        float end = lastKey.time;
-        //Setting to the end of the animation 
-
-        float timeElapsed = 0;
-     
-        while (timeElapsed < end)
-        {
+        StartCoroutine(Dash());
+    }
+    public IEnumerator Dash()
+    {
+       float timeElapsed = 0;
+       // bool hasinitalDir = false;
+       while (timeElapsed < end)
+       {
             Vector3 dir = transform.rotation * Vector3.forward;
+          /*if (playerManger.DirectionInput == Vector3.zero)
+            {
+                
+            }
+            else
+            {
+                dir = playerManger.DirectionInput.normalized;
+            }*/
             force = curveToEvaluate.Evaluate(timeElapsed);
             playerBody.AddForce(dir * force * Time.deltaTime, ForceMode.VelocityChange);
             playerBody.AddForce(playerBody.velocity * -10f * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
-        }
-
-        isDashing = false;
-        animator.SetBool("isDashing", false);
-        if (dashType == PlayerStates.GroundedDash)
-            playerBody.velocity = Vector3.zero; // Stop player speed instantly 
-        else
-            playerManger.SetPlayerState(PlayerStates.FallingAndMoving);
-    
-        
+       }
         force = 0;
+        end = 0;
+        curveToEvaluate = null;
 
+        if (playerManger.superStates == SuperStates.Grounded)
+        {
+           
+            // Stop applying force to the rigidbody
+            playerBody.velocity = Vector3.zero;
+            playerManger.IsDashing = false;
+            playerManger.StopMovement = false;
+        }         
     }
 
     public void DashAnimationEnded()
@@ -302,6 +241,14 @@ public class PlayerMovement : MonoBehaviour
 
     }
     #endregion
+
+
+
+
+  
+
+
+
 
 
 

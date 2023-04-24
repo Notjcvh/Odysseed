@@ -13,7 +13,6 @@ public class SceneHandeler : MonoBehaviour
     [SerializeField] private AudioController audioController;
 
     public bool sceneActivated = false;
-
     public Vector3 spawnPosition;
 
     [Header("Background Audio Caller")]
@@ -48,14 +47,7 @@ public class SceneHandeler : MonoBehaviour
                 StartCoroutine(WaitToPlay(clip.length));
            }
         }
-        if (gameManager.gamePaused == true)
-        {
-            DeactivatePlayer();
-        }
-        else
-        {
-            ActivatePlayer();
-        }
+  
     }
     #endregion
 
@@ -135,35 +127,32 @@ public class SceneHandeler : MonoBehaviour
 
     public void IntializeScene()
     {
-
         sceneActivated = true;
-       // if (gameManager.buildindex >= 0) //the player is active after scene 1
-       // {
-            player = GameObject.FindGameObjectWithTag("Player");
-      //  }
-
-        
+        player = GameObject.FindGameObjectWithTag("Player");
         //Load the player position
+     
+        
         spawnPosition = gameManager.startingPosition;
-        player.transform.position = spawnPosition;
-
-
-        playerManger.CreateHealthBar();
+        player.transform.position = spawnPosition;   // this makes the player restart 
+        
+        
+        playerManger.CallPlayerUi();
         ActivatePlayer();
     }
 
-   
-
-
-    void ActivatePlayer()
+    public void ActivatePlayer()
     {
         playerManger.inputsEnable = true;
-       
+    //    gameManager.Cursor.SetActive(false);
+        Debug.Log("playerActivated");
     }
 
     public void DeactivatePlayer()
     {
        playerManger.inputsEnable = false;
+      // gameManager.Cursor.SetActive(true);
+        Debug.Log("playerdeactivated");
     }
+
 
 }

@@ -29,6 +29,8 @@ public class PlayerInput : MonoBehaviour
     public bool activateEarthSpecial { get; private set; }
     public bool activateSunSpecial { get; private set; }
 
+    public bool block { get; private set; }
+
     /// <summary>
     /// e to interact 
     /// q to sepcial ability 
@@ -85,9 +87,10 @@ public class PlayerInput : MonoBehaviour
 
             activateSunSpecial = Input.GetButtonDown("Activate Sun Special"); // number 22
 
+            block = Input.GetKey(KeyCode.F);
 
           
         }
-       ;
+       
     }
 }

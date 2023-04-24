@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Carrot_EventCaller : EnemyEventCaller
 {
+
     public override void AudioEventCalled(string audioType)
     {
+
+
+
+
+
 
     }
 
