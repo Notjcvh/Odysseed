@@ -64,7 +64,6 @@ public class CarrotGrunt : MonoBehaviour
         newTarget.y = 0;
         transform.LookAt(newTarget);
         animator.SetBool("isAttacking", true);
-        Debug.Log("isAttacking");
     }
 
     public void ChasePlayer()
