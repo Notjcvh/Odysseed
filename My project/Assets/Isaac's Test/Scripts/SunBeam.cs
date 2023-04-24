@@ -5,15 +5,16 @@ using UnityEngine;
 public class SunBeam : Abilites
 {
     public bool useLaser = false;
+    public float sunBeamDuration;
     public int damageOverTime = 30;
     public Transform target;
     public GameObject lazerStart;
     public LineRenderer lineRenderer;
     public float range;
+    public GameObject player;
     void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update()
@@ -23,11 +24,14 @@ public class SunBeam : Abilites
             lineRenderer.SetPosition(0, lazerStart.transform.position);
             lineRenderer.SetPosition(1, target.position);
         }
+        UpdateTarget();
     }
 
     public override void Ability()
     {
+        lineRenderer = gameObject.AddComponent<LineRenderer>() as LineRenderer; 
         useLaser = true;
+        StartCoroutine("EndSunBeam", sunBeamDuration);
     }
 
     void UpdateTarget()
@@ -44,14 +48,24 @@ public class SunBeam : Abilites
                 nearestEnemy = enemy;
             }
         }
-
         if (nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
+            nearestEnemy.GetComponent<Enemy>().currentHealth -= damageOverTime;
+        }
+        if (useLaser)
+        {
+            player.transform.LookAt(nearestEnemy.transform);
         }
         else
         {
             target = null;
         }
+    }
+    private IEnumerator EndSunBeam(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        Destroy(lineRenderer);
+        useLaser = false;
     }
 }

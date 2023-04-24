@@ -876,7 +876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
-  playerHealth: {fileID: 0}
+  playerManager: {fileID: 0}
   damage: 1
   hitAlready: 0
   hitShield: 0
@@ -984,7 +984,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8281145372905091958
 Transform:
   m_ObjectHideFlags: 0
@@ -1111,11 +1111,6 @@ MonoBehaviour:
   isTargeted: 1
   myHealthbar: {fileID: 7861954336783038339}
   myRoom: {fileID: 0}
-  audioController: {fileID: 0}
-  playingAudio: 0
-  queueAudio: 0
-  clip: {fileID: 0}
-  audioJobSent: 0
   blinkIntensity: 0
   blinkDuration: 0
   mats: []
