@@ -176,7 +176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1986e8c424c04a24ab7f9d5de3696ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  rb: {fileID: 0}
+  maxHealth: 200
   currentHealth: 0
   hitEffect: {fileID: 1014210819661757414, guid: 09c7af6e75624494e92d661a082fab8b, type: 3}
   animator: {fileID: 8633926705082632788}
@@ -184,11 +185,6 @@ MonoBehaviour:
   isTargeted: 1
   myHealthbar: {fileID: 0}
   myRoom: {fileID: 0}
-  audioController: {fileID: 0}
-  playingAudio: 0
-  queueAudio: 0
-  clip: {fileID: 0}
-  audioJobSent: 0
   blinkIntensity: 0
   blinkDuration: 0
   mats: []
@@ -1023,7 +1019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
-  playerHealth: {fileID: 0}
+  playerManager: {fileID: 0}
   damage: 1
   hitAlready: 0
   hitShield: 0

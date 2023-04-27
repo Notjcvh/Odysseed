@@ -413,7 +413,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clearCheckpoints: {fileID: 11400000, guid: 4094e79300794404884c6b1ad890d473, type: 2}
   sceneToLoad: 7
-  intialPosition: {fileID: 0}
   gameManager: {fileID: 69644491}
 --- !u!65 &6537401
 BoxCollider:
@@ -15401,6 +15400,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7536114446765932146, guid: 8a3ac321a499b0743859b583fc31fbfe, type: 3}
+      propertyPath: maxHealth
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536114446765932146, guid: 8a3ac321a499b0743859b583fc31fbfe, type: 3}
       propertyPath: myHealthbar
       value: 
       objectReference: {fileID: 761910886}
@@ -28391,7 +28394,7 @@ PrefabInstance:
     - target: {fileID: 1468764402964890806, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
       propertyPath: lineRenderer
       value: 
-      objectReference: {fileID: 1471449366}
+      objectReference: {fileID: 0}
     - target: {fileID: 1468764402964890806, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
       propertyPath: abilityCooldown
       value: 
@@ -28478,11 +28481,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
---- !u!120 &1471449366 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 8218502148309811530, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
-  m_PrefabInstance: {fileID: 1471449365}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1471449367 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5442568676606704181, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
