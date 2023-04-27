@@ -7,6 +7,7 @@ public class EarthGrab : Abilites
     public GameObject earthPull;
     public Transform player;
     public Transform abilitySpawner;
+    public float abilityDuration;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -14,5 +15,6 @@ public class EarthGrab : Abilites
     public override void Ability()
     {
         GameObject earthPull = Instantiate(this.earthPull, abilitySpawner.position, player.rotation) as GameObject;
+        Destroy(earthPull, abilityDuration);
     }
 }

@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour
             if (this.tag == "Boss")
             {
 
-                animator.SetBool("IsDying", true);
+                animator.SetBool("isDying", true);
                 Destroy(myHealthbar.gameObject);
             }
            /* else
@@ -113,7 +113,7 @@ public class Enemy : MonoBehaviour
             GameObject hiteffs = Instantiate(hitEffect, transform.position, transform.rotation);
             Destroy(hiteffs, 2f);
         }
-        currentHealth =currentHealth - amount;
+        currentHealth = currentHealth - amount;
         float currentHealthPercent = (float)currentHealth / (float)maxHealth;
 
         myHealthbar.HandleHealthChange(currentHealthPercent);

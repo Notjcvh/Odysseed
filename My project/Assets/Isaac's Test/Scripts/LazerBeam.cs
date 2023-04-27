@@ -9,7 +9,7 @@ public class LazerBeam : MonoBehaviour
     public GameObject target;
     public GameObject lazerStart;
     public LineRenderer lineRenderer;
-    //public ParticleSystem impactEffect;
+    public GameObject lazerEffect;
     //public Light impactLight;
     // Start is called before the first frame update
     void Start()

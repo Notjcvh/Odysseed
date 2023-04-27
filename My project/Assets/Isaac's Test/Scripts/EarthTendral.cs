@@ -16,7 +16,15 @@ public class EarthTendral : MonoBehaviour
     void Update()
     {
         lr.SetPosition(0, this.transform.position);
-        lr.SetPosition(1, enemy.position);
+        
+        if(enemy == null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            lr.SetPosition(1, enemy.position);
+        }
     }
 
     public void SetEnemy(Transform transform)

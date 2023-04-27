@@ -8,7 +8,7 @@ public class LazerTarget : MonoBehaviour
     public float groundlevel = 0f;
     public float speed;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player");
     }

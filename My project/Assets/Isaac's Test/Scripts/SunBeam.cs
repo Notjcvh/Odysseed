@@ -10,6 +10,7 @@ public class SunBeam : Abilites
     public Transform target;
     public GameObject lazerStart;
     public LineRenderer lineRenderer;
+    public Material sunBeamMat;
     public float range;
     public GameObject player;
     void Start()
@@ -21,15 +22,22 @@ public class SunBeam : Abilites
     {
         if(useLaser && target != null)
         {
+            lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, lazerStart.transform.position);
             lineRenderer.SetPosition(1, target.position);
+            
+        }
+        else if(lineRenderer != null)
+        {
+            lineRenderer.enabled = false;
         }
         UpdateTarget();
     }
 
     public override void Ability()
     {
-        lineRenderer = gameObject.AddComponent<LineRenderer>() as LineRenderer; 
+        lineRenderer = gameObject.AddComponent<LineRenderer>() as LineRenderer;
+        lineRenderer.material = sunBeamMat;
         useLaser = true;
         StartCoroutine("EndSunBeam", sunBeamDuration);
     }
@@ -48,13 +56,10 @@ public class SunBeam : Abilites
                 nearestEnemy = enemy;
             }
         }
-        if (nearestEnemy != null && shortestDistance <= range)
+        if (nearestEnemy != null && shortestDistance <= range && useLaser)
         {
             target = nearestEnemy.transform;
             nearestEnemy.GetComponent<Enemy>().currentHealth -= damageOverTime;
-        }
-        if (useLaser)
-        {
             player.transform.LookAt(nearestEnemy.transform);
         }
         else

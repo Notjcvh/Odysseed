@@ -8,8 +8,7 @@ public class EarthPull : MonoBehaviour
     public Vector3 endPosition;
     public float range = 30f;
     public bool hasPulled = false;
-    public float desiredDuration = 3f;
-    private float elapsedTime;
+    public float desiredDuration = 50f;
     public List<LineRenderer> newLineRenderer;
     public GameObject tendral;
     // Start is called before the first frame update
@@ -46,8 +45,9 @@ public class EarthPull : MonoBehaviour
 
     public void PullEnemies(GameObject enemy)
     {
-        elapsedTime += Time.deltaTime;
-        float percentageComplete = elapsedTime / desiredDuration;
-        enemy.transform.position = Vector3.Lerp(enemy.transform.position, this.transform.position, percentageComplete);
+        Vector3 targetDirection = (this.transform.position - enemy.transform.position).normalized;
+
+        targetDirection.y = 0;
+        enemy.GetComponent<Rigidbody>().AddForce(targetDirection * desiredDuration, ForceMode.Impulse);
     }
 }

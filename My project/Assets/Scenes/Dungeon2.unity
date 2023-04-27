@@ -454,7 +454,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clearCheckpoints: {fileID: 11400000, guid: 4094e79300794404884c6b1ad890d473, type: 2}
   sceneToLoad: 5
-  intialPosition: {fileID: 0}
   gameManager: {fileID: 69644491}
 --- !u!65 &6537401
 BoxCollider:
@@ -6372,6 +6371,10 @@ PrefabInstance:
     - target: {fileID: 807404578255027544, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_LocalPosition.y
       value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 3798040104528015276, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5555648250390313033, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_Pivot.x
@@ -14643,6 +14646,10 @@ PrefabInstance:
       propertyPath: abilityList.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1468764402964890807, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+      propertyPath: abilityList.Array.data[0]
+      value: 
+      objectReference: {fileID: 1232363332}
     - target: {fileID: 1468764402964890808, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
       propertyPath: cooldownTime
       value: 10
@@ -16418,7 +16425,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clearCheckpoints: {fileID: 11400000, guid: 4094e79300794404884c6b1ad890d473, type: 2}
   sceneToLoad: 7
-  intialPosition: {fileID: 0}
   gameManager: {fileID: 69644491}
 --- !u!65 &671003343
 BoxCollider:
@@ -27702,6 +27708,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7943188606916062638, guid: a50ea3608ac57834197185edf803083e, type: 3}
   m_PrefabInstance: {fileID: 1229940393}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1232363332 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1468764402964890808, guid: 7fdbce53aeeb0af4d84027d66b04b426, type: 3}
+  m_PrefabInstance: {fileID: 581860746}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c45ff69ede6bcd4c9de2d3b46fc717c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1232843701
 GameObject:
   m_ObjectHideFlags: 0

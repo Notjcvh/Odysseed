@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
             float t = animationCurve.Evaluate(timeElapsed); // Evaluate the animation curve at the current time
             Color lerpedColor = Color.Lerp(startColor, alphaColor, t); // Interpolate between the starting color and alphaColor
             image.color = lerpedColor; // Set the lerped color to the image'
-            Debug.Log(image.color + " this is the time" + timeElapsed);
+            //Debug.Log(image.color + " this is the time" + timeElapsed);
             
             timeElapsed += Time.deltaTime;
             yield return null;
