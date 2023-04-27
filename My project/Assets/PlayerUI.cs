@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -17,6 +18,28 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite emptyHeart;
 
 
+    public GameObject objectiveHolder;
+    public Slider objectiveSlider;
+    private float _startSliderValue; 
+    public float sliderLerpDuration;
+    private Coroutine _displayObjective;
+    public bool open;
+    public TextMeshProUGUI objectiveText;
+    public float textLerpDuration;
+
+    public float sliderMult;
+    public float textMult;
+
+
+    [Header("Block UI")]
+    public Slider blockForeground;
+    public Slider blockMiddleground;
+    public float updateSpeedInSeconds_1;
+    public float updateSpeedInSeconds_2;
+
+
+    public GameObject checkpointHolder;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,9 +48,12 @@ public class PlayerUI : MonoBehaviour
         numberOfHearts = playerManger.PlayerHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            StartCoroutine(SetObjective("hello"));
+        }
         
     }
 
@@ -60,8 +86,6 @@ public class PlayerUI : MonoBehaviour
             return;
         }
     }
-
-
     Transform GetChildByName(Transform parent, string name)
     {
         // Base Case: If the parent has no children, return null
@@ -117,4 +141,95 @@ public class PlayerUI : MonoBehaviour
             numberOfHearts = playerManger.PlayerHealth;
         }
     }
+    public void ReachedCheckpoint()
+    {
+        checkpointHolder.SetActive(true);
+    }
+    public IEnumerator SetObjective(string text)
+    {
+        objectiveText.text = text;
+        objectiveHolder.SetActive(true);
+
+        Color _startColor = objectiveText.color;
+        Color _endColor = _startColor;
+        _startSliderValue = objectiveSlider.value;
+        float sliderEndValue;
+
+        if (_startSliderValue > 0.9f)
+        {
+            sliderEndValue = 0;
+            _endColor.a = 0;
+
+        }
+        else
+        {
+            sliderEndValue = 1;
+            _endColor.a = 1;
+        }
+
+       if(sliderEndValue == 1)
+       {
+            //objective panel is open and we want to close it
+            yield return StartCoroutine(DisplayObjectivePanel(sliderEndValue));
+            yield return StartCoroutine(DisplayObjectiveText(_startColor, _endColor));
+            open = false;
+       }
+       else
+       {
+            //objective panel is closed and we want to open it
+            yield return StartCoroutine(DisplayObjectiveText(_startColor, _endColor));
+            yield return StartCoroutine(DisplayObjectivePanel(sliderEndValue));
+            open = true;
+       }
+    }
+   IEnumerator DisplayObjectivePanel(float end)
+   {
+        float timeElapsed = 0;
+        //Slider lerp
+        while(timeElapsed < sliderLerpDuration)
+        {
+            objectiveSlider.value = Mathf.Lerp(_startSliderValue, end, timeElapsed * sliderMult);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+   }
+
+   IEnumerator DisplayObjectiveText(Color start, Color end)
+   {
+         //fade in the text 
+        float timeElapsed = 0;
+        while (timeElapsed < textLerpDuration)
+        {
+            objectiveText.color = Color.Lerp(start, end, timeElapsed * textMult);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+   }
+
+
+
+
+
+    public void HandleStaminaChange(float percent)
+    {
+        // using coroutine for smoothing 
+        StartCoroutine(ChangeToPercent(percent));
+    }
+
+    private IEnumerator ChangeToPercent(float percent)
+    {
+        float percentChange = blockForeground.value;
+        float percentChange2 = blockMiddleground.value;
+        float elapsed = 0f;
+        while (elapsed < updateSpeedInSeconds_2)
+        {
+            elapsed += Time.deltaTime;
+            blockForeground.value = Mathf.Lerp(percentChange, percent, elapsed / updateSpeedInSeconds_1);
+            blockMiddleground.value = Mathf.Lerp(percentChange2, percent, elapsed / updateSpeedInSeconds_2);
+            yield return null;
+        }
+        blockForeground.value = percent;
+        blockMiddleground.value = percent;
+    }
+
 }

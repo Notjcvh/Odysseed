@@ -21,6 +21,8 @@ public class PlayerBlock : HitCollider
 
     private void Update()
     {
+        staminaBar = playerManger.PlayerBlockHealth;
+
         if(staminaBar > 100)
         {
             staminaBar = 100;

@@ -201,13 +201,13 @@ public class PlayerAttack : MonoBehaviour
                     lightAttackCounter++;
                     animator.SetFloat("Starter Type", 0);
                     SetCombo(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 1));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 5));
                     canRotate = true;
                     break;
                 case (1, true):
                     lightAttackCounter++;
                     SetCombo(inputType, lightAttackCounter, 5f);
-                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 1));
+                    SendValues("Sword", new PlayerCollider(PhysicsBehaviours.None, 10, 5f, 5));
                     break;
                 case (2, true):
                     lightAttackCounter++;

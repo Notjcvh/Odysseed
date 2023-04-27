@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 public class Enemy : MonoBehaviour
 {
+
+    public Rigidbody rb;
+
     [Header("Health")]
     public int maxHealth = 3;
     public int currentHealth;
@@ -12,8 +15,6 @@ public class Enemy : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
-
-
 
     [Header("EnemyStatus")]
     public bool isStunned = false;
@@ -25,8 +26,6 @@ public class Enemy : MonoBehaviour
     [Header("Rooms")]
     public CombatRoom myRoom;
 
-   
-
     [Header("Hit Effect")]
     public float blinkIntensity;
     public float blinkDuration;
@@ -36,6 +35,7 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        rb = this.GetComponent<Rigidbody>();
         currentHealth = maxHealth;
         
 
@@ -121,10 +121,12 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("I was hit was in my name " + this.gameObject.name);
+       // Debug.Log("I was hit was in my name " + this.gameObject.name);
         DamagePopUp.Create(this.transform.position, damage);
         ModifiyHealth(damage);
-        DisableAI();
+        this.isStunned = true;
+        //   DisableAI();
+       // PlayTakeDamgage();
         blinkTimer = blinkDuration;
 
        // GetComponent<EnemyStats>().VisualizeDamage(this.gameObject);
@@ -137,6 +139,48 @@ public class Enemy : MonoBehaviour
     {
         this.isStunned = true;
     }
+
+
+
+    public void ReturnToNormal()
+    {
+        Debug.Log("Returned to normal");
+        rb.constraints = RigidbodyConstraints.None;
+    }
+
+    public void AppliedForce(PhysicsBehaviours appliedForce)
+    {
+        Debug.Log("Applied Forces Called");
+        switch(appliedForce)
+        {
+            case PhysicsBehaviours.None:
+                //slide the enemy based the direction but don't let them fall down
+                rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                break;
+            case PhysicsBehaviours.AggresiveKnockback:
+                rb.constraints = RigidbodyConstraints.None;
+                break;
+        }
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

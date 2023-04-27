@@ -17,9 +17,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Events")]
     [SerializeField] private GameEvent initializeScene;
-
     public AudioSource audioSource;
     public AudioClip audioClip;
+
+    [Header("Player Events")]
+    public PlayerEvent reachedCheckpoint;
 
     [Header("Scene Management")]
     public Level levelToLoad;
@@ -70,14 +72,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        audioSource.clip = audioClip;
-        
-        
+        audioSource.clip = audioClip;       
         LoadLevel(SceneManager.GetActiveScene());
     }
     private void Update()
     {
-       
         if(gamePaused == true)
         {
             Cursor.SetActive(true);
@@ -144,7 +143,6 @@ public class GameManager : MonoBehaviour
         {
             buildindex = scene.buildIndex;
             DisplaySceneTransitionUI(scene);
-           // initializeScene?.Raise();
         }
     }
 
@@ -166,6 +164,8 @@ public class GameManager : MonoBehaviour
         triggeredPoints = new List<Vector3>(hasSet);
         Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
         lastReachCheckpoint = b;
+        reachedCheckpoint?.Raise();
+
     }
 
     #region Recieving Game Event Calls 
@@ -247,7 +247,6 @@ public class GameManager : MonoBehaviour
         Color startColor = image.color; // Get the starting color from the image
         Color alphaColor = startColor;
         alphaColor.a = 0;
-        Debug.Log(end);
         while (timeElapsed < end)
         {
             float t = animationCurve.Evaluate(timeElapsed); // Evaluate the animation curve at the current time

@@ -73,10 +73,12 @@ public class HitCollider : MonoBehaviour
         }
         switch (behaviours)
         {
-            case PhysicsBehaviours.None:
+            case PhysicsBehaviours.None: //
+                obj.GetComponent<Enemy>().AppliedForce(PhysicsBehaviours.None);
                 AddKnockback(obj);
                 break;
-            case PhysicsBehaviours.AggresiveKnockback:
+            case PhysicsBehaviours.AggresiveKnockback: // Last hit Combos 
+                obj.GetComponent<Enemy>().AppliedForce(PhysicsBehaviours.AggresiveKnockback);
                 AddKnockback(obj);
                 break;
             case PhysicsBehaviours.KnockUp:
@@ -97,7 +99,6 @@ public class HitCollider : MonoBehaviour
     public void ClearList()
     {
         hittableObjects.Clear();
-        Debug.Log("List Cleared");
     }
 
     public void ActivateAdditionalBehaviours()
@@ -109,10 +110,12 @@ public class HitCollider : MonoBehaviour
 
     public virtual void AddKnockback(Rigidbody body)
     {
+       
+
+
         //Dot product
             Vector3 targetDirection = (body.position - origin.position).normalized;
            // float dotProduct = Vector3.Dot(targetDirection, origin.position);
-
              targetDirection.y = 0;
              body.AddForce(targetDirection * strength, ForceMode.Impulse);
     }

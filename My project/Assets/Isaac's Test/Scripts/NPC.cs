@@ -15,6 +15,7 @@ public class NPC : MonoBehaviour
     public float talkRange;
     public float distanceToPlayer;
     public GameObject talkingIndicator;
+    private IndicatorScript indicator;
     public GameObject nextDialouge;
     public bool isTalking;
     public int dialoguePointer;
@@ -25,7 +26,8 @@ public class NPC : MonoBehaviour
     private void Awake()
     {
         isTalking = false;
-        myDialouge = dialogue.GetComponentInChildren<TextMeshProUGUI>(); 
+        myDialouge = dialogue.GetComponentInChildren<TextMeshProUGUI>();
+        indicator = talkingIndicator.GetComponent<IndicatorScript>();
         hasTalked = false;
         player = GameObject.FindGameObjectWithTag("Player");
         ac = this.GetComponent<AudioController>();
@@ -39,6 +41,7 @@ public class NPC : MonoBehaviour
             playerInTalkRange = true;
             indicators[0].SetActive(false);
             indicators[1].SetActive(true);
+            indicator.changeScale = false; // stop animation 
 
         }
         else
@@ -46,7 +49,7 @@ public class NPC : MonoBehaviour
             playerInTalkRange = false;
             indicators[0].SetActive(true);
             indicators[1].SetActive(false);
-         
+            indicator.changeScale = true; // start animation
         }
         if (Input.GetKeyDown(KeyCode.E) && playerInTalkRange && !isTalking)
         {

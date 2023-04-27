@@ -31,7 +31,8 @@ public class PlayerManger : MonoBehaviour
     public SuperStates superStates;
     public SubStates subStates;
 
-    public bool inputsEnable;
+    public bool activeInputsEnabled;
+    public bool inactiveInputsEnabled; 
     [SerializeField] private bool stopMovementEvent;
     [SerializeField] private bool isUICreated = false;
     [SerializeField] private bool isDashing = false;
@@ -74,6 +75,11 @@ public class PlayerManger : MonoBehaviour
     private int count = 0;
     public float chargedAttackMultiplier = 1.4f;
 
+
+    [Header("Blocking")]
+    private float maxBlockStamina = 100;
+    private float _currentBlockStamina;
+
     [Header("Audio Caller")]
     public AudioType playingAudio; // the currently playing audio
     [SerializeField] private AudioType queueAudio; // the next audio to play
@@ -84,6 +90,7 @@ public class PlayerManger : MonoBehaviour
 
     //Getters and Setters
     public int PlayerHealth { get { return currentHealth; } }
+    public float PlayerBlockHealth { get { return _currentBlockStamina; } set { _currentBlockStamina = value; } }
     public Vector3 DirectionInput {get { return playerInput.movementInput; }}
     public Vector3 MovementVector { get { return movementVector; } set { movementVector = value; } }
     public Quaternion TargetRot { get { return targetRotation; } set { targetRotation = value; } }
@@ -111,11 +118,13 @@ public class PlayerManger : MonoBehaviour
     }
     private void Update()
     {
-        if (playerInput.pause)
+        if(Input.GetKeyDown(KeyCode.M))
         {
-            gameManager.gamePaused = (!gameManager.gamePaused);
-            inputsEnable = !inputsEnable;
+            Blocked(playerBody, Random.Range(10, 50));
         }
+
+
+       
         if (IsGrounded() == true)
         {
             SetSuperState(SuperStates.Grounded);
@@ -138,7 +147,7 @@ public class PlayerManger : MonoBehaviour
             case SuperStates.Grounded:
                 break;
         }
-        if (inputsEnable == true)
+        if (activeInputsEnabled == true)
         {
             HandleInputs();
             switch (subStates)
@@ -225,7 +234,7 @@ public class PlayerManger : MonoBehaviour
                     animator.SetBool("isRunning", false);
                     break;
                 case SuperStates.Rising:
-                    animator.SetBool("isJumping", true);
+
                     animator.SetBool("isRunning", false);
                     playerAttack.ResetCombo();
                     break;
@@ -264,6 +273,7 @@ public class PlayerManger : MonoBehaviour
             switch (subStates)
             {
                 case SubStates.Idle:
+                    animator.SetBool("isRunning", false);
                     break;
                 case SubStates.Moving:
                     break;
@@ -278,7 +288,12 @@ public class PlayerManger : MonoBehaviour
                     Debug.Log("Called Charge");
                     break;
                 case SubStates.RunningJump:
-                    // SetSuperState(SuperStates.Rising);
+                    animator.SetBool("isJumping", true);
+                    playerMovement.InitateJump();
+                    break;
+                case SubStates.Jumping:
+                    animator.SetBool("isJumping", true);
+                    playerMovement.InitateJump();
                     break;
                 case SubStates.Dashing:
                     isDashing = true;
@@ -331,9 +346,10 @@ public class PlayerManger : MonoBehaviour
                 SetSubState(SubStates.LaunchChargedAttack);
                 isAttacking = true;
             }
-            else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero)
+            else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero && playerBody.velocity.y == 0)
             {
-                playerMovement.InitateJump();
+
+                SetSubState(SubStates.Jumping);
             }
             else if (playerInput.dash && isDashing == false)
             {
@@ -359,7 +375,6 @@ public class PlayerManger : MonoBehaviour
             if (playerInput.movementInput != Vector3.zero && playerInput.jumpInput && stopMovementEvent != true)
             {
                 SetSubState(SubStates.RunningJump);
-                playerMovement.InitateJump();
             }
 
             if (playerInput.movementInput != Vector3.zero && playerInput.dash && isDashing == false)
@@ -373,7 +388,7 @@ public class PlayerManger : MonoBehaviour
             //Moving and Attacking 
             if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
             {
-                Debug.Log("Change Direction");
+              //  Debug.Log("Change Direction");
                 animator.SetBool("isRunning", false);
                 SetSubState(SubStates.Attacking);
                 playerAttack.LaunchAttack(0);
@@ -474,9 +489,15 @@ public class PlayerManger : MonoBehaviour
         }
         #endregion
     }
-    public void Blocked(Rigidbody attacker)
+    public void Blocked(Rigidbody attacker, int damage)
     {
-        playerBlock.HitSomething(attacker);
+        //Deal damage to health bar 
+        _currentBlockStamina -= damage;
+        float blockDeductionPercentage = _currentBlockStamina / maxBlockStamina;
+        playerUI.HandleStaminaChange(blockDeductionPercentage);
+
+        //Activate Behavior
+        //playerBlock.HitSomething(attacker);
     }
 
         /*case (PlayerStates.Idle):

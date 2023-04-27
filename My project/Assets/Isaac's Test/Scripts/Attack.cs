@@ -25,7 +25,7 @@ public class Attack : MonoBehaviour
 
             Debug.Log("attacked");
             Rigidbody body = this.GetComponent<Rigidbody>();
-            playerManager.Blocked(body);
+            playerManager.Blocked(body, damage);
             hitAlready = true;
             hitShield = true;
             //Destroy(effectIns, 2f);

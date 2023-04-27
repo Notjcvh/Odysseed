@@ -30,7 +30,7 @@ public class GrapeGruntBehavior : MonoBehaviour
     private float distanceFromPlayer;
     private float distanceFromShield;
     public GameObject attackHitbox;
-    public float stunDuration = 10;
+    public float stunDuration = 3;
     public bool isTargeted;
     private float attackLifetime;
     private float attackCooldown;
@@ -84,8 +84,8 @@ public class GrapeGruntBehavior : MonoBehaviour
 
         if (thisEnemy.isStunned)
         {
-            //DisableAI(stunDuration);
-            thisEnemy.isStunned = false;
+            DisableAI(stunDuration);
+            //thisEnemy.isStunned = false;
         }
         else
         {
@@ -101,7 +101,7 @@ public class GrapeGruntBehavior : MonoBehaviour
 
             attackCooldown -= Time.deltaTime;
             attackLifetime -= Time.deltaTime;
-            animator.SetFloat("Speed", rb.velocity.magnitude);
+            animator.SetFloat("Speed", thisEnemy.rb.velocity.magnitude);
             if (attackPointer == 5)
             {
                 attackPointer = 0;
@@ -164,20 +164,23 @@ public class GrapeGruntBehavior : MonoBehaviour
         }
     }
 
-    //public void DisableAI(float duration)
-    //{
-    //    this.navMeshAge.enabled = false;
-    //    attackCooldown = 99999f;
-    //    isStunned = true;
-    //    Invoke("EnableAI", Time.deltaTime * duration);
-    //}
-
-    //public void EnableAI()
-    //{
-    //    attackCooldown = attackSpeed;
-    //    isStunned = false;
-    //    this.navMeshAge.enabled = true;
-    //}
+    public void DisableAI(float duration)
+    {
+        this.navMeshAge.enabled = false;
+        attackCooldown = 99999f;
+        isStunned = true;
+        Invoke("EnableAI", Time.deltaTime * duration);
+    }
+    public void EnableAI()
+    {
+        Debug.Log("Ai Enabled");
+        thisEnemy.ReturnToNormal(); // if the object has rigidbody contriants reset to normal 
+        Debug.Log("Called");
+        attackCooldown = attackSpeed;
+        isStunned = false;
+        thisEnemy.isStunned = false;
+        this.navMeshAge.enabled = true;
+    }
 
 
 

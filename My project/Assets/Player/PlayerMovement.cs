@@ -39,9 +39,6 @@ public class PlayerMovement : MonoBehaviour
     public AnimationCurve gravityValueCurve;
     public float gravityMultiplier = 0;
     private IEnumerator gravityCorutine;
-
-
-
     private void Awake()
     {
         cam = GetComponent<CameraController>();
@@ -140,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
     #region Jump
     public void InitateJump()
     {
-        if(playerManger.IsGrounded())
+        if(animator.GetBool("isJumping") == true)
         {
             playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
         }

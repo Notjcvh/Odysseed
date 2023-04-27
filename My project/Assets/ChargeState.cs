@@ -12,12 +12,6 @@ public class ChargeState : StateMachineBehaviour
     {
         playerManger = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManger>();
         
-        if(playerManger != null)
-        {
-            Debug.Log("found");
-        }
-
-
 
 
 

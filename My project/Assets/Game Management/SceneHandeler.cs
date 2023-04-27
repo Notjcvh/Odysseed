@@ -9,8 +9,11 @@ public class SceneHandeler : MonoBehaviour
     [Header("Referencing")]
     [SerializeField] private GameManager gameManager; 
     [SerializeField] private GameObject player;
+    
     [SerializeField] private PlayerManger playerManger;
     [SerializeField] private AudioController audioController;
+    private PlayerInput playerInput;
+    public InteractionStates sceneStates;
 
     public bool sceneActivated = false;
     public Vector3 spawnPosition;
@@ -29,6 +32,7 @@ public class SceneHandeler : MonoBehaviour
     {
         // Get Components 
         player = GameObject.FindGameObjectWithTag("Player");
+        playerInput = player.GetComponent<PlayerInput>();
         playerManger = player.GetComponent<PlayerManger>();
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
         gameManager.SetPlayerPosition(player.transform.position);
@@ -47,13 +51,57 @@ public class SceneHandeler : MonoBehaviour
                 StartCoroutine(WaitToPlay(clip.length));
            }
         }
-  
+
+        if (playerInput.pause)
+        {
+            gameManager.gamePaused = (!gameManager.gamePaused);
+
+            switch(sceneStates, gameManager.gamePaused)
+            {
+                case (InteractionStates.Active, true):
+                    DeactivatePlayer();
+               //     Debug.Log("Deactivate Player");
+                    break;
+                case (InteractionStates.Active, false):
+                    ActivatePlayer();
+             //       Debug.Log("Activate Player");
+                    break;
+            }
+        }
+
+        if(playerManger.inactiveInputsEnabled == true)
+        {
+
+        }
+        
+
+        SetState(sceneStates);
     }
     #endregion
 
+
+
+    public void SetState(InteractionStates newState)
+    {
+        if (newState != sceneStates)
+        {
+            /*//On Leave from previous State
+            switch (sceneStates)
+            {
+               
+            }*/
+            sceneStates = newState;
+            //On Enter
+          /*  switch (sceneStates)
+            {
+                
+            }*/
+        }
+    }
+
     #region Sound looping
     // Call this function if we want to stop the currently playing audio 
-     public void StopAudio(float delay) 
+    public void StopAudio(float delay) 
     {
         StopCoroutine(WaitToPlay(clip.length));
         if(audioSource.isPlaying)
@@ -128,6 +176,7 @@ public class SceneHandeler : MonoBehaviour
     public void IntializeScene()
     {
         sceneActivated = true;
+        SetState(InteractionStates.Active);
         player = GameObject.FindGameObjectWithTag("Player");
         //Load the player position
      
@@ -142,17 +191,27 @@ public class SceneHandeler : MonoBehaviour
 
     public void ActivatePlayer()
     {
-        playerManger.inputsEnable = true;
+        playerManger.activeInputsEnabled = true;
+        playerManger.inactiveInputsEnabled = false;
+        playerManger.StopMovement = false;
     //    gameManager.Cursor.SetActive(false);
-        Debug.Log("playerActivated");
     }
 
     public void DeactivatePlayer()
     {
-       playerManger.inputsEnable = false;
+       playerManger.activeInputsEnabled = false;
+       playerManger.inactiveInputsEnabled = true;
+       playerManger.StopMovement = true;
+       playerManger.SetSubState(SubStates.Idle);
       // gameManager.Cursor.SetActive(true);
-        Debug.Log("playerdeactivated");
     }
+}
 
 
+public enum InteractionStates
+{
+    None, 
+    Active, // player Inputs are fully functoinal 
+    Passive, // does not mean the game is pause but means certain player actions are disabled
+    Restricted, // Player cannot interact with the game at all
 }

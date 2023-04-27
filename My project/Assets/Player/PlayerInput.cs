@@ -8,13 +8,18 @@ public class PlayerInput : MonoBehaviour
 
     public PlayerManger playerManger;
 
+    // Pause Screen or Tutorial Controls 
     public bool pause { get; private set; }
-
     public bool mouseClick { get; private set; }
+
+    public bool backButton { get; private set; }
+    
+    public bool horizontalInput { get; private set; }
+    public float horizontalAxis { get; private set; }
 
 
     //InGame Player 
-    
+
     public Vector3 movementInput { get; private set; }
     public bool jumpInput { get; private set; }
     public bool attack { get; private set; }
@@ -46,13 +51,19 @@ public class PlayerInput : MonoBehaviour
         ///  All Inputs will be labeled by number of where they appear
         /// </summary>
 
-
         //Pausing
         pause = Input.GetButtonDown("Pause");
 
-        mouseClick = Input.GetMouseButtonDown(0);
-
-        if (playerManger.inputsEnable == true)
+    
+        if (playerManger.inactiveInputsEnabled == true && playerManger.activeInputsEnabled == false)
+        {   
+            mouseClick = Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1);
+            backButton = Input.GetKeyDown(KeyCode.F);
+            horizontalInput = Input.GetButtonDown("Horizontal"); // number 1
+            horizontalAxis = Input.GetAxisRaw("Horizontal");
+        }
+      
+        if (playerManger.activeInputsEnabled == true && playerManger.inactiveInputsEnabled == false)
         {
             // Camera Movement 
             mouseX = Input.GetAxisRaw("Mouse X"); // number 7
@@ -88,8 +99,6 @@ public class PlayerInput : MonoBehaviour
             activateSunSpecial = Input.GetButtonDown("Activate Sun Special"); // number 22
 
             block = Input.GetKey(KeyCode.F);
-
-          
         }
        
     }
