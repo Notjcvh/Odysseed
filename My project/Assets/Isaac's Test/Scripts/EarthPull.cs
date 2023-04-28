@@ -32,6 +32,7 @@ public class EarthPull : MonoBehaviour
                 {
                     //stun all the enemies
                     Enemy enemyScript = enemy.GetComponent<Enemy>();
+                    enemyScript.DisableAI();
                     GameObject tendralGO = Instantiate(tendral, this.transform);
                     EarthTendral tendralScript = tendralGO.GetComponent<EarthTendral>();
                     tendralScript.SetEnemy(enemy.transform);
@@ -49,5 +50,7 @@ public class EarthPull : MonoBehaviour
 
         targetDirection.y = 0;
         enemy.GetComponent<Rigidbody>().AddForce(targetDirection * desiredDuration, ForceMode.Impulse);
+        if (targetDirection.magnitude <= 1)
+            enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 }
