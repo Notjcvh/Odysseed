@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3981001133742218366}
   - component: {fileID: 1214753888292382900}
   - component: {fileID: 2699060334852710176}
+  - component: {fileID: 6001198041477060260}
   m_Layer: 8
   m_Name: Vineyard Housing
   m_TagString: Untagged
@@ -98,3 +99,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -951608786083511892, guid: 9daca973079cad5468f0805f00c11713, type: 3}
+--- !u!208 &6001198041477060260
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854364831054989665}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.0550001, y: 1.23, z: 1.6320001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.19800001, y: 1.23, z: -0.43500003}
+  m_TimeToStationary: 0.5
