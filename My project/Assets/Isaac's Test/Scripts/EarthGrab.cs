@@ -14,7 +14,7 @@ public class EarthGrab : Abilites
     }
     public override void Ability()
     {
-        GameObject earthPull = Instantiate(this.earthPull, abilitySpawner.position, player.rotation) as GameObject;
+        GameObject earthPull = Instantiate(this.earthPull,new Vector3(abilitySpawner.position.x, abilitySpawner.position.y - 1.28f, abilitySpawner.position.z), player.rotation) as GameObject;
         Destroy(earthPull, abilityDuration);
     }
 }

@@ -13,6 +13,7 @@ public class SunBeam : Abilites
     public Material sunBeamMat;
     public float range;
     public GameObject player;
+    public ParticleSystem lazerParticles;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -25,11 +26,12 @@ public class SunBeam : Abilites
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, lazerStart.transform.position);
             lineRenderer.SetPosition(1, target.position);
-            
+            lazerParticles.Play();
         }
         else if(lineRenderer != null)
         {
             lineRenderer.enabled = false;
+            lazerParticles.Stop();
         }
         UpdateTarget();
     }
@@ -70,6 +72,7 @@ public class SunBeam : Abilites
     private IEnumerator EndSunBeam(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
+        lazerParticles.Stop();
         Destroy(lineRenderer);
         useLaser = false;
     }
