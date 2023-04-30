@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 1295cf80dc61abb4a8314e3e09cc06ce, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: ba1b83ce22b336640836ad547261f932, type: 2}
 --- !u!1001 &16184378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3031,19 +3031,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 364.53705
+      value: 594.31
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.59
+      value: 14.41
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 368.85513
+      value: 576.88
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8660259
+      value: -0.793351
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalRotation.x
@@ -3051,7 +3051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.49999917
+      value: 0.6087645
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalRotation.z
@@ -3063,15 +3063,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 60
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114557, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2738922536054330102, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: activeInputsEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4935659498323960337, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935659498323960337, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0000009536743
       objectReference: {fileID: 0}
     - target: {fileID: 4935659498323960337, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6081,6 +6089,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: dialogueList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: indicators.Array.data[0]
       value: 
       objectReference: {fileID: 522065447}
@@ -6094,12 +6106,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[1]
-      value: Coming to buy something? How about I interest you in some coconut water?
+      value: "It IS YOU! I thought your sword looked familiar! I did make it after
+        all! Or I\u2026 knew the person who made it\u2026"
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[2]
-      value: "Hey don\u2019t give me that look! It's coconut free! I'm not a monster!
-        Er\u2026 sort of.."
+      value: "ANYWAYS! You must help the Potato People over in the hills! They\u2019re
+        being treated awfully!  "
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: dialogueList.Array.data[3]
+      value: Well?
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+      propertyPath: dialogueList.Array.data[4]
+      value: "Don\u2019t just stand there! Go! You\u2019re supposed to be an adventurer\u2026
+        so\u2026 Adventure!"
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264589, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: m_RootOrder
@@ -10623,7 +10645,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: indicators.Array.data[0]
@@ -10639,8 +10661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[1]
-      value: One Hundred Pushups, One hundred situps, One Hundred flexes, and a 100
-        pullups.
+      value: "Gotta stay fit. Must\u2026 Fight\u2026 Evil! "
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[2]
@@ -20059,8 +20080,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[1]
-      value: HEY! You better not bring those little grape demons over here.. They
-        keep stealing all of my tools!
+      value: That Buff grape from across the street is always flexing and working
+        out, I wonder if he ever has any downtime to talk to beautiful grapes like
+        me..?
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogueList.Array.data[2]
@@ -20889,6 +20911,17 @@ PrefabInstance:
       propertyPath: nextDialouge
       value: 
       objectReference: {fileID: 668104341}
+    - target: {fileID: 8112318878334639814, guid: 028052b7fdc495842a7efafd45359111, type: 3}
+      propertyPath: dialogueList.Array.data[1]
+      value: "You\u2019re back! And with the seed mind you. It doesn\u2019t surprise
+        me that you aren\u2019t affected by it! "
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112318878334639814, guid: 028052b7fdc495842a7efafd45359111, type: 3}
+      propertyPath: dialogueList.Array.data[2]
+      value: "You\u2019re on your way to finishing the prophecy your father told
+        me about.. Now quickly! Head to the market and talk to a small coconut named
+        Kiko! Or was it Derrick? Hmm maybe it was Michael?"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 028052b7fdc495842a7efafd45359111, type: 3}
 --- !u!4 &355717514310923514 stripped
