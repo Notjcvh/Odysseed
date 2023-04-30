@@ -48,7 +48,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 63
+  controlID: 101
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 64
+  controlID: 102
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 65
+  controlID: 103
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -342,6 +342,7 @@ MonoBehaviour:
     - {fileID: 2363165557387242430, guid: 3a24b9e84feaebb4ea41a7e110e7f9ef, type: 2}
     - {fileID: 8527337745325252744, guid: c4923b8adb325ba489993f273ae6cea5, type: 2}
     - {fileID: 6221471432093045448, guid: 9d3e0663eb6090141abd0f4fb148eef8, type: 2}
+    - {fileID: -5480131943961209035, guid: 16f75a26f1395764896c3c26394dfe82, type: 2}
     m_ValueSerializationHelper:
     - e00: 1.180265
       e01: 0
@@ -439,10 +440,26 @@ MonoBehaviour:
       e31: 0
       e32: 0
       e33: 1
+    - e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: 9d3e0663eb6090141abd0f4fb148eef8, type: 2}
+  m_AnimatorController: {fileID: 9100000, guid: 16f75a26f1395764896c3c26394dfe82, type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: 6221471432093045448, guid: 9d3e0663eb6090141abd0f4fb148eef8, type: 2}
+  - m_Target: {fileID: -5480131943961209035, guid: 16f75a26f1395764896c3c26394dfe82, type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
   stateMachineGraphGUI: {fileID: 0}
@@ -496,13 +513,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Art/Prefabs/Dungeon3
+    - Assets/Art/Characters
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Art/Prefabs/Dungeon3
+  - Assets/Art/Characters
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\scary\OneDrive\Documents\Schoolwork\GAME 490\Odysseed\Odysseed\My
     project
@@ -510,9 +527,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 111}
-    m_SelectedIDs: e2880000
-    m_LastClickedID: 35042
-    m_ExpandedIDs: 00000000488800004a8800004c8800004e8800005088000000ca9a3bffffff7f
+    m_SelectedIDs: 84a50000
+    m_LastClickedID: 42372
+    m_ExpandedIDs: 0000000036a5000038a500003aa500003ca500003ea500007aa50000c4c5000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -540,7 +557,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000488800004a8800004c8800004e88000050880000
+    m_ExpandedIDs: 0000000036a5000038a500003aa500003ca500003ea50000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -568,7 +585,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000d68d00003aa8060042a8060000000000968f0000dc7002000a25010070830000
+    m_ExpandedInstanceIDs: c6230000d68d00003aa8060042a8060000000000968f0000dc7002000a25010070830000dcc40000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -667,24 +684,24 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 32}
+      scrollPos: {x: 0, y: 225.20001}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 5cdcffff04fbffff888c0000fa920000869300007698000064a2000090a20000
+      m_ExpandedIDs: 647bffff3aa4ffffd2a4fffff8a4ffff82a5ffffdeb7ffffaabbffff04fbffffc0a700002ca80000eca8000034a90000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: NPC_grape_babies_v3
+        m_OriginalName: NPC_grape_babies_v3
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: -33948
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 4}
       m_SearchString: 
@@ -727,8 +744,8 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: -100, y: -25.600006}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffset: {x: 0, y: 0}
+      snapOffsetDelta: {x: -100, y: -25.600006}
       snapCorner: 3
       id: Tool Settings
       index: 0
@@ -749,7 +766,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: 0, y: 24.8}
+      snapOffset: {x: 0, y: 0}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: unity-scene-view-toolbar
@@ -952,9 +969,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 6.324836, y: 26.073675, z: 316.43417}
+    m_Target: {x: 325.45, y: 1.8711362, z: 328.583}
     speed: 2
-    m_Value: {x: 6.324836, y: 26.073675, z: 316.43417}
+    m_Value: {x: 325.45, y: 1.8711362, z: 328.583}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1001,13 +1018,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.014353915, y: 0.32436648, z: -0.004448608, w: -0.9467777}
+    m_Target: {x: 0.14968646, y: 0.82810485, z: -0.26175264, w: 0.47450683}
     speed: 2
-    m_Value: {x: -0.014334134, y: 0.32548898, z: -0.004466055, w: -0.9454265}
+    m_Value: {x: 0.14994143, y: 0.82663417, z: -0.26128823, w: 0.47531262}
   m_Size:
-    m_Target: 1.4299363
+    m_Target: 6.0971603
     speed: 2
-    m_Value: 1.4143479
+    m_Value: 5.8346033
   m_Ortho:
     m_Target: 0
     speed: 2
