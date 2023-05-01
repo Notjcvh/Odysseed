@@ -37,6 +37,12 @@ public class PlayerUI : MonoBehaviour
     public float updateSpeedInSeconds_1;
     public float updateSpeedInSeconds_2;
 
+    private string currentObjective = "hello";
+
+
+    public IEnumerator setObjective;
+    public bool coroutineRunning;
+
 
     public GameObject checkpointHolder;
 
@@ -46,15 +52,25 @@ public class PlayerUI : MonoBehaviour
         playerUi = GameObject.FindGameObjectWithTag("PlayerUI");
         playerManger = GetComponent<PlayerManger>();
         numberOfHearts = playerManger.PlayerHealth;
+        
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.O))
+        if(Input.GetKeyDown(KeyCode.B))
         {
-            StartCoroutine(SetObjective("hello"));
+            if(coroutineRunning == true)
+            {
+                StopCoroutine(SetObjective(currentObjective));
+            }
+            StartCoroutine(SetObjective(currentObjective));
         }
-        
+
+        if (playerManger.blocking != true)
+        {
+            blockMiddleground.value = playerManger.PlayerBlockHealth/100;
+            blockForeground.value = playerManger.PlayerBlockHealth /100;
+        }
     }
 
     public void CreateHealthBar()
@@ -145,8 +161,27 @@ public class PlayerUI : MonoBehaviour
     {
         checkpointHolder.SetActive(true);
     }
-    public IEnumerator SetObjective(string text)
+
+    public void AssignObjectiveWithString(string objective)
     {
+        setObjective = SetObjective(objective);
+
+        if(!coroutineRunning)
+            StartCoroutine(setObjective);
+    }   
+     public void AssignObjectiveWithEvent(PlayerEventsWithData data)
+     { 
+        setObjective = SetObjective(data.text);
+        currentObjective = data.text;
+        if (coroutineRunning == false)
+            StartCoroutine(setObjective);
+     }
+
+
+
+    IEnumerator SetObjective(string text)
+    {
+        coroutineRunning = true;
         objectiveText.text = text;
         objectiveHolder.SetActive(true);
 
@@ -159,7 +194,6 @@ public class PlayerUI : MonoBehaviour
         {
             sliderEndValue = 0;
             _endColor.a = 0;
-
         }
         else
         {
@@ -172,15 +206,27 @@ public class PlayerUI : MonoBehaviour
             //objective panel is open and we want to close it
             yield return StartCoroutine(DisplayObjectivePanel(sliderEndValue));
             yield return StartCoroutine(DisplayObjectiveText(_startColor, _endColor));
-            open = false;
+            open = true;
        }
        else
        {
             //objective panel is closed and we want to open it
             yield return StartCoroutine(DisplayObjectiveText(_startColor, _endColor));
             yield return StartCoroutine(DisplayObjectivePanel(sliderEndValue));
-            open = true;
+            open = false;
        }
+       coroutineRunning = false;
+        Debug.Log(open);
+
+
+        //If no input is pressed then close after 
+        if (open)
+        {
+            Debug.Log("Called");
+            yield return new WaitForSeconds(10f); // Wait for 5 seconds
+            StartCoroutine(SetObjective(currentObjective));  // Code for closing objective panel after 5 seconds
+        }
+        coroutineRunning = false;
     }
    IEnumerator DisplayObjectivePanel(float end)
    {
@@ -207,16 +253,7 @@ public class PlayerUI : MonoBehaviour
    }
 
 
-
-
-
-    public void HandleStaminaChange(float percent)
-    {
-        // using coroutine for smoothing 
-        StartCoroutine(ChangeToPercent(percent));
-    }
-
-    private IEnumerator ChangeToPercent(float percent)
+    public IEnumerator ReduceStamina(float percent)
     {
         float percentChange = blockForeground.value;
         float percentChange2 = blockMiddleground.value;
@@ -230,6 +267,7 @@ public class PlayerUI : MonoBehaviour
         }
         blockForeground.value = percent;
         blockMiddleground.value = percent;
+        playerManger.blocking = false;
     }
 
 }

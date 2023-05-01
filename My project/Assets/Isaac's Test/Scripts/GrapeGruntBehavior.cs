@@ -8,7 +8,6 @@ public class GrapeGruntBehavior : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject playerShield;
     private NavMeshAgent navMeshAge;
-    private AudioController audioController;
 
     [Header("Animation")]
     public Animator animator;
@@ -48,13 +47,15 @@ public class GrapeGruntBehavior : MonoBehaviour
     // Start is called before the first frame update
 
     [Header("Audio Caller")]
+    public AudioSource audioSource;
+    private AudioController audioController;
     public AudioType playingAudio; // the currently playing audio
-    [SerializeField] private AudioType queueAudio; // the next audio to play
-    public AudioClip clip;
-    public bool audioJobSent = false; // if job sent is true then it won't play
     private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    public bool audioTableSet = false; // if job sent is true then it won't play
     private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
 
+    //Getters and Setters
+    public Dictionary<AudioType, AudioClip> MyAudio { get { return ourAudio; } private set { ourAudio = value; }}
 
     void Awake()
     {
@@ -62,6 +63,7 @@ public class GrapeGruntBehavior : MonoBehaviour
         thisEnemy = GetComponent<Enemy>();
         animator = GetComponent<Animator>();
         navMeshAge = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         attackCooldown = attackSpeed;
         tempAttackMoveSpeed = attackMoveSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
@@ -72,6 +74,7 @@ public class GrapeGruntBehavior : MonoBehaviour
         //currentAttackPos = attackPoints[0].GetComponent<Transform>();
 
         audioController = GetComponent<AudioController>();
+        SetAudio();
     }
 
     // Update is called once per frame
@@ -182,50 +185,40 @@ public class GrapeGruntBehavior : MonoBehaviour
         this.navMeshAge.enabled = true;
     }
 
-
-
     #region Sound Caller
+    private void SetAudio()
+    {
+        // Loop through each audio track
+        foreach (AudioController.AudioTrack track in audioController.tracks)
+        {
+            // Access the audio objects in each track
+            audioObjects.AddRange(track.audio);
+            // Loop through each audio object in the track
+            foreach (AudioController.AudioObject audioObject in audioObjects)
+            {
+                // this should add all our audio to the dictionary
+                ourAudio.Add(audioObject.type, audioObject.clip);
+            }
+        }
+        audioTableSet = true;
+    }
 
     public void ManageAudio(AudioType type)
     {
-        if (ourAudio.Count < 1)
+        if (ourAudio.Count > 0 && ourAudio.ContainsKey(type) && audioController != null)
         {
-            // Loop through each audio track
-            foreach (AudioController.AudioTrack track in audioController.tracks)
+            if(type != playingAudio && audioSource.isPlaying)
             {
-                // Access the audio objects in each track
-                audioObjects.AddRange(track.audio);
-                // Loop through each audio object in the track
-                foreach (AudioController.AudioObject audioObject in audioObjects)
-                {
-                    // this should add all our audio to the dictionary
-                    ourAudio.Add(audioObject.type, audioObject.clip);
-                }
+                audioController.StopAudio(playingAudio, false, 0, false);
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
+            }
+            else
+            {
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
             }
         }
-        if (ourAudio.ContainsKey(type))
-        {
-            clip = ourAudio[type];
-        }
-        if (type != playingAudio)
-        {
-            audioController.PlayAudio(type, false, 0, false);
-            playingAudio = type;
-        }
-        else
-        {
-            audioController.PlayAudio(playingAudio, false, 0, false);
-        }
     }
-
-    IEnumerator WaitToPlay(float time, AudioType type)
-    {
-        float count = 0;
-        count += 1;
-        yield return new WaitForSecondsRealtime(time);
-        ManageAudio(type);
-        Debug.Log("count " + count);
-    }
-
     #endregion
 }

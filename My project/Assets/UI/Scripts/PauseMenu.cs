@@ -7,8 +7,10 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameManager gameManager;
-
-    public GameObject pauseMenuUI;
+    private SceneData sceneData = SceneData.Title;
+    public Camera myCamera;
+  
+    public Canvas canvas;
     public  VerticalLayoutGroup layoutGroup;
     public bool optionsOpened;
 
@@ -23,45 +25,25 @@ public class PauseMenu : MonoBehaviour
     public SceneEvent deactivatePlayer;
 
 
-    private void Start()
+    private void OnEnable()
     {
-        gameManager = GetComponent<GameManager>();
+        gameManager = GetComponentInParent<GameManager>();
+        canvas = GetComponent<Canvas>();
+        myCamera = gameManager.mainCamera;
+        canvas.worldCamera = myCamera;
+        canvas.planeDistance = 1f;
+        menuScreen.SetActive(true);
+    }
+    private void OnDisable()
+    {
+        BackButton();
     }
 
     void Update()
     {
-        if (gameManager.gamePaused == true)
-        {
-            Pause();
-        }
-        else
-        {
-            Resume();
-        }
+        transform.LookAt(gameManager.mainCamera.transform);
     }
 
-    //Pause and resume Game
-    private void Pause()
-    {
-        //Debug.Log("Pause");
-        pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-
-
-
-
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
-    }
-
-    public void Resume()
-    {
-        gameManager.gamePaused = false;
-        pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        Cursor.visible = false;
-        BackButton();
-    }
 
     public void PlayAudio()
     {
@@ -72,8 +54,7 @@ public class PauseMenu : MonoBehaviour
     //Pause Menu Options
     public void OptionsMenu()
     {
-        Debug.Log("Options Selected");
-        //Start Couritine loop through
+         //Start Couritine loop through
         if (optionsOpened == true)
         {
             StartCoroutine(CloseOptionSubMenu());
@@ -146,7 +127,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Continue()
     {
-        Resume();
+        gameManager.gamePaused = false;
         activatePlayer?.Raise();
     }
 
@@ -159,18 +140,8 @@ public class PauseMenu : MonoBehaviour
 
     }
 
-    public void EndGame()
+    public void QuitToMenu()
     {
-        gameManager.QuitGame();
-        Debug.Log("Game Quit");
+        gameManager.LoadLevel(sceneData.ToString());
     }
-
-
-
-
-
-
-   
-
- 
 }

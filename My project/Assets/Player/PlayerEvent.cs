@@ -8,8 +8,9 @@ public class PlayerEvent : ScriptableObject
 {
     private readonly List<GameEventListener> eventListeners = new List<GameEventListener>(); //can only be accesed not modified
 
+
     // start the broadcast play the event
-    public void Raise()
+    public virtual void Raise()
     {
         for (int i = eventListeners.Count - 1; i >= 0; i--) // this for loop runs in reverse 
             eventListeners[i].OnPlayerEventRaised(this);
@@ -28,5 +29,4 @@ public class PlayerEvent : ScriptableObject
         if (eventListeners.Contains(listener))
             eventListeners.Remove(listener);
     }
-
 }

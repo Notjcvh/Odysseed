@@ -52,6 +52,7 @@ public class SceneHandeler : MonoBehaviour
            }
         }
 
+
         if (playerInput.pause)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
@@ -73,7 +74,6 @@ public class SceneHandeler : MonoBehaviour
         {
 
         }
-        
 
         SetState(sceneStates);
     }
@@ -85,11 +85,16 @@ public class SceneHandeler : MonoBehaviour
     {
         if (newState != sceneStates)
         {
-            /*//On Leave from previous State
+            //On Leave from previous State
             switch (sceneStates)
             {
-               
-            }*/
+                case InteractionStates.Passive:
+                    playerManger.SetInputsToActive();
+                    break;
+                case InteractionStates.Active:
+                    playerManger.SetInputstToInactive();
+                    break;
+            }
             sceneStates = newState;
             //On Enter
           /*  switch (sceneStates)

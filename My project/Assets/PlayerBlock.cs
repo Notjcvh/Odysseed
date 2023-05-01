@@ -6,6 +6,7 @@ public class PlayerBlock : HitCollider
 {
 
     private PlayerManger playerManger;
+    private PlayerUI playerUI;
     public GameObject shield;
     [Range(0, 150)] public float staminaBar = 100; // the stamina bar maximum is 100
     public float regenAmount;
@@ -16,30 +17,29 @@ public class PlayerBlock : HitCollider
     private void Start()
     {
         playerManger = GetComponent<PlayerManger>();
+        playerUI = GetComponent<PlayerUI>();
     }
 
 
     private void Update()
     {
-        staminaBar = playerManger.PlayerBlockHealth;
 
-        if(staminaBar > 100)
-        {
-            staminaBar = 100;
-        }
+        
 
-        if(playerManger.subStates == SubStates.Guarding)
-        {
-            shield.SetActive(true);
-        }
-        else
+        if(playerManger.subStates != SubStates.Guarding)
         {
             shield.SetActive(false);
 
-            if(staminaBar < 100)
+            if(playerManger.PlayerBlockHealth < 100 && playerManger.blocking != true)
             {
-                staminaBar += regenAmount * Time.deltaTime;
+                playerManger.PlayerBlockHealth += regenAmount * Time.deltaTime;
+                Debug.Log(playerManger.PlayerBlockHealth);
             }
+        }
+        else if(playerManger.subStates == SubStates.Guarding && playerManger.PlayerBlockHealth > 0)
+        {
+            shield.SetActive(true);
+            MyBehaviour(new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 0, 5f, 40));
         }
     }
 

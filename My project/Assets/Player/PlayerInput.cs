@@ -19,7 +19,6 @@ public class PlayerInput : MonoBehaviour
 
 
     //InGame Player 
-
     public Vector3 movementInput { get; private set; }
     public bool jumpInput { get; private set; }
     public bool attack { get; private set; }
@@ -54,11 +53,10 @@ public class PlayerInput : MonoBehaviour
         //Pausing
         pause = Input.GetButtonDown("Pause");
 
-    
         if (playerManger.inactiveInputsEnabled == true && playerManger.activeInputsEnabled == false)
         {   
             mouseClick = Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1);
-            backButton = Input.GetKeyDown(KeyCode.F);
+            backButton = Input.GetKey(KeyCode.F);
             horizontalInput = Input.GetButtonDown("Horizontal"); // number 1
             horizontalAxis = Input.GetAxisRaw("Horizontal");
         }
@@ -100,6 +98,38 @@ public class PlayerInput : MonoBehaviour
 
             block = Input.GetKey(KeyCode.F);
         }
-       
+    }
+
+
+
+
+
+    public void ResetActiveInputs()
+    {
+        // Reset all variables to their initial values
+        mouseX = 0f;
+        mouseY = 0f;
+        movementInput = Vector3.zero;
+        jumpInput = false;
+        dash = false;
+        attack = false;
+        secondaryAttack = false;
+        chargedSecondaryAttack = false;
+        target = false;
+        interact = false;
+        activateWaterSpecial = false;
+        activateEarthSpecial = false;
+        activateSunSpecial = false;
+        block = false;
+    }
+
+
+
+    public void ResetPassiveInputs()
+    {
+        mouseClick = false;
+        backButton = false;
+        horizontalInput = false;
+        horizontalAxis = 0f;
     }
 }

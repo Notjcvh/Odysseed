@@ -17,7 +17,7 @@ public class Attack : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
 
-        Debug.Log(other.name);
+        
         if (other.gameObject.tag == "Shield" && !hitAlready && !hitShield)
         {
             //instatiate shield hit effect

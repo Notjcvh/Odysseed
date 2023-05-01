@@ -14,9 +14,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Referencing")]
     public static GameManager instance;
+    public Camera mainCamera;
 
     [Header("Game Events")]
     [SerializeField] private GameEvent initializeScene;
+    public GameEvent getObjectsFromScene; 
     public AudioSource audioSource;
     public AudioClip audioClip;
 
@@ -29,28 +31,23 @@ public class GameManager : MonoBehaviour
     public int buildindex;
     public GameObject sceneTransition;
 
-  
-
     [Header("UI Game Objects")]
+    public GameObject pauseMenuUI;
     public GameObject gameOverUI;
     public GameObject loadingScreenUI;
-    public GameObject Cursor;
+      public GameObject Cursor;
     public Slider loadingSlider;
     private float sliderTarget;
     public Image loadingScreenImage;
     public Sprite[] loadingScreenSprites;
 
     public string currentScene;
-
     public Vector3 startingPosition;
     public Vector3 lastReachCheckpoint;
     public Vector3 levelPosition;
-     
     public bool loaded = false;
     public bool hasDied = false; // might be better to have as a number 
-
     public bool gamePaused = false;
-
     public AudioMixer mixer;
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
     public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
@@ -79,11 +76,17 @@ public class GameManager : MonoBehaviour
     {
         if(gamePaused == true)
         {
-            Cursor.SetActive(true);
+            Pause();
         }
         else if(gamePaused == false)
         {
-            Cursor.SetActive(false);
+            Resume();
+        }
+
+
+        if (Input.GetKey(KeyCode.L))
+        {
+            PlayerHasDied();
         }
     }
     #endregion
@@ -138,7 +141,7 @@ public class GameManager : MonoBehaviour
         loadingScreenUI.SetActive(false);
 
         scene = SceneManager.GetActiveScene();
-
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         if (scene.isLoaded && loadingScreenUI.activeSelf == false)
         {
             buildindex = scene.buildIndex;
@@ -168,12 +171,33 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+
+
+
+
+    //Pause and resume Game
+    private void Pause()
+    {
+        //Debug.Log("Pause");
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0f;
+        Cursor.SetActive(true);
+    }
+
+    public void Resume()
+    {
+       pauseMenuUI.SetActive(false);
+        Cursor.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+
     #region Recieving Game Event Calls 
     //activate game over Ui --> Listening for playerhasDied GameEvent
     public void PlayerHasDied()
     {
-        if (gameOverUI.activeSelf == false)
-            gameOverUI.SetActive(true);
+      gameOverUI.SetActive(true);
     }
     
     //If the player dies reload the current scene by calling the event
@@ -220,21 +244,28 @@ public class GameManager : MonoBehaviour
     #region Scene Transition UI
     public void DisplaySceneTransitionUI(Scene scene)
     {
-        sceneTransition.SetActive(true);
-        foreach (Transform item in sceneTransition.transform)
+        if(sceneTransition == null)
         {
-            ObjData data = item.GetComponent<ObjData>();
-            if (data == null || scene.name != data.myData.ToString())
+            initializeScene?.Raise();
+            return;
+        }
+        else
+        {
+            sceneTransition.SetActive(true);
+            foreach (Transform item in sceneTransition.transform)
             {
-                continue;
-            }
-            else
-            {
-                item.gameObject.SetActive(true);
-                StartCoroutine(ColorLerp(item.GetComponent<Image>(), data.myCurve));
+                ObjData data = item.GetComponent<ObjData>();
+                if (data == null || scene.name != data.myData.ToString())
+                {
+                    continue;
+                }
+                else
+                {
+                    item.gameObject.SetActive(true);
+                    StartCoroutine(ColorLerp(item.GetComponent<Image>(), data.myCurve));
+                }
             }
         }
-        //initializeScene?.Raise();
     }
 
 
@@ -279,5 +310,11 @@ public enum SceneData
     #region Testing Scenes 
     Sterling_PlayerTestScene,
     #endregion 
+}
+
+public interface ICanvasRenderModeSetter
+{
+    public void SetCanvas(Camera cam, Canvas mycanvas);
+
 }
 

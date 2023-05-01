@@ -13,8 +13,6 @@ public class TutorialPopUp : MonoBehaviour
     public int currentActivePrompt;
     public bool activated = true;
 
-
-
     private void OnEnable()
     {
         sceneHandeler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandeler>();
@@ -29,12 +27,12 @@ public class TutorialPopUp : MonoBehaviour
         }
         foreach (Transform item in childTransforms)
         {
-            item.GetComponent<Tutorial>().SetPlaceInIndex();
+            item.GetComponent<Tutorial>().Set();
             item.gameObject.SetActive(false);
         }
     }
 
-
+    //If the player triggers the tutorial use this
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -45,6 +43,14 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
+    //else call this 
+    public void Activated()
+    {
+        this.gameObject.SetActive(true);
+        activated = true;
+        sceneHandeler.SetState(InteractionStates.Passive);
+        sceneHandeler.DeactivatePlayer();
+    }
 
     // on Input press change the game 
     private void Update()
@@ -67,12 +73,11 @@ public class TutorialPopUp : MonoBehaviour
         {
             if (playerInput.backButton && activated == true)
             {
-                CloseTutorial(this);
+                CloseTutorial(this.gameObject);
             }
 
 
-
-            if (playerInput.horizontalInput)
+            if (playerInput.horizontalInput && activated == true)
             {
                 if (playerInput.horizontalAxis > 0)
                 {
@@ -105,11 +110,14 @@ public class TutorialPopUp : MonoBehaviour
     }
 
     //close 
-    public void CloseTutorial(TutorialPopUp obj)
+    public void CloseTutorial(GameObject obj)
     {
-        obj.gameObject.SetActive(false);
+        obj.SetActive(false);
         activated = false;
         childTransforms[currentActivePrompt].gameObject.SetActive(false);
+
+
+
         sceneHandeler.SetState(InteractionStates.Active);
         sceneHandeler.ActivatePlayer();
     }

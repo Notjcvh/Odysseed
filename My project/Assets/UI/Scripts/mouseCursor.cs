@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class mouseCursor : MonoBehaviour
 {
+
+    public PlayerInput playerInput;
+    public GameManager gameManager;
     private SpriteRenderer spriteRenderer;
     public Sprite defaultCursor;
     public Sprite selectedCursor;
+    public LayerMask layer;
 
-    public Vector3 screenPos;
-    public Vector3 worldPos;
+    private Vector3 screenPos;
+    private Vector3 worldPos;
     public Vector3 offset;
     public float depth = 1;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
+       // playerInput = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInput>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        gameManager = GetComponentInParent<GameManager>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
     }
@@ -24,21 +30,13 @@ public class mouseCursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
-
-
-
-        Cursor.visible = false;
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
-        screenPos = Input.mousePosition;
+        transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
+        screenPos = Input.mousePosition + offset * 4f;
         screenPos.z = Camera.main.nearClipPlane + depth; //create forwarf depth
         worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        transform.position = worldPos + offset;
-       
-
-      
-
+        transform.position = worldPos; //+ offset;
 
 
         if (Input.GetMouseButton(0))

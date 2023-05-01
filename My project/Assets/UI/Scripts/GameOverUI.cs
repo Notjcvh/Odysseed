@@ -11,14 +11,14 @@ using UnityEngine.Video;
 public class GameOverUI : MonoBehaviour
 {
     public GameManager gameManager;
+    public Camera myCamera;
+    public Canvas canvas;
     public GameEvent restart;
     public GameEvent quit;
  
     public VideoPlayer videoPlayer;
-    public GameObject[] uiElements; // activate each object in the array
+    public Transform uiElementsHolder; // activate each object in the array
     public TextMeshProUGUI instructionText; // what instructions do we display to the player 
-
-    public bool gameOverIncremented = false; // to check if the game over has started
 
     [SerializeField] private Button continueButton;
     [SerializeField] private Button endButton;
@@ -32,18 +32,19 @@ public class GameOverUI : MonoBehaviour
     private void OnEnable()
     {
         ButtonHoverChecker.OnButtonHover += HandleButtonHover;
+        gameManager = GetComponentInParent<GameManager>();
+        canvas = GetComponent<Canvas>();
+        myCamera = gameManager.mainCamera;
+        Debug.Log(myCamera);
+        canvas.worldCamera = myCamera;
+        canvas.planeDistance = 1;
     }
+  
 
     private void OnDisable()
     {
         ButtonHoverChecker.OnButtonHover -= HandleButtonHover;
     }
-
-
-   /* public void PlayAudio()
-    {
-        gameManager.audioSource.Play();
-    }*/
 
     void PlayVideo()
     {
@@ -53,11 +54,14 @@ public class GameOverUI : MonoBehaviour
 
     IEnumerator ActivateUi(float time)
     {
+        Debug.Log(time);
         yield return new WaitForSeconds(time/2);
-        for (int i = 0; i < uiElements.Length; i++)
-        {
-            uiElements[i].SetActive(true);
-        }
+        //foreach (Transform item in uiElementsHolder)
+        //{
+        //    item.gameObject.SetActive(true);
+        //}
+        Debug.Log("called");
+        uiElementsHolder.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
@@ -87,7 +91,6 @@ public class GameOverUI : MonoBehaviour
    {
         CloseUi();
         restart.Raise();
-        
    }
 
    public void Quit()
@@ -101,9 +104,10 @@ public class GameOverUI : MonoBehaviour
     {
         this.gameObject.SetActive(false);
         Cursor.visible = false;
-        for (int i = 0; i < uiElements.Length; i++)
-        {
-            uiElements[i].SetActive(false);
-        }
+        uiElementsHolder.gameObject.SetActive(false);
+        //foreach (Transform item in uiElementsHolder)
+        //{
+        //    item.gameObject.SetActive(false);
+        //}
     }
 }

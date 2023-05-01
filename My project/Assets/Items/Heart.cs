@@ -10,7 +10,6 @@ public class Heart : MonoBehaviour
     public Rigidbody rigidbody;
     public LayerMask ground;
     public RaycastHit hit;
-    private Spin spin;
     public float maxDistance;
 
 
@@ -34,7 +33,6 @@ public class Heart : MonoBehaviour
     {
         playerManger = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManger>();
         collider = GetComponent<SphereCollider>();
-        spin = GetComponent<Spin>();
         rigidbody = GetComponentInChildren<Rigidbody>();
     }
 

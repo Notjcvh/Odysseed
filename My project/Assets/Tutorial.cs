@@ -7,30 +7,29 @@ using UnityEngine.EventSystems;
 
 public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private Camera cam;
+    private Canvas _canvas;
     public TutorialPopUp promptHolder;
     public Button forwardButton;
     public Button backButton;
     public int index;
     public int fullIndex;
-    public void SetPlaceInIndex()
+    public void Set()
     {
+        //Gets the position within the parent array 
+        //based on it's index activates or deactivates the buttons
+
         promptHolder = GetComponentInParent<TutorialPopUp>();
         foreach (Transform item in promptHolder.childTransforms)
         {
             if (item.name == this.name)
-            {
-                index = promptHolder.childTransforms.IndexOf(item);
-            }
+              index = promptHolder.childTransforms.IndexOf(item);
             else
-            {
-                continue;
-            }
+              continue;
         }
-
         //determine the position of the object within the parent array
         if(index == 0)
         {
-            Debug.Log(this.name + " is in the start of an array");
             if (promptHolder.childTransforms.Count > 1)
             {
                 backButton.interactable = false;
@@ -44,7 +43,7 @@ public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 backButton.gameObject.SetActive(false);
             }
         }
-        // to ccheck if the parent array length if it is odd or even, then we check what position we are in 
+        // to check if the parent array length if it is odd or even, then we check what position we are in 
         else if(index >= 1 && index <= promptHolder.childTransforms.Count - 2)
         {
          //   Debug.Log(this.name + " is in the middle of an array");
@@ -56,7 +55,14 @@ public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
          //   Debug.Log(this.name + " is at the end of an array");
             forwardButton.interactable = false;
             forwardButton.gameObject.SetActive(false);
-        }       
+        }
+
+
+        //Setiting this canvas to screen space and on a layer
+        _canvas = GetComponent<Canvas>();
+        cam = Camera.main;
+        _canvas.worldCamera = cam;
+        _canvas.planeDistance = 1f;
     }
 
     #region Events 

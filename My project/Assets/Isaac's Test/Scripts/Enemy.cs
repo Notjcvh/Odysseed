@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine.VFX;
 using UnityEngine;
 using UnityEngine.Rendering;
+
 public class Enemy : MonoBehaviour
 {
-
     public Rigidbody rb;
 
     [Header("Health")]
@@ -15,12 +15,18 @@ public class Enemy : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
+   
+
+    [Header("Audio")]
+    private bool hasPlayedAudio = false;
+    public bool hasDamageAudio = false;
+    public AudioSource audioSource;
+    public EnemyEventCaller enemyEventCaller;
 
     [Header("EnemyStatus")]
     public bool isStunned = false;
     public bool isTargeted = true;
     public EnemyHealthbar myHealthbar;
-    public event System.Action<float> OnHealthPercentChange = delegate { };
     private BossEvents bossEvents;
 
     [Header("Rooms")]
@@ -31,31 +37,32 @@ public class Enemy : MonoBehaviour
     public float blinkDuration;
     public SkinnedMeshRenderer[] mats;
     private float blinkTimer;
+    
+
+
 
 
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
+        enemyEventCaller = GetComponent<EnemyEventCaller>();
+        audioSource = GetComponent<AudioSource>();
         currentHealth = maxHealth;
-        
-
-        if(this.tag == "Boss")
+        if (this.tag == "Boss")
         {
-          bossEvents = GetComponent<BossEvents>();
-            if(bossEvents == null)
+            bossEvents = GetComponent<BossEvents>();
+            if (bossEvents == null)
             {
                 Debug.Log("you need to add boss events to change audio or spawn seed");
             }
         }
     }
-
-
     private void Update()
     {
         if (currentHealth <= 0)
         {
             Vector3 enemyPos = this.transform.position;
-            GameObject smokeEffect = Instantiate(GameAssets.i.smokePoof, new Vector3(enemyPos.x,enemyPos.y + 1 , enemyPos.z) , Quaternion.identity);
+           
             if (myRoom != null)
             {
                 myRoom.enemies.Remove(this.gameObject);
@@ -65,20 +72,28 @@ public class Enemy : MonoBehaviour
                 animator.SetBool("isDying", true);
                 Destroy(myHealthbar.gameObject);
             }
-           /* else
+
+
+            if (!hasPlayedAudio)
             {
-                this.gameObject.SetActive(false);
-                DestroyImmediate(this.gameObject);
-            }*/
-            this.gameObject.SetActive(false);
-            if(bossEvents != null)
+                CallAudio("Death");
+                GameObject smokeEffect = Instantiate(GameAssets.i.smokePoof, new Vector3(enemyPos.x, enemyPos.y + 1, enemyPos.z), Quaternion.identity);
+                Destroy(smokeEffect, 1.5f);
+                hasPlayedAudio = true;
+            }
+            /* else
+             {
+                 this.gameObject.SetActive(false);
+                 DestroyImmediate(this.gameObject);
+             }*/
+            //  this.gameObject.SetActive(false);
+            // CallAudio();
+            if (bossEvents != null)
             {
-                     bossEvents.Call();
+                bossEvents.Call();
             }
 
-
-            Destroy(smokeEffect, 1.5f);
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, audioSource.clip.length);
         }
 
 
@@ -94,10 +109,12 @@ public class Enemy : MonoBehaviour
             }
 
         }*/
-       
     }
 
-    // the goal here is to 
+    private void CallAudio(string keyword)
+    {
+        enemyEventCaller.AudioEventCalled(keyword);
+    }
 
     public void WhichRoom(GameObject room) 
     {
@@ -123,12 +140,13 @@ public class Enemy : MonoBehaviour
        // Debug.Log("I was hit was in my name " + this.gameObject.name);
         DamagePopUp.Create(this.transform.position, damage);
         ModifiyHealth(damage);
+
+        if (hasDamageAudio)
+            CallAudio("Damage");
         this.isStunned = true;
         //   DisableAI();
        // PlayTakeDamgage();
         blinkTimer = blinkDuration;
-
-       // GetComponent<EnemyStats>().VisualizeDamage(this.gameObject);
     }
     public void PlayTakeDamgage()
     {
@@ -138,8 +156,6 @@ public class Enemy : MonoBehaviour
     {
         this.isStunned = true;
     }
-
-
 
     public void ReturnToNormal()
     {

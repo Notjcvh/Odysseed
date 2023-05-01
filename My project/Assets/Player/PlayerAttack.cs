@@ -111,6 +111,8 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+       
+
         #region Handeling Starting and Ending Combo
         if (comboLifeCounter > 0)  //begin countdown 
         {
@@ -129,20 +131,14 @@ public class PlayerAttack : MonoBehaviour
 
         if(comboLifeCounter > 0)
         {
-            if (playerManger.currentState == PlayerStates.Moving)
-            {
+            if (playerManger.subStates == SubStates.Moving ||
+                playerManger.subStates == SubStates.Jumping ||
+                playerManger.subStates == SubStates.RunningJump || 
+                playerManger.subStates == SubStates.Dashing) { 
+            
                 ResetCombo();
             }
-            else if (playerManger.currentState == PlayerStates.Jumping) // if we jump reset combo 
-            {
-                isInAir = true;
-                ResetCombo();
-            }
-            else if (playerManger.IsGrounded() == true && playerManger.currentState == PlayerStates.Jumping) // if we land reset the combo 
-            {
-                isInAir = true;
-                ResetCombo();
-            }
+        
         }
         #endregion
     }
@@ -262,6 +258,7 @@ public class PlayerAttack : MonoBehaviour
         else if(inputType == 2)
         {
             int attackRating = (int)Math.Ceiling(20 * chargedAttackMultiplier);
+            Debug.Log(attackRating);
             SendValues("Sword", new PlayerCollider(PhysicsBehaviours.KnockUp, attackRating, 3f, 10));
             SetAttackBehaviour(2);
             ResetCombo();
@@ -269,9 +266,7 @@ public class PlayerAttack : MonoBehaviour
         else if( inputType == 3)
         {
             SetAttackBehaviour(3);
-            ResetCombo();
         }
-
     }
     private void SetCombo(int inputType, int attacktype, float combolifetime)
     {
@@ -294,9 +289,8 @@ public class PlayerAttack : MonoBehaviour
             if(playerManger.superStates == SuperStates.Rising || playerManger.superStates == SuperStates.Falling)
             {
                 playerManger.playerBody.velocity = Vector3.zero;
-     
             }
-
+            
             playerManger.playerBody.useGravity = false;
             //Apply Aggrasive Gravity
             StartCoroutine(playerMovement.ApplyGravity());
@@ -305,14 +299,13 @@ public class PlayerAttack : MonoBehaviour
         {
             //call functions
         }
-        else if (inputTpye == 2)// Charge Attack
+    
+        /*else if (inputTpye == 2)// Charge Attack
         {
-
         }
         else //Wave Attack
         {
-
-        }
+        }*/
     }
 
     private void SendValues(string myCollider, PlayerCollider values)
@@ -329,20 +322,20 @@ public class PlayerAttack : MonoBehaviour
     public void isAnimationFinished()
     {
         playerManger.StopMovement = false;
-        Debug.Log("Animation is Finished");
+       // Debug.Log("Animation is Finished");
         animator.SetBool("Attacking", false);
         animator.ResetTrigger("Input Pressed");
         animator.ResetTrigger("LaunchChargedAttack");
-        playerManger.isAttackAnimationActive = false;
-      
         playerManger.isAttacking = false;
         canRotate = true;
-        
+
         //Checking if the player has hit the combo finisher  
-        if (lightAttackCounter == lightAttackMaxGround && playerManger.IsGrounded() == true || 
-            heavyAttackCounter == heavyAttackMaxGround && playerManger.IsGrounded() == true ) // Finisher end of the Combo grounded
+        if (lightAttackCounter == lightAttackMaxGround && playerManger.IsGrounded() == true ||
+            heavyAttackCounter == heavyAttackMaxGround && playerManger.IsGrounded() == true) // Finisher end of the Combo grounded
             ResetCombo();
         else if (lightAttackCounter == lightAttackMaxAir && playerManger.IsGrounded() != true)
+            ResetCombo();
+        else if (animator.GetInteger("Mouse Input") == 3)
             ResetCombo();
         else
             comboLifeCounter = animator.GetFloat("ComboLifetime");
@@ -350,7 +343,6 @@ public class PlayerAttack : MonoBehaviour
 
     public void ResetCombo()
     {
-
         lightAttackCounter = 0;
         heavyAttackCounter = 0;
         animator.SetInteger("Attack Type", 0);
@@ -393,7 +385,6 @@ public class PlayerAttack : MonoBehaviour
         }
     }
     #endregion
-   
 
     public void StopAnimRotation()
     {

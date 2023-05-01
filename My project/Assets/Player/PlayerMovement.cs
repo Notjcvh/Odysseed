@@ -36,7 +36,8 @@ public class PlayerMovement : MonoBehaviour
     public int seedId;
 
     private float gravity;
-    public AnimationCurve gravityValueCurve;
+    public AnimationCurve fallingAttackGravity;
+    public AnimationCurve jumpGravity;
     public float gravityMultiplier = 0;
     private IEnumerator gravityCorutine;
     private void Awake()
@@ -122,10 +123,16 @@ public class PlayerMovement : MonoBehaviour
     public IEnumerator ApplyGravity()
     {
         float timeElapsed = 0;
-        while (playerManger.IsGrounded() == false && playerManger.subStates == SubStates.Attacking)
+        while (playerManger.IsGrounded() == false)
         {
-            gravityMultiplier = gravityValueCurve.Evaluate(timeElapsed);
-
+            if (playerManger.subStates != SubStates.Attacking)
+            {
+                gravityMultiplier = jumpGravity.Evaluate(timeElapsed);
+            }
+            else
+            {
+                gravityMultiplier = fallingAttackGravity.Evaluate(timeElapsed);
+            }
             playerBody.AddForce(Vector3.down * Time.deltaTime * gravityMultiplier, ForceMode.VelocityChange);
             timeElapsed += Time.deltaTime;
             yield return null;
@@ -137,14 +144,8 @@ public class PlayerMovement : MonoBehaviour
     #region Jump
     public void InitateJump()
     {
-        if(animator.GetBool("isJumping") == true)
-        {
-            playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
-        }
-      
+        playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
     }
-
-    //Calling an animation envent to stop anim form looping 
  
     #endregion
 

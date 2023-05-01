@@ -27,7 +27,6 @@ public class PlayerManger : MonoBehaviour
     private Vector3 intialStartPos;
 
     [Header("Player States")]
-    public PlayerStates currentState;
     public SuperStates superStates;
     public SubStates subStates;
 
@@ -40,6 +39,7 @@ public class PlayerManger : MonoBehaviour
     [SerializeField] private bool isGrounded = false;
     public bool isDying = false;
     public bool isAttacking = false;
+    public bool blocking = false;
 
     [Header("Health")]
     public int maxHealth = 5;
@@ -74,7 +74,6 @@ public class PlayerManger : MonoBehaviour
     public float timeOfCharge;
     private int count = 0;
     public float chargedAttackMultiplier = 1.4f;
-
 
     [Header("Blocking")]
     private float maxBlockStamina = 100;
@@ -114,6 +113,7 @@ public class PlayerManger : MonoBehaviour
         playerBlock = GetComponent<PlayerBlock>();
         playerUI = GetComponent<PlayerUI>();
         currentHealth = maxHealth;
+        _currentBlockStamina = maxBlockStamina;
         animator.SetInteger("Health", currentHealth);
     }
     private void Update()
@@ -123,8 +123,8 @@ public class PlayerManger : MonoBehaviour
             Blocked(playerBody, Random.Range(10, 50));
         }
 
+        //   Debug.Log("current block health " + PlayerBlockHealth);
 
-       
         if (IsGrounded() == true)
         {
             SetSuperState(SuperStates.Grounded);
@@ -201,6 +201,7 @@ public class PlayerManger : MonoBehaviour
                 case SuperStates.Grounded:
                     break;
                 case SuperStates.Falling:
+                    playerBody.useGravity = true;
                     if(isDashing == true)
                     {
                         // Stop applying force to the rigidbody
@@ -218,6 +219,7 @@ public class PlayerManger : MonoBehaviour
                     }
                     break;
                 case SuperStates.Rising:
+                  
                     break;
             }
             superStates = newState;
@@ -225,6 +227,7 @@ public class PlayerManger : MonoBehaviour
             switch (superStates)
             {
                 case SuperStates.Grounded:
+
                     animator.SetFloat("PlayerYVelocity", 0);
                     animator.SetBool("isGrounded", IsGrounded());
                     animator.SetBool("isFalling", false);
@@ -285,15 +288,13 @@ public class PlayerManger : MonoBehaviour
                     break;
                 case SubStates.ChargingAttack:
                     animator.SetBool("Attacking", true);
-                    Debug.Log("Called Charge");
                     break;
                 case SubStates.RunningJump:
                     animator.SetBool("isJumping", true);
-                    playerMovement.InitateJump();
+                    //playerMovement.InitateJump();
                     break;
                 case SubStates.Jumping:
                     animator.SetBool("isJumping", true);
-                    playerMovement.InitateJump();
                     break;
                 case SubStates.Dashing:
                     isDashing = true;
@@ -311,6 +312,11 @@ public class PlayerManger : MonoBehaviour
                     stopMovementEvent = true;
                     animator.SetTrigger("StartGuard");
                     animator.SetBool("Guarding", true);
+                    break;
+                case SubStates.SeedAbilityAttack:
+                    stopMovementEvent = true;
+                    isAttacking = true;
+                    playerAttack.LaunchAttack(3);
                     break;
             }
         }
@@ -346,9 +352,8 @@ public class PlayerManger : MonoBehaviour
                 SetSubState(SubStates.LaunchChargedAttack);
                 isAttacking = true;
             }
-            else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero && playerBody.velocity.y == 0)
+            else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero && playerBody.velocity.y >= 0)
             {
-
                 SetSubState(SubStates.Jumping);
             }
             else if (playerInput.dash && isDashing == false)
@@ -357,12 +362,10 @@ public class PlayerManger : MonoBehaviour
                 stopMovementEvent = true;
                 playerMovement.CreateDash(SuperStates.Grounded);
                 SetSubState(SubStates.Dashing);
-                
             }
             else if (Input.GetKey(KeyCode.F))
             {
                 SetSubState(SubStates.Guarding);
-                playerBlock.MyBehaviour(new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 0, 5f, 40));
             }
             else if(!isDashing && !isAttacking)
             {
@@ -393,6 +396,11 @@ public class PlayerManger : MonoBehaviour
                 SetSubState(SubStates.Attacking);
                 playerAttack.LaunchAttack(0);
             }
+
+            if(playerInput.block && playerInput.movementInput != Vector3.zero)
+            {
+                SetSubState(SubStates.Guarding);
+            }
         }
 
         #region Rising and Falling SuperStates
@@ -402,17 +410,17 @@ public class PlayerManger : MonoBehaviour
             {
                 SetSubState(SubStates.Moving);
             }
-            else if (playerInput.attack && isAttackAnimationActive == false)
+            else if (playerInput.attack && !isAttacking)
             {
                 SetSubState(SubStates.Attacking);
                 isAttacking = true;
                 playerAttack.LaunchAttack(0);
             }
-            else if (playerInput.secondaryAttack && chargeTime <= 1f && isAttackAnimationActive == false)
+          /*  else if (playerInput.secondaryAttack && chargeTime <= 1f && !isAttacking)
             {
                 SetSubState(SubStates.Attacking);
                 playerAttack.LaunchAttack(1);
-            }
+            }*/
             else if (playerInput.dash && isDashing == false)
             {
                 Debug.Log("Start Dash");
@@ -447,17 +455,17 @@ public class PlayerManger : MonoBehaviour
             {
                 SetSubState(SubStates.Moving);
             }
-            else if (playerInput.attack && isAttackAnimationActive == false)
+            else if (playerInput.attack && !isAttacking)
             {
                 SetSubState(SubStates.Attacking);
                 isAttacking = true;
                 playerAttack.LaunchAttack(0);
             }
-            else if (playerInput.secondaryAttack && chargeTime <= 1f && isAttackAnimationActive == false)
+         /*   else if (playerInput.secondaryAttack && chargeTime <= 1f && isAttackAnimationActive == false)
             {
                 SetSubState(SubStates.Attacking);
                 playerAttack.LaunchAttack(1);
-            }
+            }*/
            
             else if (playerInput.dash && isDashing == false)
             {
@@ -491,134 +499,19 @@ public class PlayerManger : MonoBehaviour
     }
     public void Blocked(Rigidbody attacker, int damage)
     {
-        //Deal damage to health bar 
-        _currentBlockStamina -= damage;
-        float blockDeductionPercentage = _currentBlockStamina / maxBlockStamina;
-        playerUI.HandleStaminaChange(blockDeductionPercentage);
-
         //Activate Behavior
-        //playerBlock.HitSomething(attacker);
+        playerBlock.HitSomething(attacker);
+
+        if (_currentBlockStamina > 0)
+        {
+            blocking = true;
+            //Deal damage to health bar 
+            // Ensure that block stamina does not go below zero
+            _currentBlockStamina = Mathf.Max(_currentBlockStamina - damage, 0);
+            float blockDeductionPercentage = _currentBlockStamina / maxBlockStamina;
+            StartCoroutine(playerUI.ReduceStamina(blockDeductionPercentage));
+        }
     }
-
-        /*case (PlayerStates.Idle):
-              animator.SetBool("isRunning", false);
-              stopMovementEvent = false;
-              break;
-          case (PlayerStates.Moving):
-              animator.SetBool("isRunning", true);
-              break;
-          case (PlayerStates.Falling):
-              animator.SetBool("isFalling", true);
-              animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-              break;
-          case (PlayerStates.GroundedDash):
-              SetPlayerState(currentState);
-              stopMovementEvent = true;
-              break;
-          case (PlayerStates.FallingAndMoving):
-              animator.SetBool("isFalling", true);
-              animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-              break;
-          case (PlayerStates.JumpingAndMoving):
-              animator.SetFloat("PlayerYVelocity", playerBody.velocity.y);
-              break;
-          case (PlayerStates.DirectionalAttack):
-              isAttackAnimationActive = true;
-              break;*/
-
-
-        /*
-
-        if (playerInput.jumpInput && IsGrounded() == true)
-        {
-            playerMovement.InitateJump();
-            animator.SetBool("isJumping", true);
-        }
-
-       if (playerInput.dash && playerMovement.isDashing == false)
-        {
-            animator.SetBool("isDashing", true);
-            playerMovement.isDashing = true;
-            StartCoroutine(playerMovement.Dash());
-        }
-
-        if (playerMovement.isDashing == true)
-        {
-            PlayerStates state;
-
-            if (IsGrounded() == true)
-                state = PlayerStates.GroundedDash;
-            else
-                state = PlayerStates.InAirDash;
-            SetPlayerState(state);
-        }
-
-
-        if (IsGrounded() )
-        {
-            if (playerInput.attack)
-            {
-              //  SetPlayerState(PlayerStates.PrimaryAttack);
-                isAttackAnimationActive = true;
-            }
-
-            if (playerInput.secondaryAttack && chargeTime <= 1f)
-            {
-             //   SetPlayerState(PlayerStates.SecondaryAttack);
-                isAttackAnimationActive = true;
-            }
-
-
-
-            if (!playerInput.chargedSecondaryAttack && chargeTime > 1f)
-            {
-                animator.SetTrigger("LaunchChargedAttack");
-                animator.ResetTrigger("InputPressed");
-                animator.ResetTrigger("Charging");
-                chargedAttack = false;
-                isAttackAnimationActive = true;
-             //   SetPlayerState(PlayerStates.LaunchChargedAttack);
-            }
-        }
-        else
-        {
-
-        }*/
-
-        /*}   
-
-           case PlayerStates.PrimaryAttack:
-                        inputType = 0;
-                        playerAttack.LaunchAttack(inputType);
-                        break;
-                    case PlayerStates.SecondaryAttack:
-                        inputType = 1;
-                        chargeTime = 0;
-                        playerAttack.timeOfCharge = 0;
-                        playerAttack.chargedAttackMultiplier = 1.4f;
-                        playerAttack.LaunchAttack(inputType);
-                        break;
-                    case PlayerStates.LaunchChargedAttack:
-                        inputType = 2;
-                        chargedAttack = false;
-                        playerAttack.LaunchAttack(inputType);
-                        chargeTime = 0;
-                        playerAttack.timeOfCharge = 0;
-                        playerAttack.chargedAttackMultiplier = 1.4f;
-                        break;
-                    case PlayerStates.Dying:
-                        stopMovementEvent = true;
-                        break;
-                    case PlayerStates.Landing:
-                        playerBody.velocity = Vector3.zero;
-                        break;
-
-
-
-
-
-
-         */
 
 
 
@@ -680,47 +573,65 @@ public class PlayerManger : MonoBehaviour
         {
             animator.SetBool("isFalling", false);
         }
-        #endregion
+    #endregion
 
 
-  #region Animation Finished Calls
-        public void JumpAnimationEnded()
-        {
-            animator.SetBool("isJumping", false);
-            playerBody.velocity = new Vector3(playerBody.velocity.x, 0, playerBody.velocity.z);
-        }
+    #region Animation Event Calls
+    public void StartJump()
+    {
+        playerMovement.InitateJump();
+    }
+    public void JumpAnimationEnded()
+    {
+        animator.SetBool("isJumping", false);
+        playerBody.useGravity = false;
+        StartCoroutine(playerMovement.ApplyGravity());
+        playerBody.velocity = new Vector3(playerBody.velocity.x, 0, playerBody.velocity.z);
+    }
 
-        public void DashAnimationEnded()
-        {
-            animator.SetBool("isDashing", false);
-        }
+    public void DashAnimationEnded()
+    {
+        animator.SetBool("isDashing", false);
+    }
 
-        public void CanRotate()
-        {
+    public void CanRotate()
+    {
         playerAttack.canRotate = false;
-        }
+    }
 
 
-        public void EndWindUp()
-        {
-            animator.SetBool("Attacking", false);
+    public void EndWindUp()
+    {
+        animator.SetBool("Attacking", false);
         Debug.Log("Called");
-        }
+    }
 
     #endregion
 
-  #region Disable All Inputs
+    #region Called form Other Scripts 
     public void DisableAllInputs()
     {
         playerInput.enabled = false;
+    }
+
+    //resets the variables to their initial values to ensure
+    // that they are not carrying over any data when we switch states
+    public void SetInputstToInactive()
+    {
+        playerInput.ResetActiveInputs();
+    }
+    public void SetInputsToActive()
+    {
+        playerInput.ResetPassiveInputs();    
     }
     #endregion
 
 
 
 
-  #region Player Restore Health or Taking Damgage
-     public void TakeDamage(int damage)
+
+    #region Player Restore Health or Taking Damgage
+    public void TakeDamage(int damage)
      {
          currentHealth -= damage;
          SelectAudio("Damage");
@@ -905,17 +816,39 @@ public class PlayerManger : MonoBehaviour
             audioController.PlayAudio(playingAudio, false, 0, false);
         }
     }
-
     IEnumerator WaitToPlay(float time)
     {
         yield return new WaitForSecondsRealtime(time);
         audioJobSent = false;
     }
-
     #endregion
 
     void OnDrawGizmos()
     {
+
+       
+        float ydirection = playerBody.velocity.y;
+        if(ydirection > 0)
+        {
+            Gizmos.color = Color.red;
+        }
+        else if(ydirection < 0)
+        {
+            Gizmos.color = Color.green;
+        }
+        Gizmos.DrawRay(sphereCollider.bounds.center, new Vector3(0, ydirection, 0).normalized * 10f);
+
+       
+
+
+
+
+
+        /*
+
+
+
+
        // Set the color of the gizmo
         Gizmos.color = Color.yellow;
 
@@ -973,45 +906,10 @@ public class PlayerManger : MonoBehaviour
             // If the ray doesn't hit anything, draw a green line up to the end of the movement vector
             Gizmos.color = Color.green;
             Gizmos.DrawRay(transform.position, MovementVector * Time.fixedDeltaTime * speed);
-        }
+        }*/
     }
     
  }
-public enum PlayerStates
-{
-
-    //Super States
-
-
-    //SubStates
-
-
-    None,
-    Idle,
-    Moving,
-    Landing,
-    Jumping,
-    JumpingAndMoving,
-    GroundedDash,
-    InAirDash,
-    Falling,
-    FallingAndMoving,
-    Dying,
-
-    //Regular attacks 
-    PrimaryAttack,
-    SecondaryAttack,
-    ChargingAttack,
-    LaunchChargedAttack,
-    DirectionalAttack,
-
-
-    //Seed Abilities
-
-    //Status Effects 
-    Stunned,
-}
-
 public enum SuperStates
 {
     Falling,
@@ -1032,5 +930,6 @@ public enum SubStates
     ChargingAttack,
     LaunchChargedAttack,
     RunningJump,
+    SeedAbilityAttack,
 
 }

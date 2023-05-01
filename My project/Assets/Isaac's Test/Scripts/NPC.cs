@@ -96,3 +96,6 @@ public class NPC : MonoBehaviour
         myDialouge.text = "";
     }
 }
+
+
+

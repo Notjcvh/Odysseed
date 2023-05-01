@@ -27,6 +27,19 @@ public class carrotKhan : MonoBehaviour
     public bool hasExploded = false;
     private Animator animator;
 
+
+    [Header("Audio Caller")]
+    public AudioSource audioSource;
+    private AudioController audioController;
+    public AudioType playingAudio; // the currently playing audio
+    private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    public bool audioTableSet = false; // if job sent is true then it won't play
+    private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
+
+    //Getters and Setters
+    public Dictionary<AudioType, AudioClip> MyAudio { get { return ourAudio; } private set { ourAudio = value; } }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +48,9 @@ public class carrotKhan : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         age = this.GetComponent<NavMeshAgent>();
         lb = this.GetComponent<LazerBeam>();
+        audioSource = GetComponent<AudioSource>();
+        audioController = GetComponent<AudioController>();
+        SetAudio();
     }
 
     // Update is called once per frame
@@ -352,5 +368,43 @@ public class carrotKhan : MonoBehaviour
         animator.SetBool("isWhirlwinding", false);
         animator.SetBool("isOvrSwinging", false);
     }
+
+
+    #region Sound Caller
+    private void SetAudio()
+    {
+        // Loop through each audio track
+        foreach (AudioController.AudioTrack track in audioController.tracks)
+        {
+            // Access the audio objects in each track
+            audioObjects.AddRange(track.audio);
+            // Loop through each audio object in the track
+            foreach (AudioController.AudioObject audioObject in audioObjects)
+            {
+                // this should add all our audio to the dictionary
+                ourAudio.Add(audioObject.type, audioObject.clip);
+            }
+        }
+        audioTableSet = true;
+    }
+
+    public void ManageAudio(AudioType type)
+    {
+        if (ourAudio.Count > 0 && ourAudio.ContainsKey(type) && audioController != null)
+        {
+            if (type != playingAudio && audioSource.isPlaying)
+            {
+                audioController.StopAudio(playingAudio, false, 0, false);
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
+            }
+            else
+            {
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
+            }
+        }
+    }
+    #endregion
 }
 

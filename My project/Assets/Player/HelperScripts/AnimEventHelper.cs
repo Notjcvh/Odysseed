@@ -4,76 +4,80 @@ using UnityEngine;
 
 public class AnimEventHelper : MonoBehaviour
 {
-        public PlayerManger playerManger;
+      public PlayerManger playerManger;
 
-    // Event calls
+
 
     // Player Animation Events --> Subscribers: Player Attack, Player Movement
     [SerializeField] private PlayerEvent TriggerEvent;
-        [SerializeField] private PlayerEvent hasAttackAnimationEnded;
-        [SerializeField] private PlayerEvent stopRotation;
-        [SerializeField] private PlayerEvent hasJumpAnimationPlayed;
-        [SerializeField] private PlayerEvent hasFallAnimationPlayed;
-        [SerializeField] private PlayerEvent hasDashAnimationPlayed;
-        [SerializeField] private PlayerEvent endWindUp;
-        
+    [SerializeField] private PlayerEvent hasAttackAnimationEnded;
+    [SerializeField] private PlayerEvent stopRotation;
+    [SerializeField] private PlayerEvent startJump;
+    [SerializeField] private PlayerEvent hasJumpAnimationPlayed;
+    [SerializeField] private PlayerEvent hasFallAnimationPlayed;
+    [SerializeField] private PlayerEvent hasDashAnimationPlayed;
+    [SerializeField] private PlayerEvent endWindUp;
 
-        [SerializeField] private PlayerEvent callBehaviours;
-        [SerializeField] private PlayerEvent finishBehaviours;
 
-        [SerializeField] private PlayerEvent Death;
-
+    // Event calls
+    [SerializeField] private PlayerEvent callBehaviours;
+    [SerializeField] private PlayerEvent finishBehaviours;
+    [SerializeField] private PlayerEvent Death;
 
 
     public void AnimationTrigger()
-        {
-            TriggerEvent?.Raise();
-        }
+    {
+        TriggerEvent?.Raise();
+    }
 
-        public void AttackAnimationEndEvent()
-        {
-            hasAttackAnimationEnded?.Raise();
-        }
+    public void AttackAnimationEndEvent()
+    {
+        hasAttackAnimationEnded?.Raise();
+    }
 
-        public void StopAnimationRotation()
-        {
-            stopRotation?.Raise();
-        }
-        
-        public void JumpAnimationPlayed()
-        { 
-            hasJumpAnimationPlayed?.Raise();
-        }
-        
-        public void FallingAnimationPlayed()
-        {
-            hasFallAnimationPlayed?.Raise();
-        }
+    public void StopAnimationRotation()
+    {
+        stopRotation?.Raise();
+    }
+    
+    public void StartJump()
+    {
+        startJump?.Raise();
+    }
+    public void JumpAnimationPlayed()
+    {
+        hasJumpAnimationPlayed?.Raise();
+    }
 
-        public void DashAnimationPlayed()
-        {
-           hasDashAnimationPlayed?.Raise();
-        }
+    public void FallingAnimationPlayed()
+    {
+        hasFallAnimationPlayed?.Raise();
+    }
 
-        public void EndWindUp()
-        {
-           endWindUp?.Raise();
-        }
+    public void DashAnimationPlayed()
+    {
+        hasDashAnimationPlayed?.Raise();
+    }
 
-        public void PlayerDied()
-        {
-          Death?.Raise();
-        }
+    public void EndWindUp()
+    {
+        endWindUp?.Raise();
+    }
 
-        public void CallBehaviours()
-        {
-            callBehaviours?.Raise();
-        }
+    public void PlayerDied()
+    {
+        Death?.Raise();
+    }
 
-        public void FinisheBehaviours()
-        {
-            finishBehaviours?.Raise();
-        }
+    public void CallBehaviours()
+    {
+        callBehaviours?.Raise();
+    }
+
+    public void FinisheBehaviours()
+    {
+        finishBehaviours?.Raise();
+    }
 
 
     public void CalledAudio(string type)
