@@ -15,8 +15,8 @@ public class CarrotGrunt : MonoBehaviour
     [Header("Attack Attributes")]
     public float attackRange, sightRange;
     public bool playerInSightRange, playerinAttackRange;
+    public bool isAttacking;
     public GameObject attackHitbox;
-    public bool attackPart1;
 
     public LayerMask whatIsGround, whatIsPlayer;
     private Animator animator;
@@ -58,14 +58,12 @@ public class CarrotGrunt : MonoBehaviour
 
     public void Attack()
     {
+        isAttacking = true;
         nav.SetDestination(this.transform.position);
         Vector3 newTarget = player.transform.position;
-        transform.LookAt(new Vector3(newTarget.x, transform.position.y, newTarget.z));
-        animator.SetBool("isWalking", false);
-        if(attackPart1)
-            animator.SetBool("isAttacking", true);
-        else
-            animator.SetBool("isAttacking1", true);
+        newTarget.y = 0;
+        transform.LookAt(newTarget);
+        animator.SetBool("isAttacking", true);
     }
 
     public void ChasePlayer()
@@ -100,14 +98,6 @@ public class CarrotGrunt : MonoBehaviour
         {
             walkPointSet = true;
         }
-    }
-
-    public void EndAttack()
-    {
-        animator.SetBool("isAttacking", false);
-        animator.SetBool("isAttacking1", false);
-        animator.SetBool("isWalking", true);
-        attackPart1 = !attackPart1;
     }
     public void ActivateAttack()
     {
