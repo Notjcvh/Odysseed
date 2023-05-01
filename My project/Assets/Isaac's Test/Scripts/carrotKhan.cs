@@ -116,7 +116,7 @@ public class carrotKhan : MonoBehaviour
         }
         Vector3 newTarget = player.transform.position;
         newTarget.y = 0;
-        transform.LookAt(newTarget);
+        transform.LookAt(new Vector3(newTarget.x, transform.position.y, transform.position.z));
     }
     //Phase 1
     #region Taunt
