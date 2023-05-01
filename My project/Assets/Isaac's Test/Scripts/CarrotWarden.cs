@@ -23,8 +23,6 @@ public class CarrotWarden : MonoBehaviour
     public Transform projectileSpawnLocation;
     public float projectileVelocity;
     public float projectileLifetime;
-    [Header("LazerBeam")]
-    private LazerBeam lb;
     private Animator animator;
 
     // Start is called before the first frame update
@@ -135,8 +133,8 @@ public class CarrotWarden : MonoBehaviour
 
     public void Death()
     {
-        Debug.Log("Im Dying");
-        isAttacking = true;
+        if (animator.GetBool("isDying") == true)
+            Destroy(this.gameObject);
     }
     public void Idles()
     {

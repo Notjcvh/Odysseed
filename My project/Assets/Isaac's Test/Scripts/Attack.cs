@@ -22,7 +22,7 @@ public class Attack : MonoBehaviour
         {
             //instatiate shield hit effect
             //GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
-
+            playerManager = other.GetComponent<PlayerManger>();
             Debug.Log("attacked");
             Rigidbody body = this.GetComponent<Rigidbody>();
             playerManager.Blocked(body, damage);
