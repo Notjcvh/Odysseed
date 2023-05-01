@@ -37,7 +37,7 @@ public class PlayerUI : MonoBehaviour
     public float updateSpeedInSeconds_1;
     public float updateSpeedInSeconds_2;
 
-    private string currentObjective = "hello";
+    private string currentObjective = "";
 
 
     public IEnumerator setObjective;
@@ -61,9 +61,9 @@ public class PlayerUI : MonoBehaviour
         {
             if(coroutineRunning == true)
             {
-                StopCoroutine(SetObjective(currentObjective));
+                StopCoroutine(SetObjective());
             }
-            StartCoroutine(SetObjective(currentObjective));
+            StartCoroutine(SetObjective());
         }
 
         if (playerManger.blocking != true)
@@ -75,7 +75,8 @@ public class PlayerUI : MonoBehaviour
 
     public void CreateHealthBar()
     {
-         playerUi.SetActive(true);
+        playerUi = GameObject.FindGameObjectWithTag("PlayerUI");
+        playerUi.SetActive(true);
         //Set up Health Bar
         if (playerUi != null)
         {
@@ -164,25 +165,35 @@ public class PlayerUI : MonoBehaviour
 
     public void AssignObjectiveWithString(string objective)
     {
-        setObjective = SetObjective(objective);
-
-        if(!coroutineRunning)
+        setObjective = SetObjective();
+        currentObjective = objective;
+        if (coroutineRunning == false)
             StartCoroutine(setObjective);
     }   
      public void AssignObjectiveWithEvent(PlayerEventsWithData data)
      { 
-        setObjective = SetObjective(data.text);
+        setObjective = SetObjective();
         currentObjective = data.text;
         if (coroutineRunning == false)
             StartCoroutine(setObjective);
      }
 
+    public void RecallObjective()
+    {
+        if(currentObjective != "")
+        {
+            setObjective = SetObjective();
+            if (coroutineRunning == false)
+                StartCoroutine(setObjective);
+        }
+       
+    }
 
 
-    IEnumerator SetObjective(string text)
+    IEnumerator SetObjective()
     {
         coroutineRunning = true;
-        objectiveText.text = text;
+        objectiveText.text = currentObjective;
         objectiveHolder.SetActive(true);
 
         Color _startColor = objectiveText.color;
@@ -223,8 +234,8 @@ public class PlayerUI : MonoBehaviour
         if (open)
         {
             Debug.Log("Called");
-            yield return new WaitForSeconds(10f); // Wait for 5 seconds
-            StartCoroutine(SetObjective(currentObjective));  // Code for closing objective panel after 5 seconds
+            yield return new WaitForSeconds(1.5f); // Wait for 5 seconds
+            StartCoroutine(SetObjective());  // Code for closing objective panel after 5 seconds
         }
         coroutineRunning = false;
     }

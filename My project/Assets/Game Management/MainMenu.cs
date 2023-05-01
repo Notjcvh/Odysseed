@@ -10,18 +10,24 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-        Cursor.visible = true;
+        gameManager.AssignCanvasValues();
+        if (gameManager.loadingScreenUI.activeInHierarchy == false)
+            gameManager.cursor.SetActive(true);
     }
 
     private void Update()
     {
-        Cursor.visible = true;
+        if(gameManager.loadingScreenUI.activeInHierarchy == false)
+            gameManager.cursor.SetActive(true);
+        //  Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
 
     public void StartGame()
     {
+        gameManager.cursor.SetActive(false);
         gameManager.LoadLevel(scenetoLoad.ToString());
+
     }
 
     public void OpenSettings()

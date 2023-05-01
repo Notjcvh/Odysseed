@@ -13,56 +13,67 @@ public class HeartSpawner : MonoBehaviour, ISpawnable
     public float spawnPorbability = 0.5f; // 20%
     public Vector3 offset;
 
+    public int health;
+    public int heartsAvailable;
+    public int lastLifeCount; // when player health == 1, 
+
 
     void Start()
     {
         playerManger = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManger>();
+        health = 3;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        
-        if (playerManger.currentHealth <= 3 && other.gameObject.tag == ("Player"))
+        if (playerManger.currentHealth <= health && other.gameObject.tag == ("Player"))
         {
             if (Random.value > spawnPorbability && spawnedObj == null)
-            {
-                StartCoroutine(Delay());
-                Debug.Log("true");
+                SpawnObj();
 
+        }
+    }
+    IEnumerator Delay()
+    {
+        yield return new WaitForSecondsRealtime(4);
+        SpawnObj();
+      
+    }
+
+    public void SpawnObj()
+    {
+        if(heartsAvailable > 0)
+        {
+            int childCount = points.childCount;
+            Transform randomChild;
+            Debug.Log(childCount);
+            if (childCount > 0)
+            {
+                int randomIndex = Random.Range(0, childCount);
+                randomChild = transform.GetChild(randomIndex);
+                Debug.Log(randomChild);
             }
             else
             {
-                Debug.Log("false");
+                //No child found use the parent transform
+                randomChild = this.transform;
             }
-        }
+
+            spawnedObj = Instantiate(heart, randomChild.position + offset, randomChild.rotation, this.transform);
+            Rigidbody rb = spawnedObj.GetComponent<Rigidbody>();
+            rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+
+
+            // decrement the heartsAvailable and health variable
+            heartsAvailable--;
+            if(health > 0)
+                health--;
+        }  
     }
 
-    IEnumerator Delay()
-    {
-        SpawnObj();
-        yield return new WaitForSecondsRealtime(4);
-    }        
-    
-    public void SpawnObj()
-    {
-        int childCount = points.childCount;
-        Transform randomChild;
-        Debug.Log(childCount);
-        if (childCount > 0)
-        {
-            int randomIndex = Random.Range(0, childCount);
-            randomChild = transform.GetChild(randomIndex);
-            Debug.Log(randomChild);
-        }
-        else
-        {
-            //No child found use the parent transform
-            randomChild = this.transform;
-        }
 
-        spawnedObj = Instantiate(heart, randomChild.position + offset, randomChild.rotation, this.transform);
-        Rigidbody rb = spawnedObj.GetComponent<Rigidbody>();
-        rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
-    }
+
+
+
 }
 

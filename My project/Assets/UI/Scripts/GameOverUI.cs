@@ -27,17 +27,18 @@ public class GameOverUI : MonoBehaviour
     [TextAreaAttribute] public string continueButtonText;
     [TextAreaAttribute] public string endButtonText;
 
-
+   
 
     private void OnEnable()
     {
-        ButtonHoverChecker.OnButtonHover += HandleButtonHover;
         gameManager = GetComponentInParent<GameManager>();
         canvas = GetComponent<Canvas>();
         myCamera = gameManager.mainCamera;
-        Debug.Log(myCamera);
+        ButtonHoverChecker.OnButtonHover += HandleButtonHover;
         canvas.worldCamera = myCamera;
-        canvas.planeDistance = 1;
+        canvas.sortingLayerName = "UI";
+        canvas.sortingOrder = 3;
+        canvas.planeDistance = 0.15f;
     }
   
 
@@ -60,17 +61,16 @@ public class GameOverUI : MonoBehaviour
         //{
         //    item.gameObject.SetActive(true);
         //}
-        Debug.Log("called");
         uiElementsHolder.gameObject.SetActive(true);
+        gameManager.cursor.SetActive(true);
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
     }
 
     void HandleButtonHover(GameObject obj, bool isHovering)
     {
         if(isHovering)
         {
-           
             if(obj == continueButton.gameObject)
             {
                 instructionText.text = continueButtonText;
@@ -96,6 +96,7 @@ public class GameOverUI : MonoBehaviour
    public void Quit()
    {
         CloseUi();
+
         quit.Raise();
    }
 
@@ -103,7 +104,8 @@ public class GameOverUI : MonoBehaviour
     void CloseUi()
     {
         this.gameObject.SetActive(false);
-        Cursor.visible = false;
+        gameManager.cursor.SetActive(false);
+      //  Cursor.visible = false;
         uiElementsHolder.gameObject.SetActive(false);
         //foreach (Transform item in uiElementsHolder)
         //{

@@ -6,7 +6,7 @@ public class TutorialPopUp : MonoBehaviour
 {
 
     public List<Transform> childTransforms;
-    public SceneHandeler sceneHandeler;
+    public SceneHandler sceneHandler;
     private GameObject _player;
     public PlayerManger playerManger;
     public PlayerInput playerInput;
@@ -15,7 +15,7 @@ public class TutorialPopUp : MonoBehaviour
 
     private void OnEnable()
     {
-        sceneHandeler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandeler>();
+        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
         _player = GameObject.FindGameObjectWithTag("Player");
         playerManger = _player.GetComponent<PlayerManger>();
         playerInput = _player.GetComponent<PlayerInput>();
@@ -38,8 +38,18 @@ public class TutorialPopUp : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             activated = true;
-            sceneHandeler.SetState(InteractionStates.Passive);
-            sceneHandeler.DeactivatePlayer();
+            sceneHandler.SetState(InteractionStates.Passive);
+           // sceneHandler.DeactivatePlayer();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            activated = true;
+            sceneHandler.SetState(InteractionStates.Passive);
+            // sceneHandler.DeactivatePlayer();
         }
     }
 
@@ -48,8 +58,8 @@ public class TutorialPopUp : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         activated = true;
-        sceneHandeler.SetState(InteractionStates.Passive);
-        sceneHandeler.DeactivatePlayer();
+        sceneHandler.SetState(InteractionStates.Passive);
+        sceneHandler.DeactivatePlayer();
     }
 
     // on Input press change the game 
@@ -115,10 +125,7 @@ public class TutorialPopUp : MonoBehaviour
         obj.SetActive(false);
         activated = false;
         childTransforms[currentActivePrompt].gameObject.SetActive(false);
-
-
-
-        sceneHandeler.SetState(InteractionStates.Active);
-        sceneHandeler.ActivatePlayer();
+        sceneHandler.SetState(InteractionStates.Active);
+        sceneHandler.ActivatePlayer();
     }
 }

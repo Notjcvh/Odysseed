@@ -123,6 +123,9 @@ public class PlayerManger : MonoBehaviour
             Blocked(playerBody, Random.Range(10, 50));
         }
 
+
+        Debug.Log(activeInputsEnabled);
+
         //   Debug.Log("current block health " + PlayerBlockHealth);
 
         if (IsGrounded() == true)
@@ -643,6 +646,7 @@ public class PlayerManger : MonoBehaviour
 
     public void CallPlayerUi()
     {
+        playerUI = GetComponent<PlayerUI>();
         //Call whatever functions the player Ui needs to call
         playerUI.CreateHealthBar();
     }
@@ -826,90 +830,90 @@ public class PlayerManger : MonoBehaviour
     void OnDrawGizmos()
     {
 
-       
-        float ydirection = playerBody.velocity.y;
-        if(ydirection > 0)
-        {
-            Gizmos.color = Color.red;
-        }
-        else if(ydirection < 0)
-        {
-            Gizmos.color = Color.green;
-        }
-        Gizmos.DrawRay(sphereCollider.bounds.center, new Vector3(0, ydirection, 0).normalized * 10f);
-
-       
-
-
-
-
-
         /*
+         float ydirection = playerBody.velocity.y;
+         if(ydirection > 0)
+         {
+             Gizmos.color = Color.red;
+         }
+         else if(ydirection < 0)
+         {
+             Gizmos.color = Color.green;
+         }
+         Gizmos.DrawRay(sphereCollider.bounds.center, new Vector3(0, ydirection, 0).normalized * 10f);
 
 
 
 
-       // Set the color of the gizmo
-        Gizmos.color = Color.yellow;
-
-        // Draw the box cast using Gizmos.DrawWireCube and Gizmos.DrawRay
-        Gizmos.DrawWireCube(sphereCollider.bounds.center, sphereCollider.bounds.size);
-        Gizmos.DrawRay(sphereCollider.bounds.center, Vector3.down * distanceToGround);
-
-        Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
-
-        // Check if the box cast hits anything
-        RaycastHit hit;
-        if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
-        {
-            Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
-            // Set the color of the gizmo to red if there is a hit
-            Gizmos.color = Color.red;
-            // Draw a sphere at the hit point using Gizmos.DrawSphere
-            Gizmos.DrawSphere(hitPos, 0.1f);
-
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(hitPos, hit.normal * distanceToGround);
-            Ray ray2 = new Ray(hitPos, hit.normal * distanceToGround);
-
-            float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
-
-            Gizmos.color = Color.blue;
-            Vector3 rotationAxis = Vector3.Cross(Vector3.up, hit.normal);
-            rotationAxis.z = 0;
-            rotationAxis.x = 0;
-            Quaternion rotation = Quaternion.AngleAxis(angle, rotationAxis);
-
-            Vector3 rotatedDirection = rotation * Vector3.forward;
-            Gizmos.DrawRay(hitPos, rotatedDirection * distanceToGround);
-        }
 
 
 
 
-        // Draw a ray to visualize the player's movement direction
-        Gizmos.color = Color.white;
-        Gizmos.DrawRay(transform.position, MovementVector);
 
-        // Cast a ray in front of the player to check for collisions
-        RaycastHit hit2;
-        float speed = MovementVector != Vector3.zero ? TargetSpeed : 0;
-        if (Physics.Raycast(transform.position, MovementVector, out hit2, speed * Time.fixedDeltaTime))
-        {
-            // If the ray hits something, draw a red line up to the point of collision
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, hit2.point - transform.position);
-        }
-        else
-        {
-            // If the ray doesn't hit anything, draw a green line up to the end of the movement vector
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(transform.position, MovementVector * Time.fixedDeltaTime * speed);
-        }*/
+
+
+
+        // Set the color of the gizmo
+         Gizmos.color = Color.yellow;
+
+         // Draw the box cast using Gizmos.DrawWireCube and Gizmos.DrawRay
+         Gizmos.DrawWireCube(sphereCollider.bounds.center, sphereCollider.bounds.size);
+         Gizmos.DrawRay(sphereCollider.bounds.center, Vector3.down * distanceToGround);
+
+         Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
+
+         // Check if the box cast hits anything
+         RaycastHit hit;
+         if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
+         {
+             Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+             // Set the color of the gizmo to red if there is a hit
+             Gizmos.color = Color.red;
+             // Draw a sphere at the hit point using Gizmos.DrawSphere
+             Gizmos.DrawSphere(hitPos, 0.1f);
+
+
+             Gizmos.color = Color.green;
+             Gizmos.DrawRay(hitPos, hit.normal * distanceToGround);
+             Ray ray2 = new Ray(hitPos, hit.normal * distanceToGround);
+
+             float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
+
+             Gizmos.color = Color.blue;
+             Vector3 rotationAxis = Vector3.Cross(Vector3.up, hit.normal);
+             rotationAxis.z = 0;
+             rotationAxis.x = 0;
+             Quaternion rotation = Quaternion.AngleAxis(angle, rotationAxis);
+
+             Vector3 rotatedDirection = rotation * Vector3.forward;
+             Gizmos.DrawRay(hitPos, rotatedDirection * distanceToGround);
+         }
+
+
+
+
+         // Draw a ray to visualize the player's movement direction
+         Gizmos.color = Color.white;
+         Gizmos.DrawRay(transform.position, MovementVector);
+
+         // Cast a ray in front of the player to check for collisions
+         RaycastHit hit2;
+         float speed = MovementVector != Vector3.zero ? TargetSpeed : 0;
+         if (Physics.Raycast(transform.position, MovementVector, out hit2, speed * Time.fixedDeltaTime))
+         {
+             // If the ray hits something, draw a red line up to the point of collision
+             Gizmos.color = Color.red;
+             Gizmos.DrawRay(transform.position, hit2.point - transform.position);
+         }
+         else
+         {
+             // If the ray doesn't hit anything, draw a green line up to the end of the movement vector
+             Gizmos.color = Color.green;
+             Gizmos.DrawRay(transform.position, MovementVector * Time.fixedDeltaTime * speed);
+         }*/
     }
-    
- }
+
+}
 public enum SuperStates
 {
     Falling,

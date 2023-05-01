@@ -23,6 +23,9 @@ public class mouseCursor : MonoBehaviour
        // playerInput = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInput>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GetComponentInParent<GameManager>();
+        spriteRenderer.sortingLayerName = "UI";
+        spriteRenderer.sortingOrder = 5;
+     
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
     }
@@ -30,7 +33,7 @@ public class mouseCursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cursor.visible = true;
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
         transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
         screenPos = Input.mousePosition + offset * 4f;

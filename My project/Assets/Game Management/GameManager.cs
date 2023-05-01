@@ -15,9 +15,11 @@ public class GameManager : MonoBehaviour
     [Header("Referencing")]
     public static GameManager instance;
     public Camera mainCamera;
+    public GameObject player;
 
     [Header("Game Events")]
     [SerializeField] private GameEvent initializeScene;
+    [SerializeField] private GameEvent initializePlayer;
     public GameEvent getObjectsFromScene; 
     public AudioSource audioSource;
     public AudioClip audioClip;
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenuUI;
     public GameObject gameOverUI;
     public GameObject loadingScreenUI;
-      public GameObject Cursor;
+      public GameObject cursor;
     public Slider loadingSlider;
     private float sliderTarget;
     public Image loadingScreenImage;
@@ -65,12 +67,18 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
+
+     
     }
 
     private void Start()
     {
-        audioSource.clip = audioClip;       
+        audioSource.clip = audioClip;
+
+
         LoadLevel(SceneManager.GetActiveScene());
+        //initializeScene.Raise();
+        //initializePlayer.Raise();
     }
     private void Update()
     {
@@ -83,11 +91,8 @@ public class GameManager : MonoBehaviour
             Resume();
         }
 
-
-        if (Input.GetKey(KeyCode.L))
-        {
-            PlayerHasDied();
-        }
+        if (Input.GetKeyDown(KeyCode.O))
+            player.GetComponent<PlayerManger>().currentHealth = 0;
     }
     #endregion
 
@@ -103,7 +108,6 @@ public class GameManager : MonoBehaviour
 
     IEnumerator LoadAsycnchronously(string sceneName)
     {
-       
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
 
@@ -131,6 +135,27 @@ public class GameManager : MonoBehaviour
                 operation.allowSceneActivation = true;
             }
         }
+        // Wait until the new scene is fully loaded
+        yield return new WaitForEndOfFrame();
+
+        // Get the objects form the new scene
+        mainCamera = Camera.main;
+
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        if(player != null)
+        {
+            initializeScene?.Raise();
+            SetPlayerPosition(player.transform.position);
+        }
+       
+
+        // Assign the camera to the loading screen canvas
+        Canvas loadingScreenCanvas = loadingScreenUI.GetComponent<Canvas>();
+        loadingScreenCanvas.worldCamera = mainCamera;
+        loadingScreenCanvas.planeDistance = .15f;
+        loadingScreenCanvas.sortingLayerName = "UI";
+        loadingScreenCanvas.sortingOrder = 2;
 
         while (loadingSlider.value != sliderTarget)
         { 
@@ -141,11 +166,12 @@ public class GameManager : MonoBehaviour
         loadingScreenUI.SetActive(false);
 
         scene = SceneManager.GetActiveScene();
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+     
         if (scene.isLoaded && loadingScreenUI.activeSelf == false)
         {
             buildindex = scene.buildIndex;
-            DisplaySceneTransitionUI(scene);
+            if(player != null)
+                DisplaySceneTransitionUI(scene);
         }
     }
 
@@ -160,6 +186,8 @@ public class GameManager : MonoBehaviour
         {
             startingPosition = position;
         }
+
+        player.transform.position = startingPosition;
       
     }
     public void Convert()
@@ -168,13 +196,7 @@ public class GameManager : MonoBehaviour
         Vector3 b = triggeredPoints[triggeredPoints.Count - 1];
         lastReachCheckpoint = b;
         reachedCheckpoint?.Raise();
-
     }
-
-
-
-
-
 
     //Pause and resume Game
     private void Pause()
@@ -182,13 +204,11 @@ public class GameManager : MonoBehaviour
         //Debug.Log("Pause");
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
-        Cursor.SetActive(true);
     }
 
     public void Resume()
     {
        pauseMenuUI.SetActive(false);
-        Cursor.SetActive(false);
         Time.timeScale = 1f;
     }
 
@@ -197,7 +217,8 @@ public class GameManager : MonoBehaviour
     //activate game over Ui --> Listening for playerhasDied GameEvent
     public void PlayerHasDied()
     {
-      gameOverUI.SetActive(true);
+        gameOverUI.SetActive(true);
+       
     }
     
     //If the player dies reload the current scene by calling the event
@@ -216,8 +237,31 @@ public class GameManager : MonoBehaviour
        //}
 
         Application.Quit();
-           
     }
+
+    public void AssignCanvasValues()
+    {
+        // Get the objects form the new scene
+        mainCamera = Camera.main;
+
+
+
+        // Assign the camera to the loading screen canvas
+        Canvas loadingScreenCanvas = loadingScreenUI.GetComponent<Canvas>();
+        loadingScreenCanvas.worldCamera = mainCamera;
+        loadingScreenCanvas.planeDistance = .15f;
+        loadingScreenCanvas.sortingLayerName = "UI";
+        loadingScreenCanvas.sortingOrder = 2;
+
+
+        Canvas pauseMenuCanvas = pauseMenuUI.GetComponent<Canvas>();
+        pauseMenuCanvas.worldCamera = mainCamera;
+        pauseMenuCanvas.planeDistance = .15f;
+        pauseMenuCanvas.sortingLayerName = "UI";
+        pauseMenuCanvas.sortingOrder = 4;
+
+    }
+
 
     public void ClearCheckpoints()
     {
@@ -247,6 +291,7 @@ public class GameManager : MonoBehaviour
         if(sceneTransition == null)
         {
             initializeScene?.Raise();
+            initializePlayer?.Raise();
             return;
         }
         else
@@ -286,9 +331,12 @@ public class GameManager : MonoBehaviour
             //Debug.Log(image.color + " this is the time" + timeElapsed);
             
             timeElapsed += Time.deltaTime;
+            if (timeElapsed > end / 2)
+                initializePlayer?.Raise();
             yield return null;
         }
-        initializeScene?.Raise();
+        sceneTransition.SetActive(false);
+        image.color = startColor;
     }
     #endregion
 }
@@ -312,9 +360,4 @@ public enum SceneData
     #endregion 
 }
 
-public interface ICanvasRenderModeSetter
-{
-    public void SetCanvas(Camera cam, Canvas mycanvas);
-
-}
 

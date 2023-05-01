@@ -17,7 +17,7 @@ public class InteractableObj : MonoBehaviour, IAssignable
     private IndicatorScript indicator;
     public GameObject[] indicators = new GameObject[2];
 
-    public GameObject prompt;
+    public GameObject prompt; // prompt can be a tutorial or a dialouge 
 
     [TextArea]
     public string objective;
@@ -28,13 +28,11 @@ public class InteractableObj : MonoBehaviour, IAssignable
         hasInteractedWith = false;
         player = GameObject.FindGameObjectWithTag("Player");
         indicator = interactableIndicator.GetComponent<IndicatorScript>();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
         interactableIndicator.SetActive(!hasInteractedWith);
         _distanceToPlayer = Mathf.Abs(Vector3.Distance(transform.position, player.transform.position));
         if (_distanceToPlayer < interactRange)
@@ -43,7 +41,6 @@ public class InteractableObj : MonoBehaviour, IAssignable
             indicators[0].SetActive(false);
             indicators[1].SetActive(true);
             indicator.changeScale = false; // stop animation 
-
         }
         else
         {
@@ -58,7 +55,7 @@ public class InteractableObj : MonoBehaviour, IAssignable
             InteractFunction();
         }
 
-        if(hasInteractedWith && prompt.activeInHierarchy == false && calledEvent == false)
+        if(hasInteractedWith && calledEvent == false && prompt != null && prompt.activeInHierarchy == false)
         {
             if (playerEvent != null)
             {
@@ -67,7 +64,17 @@ public class InteractableObj : MonoBehaviour, IAssignable
                 AssignObjective(playerEvent);
             }
             calledEvent = true;
-            this.enabled = false;
+        }
+        else if( hasInteractedWith  && calledEvent == false)
+        {
+
+            if (playerEvent != null)
+            {
+                //Assign the scriptable object event string with the our objective string 
+                playerEvent.text = objective;
+                AssignObjective(playerEvent);
+            }
+            calledEvent = true;
         }
     }
 
@@ -86,9 +93,6 @@ public class InteractableObj : MonoBehaviour, IAssignable
     {
         playerEvent.Raise();
     }
- 
-
-
 }
 
 public interface IAssignable

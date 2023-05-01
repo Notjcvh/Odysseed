@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class SetCanvasRenderer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameManager gameManager;
+    public Camera myCamera;
+    public Canvas canvas;
+    public int order;
 
-    // Update is called once per frame
-    void Update()
+    public virtual void OnEnable()
     {
-        
+        gameManager = GetComponentInParent<GameManager>();
+        canvas = GetComponent<Canvas>();
+        myCamera = Camera.main;
+        canvas.worldCamera = myCamera;
+        canvas.planeDistance = .15f;
+        canvas.sortingLayerName = "UI";
+        canvas.sortingOrder = order;
     }
 }

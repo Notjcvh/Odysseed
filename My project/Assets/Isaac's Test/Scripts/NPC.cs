@@ -23,6 +23,8 @@ public class NPC : MonoBehaviour
     public TextMeshProUGUI myDialouge;
     public TextMeshProUGUI NPCNameTag;
     public GameObject[] indicators = new GameObject[2];
+
+    public NPC_AssignObjective objective;
     private void Awake()
     {
         isTalking = false;
@@ -31,6 +33,10 @@ public class NPC : MonoBehaviour
         hasTalked = false;
         player = GameObject.FindGameObjectWithTag("Player");
         ac = this.GetComponent<AudioController>();
+
+        //Prefab has the objecitve component so it can assign objectives
+        if (this.GetComponent<NPC_AssignObjective>() != null)
+            objective = this.GetComponent<NPC_AssignObjective>();
     }
     void Update()
     {
@@ -84,6 +90,10 @@ public class NPC : MonoBehaviour
         dialogue.SetActive(isTalking);
         dialoguePointer = 0;
         ZeroText();
+
+        //assign objective
+        if (objective != null)
+            objective.GiveObjective();
     }
     public void NextDialogue()
     {

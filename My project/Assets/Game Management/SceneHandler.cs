@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class SceneHandeler : MonoBehaviour
+public class SceneHandler : MonoBehaviour
 {
     [Header("Referencing")]
     [SerializeField] private GameManager gameManager; 
@@ -35,7 +35,7 @@ public class SceneHandeler : MonoBehaviour
         playerInput = player.GetComponent<PlayerInput>();
         playerManger = player.GetComponent<PlayerManger>();
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-        gameManager.SetPlayerPosition(player.transform.position);
+      //  gameManager.SetPlayerPosition(player.transform.position);
         audioController = GetComponent<AudioController>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -51,8 +51,6 @@ public class SceneHandeler : MonoBehaviour
                 StartCoroutine(WaitToPlay(clip.length));
            }
         }
-
-
         if (playerInput.pause)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
@@ -60,7 +58,7 @@ public class SceneHandeler : MonoBehaviour
             switch(sceneStates, gameManager.gamePaused)
             {
                 case (InteractionStates.Active, true):
-                    DeactivatePlayer();
+                     DeactivatePlayer();
                //     Debug.Log("Deactivate Player");
                     break;
                 case (InteractionStates.Active, false):
@@ -69,9 +67,11 @@ public class SceneHandeler : MonoBehaviour
                     break;
             }
         }
-
         if(playerManger.inactiveInputsEnabled == true)
         {
+
+
+
 
         }
 
@@ -89,18 +89,19 @@ public class SceneHandeler : MonoBehaviour
             switch (sceneStates)
             {
                 case InteractionStates.Passive:
+                    ActivatePlayer();
                     playerManger.SetInputsToActive();
                     break;
                 case InteractionStates.Active:
+                    DeactivatePlayer();
                     playerManger.SetInputstToInactive();
                     break;
             }
             sceneStates = newState;
             //On Enter
-          /*  switch (sceneStates)
+            switch (sceneStates)
             {
-                
-            }*/
+            }
         }
     }
 
@@ -120,12 +121,6 @@ public class SceneHandeler : MonoBehaviour
    {
         switch (sceneEvent.name)
         {
-            case ("Audio_RotBoss"):
-                queueAudio = AudioType.RotBoss;
-                break;
-            case ("Audio_PotatoKingBoss"):
-                queueAudio = AudioType.PotatoKingMusic;
-                break;
             case ("Audio_Dungeon1"):
                 queueAudio = AudioType.DungeonOne;
                 break;
@@ -134,6 +129,15 @@ public class SceneHandeler : MonoBehaviour
                 break;
             case ("Audio_PrisonTheme"):
                 queueAudio = AudioType.PrisonTheme;
+                break;
+            case ("Audio_RotBoss"):
+                queueAudio = AudioType.RotBoss;
+                break;
+            case ("Audio_PotatoKingBoss"):
+                queueAudio = AudioType.PotatoKingMusic;
+                break;
+            case ("Audio_CastleTheme"):
+                queueAudio = AudioType.CastleTheme;
                 break;
             default:
                 break;
@@ -183,27 +187,30 @@ public class SceneHandeler : MonoBehaviour
         sceneActivated = true;
         SetState(InteractionStates.Active);
         player = GameObject.FindGameObjectWithTag("Player");
-        //Load the player position
-     
-        
-        spawnPosition = gameManager.startingPosition;
-        player.transform.position = spawnPosition;   // this makes the player restart 
-        
-        
+        playerManger = player.GetComponent<PlayerManger>();
         playerManger.CallPlayerUi();
+    }
+
+    public void InitializePlayer()
+    {
         ActivatePlayer();
     }
 
+
     public void ActivatePlayer()
     {
-        playerManger.activeInputsEnabled = true;
-        playerManger.inactiveInputsEnabled = false;
-        playerManger.StopMovement = false;
-    //    gameManager.Cursor.SetActive(false);
+        if(playerManger!= null)
+        {
+            playerManger.activeInputsEnabled = true;
+            playerManger.inactiveInputsEnabled = false;
+            playerManger.StopMovement = false;
+        }
     }
 
     public void DeactivatePlayer()
     {
+
+
        playerManger.activeInputsEnabled = false;
        playerManger.inactiveInputsEnabled = true;
        playerManger.StopMovement = true;

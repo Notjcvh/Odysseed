@@ -23,6 +23,7 @@ public class PauseMenu : MonoBehaviour
 
     public SceneEvent activatePlayer;
     public SceneEvent deactivatePlayer;
+    public PlayerEvent callObjective;
 
 
     private void OnEnable()
@@ -31,17 +32,22 @@ public class PauseMenu : MonoBehaviour
         canvas = GetComponent<Canvas>();
         myCamera = gameManager.mainCamera;
         canvas.worldCamera = myCamera;
-        canvas.planeDistance = 1f;
+        canvas.planeDistance = .15f;
+        canvas.sortingLayerName = "UI";
+        canvas.sortingOrder = 4;
         menuScreen.SetActive(true);
+        gameManager.cursor.SetActive(true);
     }
     private void OnDisable()
     {
         BackButton();
+        gameManager.cursor.SetActive(false);
     }
 
     void Update()
     {
-        transform.LookAt(gameManager.mainCamera.transform);
+        if(gameManager.mainCamera != null)
+            transform.LookAt(gameManager.mainCamera.transform);
     }
 
 
@@ -129,6 +135,7 @@ public class PauseMenu : MonoBehaviour
     {
         gameManager.gamePaused = false;
         activatePlayer?.Raise();
+        callObjective?.Raise();
     }
 
     public void BackButton()
@@ -140,8 +147,13 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+
+
+
     public void QuitToMenu()
     {
+        BackButton();
+        gameManager.gamePaused = false;
         gameManager.LoadLevel(sceneData.ToString());
     }
 }

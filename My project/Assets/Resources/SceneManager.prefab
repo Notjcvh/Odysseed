@@ -51,10 +51,11 @@ MonoBehaviour:
   player: {fileID: 0}
   playerManger: {fileID: 0}
   audioController: {fileID: 1130789478}
+  sceneStates: 0
   sceneActivated: 0
   spawnPosition: {x: 0, y: 0, z: 0}
   playingAudio: 0
-  queueAudio: 44
+  queueAudio: 86
   clip: {fileID: 0}
   audioJobSent: 0
 --- !u!82 &1130789477
@@ -169,24 +170,26 @@ MonoBehaviour:
   tracks:
   - source: {fileID: 1130789477}
     audio:
-    - type: 43
+    - type: 77
       clip: {fileID: 8300000, guid: f4ccf66197808cd40911257667c88507, type: 3}
-    - type: 44
+    - type: 78
       clip: {fileID: 8300000, guid: 0a75ca26c1932794ba0150103c789084, type: 3}
-    - type: 45
+    - type: 79
       clip: {fileID: 8300000, guid: f7fce712be3e7f144acb1a89a3da92e3, type: 3}
-    - type: 46
+    - type: 80
       clip: {fileID: 8300000, guid: a60eca718868a0c42bb65471424c6c9e, type: 3}
-    - type: 47
+    - type: 81
       clip: {fileID: 8300000, guid: 69afb9099b270174580d083a246d1953, type: 3}
-    - type: 49
+    - type: 83
       clip: {fileID: 8300000, guid: fb3149f7c47e7dd4587b4a98016ce819, type: 3}
-    - type: 48
+    - type: 82
       clip: {fileID: 8300000, guid: 4c78dea108389ef4b9e255eef38111d0, type: 3}
-    - type: 50
+    - type: 84
       clip: {fileID: 8300000, guid: 300161631f8bdae418982882a63c90cd, type: 3}
-    - type: 51
+    - type: 85
       clip: {fileID: 8300000, guid: e8a527407532ca94e9ecc4cc07590ed2, type: 3}
+    - type: 86
+      clip: {fileID: 8300000, guid: e604d1ef968338140a89af654af7ac04, type: 3}
 --- !u!114 &1761687039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,13 +203,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myGameEvent:
+  - Event: {fileID: 11400000, guid: 1349c392e4569024a8f028c83528baa2, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: IntializeScene
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - Event: {fileID: 11400000, guid: 90f72be55dcd8c24f8547dba1e4a1a6a, type: 2}
     Response:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 8036716337707442957}
-          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
-          m_MethodName: IntializeScene
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: InitializePlayer
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -339,6 +358,34 @@ MonoBehaviour:
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 11400000, guid: 9ed7e370f1f909e488a1858b618b44a2, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: StopAudio
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: adcb25345be80ac4c8df7d44076f3b4c, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: adcb25345be80ac4c8df7d44076f3b4c, type: 2}
             m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
             m_IntArgument: 0
             m_FloatArgument: 0
