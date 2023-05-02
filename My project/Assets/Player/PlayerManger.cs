@@ -16,6 +16,7 @@ public class PlayerManger : MonoBehaviour
     private CameraController cam;
     public Animator animator;
     private AudioController audioController;
+    private AudioSource audioSource;
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
     public Rigidbody playerBody;
@@ -63,6 +64,7 @@ public class PlayerManger : MonoBehaviour
     [Header("Dash")]
     public float force;
     private IEnumerator dashCorutine;
+    private bool dashForceApplied; // if we the air we want to set to true to stop the Rigibody from sliding
 
     [Header("Seeds")]
     public Seeds seeds;
@@ -92,6 +94,7 @@ public class PlayerManger : MonoBehaviour
     public float PlayerBlockHealth { get { return _currentBlockStamina; } set { _currentBlockStamina = value; } }
     public Vector3 DirectionInput {get { return playerInput.movementInput; }}
     public Vector3 MovementVector { get { return movementVector; } set { movementVector = value; } }
+    public Rigidbody PlayerBody { get { return playerBody; } set { playerBody = value; } }
     public Quaternion TargetRot { get { return targetRotation; } set { targetRotation = value; } }
     public float TargetSpeed { get { return targetSpeed; } }
     public float JumpForce { get { return jumpForce; } }
@@ -115,6 +118,10 @@ public class PlayerManger : MonoBehaviour
         currentHealth = maxHealth;
         _currentBlockStamina = maxBlockStamina;
         animator.SetInteger("Health", currentHealth);
+        audioSource = GetComponent<AudioSource>();
+
+
+        SetAudio();
     }
     private void Update()
     {
@@ -148,6 +155,7 @@ public class PlayerManger : MonoBehaviour
                 animator.SetBool("isGrounded", IsGrounded());
                 break;
             case SuperStates.Grounded:
+
                 break;
         }
         if (activeInputsEnabled == true)
@@ -202,17 +210,20 @@ public class PlayerManger : MonoBehaviour
             switch (superStates)
             {
                 case SuperStates.Grounded:
+                    playerBody.useGravity = false;
                     break;
                 case SuperStates.Falling:
-                    playerBody.useGravity = true;
-                    if(isDashing == true)
-                    {
+
+                    if (dashForceApplied == true)
+                    { 
+                        Debug.Log("Called");
+                        dashForceApplied = false;
+                        playerBody.useGravity = false;
                         // Stop applying force to the rigidbody
                         playerBody.velocity = Vector3.zero;
-                        isDashing = false;
                         stopMovementEvent = false;
                     }
-                    if(isAttacking == true)
+                    if (isAttacking == true)
                     {
                         animator.SetBool("Attacking", false);
                         StartCoroutine(playerMovement.ApplyGravity());
@@ -230,7 +241,7 @@ public class PlayerManger : MonoBehaviour
             switch (superStates)
             {
                 case SuperStates.Grounded:
-
+                    playerBody.useGravity = true;
                     animator.SetFloat("PlayerYVelocity", 0);
                     animator.SetBool("isGrounded", IsGrounded());
                     animator.SetBool("isFalling", false);
@@ -238,6 +249,7 @@ public class PlayerManger : MonoBehaviour
                 case SuperStates.Falling:
                     animator.SetBool("isFalling", true);
                     animator.SetBool("isRunning", false);
+                    StartCoroutine(playerMovement.ApplyGravity());
                     break;
                 case SuperStates.Rising:
 
@@ -291,6 +303,7 @@ public class PlayerManger : MonoBehaviour
                     break;
                 case SubStates.ChargingAttack:
                     animator.SetBool("Attacking", true);
+                    stopMovementEvent = true;
                     break;
                 case SubStates.RunningJump:
                     animator.SetBool("isJumping", true);
@@ -300,6 +313,7 @@ public class PlayerManger : MonoBehaviour
                     animator.SetBool("isJumping", true);
                     break;
                 case SubStates.Dashing:
+                    MovementVector = Vector3.zero;
                     isDashing = true;
                     animator.SetBool("isDashing", true);
                     break;
@@ -354,6 +368,7 @@ public class PlayerManger : MonoBehaviour
             {
                 SetSubState(SubStates.LaunchChargedAttack);
                 isAttacking = true;
+               
             }
             else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero && playerBody.velocity.y >= 0)
             {
@@ -361,7 +376,7 @@ public class PlayerManger : MonoBehaviour
             }
             else if (playerInput.dash && isDashing == false)
             {
-                Debug.Log("Start Dash");
+            
                 stopMovementEvent = true;
                 playerMovement.CreateDash(SuperStates.Grounded);
                 SetSubState(SubStates.Dashing);
@@ -391,6 +406,7 @@ public class PlayerManger : MonoBehaviour
                 SetSubState(SubStates.Dashing);
             }
 
+
             //Moving and Attacking 
             if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
             {
@@ -400,7 +416,15 @@ public class PlayerManger : MonoBehaviour
                 playerAttack.LaunchAttack(0);
             }
 
-            if(playerInput.block && playerInput.movementInput != Vector3.zero)
+            if (playerInput.chargedSecondaryAttack && playerInput.movementInput != Vector3.zero && !isAttacking)
+            {
+                animator.SetBool("isRunning", false);
+                chargeTime += Time.deltaTime;
+                animator.SetFloat("ChargeTime", chargeTime);
+                SetSubState(SubStates.ChargingAttack);
+            }
+
+            if (playerInput.block && playerInput.movementInput != Vector3.zero)
             {
                 SetSubState(SubStates.Guarding);
             }
@@ -426,8 +450,8 @@ public class PlayerManger : MonoBehaviour
             }*/
             else if (playerInput.dash && isDashing == false)
             {
-                Debug.Log("Start Dash");
                 stopMovementEvent = true;
+                dashForceApplied = true;
                 playerMovement.CreateDash(SuperStates.Falling);
                 SetSubState(SubStates.Dashing);
             }
@@ -438,9 +462,10 @@ public class PlayerManger : MonoBehaviour
 
             if (playerInput.movementInput != Vector3.zero && playerInput.dash && isDashing == false)
             {
-                Debug.Log("Start Dash");
+                movementVector = Vector3.zero;
                 stopMovementEvent = true;
-                playerMovement.CreateDash(SuperStates.Grounded);
+                dashForceApplied = true;
+                playerMovement.CreateDash(SuperStates.Falling);
                 SetSubState(SubStates.Dashing);
             }
 
@@ -472,8 +497,8 @@ public class PlayerManger : MonoBehaviour
            
             else if (playerInput.dash && isDashing == false)
             {
-                Debug.Log("Start Dash");
                 stopMovementEvent = true;
+                dashForceApplied = true;
                 playerMovement.CreateDash(SuperStates.Rising);
                 SetSubState(SubStates.Dashing);
             }
@@ -484,8 +509,11 @@ public class PlayerManger : MonoBehaviour
             //Moving and Dashing 
             if (playerInput.movementInput != Vector3.zero && playerInput.dash && isDashing == false)
             {
+                // Set movement input to zero before dashing
+                movementVector = Vector3.zero;
+                dashForceApplied = true;
                 stopMovementEvent = true;
-                playerMovement.CreateDash(SuperStates.Grounded);
+                playerMovement.CreateDash(SuperStates.Rising);
                 SetSubState(SubStates.Dashing);
             }
 
@@ -595,6 +623,7 @@ public class PlayerManger : MonoBehaviour
     public void DashAnimationEnded()
     {
         animator.SetBool("isDashing", false);
+        isDashing = false;
     }
 
     public void CanRotate()
@@ -606,7 +635,6 @@ public class PlayerManger : MonoBehaviour
     public void EndWindUp()
     {
         animator.SetBool("Attacking", false);
-        Debug.Log("Called");
     }
 
     #endregion
@@ -654,6 +682,25 @@ public class PlayerManger : MonoBehaviour
 
 
     #region Sound looping
+
+    public void SetAudio()
+    {
+        if (ourAudio.Count < 1)
+        {
+            // Loop through each audio track
+            foreach (AudioController.AudioTrack track in audioController.tracks)
+            {
+                // Access the audio objects in each track
+                audioObjects.AddRange(track.audio);
+                // Loop through each audio object in the track
+                foreach (AudioController.AudioObject audioObject in audioObjects)
+                {
+                    // this should add all our audio to the dictionary
+                    ourAudio.Add(audioObject.type, audioObject.clip);
+                }
+            }
+        }
+    }
 
     public void SelectAudio(string type)
     {
@@ -731,19 +778,18 @@ public class PlayerManger : MonoBehaviour
         }
         else if (type == "ChargedAttack")
         {
-            AudioType sendingAudio = AudioType.PlayerChargedAttack1;
-            /*
             AudioType sendingAudio = AudioType.None;
-            int numberOfRandomNumbers = 1; // Number of random numbers to generate
+            int numberOfRandomNumbers = 2; // Number of random numbers to generate
             int minRange = 1; // Minimum value for random numbers
-            int maxRange = 5;
+            int maxRange = 2;
             int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
             for (int i = 0; i < numberOfRandomNumbers; i++)
             {
                 switch (randomNumber)
                 {
                     case (1):
-
+                        Debug.Log("Called");
+                        sendingAudio = AudioType.PlayerChargedAttack1;
                         break;
                     case (2):
                         sendingAudio = AudioType.PlayerChargedAttack2;
@@ -751,9 +797,8 @@ public class PlayerManger : MonoBehaviour
                     default:
                         break;
                 }
-            }*/
+            }
             ManageAudio(sendingAudio);
-
         }
         else if (type == "Damaged")
         {
@@ -791,35 +836,22 @@ public class PlayerManger : MonoBehaviour
     }
     public void ManageAudio(AudioType type)
     {
-        if (ourAudio.Count < 1)
+        if (ourAudio.Count > 0 && ourAudio.ContainsKey(type) && audioController != null)
         {
-            // Loop through each audio track
-            foreach (AudioController.AudioTrack track in audioController.tracks)
+            if (type != playingAudio && audioSource.isPlaying)
             {
-                // Access the audio objects in each track
-                audioObjects.AddRange(track.audio);
-                // Loop through each audio object in the track
-                foreach (AudioController.AudioObject audioObject in audioObjects)
-                {
-                    // this should add all our audio to the dictionary
-                    ourAudio.Add(audioObject.type, audioObject.clip);
-                }
+                audioController.StopAudio(playingAudio, false, 0, false);
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
+            }
+            else
+            {
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
             }
         }
-        if (ourAudio.ContainsKey(type))
-        {
-            clip = ourAudio[type];
-        }
-        if (type != playingAudio)
-        {
-            audioController.PlayAudio(type, false, 0, false);
-            playingAudio = type;
-        }
-        else
-        {
-            audioController.PlayAudio(playingAudio, false, 0, false);
-        }
     }
+
     IEnumerator WaitToPlay(float time)
     {
         yield return new WaitForSecondsRealtime(time);

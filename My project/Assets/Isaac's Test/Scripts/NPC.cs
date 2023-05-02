@@ -24,7 +24,16 @@ public class NPC : MonoBehaviour
     public TextMeshProUGUI NPCNameTag;
     public GameObject[] indicators = new GameObject[2];
 
-    public NPC_AssignObjective objective;
+    [Header("Audio")]
+    private AudioSource audioSource;
+    public AudioClip startAudioClip;
+    public AudioClip endAudioClip;
+    
+    [Header("Additional Actions")]
+    public NPC_AdditionalActions actions;
+    public PlayerEventsWithData playerEvent; //if the NPC has an objective
+
+   
     private void Awake()
     {
         isTalking = false;
@@ -33,14 +42,15 @@ public class NPC : MonoBehaviour
         hasTalked = false;
         player = GameObject.FindGameObjectWithTag("Player");
         ac = this.GetComponent<AudioController>();
+        audioSource = GetComponent<AudioSource>();
 
         //Prefab has the objecitve component so it can assign objectives
-        if (this.GetComponent<NPC_AssignObjective>() != null)
-            objective = this.GetComponent<NPC_AssignObjective>();
+        if (this.GetComponent<NPC_AdditionalActions>() != null)
+            actions = this.GetComponent<NPC_AdditionalActions>();
     }
     void Update()
     {
-        talkingIndicator.SetActive(!hasTalked);
+       
         distanceToPlayer = Mathf.Abs(Vector3.Distance(transform.position, player.transform.position));
         if(distanceToPlayer < talkRange)
         {
@@ -59,6 +69,10 @@ public class NPC : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.E) && playerInTalkRange && !isTalking)
         {
+            // talk at the start of a dialouge 
+            if (actions != null && actions.willSpeak == true)
+                actions.Talk(audioSource, startAudioClip);
+
              StartDialouge();
         }
         if(isTalking && Input.GetKeyDown(KeyCode.E) && playerInTalkRange)
@@ -85,15 +99,22 @@ public class NPC : MonoBehaviour
     }
     public void EndDialouge()
     {
+        // Talk at the end of the dialouge 
+
+
+
+
+        //assign objective
+        if (actions != null && playerEvent != null && hasTalked == false)
+            actions.AssignObjective(playerEvent);
+
         isTalking = false;
         hasTalked = true;
         dialogue.SetActive(isTalking);
         dialoguePointer = 0;
         ZeroText();
 
-        //assign objective
-        if (objective != null)
-            objective.GiveObjective();
+      
     }
     public void NextDialogue()
     {

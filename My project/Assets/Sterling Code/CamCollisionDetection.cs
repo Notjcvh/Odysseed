@@ -231,7 +231,7 @@ public class CamCollisionDetection : MonoBehaviour
         if (differenceInTheY < 1)
         {
             camControl.minVerticalAngle = degree ;
-            print("Distance to ground :" + differenceInTheY + "degree : " + degree  + "cam control : " + camControl.minVerticalAngle); 
+            //print("Distance to ground :" + differenceInTheY + "degree : " + degree  + "cam control : " + camControl.minVerticalAngle); 
         }
     }
 

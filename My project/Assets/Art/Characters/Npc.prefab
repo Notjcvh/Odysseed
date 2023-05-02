@@ -74,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: NPCName
-      value: Top G
+      value: Adra
       objectReference: {fileID: 0}
     - target: {fileID: 8393438911682264585, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
       propertyPath: dialogue
@@ -184,6 +184,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8393438911682264589, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
   m_PrefabInstance: {fileID: 355717513777504463}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8112318878334639815 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8393438911682264584, guid: 29ac5c411596e904ba1d40abcc9d1890, type: 3}
+  m_PrefabInstance: {fileID: 355717513777504463}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &70310130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112318878334639815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82675c3947e9e3b44aba18c694528069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerEvent: {fileID: 11400000, guid: f80420df69613f14f93a270e2039a0a2, type: 2}
+  objective: Talk to Grape People
 --- !u!1001 &355717513886892960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -427,6 +446,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3234205452166716430, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3817333829736736554, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4557555287972316452, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
@@ -503,7 +526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412856236041008205, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.01
+      value: 2.76
       objectReference: {fileID: 0}
     - target: {fileID: 5412856236041008205, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -516,6 +539,10 @@ PrefabInstance:
     - target: {fileID: 5412856236041008205, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868592087419020694, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb0c1c1ea71ef37429383944f0b408a1, type: 3}

@@ -28,6 +28,7 @@ public class TutorialPopUp : MonoBehaviour
         foreach (Transform item in childTransforms)
         {
             item.GetComponent<Tutorial>().Set();
+
             item.gameObject.SetActive(false);
         }
     }
@@ -38,6 +39,7 @@ public class TutorialPopUp : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             activated = true;
+            other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             sceneHandler.SetState(InteractionStates.Passive);
            // sceneHandler.DeactivatePlayer();
         }

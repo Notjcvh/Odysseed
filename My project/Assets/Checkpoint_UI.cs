@@ -29,7 +29,6 @@ public class Checkpoint_UI : MonoBehaviour
 
     private void OnLoopPointReached(VideoPlayer player)
     {
-        Debug.Log("Loop point reached");
         this.gameObject.SetActive(false);
     }
 }
