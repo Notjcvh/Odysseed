@@ -23,6 +23,7 @@ public class carrotKhan : MonoBehaviour
     public LayerMask whatIsPlayer;
     [Header("LazerBeam")]
     private LazerBeam lb;
+    public ParticleSystem ps;
     [Header("Phase 2")]
     public bool hasExploded = false;
     private Animator animator;
@@ -131,7 +132,7 @@ public class carrotKhan : MonoBehaviour
             }
         }
         Vector3 newTarget = player.transform.position;
-        newTarget.y = 0;
+        newTarget.y = transform.position.y;
         transform.LookAt(newTarget);
     }
     //Phase 1

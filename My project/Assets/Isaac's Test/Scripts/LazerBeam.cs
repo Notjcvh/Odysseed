@@ -27,6 +27,8 @@ public class LazerBeam : MonoBehaviour
                 if (lineRenderer.enabled)
                 {
                     lineRenderer.enabled = false;
+                    target.SetActive(false);
+                    lazerEffect.SetActive(false);
                 }
             }
             return;
@@ -41,6 +43,8 @@ public class LazerBeam : MonoBehaviour
         else
         {
             lineRenderer.enabled = false;
+            target.SetActive(false);
+            lazerEffect.SetActive(false);
         }
     }
     void Laser()
@@ -48,6 +52,8 @@ public class LazerBeam : MonoBehaviour
         if (!lineRenderer.enabled)
         {
             lineRenderer.enabled = true;
+            target.SetActive(true);
+            lazerEffect.SetActive(true);
         }
         lineRenderer.SetPosition(0, lazerStart.transform.position);
         lineRenderer.SetPosition(1, target.transform.position);
