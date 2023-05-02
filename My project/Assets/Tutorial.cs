@@ -10,6 +10,7 @@ public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Camera cam;
     private Canvas _canvas;
     public TutorialPopUp promptHolder;
+    public GameObject myImage;
     public Button forwardButton;
     public Button backButton;
     public int index;
@@ -21,6 +22,7 @@ public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         cam = Camera.main;
         _canvas.worldCamera = cam;
         _canvas.planeDistance = 1f;
+
 
 
         //Gets the position within the parent array 

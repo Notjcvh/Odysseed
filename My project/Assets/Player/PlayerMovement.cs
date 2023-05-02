@@ -11,43 +11,47 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerManger playerManger;
     private Animator animator;
-    public SphereCollider collider;
-    [SerializeField] private Rigidbody playerBody;
+    private Rigidbody playerBody;
 
+    [Header("Collision")]
+    public float offset = 0.1f;
     public LayerMask CollidableLayers;
 
-    private Vector3 movementVector;
-    public float force;
-    public Keyframe[] keys;
-    public AnimationCurve curveToEvaluate;
-    public Keyframe lastKey;
-    public  float end = 0;
 
+    [Header("Dash Force")]
+    private Keyframe lastKey;
+    private float end = 0;
+    private Keyframe[] keys;
+    private AnimationCurve curveToEvaluate;
+    public float dashForce;
     public AnimationCurve groundedDashValueCurve;
     public AnimationCurve inAirDashValueCurve;
 
-
-    [Header("Targeting")]
-    public bool targetingEnemy;
-    public Transform target;
-    public float range;
-
-    [Header("Seeds")]
-    public int seedId;
-
+    [Header("Player Applied Gravity")]
     private float gravity;
     public AnimationCurve fallingAttackGravity;
+    public AnimationCurve dashingGravityCurve;
     public AnimationCurve jumpGravity;
     public float gravityMultiplier = 0;
     private IEnumerator gravityCorutine;
+
+
+    //Unused stuff
+    //[Header("Targeting")]
+    //public bool targetingEnemy;
+    //public Transform target;
+    //public float range;
+    //[Header("Seeds")]
+    //public int seedId;
+
     private void Awake()
     {
         cam = GetComponent<CameraController>();
         playerInput = GetComponent<PlayerInput>();
-        playerBody = GetComponentInChildren<Rigidbody>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponent<PlayerManger>().animator;
-        collider = GetComponent<SphereCollider>();
+
+        playerBody = playerManger.PlayerBody;
 
      /*   Keyframe[] keys = gravityValueCurve.keys;
         Keyframe lastKey = keys[keys.Length - 1];
@@ -61,17 +65,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //Enemy Targetting 
-        if (playerInput.target)
-            UpdateTarget();
-        if (targetingEnemy)
-            this.gameObject.transform.LookAt(target);
+        ////Enemy Targetting 
+        //if (playerInput.target)
+        //    UpdateTarget();
+        //if (targetingEnemy)
+        //    this.gameObject.transform.LookAt(target);
     }
 
     private void FixedUpdate()
     {
-        
-
         if (playerManger.subStates == SubStates.Moving)
         {
             CanMove();
@@ -92,11 +94,10 @@ public class PlayerMovement : MonoBehaviour
 
         // Cast a ray in front of the player to check for collisions
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, playerManger.MovementVector, out hit, speed * Time.fixedDeltaTime, CollidableLayers))
+        if (Physics.Raycast(transform.position + (playerManger.MovementVector.normalized * offset), playerManger.MovementVector, out hit, speed * Time.fixedDeltaTime, CollidableLayers))
         {
-            // If the ray hits something, move the player up to the point of collision
-            playerBody.MovePosition(hit.point);
-            Debug.Log("Hit Something");
+            // If the ray hits something, move the player up to the point of collision with the offset added
+            playerBody.MovePosition(hit.point - (playerManger.MovementVector.normalized * offset));
         }
         else
         {
@@ -111,26 +112,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
-
-
-    #region Rotate
-
-
-    #endregion
-
-
     #region Apply Gravity 
     public IEnumerator ApplyGravity()
     {
         float timeElapsed = 0;
         while (playerManger.IsGrounded() == false)
         {
-            if (playerManger.subStates != SubStates.Attacking)
+            if (playerManger.subStates != SubStates.Attacking && playerManger.subStates != SubStates.Dashing)
             {
                 gravityMultiplier = jumpGravity.Evaluate(timeElapsed);
             }
-            else
+            else if(playerManger.subStates == SubStates.Dashing)
             {
+                gravityMultiplier = dashingGravityCurve.Evaluate(timeElapsed);
+            }
+            else if(playerManger.subStates == SubStates.Attacking)
+            {
+                Debug.Log("Called");
                 gravityMultiplier = fallingAttackGravity.Evaluate(timeElapsed);
             }
             playerBody.AddForce(Vector3.down * Time.deltaTime * gravityMultiplier, ForceMode.VelocityChange);
@@ -140,19 +138,16 @@ public class PlayerMovement : MonoBehaviour
         gravityMultiplier = 0;
     }
     #endregion
-
     #region Jump
     public void InitateJump()
     {
         playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
     }
- 
     #endregion
-
     #region Dashing'
     public void CreateDash(SuperStates currentState)
     {
-        if (currentState== SuperStates.Grounded)
+        if (currentState == SuperStates.Grounded)
         {
             Debug.Log("ground Dash");
             keys = groundedDashValueCurve.keys;
@@ -167,37 +162,28 @@ public class PlayerMovement : MonoBehaviour
             curveToEvaluate = inAirDashValueCurve;
             lastKey = keys[keys.Length - 1];
             end = lastKey.time;
+            StopCoroutine(ApplyGravity());
         }
         StartCoroutine(Dash());
     }
     public IEnumerator Dash()
     {
        float timeElapsed = 0;
-       // bool hasinitalDir = false;
        while (timeElapsed < end)
        {
             Vector3 dir = transform.rotation * Vector3.forward;
-          /*if (playerManger.DirectionInput == Vector3.zero)
-            {
-                
-            }
-            else
-            {
-                dir = playerManger.DirectionInput.normalized;
-            }*/
-            force = curveToEvaluate.Evaluate(timeElapsed);
-            playerBody.AddForce(dir * force * Time.deltaTime, ForceMode.VelocityChange);
+            dashForce = curveToEvaluate.Evaluate(timeElapsed);
+            playerBody.AddForce(dir * dashForce * Time.deltaTime, ForceMode.VelocityChange);
             playerBody.AddForce(playerBody.velocity * -10f * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
        }
-        force = 0;
+        dashForce = 0;
         end = 0;
         curveToEvaluate = null;
 
         if (playerManger.superStates == SuperStates.Grounded)
         {
-           
             // Stop applying force to the rigidbody
             playerBody.velocity = Vector3.zero;
             playerManger.IsDashing = false;
@@ -210,91 +196,37 @@ public class PlayerMovement : MonoBehaviour
        // animator.SetBool("isDashing", false);
     }
     #endregion
-
-    #region Player Targeting 
-    void UpdateTarget()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        float shortestDistance = Mathf.Infinity;
-        GameObject nearestEnemy = null;
-        Vector3 screenCenter = new Vector3(Screen.width, Screen.height, 0) / 2;
-        foreach (GameObject enemy in enemies)
-        {
-            Vector3 TargetScreenPoint = Camera.main.WorldToScreenPoint(enemy.transform.position);
+    //#region Player Targeting 
+    //void UpdateTarget()
+    //{
+    //    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //    float shortestDistance = Mathf.Infinity;
+    //    GameObject nearestEnemy = null;
+    //    Vector3 screenCenter = new Vector3(Screen.width, Screen.height, 0) / 2;
+    //    foreach (GameObject enemy in enemies)
+    //    {
+    //        Vector3 TargetScreenPoint = Camera.main.WorldToScreenPoint(enemy.transform.position);
             
-            float distance = Vector2.Distance(TargetScreenPoint, screenCenter);
+    //        float distance = Vector2.Distance(TargetScreenPoint, screenCenter);
 
-            if (distance < shortestDistance)
-            {
-                shortestDistance = distance;
-                nearestEnemy = enemy;
-            }
-        }
+    //        if (distance < shortestDistance)
+    //        {
+    //            shortestDistance = distance;
+    //            nearestEnemy = enemy;
+    //        }
+    //    }
 
-        if (nearestEnemy != null && shortestDistance <= range)
-        {
-            target = nearestEnemy.transform;
-            nearestEnemy.GetComponent<Enemy>().isTargeted = true;
-        }
+    //    if (nearestEnemy != null && shortestDistance <= range)
+    //    {
+    //        target = nearestEnemy.transform;
+    //        nearestEnemy.GetComponent<Enemy>().isTargeted = true;
+    //    }
 
-    }
-    #endregion
-
-
-
-
-  
+    //}
+    //#endregion
 
 
 
-
-
-
-
-    #region Sound looping
-    public void SelectAudio(int type)
-    {
-        if (type == 0)
-        {
-            AudioType sendingAudio = AudioType.None;
-            int numberOfRandomNumbers = 5; // Number of random numbers to generate
-            int minRange = 1; // Minimum value for random numbers
-            int maxRange = 5;
-            for (int i = 0; i < numberOfRandomNumbers; i++)
-            {
-                int randomNumber = Random.Range(minRange, maxRange + 1); // Generate a random number within the specified range
-                Debug.Log("Random Number " + (i + 1) + ": " + randomNumber); // Print the generated random number
-
-                switch (randomNumber)
-                {
-                    case (1):
-                        sendingAudio = AudioType.PlayerWalk1;
-                        break;
-                    case (2):
-                        sendingAudio = AudioType.PlayerWalk2;
-                        break;
-                    case (3):
-                        sendingAudio = AudioType.PlayerWalk3;
-                        break;
-                    case (4):
-                        sendingAudio = AudioType.PlayerWalk4;
-                        break;
-                    case (5):
-                        sendingAudio = AudioType.PlayerWalk5;
-                        break;
-                  default:
-                        break;
-                }
-            }
-            playerManger.ManageAudio(sendingAudio);
-        }
-        else
-        {
-            return;
-        }
-    }
-
-    #endregion
 
 
 }

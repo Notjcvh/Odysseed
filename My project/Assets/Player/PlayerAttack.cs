@@ -289,11 +289,14 @@ public class PlayerAttack : MonoBehaviour
             if(playerManger.superStates == SuperStates.Rising || playerManger.superStates == SuperStates.Falling)
             {
                 playerManger.playerBody.velocity = Vector3.zero;
+                playerManger.playerBody.useGravity = false;
+
+                Debug.Log(playerManger.subStates);
+                //Apply Gravity
+                StartCoroutine(playerMovement.ApplyGravity());
             }
             
-            playerManger.playerBody.useGravity = false;
-            //Apply Aggrasive Gravity
-            StartCoroutine(playerMovement.ApplyGravity());
+      
         }
         else if (inputTpye == 1) //Heavy Air Attack
         {

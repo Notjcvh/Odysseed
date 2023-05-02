@@ -12,11 +12,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Camera cam = null;
     public Transform followObj = null;
     private PlayerInput playerInput;
-    private PlayerMovement playerMovement;
     private CamCollisionDetection camCollision;
 
     [Header("Mouse Sensitivity")]
-    [Range(20, 90)] public float mouseSensitivityX;
+    [Range(20, 150)] public float mouseSensitivityX;
     [Range(20, 90)] public float mouseSensitivityY;
 
     [Header("Vertical Rotation Range")]
@@ -54,7 +53,6 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        playerMovement = GetComponent<PlayerMovement>();
         cam = Camera.main;
         Obstruction = followObj.transform; // default starting point 
         plannerDirection = followObj.forward;  //Important

@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
     {
         gameManager = GetComponentInParent<GameManager>();
         canvas = GetComponent<Canvas>();
-        myCamera = gameManager.mainCamera;
+        myCamera = Camera.main;
         canvas.worldCamera = myCamera;
         canvas.planeDistance = .15f;
         canvas.sortingLayerName = "UI";

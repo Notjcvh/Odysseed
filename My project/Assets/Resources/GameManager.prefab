@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 229583814}
   - component: {fileID: 229583813}
   m_Layer: 5
-  m_Name: Vineyard (1)
+  m_Name: Vineyard 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,21 +89,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6365accbb49b1a140815c27cbaec3f6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myData: 0
+  myData: 4
   myCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 5
       value: 1
       inSlope: 0
       outSlope: 0
@@ -390,7 +390,25 @@ MonoBehaviour:
   myData: 9
   myCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -487,7 +505,25 @@ MonoBehaviour:
   myData: 6
   myCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -855,10 +891,10 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 5
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -956,19 +992,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6365accbb49b1a140815c27cbaec3f6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myData: 10
+  myData: 7
   myCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.39407864
-      outSlope: 0.39407864
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.064417176
+      outWeight: 0
     - serializedVersion: 3
       time: 5
       value: 1
@@ -1016,7 +1052,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1094,7 +1130,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 14, y: -422}
+  m_AnchoredPosition: {x: 0, y: -422}
   m_SizeDelta: {x: 1440, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5525748768876822943
@@ -1279,7 +1315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6061768112894880683
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1655,7 +1691,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 255
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1663,13 +1699,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 4.0078125
-      value: 1.2146912
-      inSlope: -227.09271
-      outSlope: -227.09271
+      time: 5
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.05378417
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1958,35 +1994,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5525748768949818202, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748768949818202, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748768949818202, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 311.2042
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748768949818202, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -389.73114
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748769180658831, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748769180658831, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748769180658831, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 311.2042
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5525748769180658831, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -188.76038
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b47e567d91903c04cbcf606f0ef7dd90, type: 3}
