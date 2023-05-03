@@ -93,7 +93,10 @@ public class Enemy : MonoBehaviour
                 bossEvents.Call();
             }
 
-            Destroy(this.gameObject, audioSource.clip.length);
+            if (audioSource.clip != null)
+                Destroy(this.gameObject, audioSource.clip.length);
+            else
+                Destroy(this.gameObject);
         }
 
 

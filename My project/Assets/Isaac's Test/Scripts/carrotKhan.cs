@@ -246,7 +246,6 @@ public class carrotKhan : MonoBehaviour
     #region SlamAttack
     public void SlamAttack()
     {
-        Debug.Log("Im slamming");
         animator.SetBool("isSlamming", true);
         isAttacking = true;
     }
@@ -313,6 +312,12 @@ public class carrotKhan : MonoBehaviour
         animator.SetBool("isDying", true);
         isAttacking = true;
     }
+
+    public void Death2()
+    {
+        Destroy(this.gameObject);
+    }
+
     public void Idles()
     {
         animator.SetBool("isIdling", true);
@@ -339,11 +344,13 @@ public class carrotKhan : MonoBehaviour
     {
         animator.SetBool("isIdling", false);
         isAttacking = false;
+        attackCounter = 1;
     }
     public void Idle2()
     {
         animator.SetBool("isIdling2", true);
         isAttacking = true;
+        attackCounter = 1;
     }
     public void endIdle2()
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WavePhysics : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class WavePhysics : MonoBehaviour
             case ("Enemy"):
                 obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
                 AddKnockback(obj.rigidbody);
+                StartCoroutine(DisablingAI(obj.gameObject.GetComponent<NavMeshAgent>()));
                 break;
             case ("Boss"):
                 obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
@@ -37,14 +39,23 @@ public class WavePhysics : MonoBehaviour
             default:
                 break;
         }
+        IEnumerator DisablingAI(NavMeshAgent nav)
+        {
+            nav.enabled = false;
+            yield return new WaitForSeconds(lifetime);
+            nav.enabled = true;
+        }
     }
     private void AddKnockback(Rigidbody body)
     {
         //Dot product
         Vector3 targetDirection = (body.position - this.transform.position).normalized;
         // float dotProduct = Vector3.Dot(targetDirection, origin.position);
-
+        
         targetDirection.y = 0;
         body.AddForce(targetDirection * strength, ForceMode.Impulse);
+        
     }
+
+    
 }

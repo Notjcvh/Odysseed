@@ -565,6 +565,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b599b78fc62f8043b2aec87a5ba925e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &198886598 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8009384258587862311, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
+  m_PrefabInstance: {fileID: 198886594}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b599b78fc62f8043b2aec87a5ba925e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &445849697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1017,6 +1028,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 489488987, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1104457263556555155, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2004397425068917748, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: abilityCooldown
+      value: 
+      objectReference: {fileID: 198886597}
+    - target: {fileID: 2004397425068917751, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: cooldownTime
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2004397425068917751, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: abilityCooldown
+      value: 
+      objectReference: {fileID: 198886596}
+    - target: {fileID: 2004397425068917753, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: abilityCooldown
+      value: 
+      objectReference: {fileID: 198886598}
+    - target: {fileID: 2004397425068917755, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114552, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_Name
       value: Merlot(Final)_Sterling

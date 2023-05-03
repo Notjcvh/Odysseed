@@ -60,9 +60,10 @@ public class LazerBeam : MonoBehaviour
         Vector3 dir = this.transform.position - target.transform.position;
     }
     void LockOnTarget()
-        {
-            Vector3 dir = target.transform.position - transform.position;
-            Quaternion lookRotation = Quaternion.LookRotation(dir);
-        }
+    {
+        Vector3 dir = target.transform.position - transform.position;
+        Quaternion lookRotation = Quaternion.LookRotation(dir);
+        lazerEffect.transform.LookAt(target.transform.position - transform.position);
+    }
     }
     

@@ -46,10 +46,11 @@ public class SunBeam : Abilites
 
     void UpdateTarget()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
         float shortestDistance = Mathf.Infinity;
-        GameObject nearestEnemy = null;
-        foreach (GameObject enemy in enemies)
+        Enemy nearestEnemy = null;
+        foreach (Enemy enemy in enemies)
         {
             float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
             if (distanceToEnemy < shortestDistance)
@@ -58,16 +59,17 @@ public class SunBeam : Abilites
                 nearestEnemy = enemy;
             }
         }
-        if (nearestEnemy != null && shortestDistance <= range && useLaser)
+        if (nearestEnemy != null && shortestDistance <= range && useLaser && nearestEnemy.currentHealth > 0)
         {
             target = nearestEnemy.transform;
-            nearestEnemy.GetComponent<Enemy>().currentHealth -= damageOverTime;
+            nearestEnemy.GetComponent<Enemy>().TakeDamage(damageOverTime);
             player.transform.LookAt(nearestEnemy.transform);
         }
         else
         {
             target = null;
         }
+        
     }
     private IEnumerator EndSunBeam(float waitTime)
     {
