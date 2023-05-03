@@ -37,7 +37,7 @@ public class PotatoKing : MonoBehaviour
     public GameObject EnemyDirtSpawner;
     public float EnemyDirtSpawnSpeed;
     public int enemyMax;
-    public GameObject[] enemies;
+    public List<GameObject> enemies = new List<GameObject>();
 
     [Header("Audio Caller")]
     public AudioSource audioSource;
@@ -87,7 +87,6 @@ public class PotatoKing : MonoBehaviour
                     break;
             }
         }
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
     }
 
     public void ShootPea()
@@ -141,7 +140,7 @@ public class PotatoKing : MonoBehaviour
     }
     public void SummonEnemy()
     {
-        if(enemies.Length < enemyMax)
+        if(enemies.Count < enemyMax)
         {
             GameObject Seed = Instantiate(EnemyDirtSpawner, spawner.position, transform.rotation);
             Rigidbody rb = Seed.GetComponent<Rigidbody>();

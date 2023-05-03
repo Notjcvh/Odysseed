@@ -78,7 +78,7 @@ public class CarrotGrunt : MonoBehaviour
         isAttacking = true;
         nav.SetDestination(this.transform.position);
         Vector3 newTarget = player.transform.position;
-        newTarget.y = 0;
+        newTarget.y = transform.position.y;
         transform.LookAt(newTarget);
         animator.SetBool("isAttacking", true);
     }
