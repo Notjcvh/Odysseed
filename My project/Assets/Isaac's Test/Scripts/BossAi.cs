@@ -42,6 +42,8 @@ public class BossAi : MonoBehaviour
     public float distanceFromPlayer;
     private Animator animator;
     private NavMeshAgent navMeshAge;
+    public GameObject walkingAttackHitbox;
+    public GameObject walkingAttackHitbox1;
 
     [Header("Audio Caller")]
     public AudioSource audioSource;
@@ -151,7 +153,6 @@ public class BossAi : MonoBehaviour
         GameObject effectIns = (GameObject)Instantiate(explosion, attackHitbox.transform.position, attackHitbox.transform.rotation);
         Destroy(effectIns, 2f);
     }
-
     public void ReEnableMovement()
     {        
         tempAttackMoveSpeed = movementSpeed;
@@ -169,7 +170,27 @@ public class BossAi : MonoBehaviour
         isTossing = false;
     }
 
+    public void WalkingAttack()
+    {
+        walkingAttackHitbox.SetActive(true);
+        GameObject effectIns = (GameObject)Instantiate(explosion, walkingAttackHitbox.transform.position, walkingAttackHitbox.transform.rotation);
+        Destroy(effectIns, 2f);
+    }
+    public void DeWalkingAttack()
+    {
+        walkingAttackHitbox.SetActive(false);
+    }
 
+    public void WalkingAttack1()
+    {
+        walkingAttackHitbox1.SetActive(true);
+        GameObject effectIns = (GameObject)Instantiate(explosion, walkingAttackHitbox1.transform.position, walkingAttackHitbox1.transform.rotation);
+        Destroy(effectIns, 2f);
+    }
+    public void DeWalkingAttack1()
+    {
+        walkingAttackHitbox1.SetActive(false);
+    }
 
     #region Sound Caller
     private void SetAudio()
