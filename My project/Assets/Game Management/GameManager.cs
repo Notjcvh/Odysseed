@@ -45,6 +45,9 @@ public class GameManager : MonoBehaviour
     public Image loadingScreenImage;
     public Sprite[] loadingScreenSprites;
 
+    //boss health
+    public GameObject bossHealth;
+
     public string currentScene;
     public Vector3 startingPosition;
     public Vector3 lastReachCheckpoint;
@@ -224,6 +227,13 @@ public class GameManager : MonoBehaviour
     //activate game over Ui --> Listening for playerhasDied GameEvent
     public void PlayerHasDied()
     {
+
+        bossHealth = GameObject.FindGameObjectWithTag("BossHealth");
+        if(bossHealth != null)
+        {
+            bossHealth.SetActive(false);
+        }
+
         gameOverUI.SetActive(true);
        
     }

@@ -37,6 +37,7 @@ public class AbilityHandler : MonoBehaviour
         abilityList.Add(abilitesToAdd[index]);
         if (abilityList.Count >= 1)
         {
+            Debug.Log(abilityList[0].abilityCooldown);
             abilityList[0].abilityCooldown.isActive = true;
         }
         if (abilityList.Count >= 2)

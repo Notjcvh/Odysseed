@@ -35,6 +35,7 @@ public class EnemyHealthbar : MonoBehaviour
             elapsed += Time.deltaTime;
             foregroundImage.fillAmount = Mathf.Lerp(percentChange, percent, elapsed / updateSpeedInSeconds1);
             middlegroundImage.fillAmount = Mathf.Lerp(percentChange2, percent, elapsed / updateSpeedInSeconds2);
+           
             yield return null;
         }
        foregroundImage.fillAmount = percent;

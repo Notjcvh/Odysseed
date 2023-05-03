@@ -53,7 +53,8 @@ public class HitCollider : MonoBehaviour
         for (int i = 0; i < hittableObjects.Count; i++)
         {
            // Debug.Log("Object " + (i + 1) + ": " + hittableObjects[i].gameObject.name);
-            HitSomething(hittableObjects[i]);
+           if(hittableObjects[i] != null)
+              HitSomething(hittableObjects[i]);
         }
     }
 

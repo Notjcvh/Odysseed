@@ -65,20 +65,20 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.B))
+       /* if(Input.GetKeyDown(KeyCode.B))
         {
             if(coroutineRunning == true)
             {
                 StopCoroutine(SetObjective());
             }
             StartCoroutine(SetObjective());
-        }
+        }*/
 
-      /*  if (playerManger.blocking != true)
+        if (playerManger.subStates != SubStates.Guarding)
         {
             blockMiddleground.value = playerManger.PlayerBlockHealth/100;
             blockForeground.value = playerManger.PlayerBlockHealth /100;
-        }*/
+        }
     }
 
     public void CreateHealthBar()
@@ -241,7 +241,6 @@ public class PlayerUI : MonoBehaviour
         //If no input is pressed then close after 
         if (open)
         {
-            Debug.Log("Called");
             yield return new WaitForSeconds(1.5f); // Wait for 5 seconds
             StartCoroutine(SetObjective());  // Code for closing objective panel after 5 seconds
         }
@@ -274,19 +273,20 @@ public class PlayerUI : MonoBehaviour
 
     public IEnumerator ReduceStamina(float percent)
     {
-        float percentChange = blockForeground.value;
-        float percentChange2 = blockMiddleground.value;
+        float percentChange = blockForeground.value * percent;
+        float percentChange2 = blockMiddleground.value * percent;
         float elapsed = 0f;
         while (elapsed < updateSpeedInSeconds_2)
         {
             elapsed += Time.deltaTime;
-            blockForeground.value = Mathf.Lerp(percentChange, percent, elapsed / updateSpeedInSeconds_1);
-            blockMiddleground.value = Mathf.Lerp(percentChange2, percent, elapsed / updateSpeedInSeconds_2);
+            blockForeground.value = Mathf.Lerp(blockForeground.value, percent, elapsed / updateSpeedInSeconds_1);
+            blockMiddleground.value = Mathf.Lerp(blockMiddleground.value, percent, elapsed / updateSpeedInSeconds_2);
+            Debug.Log(" foregroundImage.Fillamount" + blockForeground.value + " middlegroundImage.fillAmount" + blockMiddleground.value + " Percentage" + percent);
             yield return null;
         }
-        blockForeground.value = percent;
-        blockMiddleground.value = percent;
-        playerManger.blocking = false;
+        //}
+        //blockForeground.value = ;
+        //blockMiddleground.value = percent;
     }
 
 }

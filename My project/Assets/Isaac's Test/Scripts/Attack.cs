@@ -18,7 +18,7 @@ public class Attack : MonoBehaviour
     {
 
         
-        if (other.gameObject.tag == "Shield" && !hitAlready && !hitShield)
+       /* if (other.gameObject.tag == "Shield" && !hitAlready && !hitShield)
         {
             //instatiate shield hit effect
             //GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
@@ -29,8 +29,8 @@ public class Attack : MonoBehaviour
             hitAlready = true;
             hitShield = true;
             //Destroy(effectIns, 2f);
-        }
-        if (other.gameObject.tag == "Player" && !hitAlready && !hitShield)
+        }*/
+        if (other.gameObject.tag == "Player" && !hitAlready)
         {
             GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
             playerManager = other.GetComponent<PlayerManger>();

@@ -7,8 +7,6 @@ using UnityEditor;
 
 public class PlayerManger : MonoBehaviour
 {
-
-
     // members
     [Header("Refrences")]
     private GameManager gameManager;
@@ -66,6 +64,9 @@ public class PlayerManger : MonoBehaviour
     private IEnumerator dashCorutine;
     public bool dashForceApplied; // if we the air we want to set to true to stop the Rigibody from sliding
 
+    [Header("Blocking")]
+    public GameObject shield; 
+
     [Header("Seeds")]
     public Seeds seeds;
 
@@ -80,6 +81,7 @@ public class PlayerManger : MonoBehaviour
     [Header("Blocking")]
     private float maxBlockStamina = 100;
     private float _currentBlockStamina;
+    public float regenAmount;
 
     [Header("Audio Caller")]
     public AudioType playingAudio; // the currently playing audio
@@ -113,7 +115,7 @@ public class PlayerManger : MonoBehaviour
         playerAttack = GetComponent<PlayerAttack>();
         audioController = GetComponent<AudioController>();
         sphereCollider = GetComponent<SphereCollider>();
-        playerBlock = GetComponent<PlayerBlock>();
+
         playerUI = GetComponent<PlayerUI>();
         currentHealth = maxHealth;
         _currentBlockStamina = maxBlockStamina;
@@ -124,11 +126,6 @@ public class PlayerManger : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            Blocked(playerBody, Random.Range(10, 50));
-        }
-
         if (IsGrounded() == true)
         {
             SetSuperState(SuperStates.Grounded);
@@ -168,7 +165,6 @@ public class PlayerManger : MonoBehaviour
                         timeOfCharge = 0;
                         count += 1;
                     }
-
                     if (chargeTime > 1.98f && chargeTime < 2 && count < 4)
                     {
                         count += 1;
@@ -177,12 +173,24 @@ public class PlayerManger : MonoBehaviour
                 break;
                 case (SubStates.Guarding):
                     animator.SetBool("Guarding", true);
+                    if (_currentBlockStamina > 0)
+                    {
+                        shield.SetActive(true);
+                        shield.GetComponent<PlayerBlock>().MyBehaviour
+                        (new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 10, 5f, 40));
+                        blocking = true;
+                    }
                     break;
             }
 
-            #region Handeling Player Health 
-           
-            if (isUICreated == true)
+            //Recharge the block 
+            if (_currentBlockStamina < 100 && subStates != SubStates.Guarding)
+            {
+                _currentBlockStamina += regenAmount * Time.deltaTime;
+            }
+        #region Handeling Player Health 
+
+        if (isUICreated == true)
             {
                 playerUI.VisualizeHealth();
                 animator.SetInteger("Health", currentHealth);
@@ -209,7 +217,6 @@ public class PlayerManger : MonoBehaviour
                 case SuperStates.Falling:
                     if (dashForceApplied == true)
                     { 
-                        Debug.Log("Called");
                         dashForceApplied = false;
                         playerBody.useGravity = false;
                         // Stop applying force to the rigidbody
@@ -276,10 +283,13 @@ public class PlayerManger : MonoBehaviour
                 case SubStates.Guarding:
                     animator.SetBool("Guarding", false);
                     animator.ResetTrigger("StartGuard");
+                    animator.SetBool("isRunning", false);
                     stopMovementEvent = false;
+                    shield.SetActive(false);
                     break;
             }
             subStates = newState;
+
             //On Enter
             switch (subStates)
             {
@@ -374,7 +384,7 @@ public class PlayerManger : MonoBehaviour
                 playerMovement.CreateDash(SuperStates.Grounded);
                 SetSubState(SubStates.Dashing);
             }
-            else if (Input.GetKey(KeyCode.F))
+            else if (playerInput.block)
             {
                 SetSubState(SubStates.Guarding);
             }
@@ -398,7 +408,6 @@ public class PlayerManger : MonoBehaviour
                 playerMovement.CreateDash(SuperStates.Grounded);
                 SetSubState(SubStates.Dashing);
             }
-
 
             //Moving and Attacking 
             if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
@@ -521,25 +530,9 @@ public class PlayerManger : MonoBehaviour
         }
         #endregion
     }
-    public void Blocked(Rigidbody attacker, int damage)
-    {
-        //Activate Behavior
-        playerBlock.HitSomething(attacker);
-
-        if (_currentBlockStamina > 0)
-        {
-            blocking = true;
-            //Deal damage to health bar 
-            // Ensure that block stamina does not go below zero
-            _currentBlockStamina = Mathf.Max(_currentBlockStamina - damage, 0);
-            float blockDeductionPercentage = _currentBlockStamina / maxBlockStamina;
-            StartCoroutine(playerUI.ReduceStamina(blockDeductionPercentage));
-        }
-    }
 
 
-
-  #region Ground Check
+    #region Ground Check
         public bool IsGrounded()
         {
             bool isHit;
@@ -594,7 +587,6 @@ public class PlayerManger : MonoBehaviour
         }
     #endregion
 
-
     #region Animation Event Calls
     public void StartJump()
     {
@@ -645,13 +637,12 @@ public class PlayerManger : MonoBehaviour
     }
     #endregion
 
-
-
-
-
     #region Player Restore Health or Taking Damgage
     public void TakeDamage(int damage)
      {
+        // if guarding and player block health is greater than 0 
+
+
          currentHealth -= damage;
          SelectAudio("Damage");
      }
@@ -667,7 +658,6 @@ public class PlayerManger : MonoBehaviour
         playerUI.CreateHealthBar();
     }
     #endregion
-
 
     #region Sound looping
 
