@@ -2705,7 +2705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3490732091828344011, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: isActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3798040104528015276, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_IsActive
@@ -2789,7 +2789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3967945164325192606, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: isActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5555648250390313033, guid: e55298e9430fa484eaea53c70ca992fd, type: 3}
       propertyPath: m_Pivot.x
@@ -2897,10 +2897,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1104457263556555155, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2004397425068917748, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: abilityCooldown
       value: 
       objectReference: {fileID: 650828361}
+    - target: {fileID: 2004397425068917750, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: abilityList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2004397425068917751, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: abilityCooldown
       value: 
@@ -2909,6 +2917,10 @@ PrefabInstance:
       propertyPath: abilityCooldown
       value: 
       objectReference: {fileID: 1005485921}
+    - target: {fileID: 2004397425068917755, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2225953544501114552, guid: 2c34f1805d58f1f408d43c657bae1bce, type: 3}
       propertyPath: m_Name
       value: Merlot(Final)_Sterling
