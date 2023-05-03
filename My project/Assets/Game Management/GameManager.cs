@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Referencing")]
     public static GameManager instance;
+    public SceneHandler sceneManager;
     public Camera mainCamera;
     public GameObject player;
 
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
     public AudioMixer mixer;
     public HashSet<Vector3> hasSet = new HashSet<Vector3>();
     public List<Vector3> triggeredPoints = null; // used to convert hashset to list to get transfroms of checkpoints
+
 
  
 
@@ -142,11 +144,13 @@ public class GameManager : MonoBehaviour
         mainCamera = Camera.main;
 
         player = GameObject.FindGameObjectWithTag("Player");
+        sceneManager = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
 
         if(player != null)
         {
-            initializeScene?.Raise();
+       
             SetPlayerPosition(player.transform.position);
+            initializeScene?.Raise();
         }
        
 
@@ -288,7 +292,7 @@ public class GameManager : MonoBehaviour
     #region Scene Transition UI
     public void DisplaySceneTransitionUI(Scene scene)
     {
-        if(sceneTransition == null)
+        if(sceneTransition == null || sceneManager.isADungeon == true)
         {
             initializeScene?.Raise();
             initializePlayer?.Raise();
@@ -297,6 +301,8 @@ public class GameManager : MonoBehaviour
         else
         {
             sceneTransition.SetActive(true);
+
+
             foreach (Transform item in sceneTransition.transform)
             {
                 ObjData data = item.GetComponent<ObjData>();

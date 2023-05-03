@@ -9,7 +9,8 @@ public class SceneHandler : MonoBehaviour
     [Header("Referencing")]
     [SerializeField] private GameManager gameManager; 
     [SerializeField] private GameObject player;
-    
+    public bool isADungeon;
+
     [SerializeField] private PlayerManger playerManger;
     [SerializeField] private AudioController audioController;
     private PlayerInput playerInput;
@@ -184,6 +185,7 @@ public class SceneHandler : MonoBehaviour
 
     public void IntializeScene()
     {
+        Debug.Log("Called");
         sceneActivated = true;
         SetState(InteractionStates.Active);
         player = GameObject.FindGameObjectWithTag("Player");
@@ -193,6 +195,7 @@ public class SceneHandler : MonoBehaviour
 
     public void InitializePlayer()
     {
+        Debug.Log("Called");
         ActivatePlayer();
     }
 
