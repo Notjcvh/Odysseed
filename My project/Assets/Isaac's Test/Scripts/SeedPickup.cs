@@ -5,7 +5,7 @@ using UnityEngine;
 public class SeedPickup : MonoBehaviour
 {
     [Header("Ability Handler")]
-    private AbilityHandler abilityHandler;
+    public AbilityHandler abilityHandler;
     public int abilityIndex;
     public SphereCollider _collider;
     public Rigidbody _rigidbody;
@@ -34,7 +34,7 @@ public class SeedPickup : MonoBehaviour
     public bool ReverseZ = false;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         abilityHandler = GameObject.FindGameObjectWithTag("AbilityHandler").GetComponent<AbilityHandler>();
         _collider = GetComponent<SphereCollider>();
@@ -74,7 +74,7 @@ public class SeedPickup : MonoBehaviour
     void Update()
     {
         //If triggerd is true and obj has a tutorial attached 
-        if (triggered == true && tutorialPopUp.activated == false)
+        if (triggered == true && tutorialPopUp?.activated == false)
         {
             Debug.Log("Closed Tutorial");
             Destroy(this.gameObject);

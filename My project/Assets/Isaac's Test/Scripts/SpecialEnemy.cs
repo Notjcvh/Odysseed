@@ -30,16 +30,16 @@ public class SpecialEnemy : MonoBehaviour
 
     public TargetGroup targetGroup;
 
-
-
     [Header("Audio Caller")]
-    public AudioController audioController;
+    public AudioSource audioSource;
+    private AudioController audioController;
     public AudioType playingAudio; // the currently playing audio
-    [SerializeField] private AudioType queueAudio; // the next audio to play
-    public AudioClip clip;
-    public bool audioJobSent = false; // if job sent is true then it won't play
     private Dictionary<AudioType, AudioClip> ourAudio = new Dictionary<AudioType, AudioClip>();
+    public bool audioTableSet = false; // if job sent is true then it won't play
     private List<AudioController.AudioObject> audioObjects = new List<AudioController.AudioObject>();
+
+    //Getters and Setters
+    public Dictionary<AudioType, AudioClip> MyAudio { get { return ourAudio; } private set { ourAudio = value; } }
     private void Awake()
     {
         currentWaypoint = this.transform;
@@ -47,6 +47,9 @@ public class SpecialEnemy : MonoBehaviour
         navMeshAge = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         StartCoroutine(FindRandomWaypoint());
+
+        audioController = GetComponent<AudioController>();
+        SetAudio();
     }
 
     private void Update()
@@ -144,36 +147,41 @@ public class SpecialEnemy : MonoBehaviour
 
 
 
-    public void ManageAudio(AudioType type)
+    #region Sound Caller
+    private void SetAudio()
     {
-        if (ourAudio.Count < 1)
+        // Loop through each audio track
+        foreach (AudioController.AudioTrack track in audioController.tracks)
         {
-            // Loop through each audio track
-            foreach (AudioController.AudioTrack track in audioController.tracks)
+            // Access the audio objects in each track
+            audioObjects.AddRange(track.audio);
+            // Loop through each audio object in the track
+            foreach (AudioController.AudioObject audioObject in audioObjects)
             {
-                // Access the audio objects in each track
-                audioObjects.AddRange(track.audio);
-                // Loop through each audio object in the track
-                foreach (AudioController.AudioObject audioObject in audioObjects)
-                {
-                    // this should add all our audio to the dictionary
-                    ourAudio.Add(audioObject.type, audioObject.clip);
-                }
+                // this should add all our audio to the dictionary
+                ourAudio.Add(audioObject.type, audioObject.clip);
             }
         }
-        if (ourAudio.ContainsKey(type))
+        audioTableSet = true;
+    }
+
+    public void ManageAudio(AudioType type)
+    {
+        if (ourAudio.Count > 0 && ourAudio.ContainsKey(type) && audioController != null)
         {
-            clip = ourAudio[type];
-        }
-        if (type != playingAudio)
-        {
-            audioController.PlayAudio(type, false, 0, false);
-            playingAudio = type;
-        }
-        else
-        {
-            audioController.PlayAudio(playingAudio, false, 0, false);
+            if (type != playingAudio && audioSource.isPlaying)
+            {
+                audioController.StopAudio(playingAudio, false, 0, false);
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
+            }
+            else
+            {
+                playingAudio = type;
+                audioController.PlayAudio(playingAudio, false, 0, false);
+            }
         }
     }
+    #endregion
 
 }
