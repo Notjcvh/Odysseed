@@ -9,6 +9,11 @@ public class SceneTransition : MonoBehaviour
     public SceneData sceneToLoad;
     public GameManager gameManager;
 
+    private void Start()
+    {
+        gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player") && !other.isTrigger)
