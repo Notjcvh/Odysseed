@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
+    private SceneHandler sceneHandler;
+
+
+
     //Paused and Settings 
 
     public PlayerManger playerManger;
@@ -42,6 +46,12 @@ public class PlayerInput : MonoBehaviour
     /// tab seed wheel
     /// </summary>
 
+    private void Awake()
+    {
+        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
+    }
+
+
     private void Update()
     {
         ///  <summary>
@@ -53,7 +63,7 @@ public class PlayerInput : MonoBehaviour
         //Pausing
         pause = Input.GetButtonDown("Pause");
 
-        if (playerManger.inactiveInputsEnabled == true && playerManger.activeInputsEnabled == false)
+        if (sceneHandler.sceneStates == InteractionStates.Passive)
         {   
             mouseClick = Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1);
             backButton = Input.GetKey(KeyCode.F);
@@ -61,7 +71,7 @@ public class PlayerInput : MonoBehaviour
             horizontalAxis = Input.GetAxisRaw("Horizontal");
         }
       
-        if (playerManger.activeInputsEnabled == true && playerManger.inactiveInputsEnabled == false)
+        if (sceneHandler.sceneStates == InteractionStates.Active)
         {
             // Camera Movement 
             mouseX = Input.GetAxisRaw("Mouse X"); // number 7

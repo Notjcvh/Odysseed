@@ -21,6 +21,7 @@ public class PlayerManger : MonoBehaviour
     public SphereCollider sphereCollider;
     private PlayerBlock playerBlock;
     private PlayerUI playerUI;
+    private SceneHandler sceneHandler;
 
     [Header("Initial Start Position")]
     private Vector3 intialStartPos;
@@ -96,7 +97,6 @@ public class PlayerManger : MonoBehaviour
     public float PlayerBlockHealth { get { return _currentBlockStamina; } set { _currentBlockStamina = value; } }
     public Vector3 DirectionInput {get { return playerInput.movementInput; }}
     public Vector3 MovementVector { get { return movementVector; } set { movementVector = value; } }
-    public Rigidbody PlayerBody { get { return playerBody; } set { playerBody = value; } }
     public Quaternion TargetRot { get { return targetRotation; } set { targetRotation = value; } }
     public float TargetSpeed { get { return targetSpeed; } }
     public float JumpForce { get { return jumpForce; } }
@@ -109,6 +109,7 @@ public class PlayerManger : MonoBehaviour
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
+        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
         playerInput = GetComponent<PlayerInput>();
         playerMovement = GetComponent<PlayerMovement>();
         playerBody = GetComponent<Rigidbody>();
@@ -149,7 +150,7 @@ public class PlayerManger : MonoBehaviour
 
                 break;
         }
-        if (activeInputsEnabled == true)
+        if ((sceneHandler.sceneStates == InteractionStates.Active))
         {
             HandleInputs();
             switch (subStates)
@@ -188,19 +189,20 @@ public class PlayerManger : MonoBehaviour
             {
                 _currentBlockStamina += regenAmount * Time.deltaTime;
             }
+        }
+
         #region Handeling Player Health 
 
         if (isUICreated == true)
-            {
-                playerUI.VisualizeHealth();
-                animator.SetInteger("Health", currentHealth);
-            }
-            if (currentHealth <= 0)
-            {
-                SetSuperState(SuperStates.Dying);
-            }
-            #endregion
+        {
+            playerUI.VisualizeHealth();
+            animator.SetInteger("Health", currentHealth);
         }
+        if (currentHealth <= 0)
+        {
+            SetSuperState(SuperStates.Dying);
+        }
+        #endregion
     }
 
     #endregion
@@ -623,17 +625,6 @@ public class PlayerManger : MonoBehaviour
     public void DisableAllInputs()
     {
         playerInput.enabled = false;
-    }
-
-    //resets the variables to their initial values to ensure
-    // that they are not carrying over any data when we switch states
-    public void SetInputstToInactive()
-    {
-        playerInput.ResetActiveInputs();
-    }
-    public void SetInputsToActive()
-    {
-        playerInput.ResetPassiveInputs();    
     }
     #endregion
 

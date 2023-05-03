@@ -60,11 +60,9 @@ public class SceneHandler : MonoBehaviour
             {
                 case (InteractionStates.Active, true):
                      DeactivatePlayer();
-               //     Debug.Log("Deactivate Player");
                     break;
                 case (InteractionStates.Active, false):
                     ActivatePlayer();
-             //       Debug.Log("Activate Player");
                     break;
             }
         }
@@ -75,8 +73,6 @@ public class SceneHandler : MonoBehaviour
 
 
         }
-
-        SetState(sceneStates);
     }
     #endregion
 
@@ -90,18 +86,22 @@ public class SceneHandler : MonoBehaviour
             switch (sceneStates)
             {
                 case InteractionStates.Passive:
-                    ActivatePlayer();
-                    playerManger.SetInputsToActive();
+                    playerInput.ResetPassiveInputs();
                     break;
                 case InteractionStates.Active:
-                    DeactivatePlayer();
-                    playerManger.SetInputstToInactive();
+                    playerInput.ResetActiveInputs();
                     break;
             }
             sceneStates = newState;
             //On Enter
             switch (sceneStates)
             {
+                case InteractionStates.Passive:
+                    DeactivatePlayer();
+                    break;
+                case InteractionStates.Active:
+                    ActivatePlayer();
+                    break;
             }
         }
     }
@@ -185,9 +185,7 @@ public class SceneHandler : MonoBehaviour
 
     public void IntializeScene()
     {
-        Debug.Log("Called");
         sceneActivated = true;
-        SetState(InteractionStates.Active);
         player = GameObject.FindGameObjectWithTag("Player");
         playerManger = player.GetComponent<PlayerManger>();
         playerManger.CallPlayerUi();
@@ -195,7 +193,7 @@ public class SceneHandler : MonoBehaviour
 
     public void InitializePlayer()
     {
-        Debug.Log("Called");
+        SetState(InteractionStates.Active);
         ActivatePlayer();
     }
 
@@ -212,13 +210,12 @@ public class SceneHandler : MonoBehaviour
 
     public void DeactivatePlayer()
     {
-
-
        playerManger.activeInputsEnabled = false;
        playerManger.inactiveInputsEnabled = true;
-       playerManger.StopMovement = true;
        playerManger.SetSubState(SubStates.Idle);
-      // gameManager.Cursor.SetActive(true);
+       playerManger.StopMovement = false;
+        playerManger.playerBody.velocity = Vector3.zero;
+        // gameManager.Cursor.SetActive(true);
     }
 }
 

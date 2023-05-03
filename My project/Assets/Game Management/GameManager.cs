@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         audioSource.clip = audioClip;
-       // LoadLevel(SceneManager.GetActiveScene());
+        LoadLevel(SceneManager.GetActiveScene());
 
         //initializeScene.Raise();
         //initializePlayer.Raise();

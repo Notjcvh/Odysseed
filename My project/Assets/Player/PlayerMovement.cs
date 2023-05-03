@@ -11,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerManger playerManger;
     private Animator animator;
-    private Rigidbody playerBody;
 
     [Header("Collision")]
     public float offset = 0.1f;
@@ -50,8 +49,6 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerManger = GetComponent<PlayerManger>();
         animator = GetComponent<PlayerManger>().animator;
-
-        playerBody = playerManger.PlayerBody;
 
      /*   Keyframe[] keys = gravityValueCurve.keys;
         Keyframe lastKey = keys[keys.Length - 1];
@@ -97,12 +94,12 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(transform.position + (playerManger.MovementVector.normalized * offset), playerManger.MovementVector, out hit, speed * Time.fixedDeltaTime, CollidableLayers))
         {
             // If the ray hits something, move the player up to the point of collision with the offset added
-            playerBody.MovePosition(hit.point - (playerManger.MovementVector.normalized * offset));
+           playerManger.playerBody.MovePosition(hit.point - (playerManger.MovementVector.normalized * offset));
         }
         else
         {
             // If the ray doesn't hit anything, move the player normally
-            playerBody.MovePosition(transform.position + playerManger.MovementVector * Time.fixedDeltaTime * speed);
+          playerManger.playerBody.MovePosition(transform.position + playerManger.MovementVector * Time.fixedDeltaTime * speed);
         }
 
         if (speed != 0)
@@ -132,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
                
                 gravityMultiplier = fallingAttackGravity.Evaluate(timeElapsed);
             }
-            playerBody.AddForce(Vector3.down * Time.deltaTime * gravityMultiplier, ForceMode.VelocityChange);
+            playerManger.playerBody.AddForce(Vector3.down * Time.deltaTime * gravityMultiplier, ForceMode.VelocityChange);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
@@ -142,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
     #region Jump
     public void InitateJump()
     {
-        playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
+        playerManger.playerBody.AddForce(Vector3.up * playerManger.JumpForce, ForceMode.Impulse);
     }
     #endregion
     #region Dashing'
@@ -174,8 +171,8 @@ public class PlayerMovement : MonoBehaviour
        {
             Vector3 dir = transform.rotation * Vector3.forward;
             dashForce = curveToEvaluate.Evaluate(timeElapsed);
-            playerBody.AddForce(dir * dashForce * Time.deltaTime, ForceMode.VelocityChange);
-            playerBody.AddForce(playerBody.velocity * -10f * Time.deltaTime);
+            playerManger.playerBody.AddForce(dir * dashForce * Time.deltaTime, ForceMode.VelocityChange);
+            playerManger.playerBody.AddForce(playerManger.playerBody.velocity * -10f * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
        }
@@ -186,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerManger.superStates == SuperStates.Grounded)
         {
             // Stop applying force to the rigidbody
-            playerBody.velocity = Vector3.zero;
+            playerManger.playerBody.velocity = Vector3.zero;
             playerManger.IsDashing = false;
             playerManger.StopMovement = false;
         }         
