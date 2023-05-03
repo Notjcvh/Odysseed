@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Referencing")]
     public static GameManager instance;
-    public SceneHandler sceneManager;
+    private GameObject sceneManager;
+    private SceneHandler sceneHandler;
     public Camera mainCamera;
     public GameObject player;
 
@@ -143,15 +144,19 @@ public class GameManager : MonoBehaviour
         mainCamera = Camera.main;
 
         player = GameObject.FindGameObjectWithTag("Player");
-        sceneManager = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
+        sceneManager = GameObject.FindGameObjectWithTag("Scene Handler");
 
-        if(player != null)
+        if (sceneManager != null)
         {
-       
+            sceneHandler = sceneManager.GetComponent<SceneHandler>();
+        }
+        
+        if (player != null)
+        {
             SetPlayerPosition(player.transform.position);
             initializeScene?.Raise();
         }
-       
+
 
         // Assign the camera to the loading screen canvas
         Canvas loadingScreenCanvas = loadingScreenUI.GetComponent<Canvas>();
@@ -177,7 +182,6 @@ public class GameManager : MonoBehaviour
                 DisplaySceneTransitionUI(scene);
         }
     }
-
 
     public void SetPlayerPosition(Vector3 position)
     {
@@ -291,7 +295,7 @@ public class GameManager : MonoBehaviour
     #region Scene Transition UI
     public void DisplaySceneTransitionUI(Scene scene)
     {
-        if(sceneTransition == null || sceneManager.isADungeon == true)
+        if(sceneTransition == null || sceneHandler?.isADungeon == true)
         {
             initializeScene?.Raise();
             initializePlayer?.Raise();
@@ -300,13 +304,12 @@ public class GameManager : MonoBehaviour
         else
         {
             sceneTransition.SetActive(true);
-
-
             foreach (Transform item in sceneTransition.transform)
             {
                 ObjData data = item.GetComponent<ObjData>();
                 if (data == null || scene.name != data.myData.ToString())
                 {
+                    item.gameObject.SetActive(false);
                     continue;
                 }
                 else
@@ -340,10 +343,31 @@ public class GameManager : MonoBehaviour
                 initializePlayer?.Raise();
             yield return null;
         }
+
+        if (sceneTransition.activeInHierarchy)
+        {
+            foreach (Transform item in sceneTransition.transform)
+            {
+                item.gameObject.SetActive(false);
+            }
+        }
+
         sceneTransition.SetActive(false);
         image.color = startColor;
     }
     #endregion
+
+    public void BackUpClose()
+    {
+        if (sceneTransition.activeInHierarchy)
+        {
+            foreach (Transform item in sceneTransition.transform)
+            {
+                item.gameObject.SetActive(false);
+            }
+            sceneTransition.SetActive(false);
+        }
+    }
 }
 
 public enum SceneData

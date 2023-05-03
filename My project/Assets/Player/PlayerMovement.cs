@@ -118,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
         float timeElapsed = 0;
         while (playerManger.IsGrounded() == false)
         {
+            Debug.Log("Called");
             if (playerManger.subStates != SubStates.Attacking && playerManger.subStates != SubStates.Dashing)
             {
                 gravityMultiplier = jumpGravity.Evaluate(timeElapsed);
@@ -128,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if(playerManger.subStates == SubStates.Attacking)
             {
-                Debug.Log("Called");
+               
                 gravityMultiplier = fallingAttackGravity.Evaluate(timeElapsed);
             }
             playerBody.AddForce(Vector3.down * Time.deltaTime * gravityMultiplier, ForceMode.VelocityChange);

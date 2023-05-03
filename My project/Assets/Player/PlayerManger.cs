@@ -64,7 +64,7 @@ public class PlayerManger : MonoBehaviour
     [Header("Dash")]
     public float force;
     private IEnumerator dashCorutine;
-    private bool dashForceApplied; // if we the air we want to set to true to stop the Rigibody from sliding
+    public bool dashForceApplied; // if we the air we want to set to true to stop the Rigibody from sliding
 
     [Header("Seeds")]
     public Seeds seeds;
@@ -120,7 +120,6 @@ public class PlayerManger : MonoBehaviour
         animator.SetInteger("Health", currentHealth);
         audioSource = GetComponent<AudioSource>();
 
-
         SetAudio();
     }
     private void Update()
@@ -129,11 +128,6 @@ public class PlayerManger : MonoBehaviour
         {
             Blocked(playerBody, Random.Range(10, 50));
         }
-
-
-      //  Debug.Log(activeInputsEnabled);
-
-        //   Debug.Log("current block health " + PlayerBlockHealth);
 
         if (IsGrounded() == true)
         {
@@ -213,7 +207,6 @@ public class PlayerManger : MonoBehaviour
                     playerBody.useGravity = false;
                     break;
                 case SuperStates.Falling:
-
                     if (dashForceApplied == true)
                     { 
                         Debug.Log("Called");
@@ -252,9 +245,9 @@ public class PlayerManger : MonoBehaviour
                     StartCoroutine(playerMovement.ApplyGravity());
                     break;
                 case SuperStates.Rising:
-
                     animator.SetBool("isRunning", false);
                     playerAttack.ResetCombo();
+                    StartCoroutine(playerMovement.ApplyGravity());
                     break;
                 case SuperStates.Dying:
                     animator.SetTrigger("Death");
@@ -553,10 +546,7 @@ public class PlayerManger : MonoBehaviour
             Vector3 direction = Vector3.down;
             RaycastHit hit;
             float distanceCheck = sphereCollider.bounds.extents.y + distanceToGround;
-            //  Debug.DrawRay(collider.bounds.center, Vector3.down * distanceCheck);
-
             Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
-
             if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
             {
                 isHit = true;
@@ -565,11 +555,9 @@ public class PlayerManger : MonoBehaviour
                 float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
                 if (angle > 0 && angle <= 25)
                 {
-                   // Debug.Log("We are on a walkable slope");
-                    //  this.transform.rotation = Quaternion.RotateTowards(transform.rotation, angle, 1)
-
+                    if (isDashing == true)
+                        dashForceApplied = true;
                 }
-
                 return isHit;
             }
             else

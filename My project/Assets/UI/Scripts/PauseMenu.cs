@@ -154,6 +154,7 @@ public class PauseMenu : MonoBehaviour
     {
         BackButton();
         gameManager.gamePaused = false;
+        gameManager.BackUpClose();
         gameManager.LoadLevel(sceneData.ToString());
     }
 }
