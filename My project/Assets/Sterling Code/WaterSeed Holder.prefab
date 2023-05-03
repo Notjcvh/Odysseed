@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4569110048859050901
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4569110048859050905}
+  - component: {fileID: 4569110048859050906}
+  - component: {fileID: 4569110048859050907}
+  - component: {fileID: 4569110048859050900}
+  m_Layer: 0
+  m_Name: WaterSeed Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4569110048859050905
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4569110048859050901}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.843596, y: 11.65, z: -110.039764}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8962051549361443353}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4569110048859050906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4569110048859050901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b888dc065f99b4cb3e95bba6cb92b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilityIndex: 0
+  _collider: {fileID: 4569110048859050907}
+  _rigidbody: {fileID: 4569110048859050900}
+  ground:
+    serializedVersion: 2
+    m_Bits: 256
+  maxDistance: 10
+  triggered: 0
+  tutorialPopUp: {fileID: 0}
+  speed: 0
+  ForwardX: 0
+  ForwardY: 1
+  ForwardZ: 0
+  ReverseX: 0
+  ReverseY: 0
+  ReverseZ: 0
+--- !u!135 &4569110048859050907
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4569110048859050901}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &4569110048859050900
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4569110048859050901}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!1001 &4569110050259358018
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4569110048859050905}
+    m_Modifications:
+    - target: {fileID: 2206676590772486124, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2206676590772486124, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249623, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_Name
+      value: WaterSeedPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2156252528919389949, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+--- !u!4 &8962051549361443353 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4843382836873249627, guid: 19da3dd1d186fcc4bbc078a639df8883, type: 3}
+  m_PrefabInstance: {fileID: 4569110050259358018}
+  m_PrefabAsset: {fileID: 0}
