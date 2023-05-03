@@ -69,8 +69,8 @@ public class RotLord_EventCaller : EnemyEventCaller
             }
             else if (audioType == "Death")
             {
-                calledClip = _myBehavior.MyAudio[AudioType.RotDeath];
-                _myBehavior.ManageAudio(AudioType.RotDeath);
+                calledClip = _myBehavior.MyAudio[AudioType.BossDeath];
+                _myBehavior.ManageAudio(AudioType.BossDeath);
                 StartCoroutine(WaitToPlay(calledClip.length));
 
             }

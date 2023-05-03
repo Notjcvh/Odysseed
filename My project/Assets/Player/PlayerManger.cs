@@ -131,7 +131,7 @@ public class PlayerManger : MonoBehaviour
         }
 
 
-        Debug.Log(activeInputsEnabled);
+      //  Debug.Log(activeInputsEnabled);
 
         //   Debug.Log("current block health " + PlayerBlockHealth);
 

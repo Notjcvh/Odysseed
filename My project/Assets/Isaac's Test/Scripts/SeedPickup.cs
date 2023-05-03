@@ -37,7 +37,7 @@ public class SeedPickup : MonoBehaviour
     void Start()
     {
         abilityHandler = GameObject.FindGameObjectWithTag("AbilityHandler").GetComponent<AbilityHandler>();
-        _collider = GetComponentInChildren<SphereCollider>();
+        _collider = GetComponent<SphereCollider>();
         _rigidbody = GetComponent<Rigidbody>();
         if (tutorialPopUp != null)
             tutorialPopUp = GetComponentInChildren<TutorialPopUp>();
@@ -46,7 +46,6 @@ public class SeedPickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == "Player")
         {
             triggered = true;
@@ -57,8 +56,6 @@ public class SeedPickup : MonoBehaviour
             }
             else
                 Destroy(this.gameObject);
-
-
         }
     }
 

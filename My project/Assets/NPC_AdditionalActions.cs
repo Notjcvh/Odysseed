@@ -5,7 +5,9 @@ using UnityEngine;
 public class NPC_AdditionalActions: MonoBehaviour, IAssignable, ISpeakable
 
 {
+    public bool willAssignObjective;
     public bool willSpeak;
+ 
     [TextArea]
     public string objective;
 

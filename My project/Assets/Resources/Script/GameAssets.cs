@@ -22,5 +22,6 @@ public class GameAssets : MonoBehaviour
     public Transform DamageTextHolder;
     public GameObject hit1;
     public GameObject smokePoof;
+    public GameObject heart;
 
 }

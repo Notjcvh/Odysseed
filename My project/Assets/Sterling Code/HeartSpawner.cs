@@ -15,7 +15,7 @@ public class HeartSpawner : MonoBehaviour, ISpawnable
 
     public int health;
     public int heartsAvailable;
-    public int lastLifeCount; // when player health == 1, 
+ //   public int lastLifeCount; // when player health == 1, 
 
 
     void Start()
@@ -59,7 +59,7 @@ public class HeartSpawner : MonoBehaviour, ISpawnable
                 randomChild = this.transform;
             }
 
-            spawnedObj = Instantiate(heart, randomChild.position + offset, randomChild.rotation, this.transform);
+            spawnedObj = Instantiate(GameAssets.i.heart, randomChild.position + offset, randomChild.rotation, this.transform);
             Rigidbody rb = spawnedObj.GetComponent<Rigidbody>();
             rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
 

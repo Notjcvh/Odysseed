@@ -118,6 +118,7 @@ public enum AudioType
     NpcDialouge5,
     NpcDialouge6,
     PotatoMurmur1,
+    Murmur,
     #region Kiko
     KikoBeginning,
     Kiko_End,

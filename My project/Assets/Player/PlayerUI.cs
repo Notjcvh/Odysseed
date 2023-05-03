@@ -7,6 +7,7 @@ using TMPro;
 public class PlayerUI : MonoBehaviour
 {
     private PlayerManger playerManger;
+    private Canvas canvas;
     public GameObject playerUi;
     [SerializeField] private Image Hud;
     [SerializeField] private int numberOfHearts;
@@ -50,9 +51,16 @@ public class PlayerUI : MonoBehaviour
     void Start()
     {
         playerUi = GameObject.FindGameObjectWithTag("PlayerUI");
+        canvas = playerUi.GetComponent<Canvas>();
         playerManger = GetComponent<PlayerManger>();
         numberOfHearts = playerManger.PlayerHealth;
-        
+
+
+        // Assign the camera to the loading screen canvas
+        canvas.worldCamera = Camera.main;
+        canvas.planeDistance = .15f;
+        canvas.sortingLayerName = "UI";
+        canvas.sortingOrder = 0;
     }
 
     private void Update()
@@ -66,11 +74,11 @@ public class PlayerUI : MonoBehaviour
             StartCoroutine(SetObjective());
         }
 
-        if (playerManger.blocking != true)
+      /*  if (playerManger.blocking != true)
         {
             blockMiddleground.value = playerManger.PlayerBlockHealth/100;
             blockForeground.value = playerManger.PlayerBlockHealth /100;
-        }
+        }*/
     }
 
     public void CreateHealthBar()
