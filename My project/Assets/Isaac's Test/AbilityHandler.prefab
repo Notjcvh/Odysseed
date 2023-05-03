@@ -47,10 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5826ffa4bf44914091b8382a637c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityList:
-  - {fileID: 7381370481764095777}
-  - {fileID: 7381370481764095777}
-  - {fileID: 7381370481764095791}
+  abilityList: []
   abilitesToAdd:
   - {fileID: 7381370481764095777}
   - {fileID: 7381370481764095788}
@@ -91,6 +88,7 @@ MonoBehaviour:
   earthPull: {fileID: 0}
   player: {fileID: 0}
   abilitySpawner: {fileID: 0}
+  abilityDuration: 0
 --- !u!114 &7381370481764095791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,4 +110,7 @@ MonoBehaviour:
   target: {fileID: 0}
   lazerStart: {fileID: 0}
   lineRenderer: {fileID: 0}
+  sunBeamMat: {fileID: 0}
   range: 30
+  player: {fileID: 0}
+  lazerParticles: {fileID: 0}

@@ -11,6 +11,7 @@ public class WaterWave : Abilites
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        abilityCooldown = GameObject.FindGameObjectWithTag("WaterSeed").GetComponent<AbilityCooldown>();
     }
 
     public override void Ability()

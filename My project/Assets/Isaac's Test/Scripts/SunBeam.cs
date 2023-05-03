@@ -17,6 +17,7 @@ public class SunBeam : Abilites
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        abilityCooldown = GameObject.FindGameObjectWithTag("SunSeed").GetComponent<AbilityCooldown>();
     }
 
     private void Update()

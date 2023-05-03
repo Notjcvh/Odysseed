@@ -11,6 +11,7 @@ public class EarthGrab : Abilites
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        abilityCooldown = GameObject.FindGameObjectWithTag("EarthSeed").GetComponent<AbilityCooldown>();
     }
     public override void Ability()
     {
