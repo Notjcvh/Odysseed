@@ -21,13 +21,11 @@ public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _canvas = GetComponent<Canvas>();
         cam = Camera.main;
         _canvas.worldCamera = cam;
+        _canvas.sortingLayerName = "UI";
         _canvas.planeDistance = 1f;
-
-
 
         //Gets the position within the parent array 
         //based on it's index activates or deactivates the buttons
-
         promptHolder = GetComponentInParent<TutorialPopUp>();
         foreach (Transform item in promptHolder.childTransforms)
         {

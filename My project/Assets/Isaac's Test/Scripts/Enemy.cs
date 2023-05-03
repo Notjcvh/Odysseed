@@ -76,9 +76,10 @@ public class Enemy : MonoBehaviour
 
             if (!hasPlayedAudio)
             {
-                CallAudio("Death");
+            
                 GameObject smokeEffect = Instantiate(GameAssets.i.smokePoof, new Vector3(enemyPos.x, enemyPos.y + 1, enemyPos.z), Quaternion.identity);
                 Destroy(smokeEffect, 1.5f);
+                CallAudio("Death");
                 hasPlayedAudio = true;
             }
             /* else
