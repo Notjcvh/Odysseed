@@ -47,15 +47,7 @@ public class EarthPull : MonoBehaviour
 
     public void PullEnemies(GameObject enemy)
     {
-        Vector3 targetDirection = (this.transform.position - enemy.transform.position).normalized;
-        NavMeshAgent nav = enemy.gameObject.GetComponent<NavMeshAgent>();
-        StartCoroutine(DisablingAI(nav));
-        nav.enabled = false;
+        enemy.gameObject.GetComponent<Enemy>().isStunned = true;
         enemy.transform.position = Vector3.Lerp(enemy.transform.position, this.transform.position, 100f);
-        IEnumerator DisablingAI(NavMeshAgent nav)
-        {
-            yield return new WaitForSeconds(1f);
-            nav.enabled = true;
-        }
     }
 }

@@ -104,12 +104,7 @@ public class Enemy : MonoBehaviour
         {
             NavMeshAgent nav = this.gameObject.GetComponent<NavMeshAgent>();
             nav.enabled = false;
-            StartCoroutine(DisablingAI(nav));
-            IEnumerator DisablingAI(NavMeshAgent nav)
-            {
-                yield return new WaitForSeconds(3f);
-                nav.enabled = true;
-            }
+            Invoke("ReEnableAi", 3);
         }
 
 
@@ -128,6 +123,12 @@ public class Enemy : MonoBehaviour
         }*/
     }
 
+    public void ReEnableAi()
+    {
+        NavMeshAgent nav = this.gameObject.GetComponent<NavMeshAgent>();
+        nav.enabled = true;
+        isStunned = false;
+    }
     private void CallAudio(string keyword)
     {
         enemyEventCaller.AudioEventCalled(keyword);
