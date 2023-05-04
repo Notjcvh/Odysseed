@@ -10,14 +10,13 @@ public class LazerBeam : MonoBehaviour
     public GameObject lazerStart;
     public LineRenderer lineRenderer;
     public GameObject lazerEffect;
-    //public Light impactLight;
-    // Start is called before the first frame update
+
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (target == null)

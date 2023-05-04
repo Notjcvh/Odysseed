@@ -11,19 +11,19 @@ public class EarthPull : MonoBehaviour
     public float desiredDuration = 50f;
     public List<LineRenderer> newLineRenderer;
     public GameObject tendral;
-    // Start is called before the first frame update
+
     private void Start()
     {
         endPosition = this.transform.position;
     }
-    // Update is called once per frame
+
     void Update()
     {
         
         if (!hasPulled)
         {
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            //find all nearby enemies with in a range
+
             foreach (GameObject enemy in enemies)
             {
                 float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
