@@ -75,7 +75,6 @@ public class PopperEnemyy : MonoBehaviour
                 //if the enemy is in attack range do this
                 transform.LookAt(player.transform);
                 movementSpeed = 0;
-                animator.SetBool("isRunning", false);
                 TriggerExplosion();
             }
             else if (distanceFromPlayer < aggroRange)
@@ -100,6 +99,7 @@ public class PopperEnemyy : MonoBehaviour
 
     public void TriggerExplosion()
     {
+        animator.SetBool("isRunning", false);
         animator.SetBool("isExploding", true);
     }
     public void Explode()

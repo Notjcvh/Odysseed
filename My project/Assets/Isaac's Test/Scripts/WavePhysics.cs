@@ -31,7 +31,9 @@ public class WavePhysics : MonoBehaviour
             case ("Enemy"):
                 obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
                 AddKnockback(obj.rigidbody);
-                StartCoroutine(DisablingAI(obj.gameObject.GetComponent<NavMeshAgent>()));
+                NavMeshAgent nav = obj.gameObject.GetComponent<NavMeshAgent>();
+                nav.enabled = false;
+                StartCoroutine(DisablingAI(nav));
                 break;
             case ("Boss"):
                 obj.gameObject.GetComponent<Enemy>().TakeDamage(damage);
@@ -41,8 +43,8 @@ public class WavePhysics : MonoBehaviour
         }
         IEnumerator DisablingAI(NavMeshAgent nav)
         {
-            nav.enabled = false;
-            yield return new WaitForSeconds(lifetime);
+            
+            yield return new WaitForSeconds(1);
             nav.enabled = true;
         }
     }

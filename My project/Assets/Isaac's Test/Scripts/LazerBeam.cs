@@ -57,13 +57,11 @@ public class LazerBeam : MonoBehaviour
         }
         lineRenderer.SetPosition(0, lazerStart.transform.position);
         lineRenderer.SetPosition(1, target.transform.position);
-        Vector3 dir = this.transform.position - target.transform.position;
     }
     void LockOnTarget()
     {
         Vector3 dir = target.transform.position - transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(dir);
-        lazerEffect.transform.LookAt(target.transform.position - transform.position);
+        lazerEffect.transform.LookAt(dir);
     }
     }
     

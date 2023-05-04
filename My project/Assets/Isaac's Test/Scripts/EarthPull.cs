@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 public class EarthPull : MonoBehaviour
 {
     public Vector3 startPosition;
@@ -47,10 +47,16 @@ public class EarthPull : MonoBehaviour
     public void PullEnemies(GameObject enemy)
     {
         Vector3 targetDirection = (this.transform.position - enemy.transform.position).normalized;
+        NavMeshAgent nav = enemy.gameObject.GetComponent<NavMeshAgent>();
+        StartCoroutine(DisablingAI(nav));
+        nav.enabled = false;
+        enemy.transform.position = Vector3.Lerp(enemy.transform.position, this.transform.position, 100f);
 
         targetDirection.y = 0;
-        enemy.GetComponent<Rigidbody>().AddForce(targetDirection * desiredDuration, ForceMode.Impulse);
-        if (targetDirection.magnitude <= 1)
-            enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        IEnumerator DisablingAI(NavMeshAgent nav)
+        {
+            yield return new WaitForSeconds(1f);
+            nav.enabled = true;
+        }
     }
 }
