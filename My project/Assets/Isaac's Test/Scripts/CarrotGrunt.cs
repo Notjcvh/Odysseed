@@ -62,6 +62,8 @@ public class CarrotGrunt : MonoBehaviour
         if (!playerInSightRange && !playerinAttackRange)
         {
             Walking();
+            if (audioSource.isPlaying)
+                audioSource.Stop();
         }
         else if (playerInSightRange && !playerinAttackRange)
         {

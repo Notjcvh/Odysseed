@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Events")]
     [SerializeField] private GameEvent initializeScene;
     [SerializeField] private GameEvent initializePlayer;
-    public GameEvent getObjectsFromScene; 
+   // public GameEvent getObjectsFromScene; 
     public AudioSource audioSource;
     public AudioClip audioClip;
 
@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     private float sliderTarget;
     public Image loadingScreenImage;
     public Sprite[] loadingScreenSprites;
+
 
     //boss health
     public GameObject bossHealth;
@@ -78,7 +79,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         audioSource.clip = audioClip;
-        //LoadLevel(SceneManager.GetActiveScene());
+        LoadLevel(SceneManager.GetActiveScene());
 
         //initializeScene.Raise();
         //initializePlayer.Raise();

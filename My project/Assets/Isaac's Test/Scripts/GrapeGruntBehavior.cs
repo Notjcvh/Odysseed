@@ -146,6 +146,7 @@ public class GrapeGruntBehavior : MonoBehaviour
                     tempAttackMoveSpeed = 0;
                     attackLifetime = attackLife;
                     attackCooldown = attackSpeed;
+
                 }
             }
             else if (distanceFromPlayer < aggroRange)
@@ -159,8 +160,9 @@ public class GrapeGruntBehavior : MonoBehaviour
             }
             else
             {
+                audioController.PlayAudio(playingAudio, false, 0, false);
                 //if enemy does not see the player do this
-               // Debug.Log("Can't see the player ");
+                // Debug.Log("Can't see the player ");
                 navMeshAge.destination = currentWaypoint.position;
                 navMeshAge.speed = idleSpeed;
             }
