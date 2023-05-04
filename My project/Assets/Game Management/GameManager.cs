@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [Header("Referencing")]
     public static GameManager instance;
     private GameObject sceneManager;
-    private SceneHandler sceneHandler;
+    public SceneHandler sceneHandler;
     public Camera mainCamera;
     public GameObject player;
 

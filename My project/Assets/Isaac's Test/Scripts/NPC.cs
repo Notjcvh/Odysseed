@@ -6,12 +6,17 @@ using TMPro;
 
 public class NPC : MonoBehaviour
 {
+    //Quick fix to stop Merlot from moving in dialouge
+    public SceneHandler sceneHandler;
+
+
     public bool hasTalked;
     public GameObject dialogue;
     public string[] dialogueList;
     public string NPCName;
     private AudioController audioController;
     public GameObject player;
+    private PlayerManger playerManger;
     public float talkRange;
     public float distanceToPlayer;
     public GameObject talkingIndicator;
@@ -49,7 +54,10 @@ public class NPC : MonoBehaviour
         myDialouge = dialogue.GetComponentInChildren<TextMeshProUGUI>();
         indicator = talkingIndicator.GetComponent<IndicatorScript>();
         hasTalked = false;
+
+        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
         player = GameObject.FindGameObjectWithTag("Player");
+        playerManger = player.GetComponent<PlayerManger>(); 
         audioController = this.GetComponent<AudioController>();
         audioSource = GetComponent<AudioSource>();
 
@@ -68,25 +76,27 @@ public class NPC : MonoBehaviour
     }
     void Update()
     {
-        
         distanceToPlayer = Mathf.Abs(Vector3.Distance(transform.position, player.transform.position));
         if(distanceToPlayer < talkRange)
         {
             playerInTalkRange = true;
+            playerManger.inRangeToInteract = true;
             indicators[0].SetActive(false);
             indicators[1].SetActive(true);
             indicator.changeScale = false; // stop animation 
-
         }
         else
         {
             playerInTalkRange = false;
+            playerManger.inRangeToInteract = false;
             indicators[0].SetActive(true);
             indicators[1].SetActive(false);
             indicator.changeScale = true; // start animation
         }
         if (Input.GetKeyDown(KeyCode.E) && playerInTalkRange && !isTalking)
         {
+            sceneHandler.SetState(InteractionStates.Passive);
+            player.GetComponent<PlayerManger>().isTalking = true;
             StartCoroutine(TalkCoroutine(audioSource, startAudioClip));
         }
         if(isTalking && Input.GetKeyDown(KeyCode.E) && playerInTalkRange)
@@ -124,6 +134,9 @@ public class NPC : MonoBehaviour
         dialoguePointer = 0;
         ZeroText();
 
+        player.GetComponent<PlayerManger>().isTalking = false;
+        sceneHandler.SetState(InteractionStates.Active);
+     
         if (actions != null && actions.willSpeak == true)
             // Play the audio clip and wait for it to finish to call the Start Dialouge
             actions.Talk(audioSource, endAudioClip);

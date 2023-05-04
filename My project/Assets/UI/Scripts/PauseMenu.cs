@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameManager gameManager;
+    public SceneHandler sceneHandler;
     private SceneData sceneData = SceneData.Title;
     public Camera myCamera;
   
@@ -29,6 +30,7 @@ public class PauseMenu : MonoBehaviour
     private void OnEnable()
     {
         gameManager = GetComponentInParent<GameManager>();
+        sceneHandler = gameManager.sceneHandler;
         canvas = GetComponent<Canvas>();
         myCamera = Camera.main;
         canvas.worldCamera = myCamera;
@@ -134,6 +136,8 @@ public class PauseMenu : MonoBehaviour
     public void Continue()
     {
         gameManager.gamePaused = false;
+        if(sceneHandler != null)
+            sceneHandler.SetState(InteractionStates.Active);
         activatePlayer?.Raise();
         callObjective?.Raise();
     }

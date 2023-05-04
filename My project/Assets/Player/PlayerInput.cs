@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     private SceneHandler sceneHandler;
+    private GameManager gameManager;
 
 
 
@@ -17,7 +18,6 @@ public class PlayerInput : MonoBehaviour
     public bool mouseClick { get; private set; }
 
     public bool backButton { get; private set; }
-    
     public bool horizontalInput { get; private set; }
     public float horizontalAxis { get; private set; }
 
@@ -49,6 +49,7 @@ public class PlayerInput : MonoBehaviour
     private void Awake()
     {
         sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
+        gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
     }
 
 
@@ -66,10 +67,24 @@ public class PlayerInput : MonoBehaviour
         if (sceneHandler.sceneStates == InteractionStates.Passive)
         {   
             mouseClick = Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1);
-            backButton = Input.GetKey(KeyCode.F);
-            horizontalInput = Input.GetButtonDown("Horizontal"); // number 1
-            horizontalAxis = Input.GetAxisRaw("Horizontal");
+
+            if(gameManager.gamePaused != true)
+            {
+                backButton = Input.GetKey(KeyCode.F);
+                horizontalInput = Input.GetButtonDown("Horizontal"); // number 1
+                horizontalAxis = Input.GetAxisRaw("Horizontal");
+            }
+
+            if(playerManger.isTalking == true)
+            {
+                interact = Input.GetButtonDown("Interact"); // number 19
+            }
         }
+
+
+
+
+
       
         if (sceneHandler.sceneStates == InteractionStates.Active)
         {
@@ -107,6 +122,7 @@ public class PlayerInput : MonoBehaviour
             activateSunSpecial = Input.GetButtonDown("Activate Sun Special"); // number 22
 
             block = Input.GetKey(KeyCode.F);
+
         }
     }
 

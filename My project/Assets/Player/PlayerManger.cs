@@ -10,6 +10,7 @@ public class PlayerManger : MonoBehaviour
     // members
     [Header("Refrences")]
     private GameManager gameManager;
+    private SceneHandler sceneHandler;
     private PlayerInput playerInput;
     private CameraController cam;
     public Animator animator;
@@ -21,7 +22,7 @@ public class PlayerManger : MonoBehaviour
     public SphereCollider sphereCollider;
     private PlayerBlock playerBlock;
     private PlayerUI playerUI;
-    private SceneHandler sceneHandler;
+
 
     [Header("Initial Start Position")]
     private Vector3 intialStartPos;
@@ -36,6 +37,7 @@ public class PlayerManger : MonoBehaviour
     [SerializeField] private bool isUICreated = false;
     [SerializeField] private bool isDashing = false;
     public bool isTalking = false;
+    public bool inRangeToInteract = false;
     [SerializeField] private bool isGrounded = false;
     public bool isDying = false;
     public bool isAttacking = false;
@@ -298,6 +300,9 @@ public class PlayerManger : MonoBehaviour
                 case SubStates.Idle:
                     animator.SetBool("isRunning", false);
                     break;
+                case SubStates.Talking:
+                    sceneHandler.SetState(InteractionStates.Passive);
+                    break;
                 case SubStates.Moving:
                     break;
                 case SubStates.Attacking:
@@ -373,8 +378,10 @@ public class PlayerManger : MonoBehaviour
             {
                 SetSubState(SubStates.LaunchChargedAttack);
                 isAttacking = true;
-               
             }
+
+
+
             else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero && playerBody.velocity.y >= 0)
             {
                 SetSubState(SubStates.Jumping);
@@ -928,6 +935,7 @@ public enum SubStates
     None,
     Moving,
     Idle, 
+    Talking,
     Dashing,
     Jumping,
     Attacking,

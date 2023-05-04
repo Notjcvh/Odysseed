@@ -55,23 +55,18 @@ public class SceneHandler : MonoBehaviour
         if (playerInput.pause)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
-
-            switch(sceneStates, gameManager.gamePaused)
+            switch(gameManager.gamePaused, playerManger.isTalking)
             {
-                case (InteractionStates.Active, true):
-                     DeactivatePlayer();
+                case (false, false):
+                    SetState(InteractionStates.Active);
                     break;
-                case (InteractionStates.Active, false):
-                    ActivatePlayer();
+                case (true, false):
+                    SetState(InteractionStates.Passive);
+                    break;
+                case (true, true):
+                case (false, true): SetState(InteractionStates.Passive);
                     break;
             }
-        }
-        if(playerManger.inactiveInputsEnabled == true)
-        {
-
-
-
-
         }
     }
     #endregion
