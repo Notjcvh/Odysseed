@@ -392,6 +392,7 @@ public enum SceneData
     CarrotKhanate,
     Dungeon3,
     TreeOfLife,
+    Credits,
     #endregion
     #region Testing Scenes 
     Sterling_PlayerTestScene,
