@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.VFX;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -99,6 +100,18 @@ public class Enemy : MonoBehaviour
             else
                 Destroy(this.gameObject);
         }
+        if(isStunned)
+        {
+            NavMeshAgent nav = this.gameObject.GetComponent<NavMeshAgent>();
+            nav.enabled = false;
+            StartCoroutine(DisablingAI(nav));
+            IEnumerator DisablingAI(NavMeshAgent nav)
+            {
+                yield return new WaitForSeconds(3f);
+                nav.enabled = true;
+            }
+        }
+
 
 
         /*
