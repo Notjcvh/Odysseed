@@ -65,22 +65,12 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
-        if (playerManger.subStates != SubStates.Guarding)
-        {
-        
-        }
-
-
         //Blocking 
         float targetForegroundValue = playerManger.PlayerBlockHealth/ 100;
         float targetMiddlegroundValue = playerManger.PlayerBlockHealth / 100;
        
         blockForeground.value = Mathf.Lerp(blockForeground.value, targetForegroundValue, Time.deltaTime /updateSpeedInSeconds_1);
         blockMiddleground.value = Mathf.Lerp(blockMiddleground.value, targetMiddlegroundValue, Time.deltaTime / updateSpeedInSeconds_2);
-
-
-
-
     }
 
     public void CreateHealthBar()

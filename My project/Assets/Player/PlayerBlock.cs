@@ -31,10 +31,6 @@ public class PlayerBlock : HitCollider
         strength = collider.strength;
     }
 
-    private void Update()
-    {
-       
-    }
 
 
     public void OnTriggerEnter(Collider other)
@@ -43,7 +39,7 @@ public class PlayerBlock : HitCollider
         switch (other.tag)
         {
             case ("Enemy"):
-                
+                HitSomething(other.attachedRigidbody);
                 break;
         }
     }
@@ -70,11 +66,8 @@ public class PlayerBlock : HitCollider
     public override void AddKnockback(Rigidbody body)
     {
         //This should only be applied once
-
-
         Debug.Log("Blocked add knockback to: " + body.name);
         body.GetComponent<Enemy>().TakeDamage(0);
-
 
         //Dot product
         Vector3 targetDirection = (body.position - origin.position).normalized;

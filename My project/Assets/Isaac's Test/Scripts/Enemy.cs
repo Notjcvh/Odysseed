@@ -148,7 +148,7 @@ public class Enemy : MonoBehaviour
         if (hasDamageAudio)
             CallAudio("Damage");
         this.isStunned = true;
-        //   DisableAI();
+        DisableAI();
        // PlayTakeDamgage();
         blinkTimer = blinkDuration;
     }

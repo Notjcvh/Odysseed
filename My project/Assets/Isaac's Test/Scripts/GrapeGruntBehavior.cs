@@ -95,13 +95,6 @@ public class GrapeGruntBehavior : MonoBehaviour
             distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
 
             //For the shield
-            playerShield = GameObject.FindGameObjectWithTag("Shield");
-            if (playerShield != null && playerShield.activeInHierarchy == true)
-            {
-                distanceFromShield = Vector3.Distance(this.transform.position, playerShield.transform.position);
-               // Debug.Log(distanceFromPlayer);
-            }
-
             attackCooldown -= Time.deltaTime;
             attackLifetime -= Time.deltaTime;
             animator.SetFloat("Speed", thisEnemy.rb.velocity.magnitude);
@@ -115,22 +108,6 @@ public class GrapeGruntBehavior : MonoBehaviour
                 animator.SetBool("IsAttacking", false);
                 attackScript.hitAlready = false;
                 tempAttackMoveSpeed = attackMoveSpeed;
-            }
-
-            if(distanceFromShield <= shieldAttackRange && playerShield != null)
-            {
-                //if the enemy is in attack range do this
-                navMeshAge.speed = tempAttackMoveSpeed;
-                transform.LookAt(player.transform);
-                navMeshAge.destination = playerShield.transform.position;
-                if (attackCooldown <= 0)
-                {
-                    attackHitbox.SetActive(true);
-                    animator.SetBool("IsAttacking", true);
-                    tempAttackMoveSpeed = 0;
-                    attackLifetime = attackLife;
-                    attackCooldown = attackSpeed;
-                }
             }
 
             if (distanceFromPlayer <= attackRange)
@@ -160,8 +137,7 @@ public class GrapeGruntBehavior : MonoBehaviour
             }
             else
             {
-                audioController.PlayAudio(playingAudio, false, 0, false);
-                //if enemy does not see the player do this
+                 //if enemy does not see the player do this
                 // Debug.Log("Can't see the player ");
                 navMeshAge.destination = currentWaypoint.position;
                 navMeshAge.speed = idleSpeed;

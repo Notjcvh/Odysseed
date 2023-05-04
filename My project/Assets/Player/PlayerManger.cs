@@ -189,7 +189,7 @@ public class PlayerManger : MonoBehaviour
                     {
                         shield.SetActive(true);
                         shield.GetComponent<PlayerBlock>().MyBehaviour
-                        (new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 10, 5f, 40));
+                        (new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 10, 5f, 150));
                         blocking = true;
                     }
                     else
@@ -663,10 +663,14 @@ public class PlayerManger : MonoBehaviour
     public void TakeDamage(int damage)
      {
         // if guarding and player block health is greater than 0 
-
-
-         currentHealth -= damage;
-         SelectAudio("Damage");
+        if (_currentBlockStamina > 0 && subStates == SubStates.Guarding)
+            return;
+        else
+        {
+            currentHealth -= damage;
+            SelectAudio("Damage");
+        }
+   
      }
     public void RestoreHealth()
     {
