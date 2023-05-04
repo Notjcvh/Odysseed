@@ -33,15 +33,7 @@ public class PlayerBlock : HitCollider
 
     private void Update()
     {
-        if(playerManger.subStates != SubStates.Guarding)
-        {
-            //Bool Check 
-            if(playerManger.PlayerBlockHealth < 100 && playerManger.blocking != true)
-            {
-                playerManger.PlayerBlockHealth += regenAmount * Time.deltaTime;
-                Debug.Log(playerManger.PlayerBlockHealth);
-            }
-        }
+       
     }
 
 
@@ -51,7 +43,7 @@ public class PlayerBlock : HitCollider
         switch (other.tag)
         {
             case ("Enemy"):
-                HitSomething(other.attachedRigidbody); //pass in the object rigidbody 
+                
                 break;
         }
     }
@@ -62,6 +54,7 @@ public class PlayerBlock : HitCollider
         {
             case PhysicsBehaviours.AggresiveKnockback:
                 AddKnockback(obj);
+                playerManger.Blocked(damage);
                 break;
             default:
                 break;
@@ -69,6 +62,10 @@ public class PlayerBlock : HitCollider
         ClearList();
     }
 
+    void call()
+    {
+        playerManger.Blocked(damage);
+    }
 
     public override void AddKnockback(Rigidbody body)
     {
@@ -86,9 +83,7 @@ public class PlayerBlock : HitCollider
         targetDirection.y = 0;
         body.AddForce(targetDirection * strength, ForceMode.Impulse);
 
-        playerManger.PlayerBlockHealth = Mathf.Max(playerManger.PlayerBlockHealth - damage, 0);
-        float blockDeductionPercentage = (playerManger.PlayerBlockHealth) / 100;
-        StartCoroutine(playerUI.ReduceStamina(blockDeductionPercentage));
+      
     }
 
 

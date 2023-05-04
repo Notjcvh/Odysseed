@@ -65,20 +65,22 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
-       /* if(Input.GetKeyDown(KeyCode.B))
-        {
-            if(coroutineRunning == true)
-            {
-                StopCoroutine(SetObjective());
-            }
-            StartCoroutine(SetObjective());
-        }*/
-
         if (playerManger.subStates != SubStates.Guarding)
         {
-            blockMiddleground.value = playerManger.PlayerBlockHealth/100;
-            blockForeground.value = playerManger.PlayerBlockHealth /100;
+        
         }
+
+
+        //Blocking 
+        float targetForegroundValue = playerManger.PlayerBlockHealth/ 100;
+        float targetMiddlegroundValue = playerManger.PlayerBlockHealth / 100;
+       
+        blockForeground.value = Mathf.Lerp(blockForeground.value, targetForegroundValue, Time.deltaTime /updateSpeedInSeconds_1);
+        blockMiddleground.value = Mathf.Lerp(blockMiddleground.value, targetMiddlegroundValue, Time.deltaTime / updateSpeedInSeconds_2);
+
+
+
+
     }
 
     public void CreateHealthBar()
@@ -281,7 +283,7 @@ public class PlayerUI : MonoBehaviour
             elapsed += Time.deltaTime;
             blockForeground.value = Mathf.Lerp(blockForeground.value, percent, elapsed / updateSpeedInSeconds_1);
             blockMiddleground.value = Mathf.Lerp(blockMiddleground.value, percent, elapsed / updateSpeedInSeconds_2);
-            Debug.Log(" foregroundImage.Fillamount" + blockForeground.value + " middlegroundImage.fillAmount" + blockMiddleground.value + " Percentage" + percent);
+           // Debug.Log(" foregroundImage.Fillamount" + blockForeground.value + " middlegroundImage.fillAmount" + blockMiddleground.value + " Percentage" + percent);
             yield return null;
         }
         //}

@@ -68,7 +68,10 @@ public class PlayerManger : MonoBehaviour
     public bool dashForceApplied; // if we the air we want to set to true to stop the Rigibody from sliding
 
     [Header("Blocking")]
-    public GameObject shield; 
+    public GameObject shield;
+    private float maxBlockStamina = 100;
+    private float _currentBlockStamina;
+    public float regenAmount = 10;
 
     [Header("Seeds")]
     public Seeds seeds;
@@ -80,11 +83,6 @@ public class PlayerManger : MonoBehaviour
     public float timeOfCharge;
     private int count = 0;
     public float chargedAttackMultiplier = 1.4f;
-
-    [Header("Blocking")]
-    private float maxBlockStamina = 100;
-    private float _currentBlockStamina;
-    public float regenAmount;
 
     [Header("Audio Caller")]
     public AudioType playingAudio; // the currently playing audio
@@ -129,6 +127,17 @@ public class PlayerManger : MonoBehaviour
     }
     private void Update()
     {
+        
+        //Recharge the block 
+        if (_currentBlockStamina < maxBlockStamina && subStates != SubStates.Guarding)
+        {
+            // Debug.Log(_currentBlockStamina);
+            _currentBlockStamina += regenAmount * Time.deltaTime;
+            Debug.Log(_currentBlockStamina);
+        }
+
+
+
         if (IsGrounded() == true)
         {
             SetSuperState(SuperStates.Grounded);
@@ -183,15 +192,17 @@ public class PlayerManger : MonoBehaviour
                         (new PlayerAttack.PlayerCollider(PhysicsBehaviours.AggresiveKnockback, 10, 5f, 40));
                         blocking = true;
                     }
+                    else
+                    {
+                        shield.SetActive(false);
+                    }
                     break;
             }
-
-            //Recharge the block 
-            if (_currentBlockStamina < 100 && subStates != SubStates.Guarding)
-            {
-                _currentBlockStamina += regenAmount * Time.deltaTime;
-            }
         }
+
+        
+
+       
 
         #region Handeling Player Health 
 
@@ -393,7 +404,7 @@ public class PlayerManger : MonoBehaviour
                 playerMovement.CreateDash(SuperStates.Grounded);
                 SetSubState(SubStates.Dashing);
             }
-            else if (playerInput.block)
+            else if (playerInput.block && !isAttacking)
             {
                 SetSubState(SubStates.Guarding);
             }
@@ -435,7 +446,7 @@ public class PlayerManger : MonoBehaviour
                 SetSubState(SubStates.ChargingAttack);
             }
 
-            if (playerInput.block && playerInput.movementInput != Vector3.zero)
+            if (playerInput.block && playerInput.movementInput != Vector3.zero && !isAttacking)
             {
                 SetSubState(SubStates.Guarding);
             }
@@ -538,6 +549,19 @@ public class PlayerManger : MonoBehaviour
             }
         }
         #endregion
+    }
+
+
+    public void Blocked(float damage)
+    {
+        if (_currentBlockStamina - damage < 0)
+        {
+            _currentBlockStamina = 0;
+        }
+        else
+        {
+            _currentBlockStamina -= damage;
+        }
     }
 
 

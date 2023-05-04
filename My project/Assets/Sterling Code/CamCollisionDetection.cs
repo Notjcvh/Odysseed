@@ -170,7 +170,7 @@ public class CamCollisionDetection : MonoBehaviour
                     Vector3 direction = (closestPointHorizontal - this.transform.position);
 
                     float horizontaldistance = (transform.position - closestPointHorizontal).magnitude;
-                    if (horizontaldistance < 1)
+                    if (horizontaldistance < 3)
                     {
                         newCamDist = camControl.defeaultDistance - horizontaldistance;
                         if(returnCamDistance != null)
@@ -228,7 +228,7 @@ public class CamCollisionDetection : MonoBehaviour
         float degree = (-camControl.minVerticalAngleRef) - angle + offset;
         float differenceInTheY = this.transform.position.y - hitObjectY;
 
-        if (differenceInTheY < 1)
+        if (differenceInTheY < 2)
         {
             camControl.minVerticalAngle = degree ;
             //print("Distance to ground :" + differenceInTheY + "degree : " + degree  + "cam control : " + camControl.minVerticalAngle); 
@@ -256,7 +256,7 @@ public class CamCollisionDetection : MonoBehaviour
 
     IEnumerator AlterCameraDistance(float time)
     {
-        Debug.Log("zoom in");
+     //   Debug.Log("zoom in");
         //calculate interpolation value
         float timeElapsed = 0;
         while (timeElapsed < 1)
