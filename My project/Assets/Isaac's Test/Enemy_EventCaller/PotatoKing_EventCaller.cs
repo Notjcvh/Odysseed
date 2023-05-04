@@ -74,8 +74,8 @@ public class PotatoKing_EventCaller : EnemyEventCaller
             }
             else if (audioType == "Death")
             {
-                calledClip = _myBehavior.MyAudio[AudioType.RotDeath];
-                _myBehavior.ManageAudio(AudioType.RotDeath);
+                calledClip = _myBehavior.MyAudio[AudioType.PK_Death];
+                _myBehavior.ManageAudio(AudioType.PK_Death);
                 StartCoroutine(WaitToPlay(calledClip.length));
 
             }

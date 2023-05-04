@@ -34,10 +34,15 @@ public class AbilityHandler : MonoBehaviour
     }
     public void AddAbility(int index)
     {
+        if (abilitesToAdd[index].abilityCooldown == null)
+        {
+            Debug.LogError("Attempted to add a null ability.");
+            return;
+        }
+
         abilityList.Add(abilitesToAdd[index]);
         if (abilityList.Count >= 1)
         {
-            Debug.Log(abilityList[0].abilityCooldown);
             abilityList[0].abilityCooldown.isActive = true;
         }
         if (abilityList.Count >= 2)

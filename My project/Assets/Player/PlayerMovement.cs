@@ -115,7 +115,6 @@ public class PlayerMovement : MonoBehaviour
         float timeElapsed = 0;
         while (playerManger.IsGrounded() == false)
         {
-            Debug.Log("Called");
             if (playerManger.subStates != SubStates.Attacking && playerManger.subStates != SubStates.Dashing)
             {
                 gravityMultiplier = jumpGravity.Evaluate(timeElapsed);

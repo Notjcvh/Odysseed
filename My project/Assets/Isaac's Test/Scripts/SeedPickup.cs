@@ -49,6 +49,7 @@ public class SeedPickup : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             triggered = true;
+            _collider.enabled = false;
             abilityHandler.AddAbility(abilityIndex);
             if (tutorialPopUp != null )
             {
