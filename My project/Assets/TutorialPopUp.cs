@@ -46,6 +46,7 @@ public class TutorialPopUp : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             activated = true;
+            sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
             sceneHandler.tutorialActivated = true;
             sceneHandler.SetState(InteractionStates.Passive);
             // sceneHandler.DeactivatePlayer();
@@ -57,6 +58,7 @@ public class TutorialPopUp : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             activated = true;
+            sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
             sceneHandler.tutorialActivated = true;
             sceneHandler.SetState(InteractionStates.Passive);
             // sceneHandler.DeactivatePlayer();
@@ -134,14 +136,24 @@ public class TutorialPopUp : MonoBehaviour
 
     private void OnDisable()
     {
+        
         sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
-        sceneHandler.tutorialActivated = false;
-        activated = false;
-        sceneHandler.SetState(InteractionStates.Active);
-        childTransforms[currentActivePrompt].gameObject.SetActive(false);
-        if (transform.parent != null)
+
+        if(sceneHandler.sceneActivated)
         {
-            transform.parent.GetComponent<SeedPickup>().Claimed();
+            sceneHandler.tutorialActivated = false;
+            activated = false;
+            sceneHandler.SetState(InteractionStates.Active);
+            childTransforms[currentActivePrompt].gameObject.SetActive(false);
+            if (transform.parent != null)
+            {
+                SeedPickup seedPickup = transform.parent.GetComponent<SeedPickup>();
+                if (seedPickup != null)
+                {
+                    seedPickup.Claimed();
+                }
+
+            }
         }
     }
 

@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     public bool isTargeted = true;
     public EnemyHealthbar myHealthbar;
     private BossEvents bossEvents;
+    public bool callEvent;
 
     [Header("Rooms")]
     public CombatRoom myRoom;
@@ -91,9 +92,10 @@ public class Enemy : MonoBehaviour
              }*/
             //  this.gameObject.SetActive(false);
             // CallAudio();
-            if (bossEvents != null)
+            if (bossEvents != null && callEvent == false)
             {
                 bossEvents.Call();
+                callEvent = true;
             }
 
             if (audioSource.clip != null)
