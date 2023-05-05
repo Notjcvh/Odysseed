@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e13b40adb1e175469cf01d61645884a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneHandler: {fileID: 0}
   hasTalked: 0
   dialogue: {fileID: 0}
   dialogueList:
@@ -133,7 +134,7 @@ MonoBehaviour:
   indicators:
   - {fileID: 0}
   - {fileID: 0}
-  audioClipChosen: 0
+  audioClipPlayed: 0
   queuedAudio: 0
   audioTableSet: 0
   actions: {fileID: 0}
@@ -154,23 +155,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   tracks:
-  - source: {fileID: 2101901112535461211}
+  - source: {fileID: 0}
     audio:
-    - type: 87
-      clip: {fileID: 8300000, guid: b27099acba83704479867d36008742fc, type: 3}
-    - type: 88
-      clip: {fileID: 8300000, guid: 594a561a3e16f1141b16411467acf50b, type: 3}
     - type: 89
-      clip: {fileID: 8300000, guid: d8196bb669eb96340873cb729b986335, type: 3}
+      clip: {fileID: 8300000, guid: b27099acba83704479867d36008742fc, type: 3}
     - type: 90
-      clip: {fileID: 8300000, guid: 5939d48e20ebe484e92dcf96b266266a, type: 3}
+      clip: {fileID: 8300000, guid: 594a561a3e16f1141b16411467acf50b, type: 3}
     - type: 91
-      clip: {fileID: 8300000, guid: 94e44106f4b506f4eb8fd4e18268a20f, type: 3}
+      clip: {fileID: 8300000, guid: d8196bb669eb96340873cb729b986335, type: 3}
     - type: 92
-      clip: {fileID: 8300000, guid: c0c7402d5b64b87469a7e0c8d55ee0b4, type: 3}
+      clip: {fileID: 8300000, guid: 5939d48e20ebe484e92dcf96b266266a, type: 3}
     - type: 93
-      clip: {fileID: 8300000, guid: 3fe8b4dd5011c8740b255e34a2bbf750, type: 3}
+      clip: {fileID: 8300000, guid: 94e44106f4b506f4eb8fd4e18268a20f, type: 3}
     - type: 94
+      clip: {fileID: 8300000, guid: c0c7402d5b64b87469a7e0c8d55ee0b4, type: 3}
+    - type: 95
+      clip: {fileID: 8300000, guid: 3fe8b4dd5011c8740b255e34a2bbf750, type: 3}
+    - type: 96
       clip: {fileID: 8300000, guid: da7edc858d76f87439ffe2d332b38899, type: 3}
 --- !u!82 &2101901112535461211
 AudioSource:

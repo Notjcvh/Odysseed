@@ -20,6 +20,7 @@ public class SceneHandler : MonoBehaviour
     public Vector3 spawnPosition;
 
     public bool tutorialActivated = false;
+    public bool countinuebutton;
 
     [Header("Background Audio Caller")]
     public AudioType playingAudio; // the currently playing audio
@@ -54,7 +55,7 @@ public class SceneHandler : MonoBehaviour
                 StartCoroutine(WaitToPlay(clip.length));
            }
         }
-        if (playerInput.pause)
+        if (playerInput.pause || countinuebutton == true)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
             switch(gameManager.gamePaused, playerManger.isTalking, tutorialActivated)
@@ -72,6 +73,9 @@ public class SceneHandler : MonoBehaviour
                  SetState(InteractionStates.Passive);
                     break;
             }
+
+            if (countinuebutton == true)
+                countinuebutton = false;
         }
     }
     #endregion
@@ -139,6 +143,15 @@ public class SceneHandler : MonoBehaviour
                 break;
             case ("Audio_CastleTheme"):
                 queueAudio = AudioType.CastleTheme;
+                break;
+            case ("Audio_CarrotLands"):
+                queueAudio = AudioType.KarrotLands;
+                break;
+            case ("Audio_CarrotKahnPhase1"):
+                queueAudio = AudioType.CK_PhaseOne_Music;
+                break;
+            case ("Audio_CarrotKahnPhase2"):
+                queueAudio = AudioType.CK_PhaseTwo_Music;
                 break;
             default:
                 break;

@@ -31,7 +31,7 @@ public class Attack : MonoBehaviour
             //Destroy(effectIns, 2f);
         }*/
         if (other.gameObject.tag == "Player" && !hitAlready)
-        {
+        { 
             GameObject effectIns = Instantiate(GameAssets.i.hit1, other.transform.position, Quaternion.identity);
             playerManager = other.GetComponent<PlayerManger>();
             playerManager.TakeDamage(damage);

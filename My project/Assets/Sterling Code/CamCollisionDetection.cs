@@ -49,6 +49,8 @@ public class CamCollisionDetection : MonoBehaviour
 
     public float offset = 1.5f;
 
+    public float raycastDistance = 10f;
+    float zoomtimeElapsed = 0;
 
     void OnDrawGizmos()
     {
@@ -62,6 +64,7 @@ public class CamCollisionDetection : MonoBehaviour
         camControl = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraController>();
         defaultDistanceMax = camControl.DefaultDistanceMax;
         defaultDistanceMin = camControl.DefaultDistanceMin;
+        newCamDist = defaultDistanceMax;
 
         defaultMaxVertivalAngle = camControl.maxVerticalAngleRef;
         defaultMinVerticalAngle = camControl.minVerticalAngleRef;
@@ -91,107 +94,127 @@ public class CamCollisionDetection : MonoBehaviour
     }
     private void Update()
     {
-        if(collider?.Count > 0)
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+        Vector3 right = transform.TransformDirection(Vector3.right);
+        Vector3 up = transform.TransformDirection(Vector3.up);
+
+        RaycastHit hit;
+
+        Vector3 upElevation = transform.up;
+        forward = transform.TransformDirection(forward);
+        right = transform.TransformDirection(right);
+
+        // Raycast from the center of the octahedron to the forward direction
+        if (Physics.Raycast(transform.position, Vector3.ProjectOnPlane(forward, upElevation), out hit, raycastDistance, wallLayer))
         {
-            foreach (Collider obj in collider)
+            Debug.DrawLine(transform.position, hit.point, Color.red);
+
+/*
+
+            // Calculate the interpolation factor based on the current distance of the camera
+            float interpolationFactor = Mathf.InverseLerp(camControl.defeaultDistance, newCamDist, 1);
+
+            // Use the interpolation factor to adjust the time for interpolation
+            float adjustedTime = interpolationFactor;
+
+            if (newCamDist > defaultDistanceMin)
             {
-                if (groundLayer == (groundLayer & (1 << obj.gameObject.layer)))
-                {
-                    if(!ground.Contains(obj))
-                    {
-                        ground.Add(obj);
-                    }
-                    isGroundCollisionDetected = true;
-                    RaycastHit hit;
-                    Ray downRay = new Ray(transform.position, Vector3.down);
-                    if (Physics.Raycast(downRay, out hit, groundLayer))
-                    {
-                       foreach (Collider item in ground)
-                       {
-                            if(hit.transform.gameObject != item.gameObject)
-                            {
-                                ground.Remove(obj);
-                                collider.Remove(obj);
-                            }    
-                       }
-                        #region  Checking For Distance from Ground
-                        //A
-                        float distanceToGround = (transform.position - hit.point).magnitude;
-                        //B
-                        Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
-                        float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
+                // Calculate the new distance of the camera based on the current interpolation time
+                float newDistance = Mathf.Lerp(camControl.defeaultDistance, newCamDist, timeElapsed);
 
-                        //C
-                        Vector3 directionToGround = Vector3.Normalize(hit.point - camControl.followObj.position);
-                        float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
-
-                       
-                        //CamController
-                        Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
-                        Debug.DrawRay(transform.position, Vector3.down * distanceToGround, Color.green);
-                        Debug.DrawRay(camControl.followObj.position, directionToGround * distancePlayerToGround, Color.red);
-
-                        HandleGroundCollision(hit.point.y);
-
-                        #endregion
-                    }
-                }
-
-                if (ceilingLayer == (ceilingLayer & (1 << obj.gameObject.layer)))
-                {
-                    RaycastHit hit;
-                    Ray upRay = new Ray(transform.position, Vector3.up);
-                    if (Physics.Raycast(upRay, out hit, groundLayer))
-                    {
-                        float distanceToCeiling = (transform.position - hit.point).magnitude;
-
-                        Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
-                        float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
-
-                        //C
-                        Vector3 directionToCeiling = Vector3.Normalize(hit.point - camControl.followObj.position);
-                        float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
-
-                        Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
-                        Debug.DrawRay(transform.position, Vector3.up * distanceToCeiling, Color.green);
-                        Debug.DrawRay(camControl.followObj.position, directionToCeiling * distancePlayerToGround, Color.red);
-
-                        HandleCeilingCollision(hit.point.y);
-                    }
-                }
-                
-                if (wallLayer == (wallLayer & (1 << obj.gameObject.layer)))
-                {
-                    isWallCollisionDetected = true;
-                    Vector3[] points = new Vector3[0];
-
-                    Vector3 point = obj.ClosestPoint(this.transform.position); // for some reason this returns two points however we just want the point shooting out horizontally
-                    Vector3 closestPointHorizontal = new Vector3(point.x, transform.position.y, point.z); //this gets that for us
-                    Vector3 direction = (closestPointHorizontal - this.transform.position);
-
-                    float horizontaldistance = (transform.position - closestPointHorizontal).magnitude;
-                    if (horizontaldistance < 3)
-                    {
-                        newCamDist = camControl.defeaultDistance - horizontaldistance;
-                        if(returnCamDistance != null)
-                        {
-                            StopCoroutine(returnCamDistance);
-                            returnCamDistance = null;
-                        }
-                        
-                        if(!isCoroutineRunning)
-                        {
-                            isCoroutineRunning = true;
-                            alterCamDistance = StartCoroutine(AlterCameraDistance(1f));
-                           
-                        }
-                    }
-
-                    Debug.DrawRay(this.transform.position, direction.normalized * horizontaldistance, Color.red);
-                }
+                // Update the camera's distance
+                camControl.defeaultDistance = newDistance;
             }
-          
+
+            timeElapsed += Time.deltaTime * adjustedTime;*/
         }
+
+        // Raycast from the center of the octahedron to the right direction
+        if (Physics.Raycast(transform.position, Vector3.ProjectOnPlane(right, upElevation), out hit, raycastDistance, wallLayer))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.green);
+        }
+
+        // Raycast from the center of the octahedron to the up direction
+        if (Physics.Raycast(transform.position, up, out hit, raycastDistance, ceilingLayer))
+        {
+            float distanceToCeiling = (transform.position - hit.point).magnitude;
+            Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
+            float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
+
+            Vector3 directionToCeiling = Vector3.Normalize(hit.point - camControl.followObj.position);
+            float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
+
+            Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.blue);
+            Debug.DrawRay(transform.position, Vector3.up * distanceToCeiling, Color.blue);
+            Debug.DrawRay(camControl.followObj.position, directionToCeiling * distancePlayerToGround, Color.blue);
+
+            HandleCeilingCollision(hit.point.y);
+        }
+
+        // Raycast from the center of the octahedron to the backward direction
+        if (Physics.Raycast(transform.position, Vector3.ProjectOnPlane(-forward, upElevation), out hit, raycastDistance, wallLayer))
+        {
+            Vector3 point = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+            float horizontalDist = (transform.position - point).magnitude;
+
+            if (horizontalDist <= 1 && newCamDist > defaultDistanceMin)
+            {
+                if(returnCamDistance != null)
+                {
+                    StopCoroutine(returnCamDistance);
+                    returnCamDistance = null;
+
+                    Debug.Log("this is the new cam dist " + newCamDist + " time elapsed" + zoomtimeElapsed);
+                }
+                // Calculate the interpolation factor based on the current elapsed time and the desired time for the transition
+                float interpolationFactor = Mathf.InverseLerp(0, 1, zoomtimeElapsed / 0.5f);
+
+                //Debug.Log(interpolationFactor);
+                // Use the interpolation factor to adjust the time for interpolation
+                float adjustedTime = interpolationFactor;
+
+                // Calculate the new distance of the camera based on the current interpolation time
+                newCamDist = Mathf.Lerp(camControl.defeaultDistance, horizontalDist, interpolationFactor);
+
+                // Update the camera's distance
+                camControl.defeaultDistance = newCamDist;
+                zoomtimeElapsed += Time.deltaTime;
+            }
+        
+        }
+
+        
+       
+
+        // Raycast from the center of the octahedron to the left direction
+        if (Physics.Raycast(transform.position, Vector3.ProjectOnPlane(-right, upElevation), out hit, raycastDistance, wallLayer))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.magenta);
+        }
+
+        // Raycast from the center of the octahedron to the down direction
+        if (Physics.Raycast(transform.position, -up, out hit, raycastDistance, groundLayer))
+        {
+
+            //A
+            float distanceToGround = (transform.position - hit.point).magnitude;
+
+            //B
+            Vector3 direct = Vector3.Normalize(transform.position - camControl.followObj.position);
+            float distancePlayerToCam = (transform.position - camControl.followObj.position).magnitude;
+
+            //C
+            Vector3 directionToGround = Vector3.Normalize(hit.point - camControl.followObj.position);
+            float distancePlayerToGround = (hit.point - camControl.followObj.position).magnitude;
+
+            Debug.DrawRay(camControl.followObj.position, direct * distancePlayerToCam, Color.cyan);
+            Debug.DrawRay(transform.position, Vector3.down * distanceToGround, Color.cyan);
+            Debug.DrawRay(camControl.followObj.position, directionToGround * distancePlayerToGround, Color.cyan);
+
+            HandleGroundCollision(hit.point.y);
+        }
+
     }
 
     private void OnTriggerExit(Collider collision)
@@ -228,7 +251,7 @@ public class CamCollisionDetection : MonoBehaviour
         float degree = (-camControl.minVerticalAngleRef) - angle + offset;
         float differenceInTheY = this.transform.position.y - hitObjectY;
 
-        if (differenceInTheY < 2)
+        if (differenceInTheY < 1)
         {
             camControl.minVerticalAngle = degree ;
             //print("Distance to ground :" + differenceInTheY + "degree : " + degree  + "cam control : " + camControl.minVerticalAngle); 
@@ -247,49 +270,41 @@ public class CamCollisionDetection : MonoBehaviour
       
         //more checks 
 
-        if (differenceInTheY <= 1.5)
+        if (differenceInTheY < 1)
         {
             camControl.maxVerticalAngle = degree;
         }
 
     }
 
-    IEnumerator AlterCameraDistance(float time)
+    void AlterCameraDistance()
     {
-     //   Debug.Log("zoom in");
-        //calculate interpolation value
-        float timeElapsed = 0;
-        while (timeElapsed < 1)
-        {
-            // Calculate the interpolation factor based on the current distance of the camera
-            float interpolationFactor = Mathf.InverseLerp(camControl.defeaultDistance,newCamDist, time);
-
-            // Use the interpolation factor to adjust the time for interpolation
-            float adjustedTime = interpolationFactor;
-
-            if (newCamDist > defaultDistanceMin)
-                camControl.defeaultDistance = Mathf.Lerp(camControl.defeaultDistance, newCamDist, timeElapsed);
-            timeElapsed += Time.deltaTime * adjustedTime;
-            yield return null;
-        }
-        isCoroutineRunning = false;
+       
     }
 
     IEnumerator ReturnCamToNormal()
     {
-        //Debug.Log("Zoom out");
-        float timeElapsed = 0;
-        while (timeElapsed < 1)
+        float elapsedTime = 0f;
+        while (elapsedTime < 1f)
         {
-                        // Calculate the interpolation factor based on the current distance of the camera
-            float interpolationFactor = Mathf.InverseLerp(camControl.defeaultDistance, newCamDist, 1);
+            // Calculate the new distance of the camera based on the current elapsed time
+            float interpolationFactor = elapsedTime / 1f;
+            float newDistance = Mathf.Lerp(newCamDist, defaultDistanceMax, interpolationFactor);
 
-            // Use the interpolation factor to adjust the time for interpolation
-            float adjustedTime = interpolationFactor;
-            camControl.defeaultDistance = Mathf.Lerp(newCamDist, defaultDistanceMax, timeElapsed);
-            timeElapsed += Time.deltaTime;
+            // Update the camera's distance
+            camControl.defeaultDistance = newDistance;
+
+            // Wait for the next frame
             yield return null;
-        } 
+
+            // Update the elapsed time
+            elapsedTime += Time.deltaTime;
+        }
+
+        // Reset the variables
+        newCamDist = 0f;
+        returnCamDistance = null;
+
     }
     /*
     [Header("Camera Obstruction")]

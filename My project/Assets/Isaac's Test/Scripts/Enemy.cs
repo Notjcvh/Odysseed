@@ -71,7 +71,8 @@ public class Enemy : MonoBehaviour
             if (this.tag == "Boss")
             {
                 animator.SetBool("isDying", true);
-                Destroy(myHealthbar.gameObject);
+                if(myHealthbar != null)
+                    Destroy(myHealthbar.gameObject);
             }
 
 

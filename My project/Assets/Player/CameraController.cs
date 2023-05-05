@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
     public float minVerticalAngleRef { get; private set; }
 
     [Header("Distance from Target")]
-    [Range(4, 10)] [SerializeField] public float defeaultDistance;
+    [Range(6, 10)] [SerializeField] public float defeaultDistance;
     public float DefaultDistanceMax { get; private set; }
     public float DefaultDistanceMin { get; private set; }
 
@@ -79,7 +79,7 @@ public class CameraController : MonoBehaviour
     {     
          ExploringCam(playerInput.mouseX, playerInput.mouseY);
 
-        var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
+      /*  var ray = new Ray(cam.transform.position, followObj.position - cam.transform.position);
         RaycastHit hit;
        
         if (Physics.Raycast(ray, out hit, 40, ~(obstructionMasks),QueryTriggerInteraction.Ignore)) 
@@ -96,7 +96,7 @@ public class CameraController : MonoBehaviour
                     Obstruction.GetComponent<ObstructionView>().SendMessage("NotObstructing");
                 }
             }       
-        }
+        }*/
     }
     #endregion
 
