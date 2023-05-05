@@ -135,8 +135,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Continue()
     {
-        gameManager.gamePaused = !gameManager.gamePaused;
-       // activatePlayer?.Raise();
+        sceneHandler.countinuebutton = true; 
+        activatePlayer?.Raise();
         callObjective?.Raise();
     }
 

@@ -70,7 +70,6 @@ public class PlayerInput : MonoBehaviour
 
             if(gameManager.gamePaused != true)
             {
-                Debug.Log("Hello" + gameManager.gamePaused);
                 backButton = Input.GetKey(KeyCode.F);
                 horizontalInput = Input.GetButtonDown("Horizontal"); // number 1
                 horizontalAxis = Input.GetAxisRaw("Horizontal");

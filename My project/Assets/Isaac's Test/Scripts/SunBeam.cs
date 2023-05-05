@@ -15,13 +15,12 @@ public class SunBeam : Abilites
     public GameObject player;
     public ParticleSystem lazerParticles;
     public AudioSource lazerAudioSource;
-
-    public bool audioCalled;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         abilityCooldown = GameObject.FindGameObjectWithTag("SunSeed").GetComponent<AbilityCooldown>();
         lazerAudioSource = lazerParticles.GetComponent<AudioSource>();
+        Debug.Log(lazerAudioSource);
     }
 
     private void Update()
@@ -31,13 +30,7 @@ public class SunBeam : Abilites
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, lazerStart.transform.position);
             lineRenderer.SetPosition(1, target.position);
-
-            if(!lazerAudioSource.isPlaying)
-            {
-                lazerAudioSource.Play();
-                audioCalled = true;
-            }
-               
+            lazerParticles.Play();
         }
         else if(lineRenderer != null)
         {
@@ -86,7 +79,6 @@ public class SunBeam : Abilites
     {
         yield return new WaitForSeconds(waitTime);
         lazerParticles.Stop();
-        lazerAudioSource.Stop();
         Destroy(lineRenderer);
         useLaser = false;
     }
