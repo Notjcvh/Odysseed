@@ -975,6 +975,9 @@ MonoBehaviour:
   EnemyDirtSpawnSpeed: 13
   enemyMax: 0
   enemies: []
+  audioSource: {fileID: 0}
+  playingAudio: 0
+  audioTableSet: 0
 --- !u!114 &5597614184794150190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,19 +990,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1986e8c424c04a24ab7f9d5de3696ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  rb: {fileID: 0}
+  maxHealth: 250
   currentHealth: 0
   hitEffect: {fileID: 0}
   animator: {fileID: 4715217821990840435}
+  hasDamageAudio: 0
+  audioSource: {fileID: 0}
+  enemyEventCaller: {fileID: 0}
   isStunned: 0
   isTargeted: 1
   myHealthbar: {fileID: 0}
   myRoom: {fileID: 0}
-  audioController: {fileID: 0}
-  playingAudio: 0
-  queueAudio: 0
-  clip: {fileID: 0}
-  audioJobSent: 0
   blinkIntensity: 0
   blinkDuration: 0
   mats: []

@@ -165,6 +165,8 @@ MonoBehaviour:
   projectileVelocity: 10
   enemy: {fileID: 4805589847024103410, guid: a985ca7fbad96224698622a0e908695b, type: 3}
   distanceFromPlayer: 0
+  walkingAttackHitbox: {fileID: 0}
+  walkingAttackHitbox1: {fileID: 0}
   audioSource: {fileID: 0}
   playingAudio: 0
   audioTableSet: 0
@@ -181,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  maxHealth: 200
+  maxHealth: 300
   currentHealth: 0
   hitEffect: {fileID: 1014210819661757414, guid: 09c7af6e75624494e92d661a082fab8b, type: 3}
   animator: {fileID: 8633926705082632788}
