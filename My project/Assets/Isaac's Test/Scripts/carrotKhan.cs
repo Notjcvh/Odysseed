@@ -24,10 +24,11 @@ public class carrotKhan : MonoBehaviour
     [Header("LazerBeam")]
     private LazerBeam lb;
     public ParticleSystem ps;
+
     [Header("Phase 2")]
     public bool hasExploded = false;
     private Animator animator;
-
+    public SceneEvent phase2Audio;
 
     [Header("Audio Caller")]
     public AudioSource audioSource;
@@ -218,6 +219,7 @@ public class carrotKhan : MonoBehaviour
         animator.SetBool("isExploding", true);
         isMoving = false;
         isAttacking = true;
+        phase2Audio.Raise();
     }
     public void ExplodeEnd()
     {
