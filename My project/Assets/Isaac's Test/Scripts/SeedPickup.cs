@@ -39,8 +39,7 @@ public class SeedPickup : MonoBehaviour
         abilityHandler = GameObject.FindGameObjectWithTag("AbilityHandler").GetComponent<AbilityHandler>();
         _collider = GetComponent<SphereCollider>();
         _rigidbody = GetComponent<Rigidbody>();
-        if (tutorialPopUp != null)
-            tutorialPopUp = GetComponentInChildren<TutorialPopUp>();
+            
     }
 
 

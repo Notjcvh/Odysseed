@@ -19,6 +19,8 @@ public class SceneHandler : MonoBehaviour
     public bool sceneActivated = false;
     public Vector3 spawnPosition;
 
+    public bool tutorialActivated = false;
+
     [Header("Background Audio Caller")]
     public AudioType playingAudio; // the currently playing audio
     [SerializeField] private AudioType queueAudio; // the next audio to play
@@ -55,16 +57,19 @@ public class SceneHandler : MonoBehaviour
         if (playerInput.pause)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
-            switch(gameManager.gamePaused, playerManger.isTalking)
+            switch(gameManager.gamePaused, playerManger.isTalking, tutorialActivated)
             {
-                case (false, false):
+                case (false, false, false): 
                     SetState(InteractionStates.Active);
                     break;
-                case (true, false):
+                case (true, false, false):
                     SetState(InteractionStates.Passive);
                     break;
-                case (true, true):
-                case (false, true): SetState(InteractionStates.Passive);
+                case (true, true, false): // game is paused but we are still talking 
+                case (false, true, false): //game is not puased, we are talking  
+                case (true, false, true): // game is paused but we are still in a tutorial 
+                case (false, false, true): // game is not paused, wa are is dialouge
+                 SetState(InteractionStates.Passive);
                     break;
             }
         }

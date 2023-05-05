@@ -22,6 +22,7 @@ public class Tutorial : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         cam = Camera.main;
         _canvas.worldCamera = cam;
         _canvas.sortingLayerName = "UI";
+        _canvas.sortingOrder = 2;
         _canvas.planeDistance = 1f;
 
         //Gets the position within the parent array 

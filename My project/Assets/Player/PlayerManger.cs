@@ -200,9 +200,6 @@ public class PlayerManger : MonoBehaviour
             }
         }
 
-        
-
-       
 
         #region Handeling Player Health 
 
@@ -213,6 +210,7 @@ public class PlayerManger : MonoBehaviour
         }
         if (currentHealth <= 0)
         {
+            sceneHandler.SetState(InteractionStates.Passive);
             SetSuperState(SuperStates.Dying);
         }
         #endregion
@@ -665,6 +663,8 @@ public class PlayerManger : MonoBehaviour
         // if guarding and player block health is greater than 0 
         if (_currentBlockStamina > 0 && subStates == SubStates.Guarding)
             return;
+        else if (sceneHandler.tutorialActivated == true || isTalking == true)
+            return;
         else
         {
             currentHealth -= damage;
@@ -674,7 +674,10 @@ public class PlayerManger : MonoBehaviour
      }
     public void RestoreHealth()
     {
-       currentHealth = maxHealth;
+        if (currentHealth > 0)
+            currentHealth = maxHealth;
+        else
+            return;
     }
 
     public void CallPlayerUi()

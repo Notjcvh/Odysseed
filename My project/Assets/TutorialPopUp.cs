@@ -41,6 +41,7 @@ public class TutorialPopUp : MonoBehaviour
             activated = true;
             other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             sceneHandler.SetState(InteractionStates.Passive);
+            sceneHandler.tutorialActivated = true;
            // sceneHandler.DeactivatePlayer();
         }
     }
@@ -50,6 +51,7 @@ public class TutorialPopUp : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             activated = true;
+            sceneHandler.tutorialActivated = true;
             sceneHandler.SetState(InteractionStates.Passive);
             // sceneHandler.DeactivatePlayer();
         }
@@ -60,8 +62,9 @@ public class TutorialPopUp : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         activated = true;
+        sceneHandler.tutorialActivated = true;
         sceneHandler.SetState(InteractionStates.Passive);
-        sceneHandler.DeactivatePlayer();
+      //  sceneHandler.DeactivatePlayer();
     }
 
     // on Input press change the game 
@@ -126,6 +129,7 @@ public class TutorialPopUp : MonoBehaviour
     {
         obj.SetActive(false);
         activated = false;
+        sceneHandler.tutorialActivated = false;
         childTransforms[currentActivePrompt].gameObject.SetActive(false);
         sceneHandler.SetState(InteractionStates.Active);
         sceneHandler.ActivatePlayer();
