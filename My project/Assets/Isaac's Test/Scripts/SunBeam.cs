@@ -14,10 +14,13 @@ public class SunBeam : Abilites
     public float range;
     public GameObject player;
     public ParticleSystem lazerParticles;
+    public AudioSource lazerAudioSource;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         abilityCooldown = GameObject.FindGameObjectWithTag("SunSeed").GetComponent<AbilityCooldown>();
+        lazerAudioSource = lazerParticles.GetComponent<AudioSource>();
+        Debug.Log(lazerAudioSource);
     }
 
     private void Update()

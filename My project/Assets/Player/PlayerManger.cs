@@ -67,6 +67,9 @@ public class PlayerManger : MonoBehaviour
     private IEnumerator dashCorutine;
     public bool dashForceApplied; // if we the air we want to set to true to stop the Rigibody from sliding
 
+
+    public bool hitKillFloor;
+
     [Header("Blocking")]
     public GameObject shield;
     private float maxBlockStamina = 100;
@@ -561,6 +564,15 @@ public class PlayerManger : MonoBehaviour
             _currentBlockStamina -= damage;
         }
     }
+    
+    public void HitKillFloor()
+    {
+        playerBody.useGravity = false;
+        currentHealth = 0;
+        sceneHandler.SetState(InteractionStates.Passive);
+        SetSuperState(SuperStates.Dying);
+    }
+
 
 
     #region Ground Check

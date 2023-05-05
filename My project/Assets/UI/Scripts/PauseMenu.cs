@@ -135,9 +135,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Continue()
     {
-        gameManager.gamePaused = false;
-        if(sceneHandler != null)
-            sceneHandler.SetState(InteractionStates.Active);
+        sceneHandler.countinuebutton = true; 
         activatePlayer?.Raise();
         callObjective?.Raise();
     }
@@ -159,6 +157,7 @@ public class PauseMenu : MonoBehaviour
         BackButton();
         gameManager.gamePaused = false;
         gameManager.BackUpClose();
+        gameManager.hasSet.Clear(); //Clear all checkpoints 
         gameManager.LoadLevel(sceneData.ToString());
     }
 }

@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class KillPlayerOnCollision : MonoBehaviour
 {
-  /*  private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.tag == "Player")
+        if(other.gameObject.tag == "Player")
         {
-            GameObject player = collision.gameObject;
-            PlayerState playerState = player.GetComponent<PlayerState>();
-           
-            if(playerState != null)
-            {
-                playerState.isAlive = false;
-                Destroy(this.gameObject);
-            }
+            other.GetComponent<PlayerManger>().HitKillFloor();
         }
-    }*/
+
+
+
+    }
 }

@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         audioSource.clip = audioClip;
-        //LoadLevel(SceneManager.GetActiveScene());
+        LoadLevel(SceneManager.GetActiveScene());
 
         //initializeScene.Raise();
         //initializePlayer.Raise();
@@ -113,7 +113,6 @@ public class GameManager : MonoBehaviour
     IEnumerator LoadAsycnchronously(string sceneName)
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-
 
         //choose image
         if (loadingScreenSprites?.Length != 0)
@@ -246,12 +245,12 @@ public class GameManager : MonoBehaviour
 
     public void  QuitGame()
     {
-       // struck the if/else for isEditor, as this makes Unity very mad if you try to build the game. - Thomas
-       //if(Application.isEditor)
-       //{
-       //   EditorApplication.isPlaying = false;
-       //}
-
+        // struck the if/else for isEditor, as this makes Unity very mad if you try to build the game. - Thomas
+        //if(Application.isEditor)
+        //{
+        //   EditorApplication.isPlaying = false;
+        //}
+        hasSet.Clear();
         Application.Quit();
     }
 

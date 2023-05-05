@@ -108,6 +108,8 @@ public enum AudioType
     RotBoss,
     PotatoKingMusic,
     CastleTheme,
+    CK_PhaseOne_Music,
+    CK_PhaseTwo_Music,
     #endregion
 
     #region NPCs
