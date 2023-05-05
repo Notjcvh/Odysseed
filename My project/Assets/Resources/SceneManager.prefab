@@ -49,11 +49,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   player: {fileID: 0}
+  isADungeon: 0
   playerManger: {fileID: 0}
   audioController: {fileID: 1130789478}
   sceneStates: 0
   sceneActivated: 0
   spawnPosition: {x: 0, y: 0, z: 0}
+  tutorialActivated: 0
   playingAudio: 0
   queueAudio: 86
   clip: {fileID: 0}
@@ -185,7 +187,7 @@ MonoBehaviour:
     - type: 82
       clip: {fileID: 8300000, guid: 4c78dea108389ef4b9e255eef38111d0, type: 3}
     - type: 84
-      clip: {fileID: 8300000, guid: 300161631f8bdae418982882a63c90cd, type: 3}
+      clip: {fileID: 8300000, guid: 05bbc5c8096b0fd498201061ab8104dc, type: 3}
     - type: 85
       clip: {fileID: 8300000, guid: e8a527407532ca94e9ecc4cc07590ed2, type: 3}
     - type: 86
