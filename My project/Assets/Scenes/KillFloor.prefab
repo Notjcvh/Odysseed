@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4985336167388199204}
   - component: {fileID: 4985336167388199207}
   - component: {fileID: 4985336167388199206}
-  - component: {fileID: 4985336167388199209}
+  - component: {fileID: 8260653984891378424}
   m_Layer: 0
   m_Name: KillFloor
   m_TagString: Untagged
@@ -55,7 +55,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4985336167388199209
+--- !u!114 &8260653984891378424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,11 +64,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4985336167388199208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 837d275ebc84f4a4d82bdbc91d742a02, type: 3}
+  m_Script: {fileID: 11500000, guid: da5167a7a23ebb54f9d37c3f3d7961bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactEffect: {fileID: 1014210819661757414, guid: f4a062340dc129c4385a0fcb7fb0d7e0, type: 3}
-  playerManager: {fileID: 0}
-  damage: 50000
-  hitAlready: 0
-  hitShield: 0

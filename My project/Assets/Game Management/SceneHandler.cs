@@ -42,10 +42,12 @@ public class SceneHandler : MonoBehaviour
       //  gameManager.SetPlayerPosition(player.transform.position);
         audioController = GetComponent<AudioController>();
         audioSource = GetComponent<AudioSource>();
+        SetAudio();
     }
 
     private void Update()
     {
+        Debug.Log(sceneStates);
         if(sceneActivated == true)
         {
            if (audioJobSent == false)
@@ -124,8 +126,10 @@ public class SceneHandler : MonoBehaviour
     // Call this function if we want to change audio 
    public void QueueAudio(SceneEvent sceneEvent)
    {
+        Debug.Log(sceneEvent.name);
         switch (sceneEvent.name)
         {
+          
             case ("Audio_Dungeon1"):
                 queueAudio = AudioType.DungeonOne;
                 break;
@@ -158,10 +162,10 @@ public class SceneHandler : MonoBehaviour
         }
    }
 
-    void ManageAudio(AudioType type)
+    void SetAudio()
     {
-       if(ourAudio.Count < 1)
-       {
+        if (ourAudio.Count < 1)
+        {
             // Loop through each audio track
             foreach (AudioController.AudioTrack track in audioController.tracks)
             {
@@ -174,7 +178,12 @@ public class SceneHandler : MonoBehaviour
                     ourAudio.Add(audioObject.type, audioObject.clip);
                 }
             }
-       }
+        }
+    }
+
+    void ManageAudio(AudioType type)
+    {
+       
         if (ourAudio.ContainsKey(type))
         {
             clip = ourAudio[type];
@@ -223,11 +232,12 @@ public class SceneHandler : MonoBehaviour
 
     public void DeactivatePlayer()
     {
+       playerManger.playerBody.velocity = Vector3.zero;
        playerManger.activeInputsEnabled = false;
        playerManger.inactiveInputsEnabled = true;
        playerManger.SetSubState(SubStates.Idle);
        playerManger.StopMovement = false;
-        playerManger.playerBody.velocity = Vector3.zero;
+
         // gameManager.Cursor.SetActive(true);
     }
 }

@@ -15,11 +15,17 @@ public class TutorialPopUp : MonoBehaviour
 
     private void OnEnable()
     {
-        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
+        if(sceneHandler =null)
+        {
+            sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
+        }
+        
         _player = GameObject.FindGameObjectWithTag("Player");
         playerManger = _player.GetComponent<PlayerManger>();
         playerInput = _player.GetComponent<PlayerInput>();
         childTransforms = new List<Transform>(this.transform.childCount);
+
+      
 
         foreach (Transform child in transform)
         {
@@ -36,13 +42,13 @@ public class TutorialPopUp : MonoBehaviour
     //If the player triggers the tutorial use this
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.tag == "Player")
         {
             activated = true;
-            other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            sceneHandler.SetState(InteractionStates.Passive);
             sceneHandler.tutorialActivated = true;
-           // sceneHandler.DeactivatePlayer();
+            sceneHandler.SetState(InteractionStates.Passive);
+            // sceneHandler.DeactivatePlayer();
         }
     }
 
@@ -60,10 +66,11 @@ public class TutorialPopUp : MonoBehaviour
     //else call this 
     public void Activated()
     {
+        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
+        sceneHandler.SetState(InteractionStates.Passive);
+        sceneHandler.tutorialActivated = true;
         this.gameObject.SetActive(true);
         activated = true;
-        sceneHandler.tutorialActivated = true;
-        sceneHandler.SetState(InteractionStates.Passive);
       //  sceneHandler.DeactivatePlayer();
     }
 
@@ -84,13 +91,12 @@ public class TutorialPopUp : MonoBehaviour
         }
 
         // Check for back button press
-        if (playerManger.inactiveInputsEnabled)
-        {
-            if (playerInput.backButton && activated == true)
+        if (playerManger.inactiveInputsEnabled )
+        { 
+            if(playerInput.backButton && activated == true)
             {
-                CloseTutorial(this.gameObject);
+                this.gameObject.SetActive(false);
             }
-
 
             if (playerInput.horizontalInput && activated == true)
             {
@@ -125,13 +131,18 @@ public class TutorialPopUp : MonoBehaviour
     }
 
     //close 
-    public void CloseTutorial(GameObject obj)
+
+    private void OnDisable()
     {
-        obj.SetActive(false);
-        activated = false;
+        sceneHandler = GameObject.FindGameObjectWithTag("Scene Handler").GetComponent<SceneHandler>();
         sceneHandler.tutorialActivated = false;
-        childTransforms[currentActivePrompt].gameObject.SetActive(false);
+        activated = false;
         sceneHandler.SetState(InteractionStates.Active);
-        sceneHandler.ActivatePlayer();
+        childTransforms[currentActivePrompt].gameObject.SetActive(false);
+        if(transform.parent != null)
+        {
+            transform.parent.GetComponent<SeedPickup>().Claimed();
+        }
     }
+  
 }

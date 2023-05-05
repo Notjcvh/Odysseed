@@ -52,12 +52,20 @@ public class SeedPickup : MonoBehaviour
             abilityHandler.AddAbility(abilityIndex);
             if (tutorialPopUp != null )
             {
-                tutorialPopUp?.Activated();
+                tutorialPopUp.Activated();
             }
             else
                 Destroy(this.gameObject);
         }
     }
+
+    public void Claimed()
+    {
+        tutorialPopUp.gameObject.SetActive(false);
+        Destroy(this.gameObject);
+    }
+
+
 
     private void isGrounded()
     {
