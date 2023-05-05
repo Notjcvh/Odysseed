@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class SceneHandler : MonoBehaviour
 {
     [Header("Referencing")]
-    [SerializeField] private GameManager gameManager; 
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject player;
     public bool isADungeon;
 
@@ -39,28 +39,30 @@ public class SceneHandler : MonoBehaviour
         playerInput = player.GetComponent<PlayerInput>();
         playerManger = player.GetComponent<PlayerManger>();
         gameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
-      //  gameManager.SetPlayerPosition(player.transform.position);
+        //  gameManager.SetPlayerPosition(player.transform.position);
         audioController = GetComponent<AudioController>();
         audioSource = GetComponent<AudioSource>();
+        SetAudio();
     }
 
     private void Update()
     {
-        if(sceneActivated == true)
+        Debug.Log(sceneStates);
+        if (sceneActivated == true)
         {
-           if (audioJobSent == false)
-           {
+            if (audioJobSent == false)
+            {
                 audioJobSent = true;
                 ManageAudio(queueAudio);
                 StartCoroutine(WaitToPlay(clip.length));
-           }
+            }
         }
         if (playerInput.pause || countinuebutton == true)
         {
             gameManager.gamePaused = (!gameManager.gamePaused);
-            switch(gameManager.gamePaused, playerManger.isTalking, tutorialActivated)
+            switch (gameManager.gamePaused, playerManger.isTalking, tutorialActivated)
             {
-                case (false, false, false): 
+                case (false, false, false):
                     SetState(InteractionStates.Active);
                     break;
                 case (true, false, false):
@@ -70,7 +72,7 @@ public class SceneHandler : MonoBehaviour
                 case (false, true, false): //game is not puased, we are talking  
                 case (true, false, true): // game is paused but we are still in a tutorial 
                 case (false, false, true): // game is not paused, wa are is dialouge
-                 SetState(InteractionStates.Passive);
+                    SetState(InteractionStates.Passive);
                     break;
             }
 
@@ -112,20 +114,22 @@ public class SceneHandler : MonoBehaviour
 
     #region Sound looping
     // Call this function if we want to stop the currently playing audio 
-    public void StopAudio(float delay) 
+    public void StopAudio(float delay)
     {
         StopCoroutine(WaitToPlay(clip.length));
-        if(audioSource.isPlaying)
+        if (audioSource.isPlaying)
         {
             audioController.StopAudio(playingAudio, false, 0, false);
             StartCoroutine(WaitToPlay(delay));
         }
     }
     // Call this function if we want to change audio 
-   public void QueueAudio(SceneEvent sceneEvent)
-   {
+    public void QueueAudio(SceneEvent sceneEvent)
+    {
+        Debug.Log(sceneEvent.name);
         switch (sceneEvent.name)
         {
+
             case ("Audio_Dungeon1"):
                 queueAudio = AudioType.DungeonOne;
                 break;
@@ -156,12 +160,12 @@ public class SceneHandler : MonoBehaviour
             default:
                 break;
         }
-   }
+    }
 
-    void ManageAudio(AudioType type)
+    void SetAudio()
     {
-       if(ourAudio.Count < 1)
-       {
+        if (ourAudio.Count < 1)
+        {
             // Loop through each audio track
             foreach (AudioController.AudioTrack track in audioController.tracks)
             {
@@ -174,7 +178,12 @@ public class SceneHandler : MonoBehaviour
                     ourAudio.Add(audioObject.type, audioObject.clip);
                 }
             }
-       }
+        }
+    }
+
+    void ManageAudio(AudioType type)
+    {
+
         if (ourAudio.ContainsKey(type))
         {
             clip = ourAudio[type];
@@ -213,7 +222,7 @@ public class SceneHandler : MonoBehaviour
 
     public void ActivatePlayer()
     {
-        if(playerManger!= null)
+        if (playerManger != null)
         {
             playerManger.activeInputsEnabled = true;
             playerManger.inactiveInputsEnabled = false;
@@ -223,11 +232,12 @@ public class SceneHandler : MonoBehaviour
 
     public void DeactivatePlayer()
     {
-       playerManger.activeInputsEnabled = false;
-       playerManger.inactiveInputsEnabled = true;
-       playerManger.SetSubState(SubStates.Idle);
-       playerManger.StopMovement = false;
         playerManger.playerBody.velocity = Vector3.zero;
+        playerManger.activeInputsEnabled = false;
+        playerManger.inactiveInputsEnabled = true;
+        playerManger.SetSubState(SubStates.Idle);
+        playerManger.StopMovement = false;
+
         // gameManager.Cursor.SetActive(true);
     }
 }
@@ -235,7 +245,7 @@ public class SceneHandler : MonoBehaviour
 
 public enum InteractionStates
 {
-    None, 
+    None,
     Active, // player Inputs are fully functoinal 
     Passive, // does not mean the game is pause but means certain player actions are disabled
     Restricted, // Player cannot interact with the game at all

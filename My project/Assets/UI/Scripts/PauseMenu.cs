@@ -10,9 +10,9 @@ public class PauseMenu : MonoBehaviour
     public SceneHandler sceneHandler;
     private SceneData sceneData = SceneData.Title;
     public Camera myCamera;
-  
+
     public Canvas canvas;
-    public  VerticalLayoutGroup layoutGroup;
+    public VerticalLayoutGroup layoutGroup;
     public bool optionsOpened;
 
     public GameObject menuScreen;
@@ -48,7 +48,7 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if(gameManager.mainCamera != null)
+        if (gameManager.mainCamera != null)
             transform.LookAt(gameManager.mainCamera.transform);
     }
 
@@ -62,7 +62,7 @@ public class PauseMenu : MonoBehaviour
     //Pause Menu Options
     public void OptionsMenu()
     {
-         //Start Couritine loop through
+        //Start Couritine loop through
         if (optionsOpened == true)
         {
             StartCoroutine(CloseOptionSubMenu());
@@ -135,8 +135,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Continue()
     {
-        sceneHandler.countinuebutton = true; 
-        activatePlayer?.Raise();
+        gameManager.gamePaused = !gameManager.gamePaused;
+        // activatePlayer?.Raise();
         callObjective?.Raise();
     }
 

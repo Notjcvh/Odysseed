@@ -49,15 +49,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   player: {fileID: 0}
-  isADungeon: 0
+  isADungeon: 1
   playerManger: {fileID: 0}
   audioController: {fileID: 1130789478}
   sceneStates: 0
   sceneActivated: 0
   spawnPosition: {x: 0, y: 0, z: 0}
   tutorialActivated: 0
+  countinuebutton: 0
   playingAudio: 0
-  queueAudio: 86
+  queueAudio: 83
   clip: {fileID: 0}
   audioJobSent: 0
 --- !u!82 &1130789477
@@ -192,6 +193,10 @@ MonoBehaviour:
       clip: {fileID: 8300000, guid: e8a527407532ca94e9ecc4cc07590ed2, type: 3}
     - type: 86
       clip: {fileID: 8300000, guid: e604d1ef968338140a89af654af7ac04, type: 3}
+    - type: 87
+      clip: {fileID: 8300000, guid: 8168109502eedaa4cba96b4b05364c02, type: 3}
+    - type: 88
+      clip: {fileID: 8300000, guid: 5bc0c3c1e372f4e4396964bc8f1d6a79, type: 3}
 --- !u!114 &1761687039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,6 +419,90 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: SceneHandeler, Assembly-CSharp
           m_MethodName: ActivatePlayer
           m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 5d4404aabd09c094093368bd3600890d, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 5d4404aabd09c094093368bd3600890d, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: StopAudio
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 4b43825ec0d336448b25c1e8800ce8e0, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 4b43825ec0d336448b25c1e8800ce8e0, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: StopAudio
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 628cc8d0effa2944d9def6936cf3fb6f, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: QueueAudio
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 628cc8d0effa2944d9def6936cf3fb6f, type: 2}
+            m_ObjectArgumentAssemblyTypeName: SceneEvent, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8036716337707442957}
+          m_TargetAssemblyTypeName: SceneHandler, Assembly-CSharp
+          m_MethodName: StopAudio
+          m_Mode: 4
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

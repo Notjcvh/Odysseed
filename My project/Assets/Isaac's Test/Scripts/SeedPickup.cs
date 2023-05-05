@@ -13,7 +13,7 @@ public class SeedPickup : MonoBehaviour
     public RaycastHit hit;
     public float maxDistance;
 
-    public bool triggered =false;
+    public bool triggered = false;
 
 
     //Tutorial
@@ -24,7 +24,7 @@ public class SeedPickup : MonoBehaviour
 
 
     public float speed = 0f;
-    
+
     public bool ForwardX = false;
     public bool ForwardY = false;
     public bool ForwardZ = false;
@@ -39,7 +39,7 @@ public class SeedPickup : MonoBehaviour
         abilityHandler = GameObject.FindGameObjectWithTag("AbilityHandler").GetComponent<AbilityHandler>();
         _collider = GetComponent<SphereCollider>();
         _rigidbody = GetComponent<Rigidbody>();
-            
+
     }
 
 
@@ -50,14 +50,22 @@ public class SeedPickup : MonoBehaviour
             triggered = true;
             _collider.enabled = false;
             abilityHandler.AddAbility(abilityIndex);
-            if (tutorialPopUp != null )
+            if (tutorialPopUp != null)
             {
-                tutorialPopUp?.Activated();
+                tutorialPopUp.Activated();
             }
             else
                 Destroy(this.gameObject);
         }
     }
+
+    public void Claimed()
+    {
+        tutorialPopUp.gameObject.SetActive(false);
+        Destroy(this.gameObject);
+    }
+
+
 
     private void isGrounded()
     {

@@ -24,10 +24,11 @@ public class carrotKhan : MonoBehaviour
     [Header("LazerBeam")]
     private LazerBeam lb;
     public ParticleSystem ps;
+
     [Header("Phase 2")]
     public bool hasExploded = false;
     private Animator animator;
-
+    public SceneEvent phase2Audio;
 
     [Header("Audio Caller")]
     public AudioSource audioSource;
@@ -60,7 +61,7 @@ public class carrotKhan : MonoBehaviour
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
         if (!isAttacking && !hasExploded)
         {
-            switch(attackCounter)
+            switch (attackCounter)
             {
                 case (0):
                     Idles();
@@ -84,7 +85,7 @@ public class carrotKhan : MonoBehaviour
                     break;
             }
         }
-        if(!hasExploded && enemyScript.currentHealth < healthThreshold)
+        if (!hasExploded && enemyScript.currentHealth < healthThreshold)
         {
             Explode();
         }
@@ -92,7 +93,7 @@ public class carrotKhan : MonoBehaviour
         {
             switch (attackCounter)
             {
-                case(0):
+                case (0):
                     Idle2();
                     break;
                 case (1):
@@ -114,7 +115,7 @@ public class carrotKhan : MonoBehaviour
                     break;
             }
         }
-        if(!isMoving)
+        if (!isMoving)
         {
             age.SetDestination(player.transform.position);
             age.speed = 0f;
@@ -123,7 +124,7 @@ public class carrotKhan : MonoBehaviour
         {
             age.SetDestination(player.transform.position);
         }
-        if(playerNearbyEndsAnimation)
+        if (playerNearbyEndsAnimation)
         {
             if (playerInAttackRange)
             {
@@ -218,6 +219,7 @@ public class carrotKhan : MonoBehaviour
         animator.SetBool("isExploding", true);
         isMoving = false;
         isAttacking = true;
+        phase2Audio.Raise();
     }
     public void ExplodeEnd()
     {

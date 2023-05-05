@@ -155,6 +155,7 @@ public class CamCollisionDetection : MonoBehaviour
         // Raycast from the center of the octahedron to the backward direction
         if (Physics.Raycast(transform.position, Vector3.ProjectOnPlane(-forward, upElevation), out hit, raycastDistance, wallLayer))
         {
+            /*
             Vector3 point = new Vector3(hit.point.x, transform.position.y, hit.point.z);
             float horizontalDist = (transform.position - point).magnitude;
 
@@ -180,7 +181,7 @@ public class CamCollisionDetection : MonoBehaviour
                 // Update the camera's distance
                 camControl.defeaultDistance = newCamDist;
                 zoomtimeElapsed += Time.deltaTime;
-            }
+            }*/
         
         }
 
