@@ -54,13 +54,14 @@ public class PlayerManger : MonoBehaviour
 
     [Header("GroundCheck")]
     public LayerMask Ground;
-    public float distanceToGround;
+
     public float lastPlayerPosY;
     [SerializeField] private float jumpForce;
     private float gravity;
     public AnimationCurve gravityValueCurve;
     public float gravityMultiplier = 0;
     private IEnumerator gravityCorutine;
+    private float distancefromGround;
 
     [Header("Dash")]
     public float force;
@@ -391,9 +392,6 @@ public class PlayerManger : MonoBehaviour
                 SetSubState(SubStates.LaunchChargedAttack);
                 isAttacking = true;
             }
-
-
-
             else if (playerInput.jumpInput && playerInput.movementInput == Vector3.zero && playerBody.velocity.y >= 0)
             {
                 SetSubState(SubStates.Jumping);
@@ -506,7 +504,7 @@ public class PlayerManger : MonoBehaviour
             {
                 SetSubState(SubStates.Moving);
             }
-            else if (playerInput.attack && !isAttacking)
+            else if (playerInput.attack && !isAttacking && distancefromGround > 4)
             {
                 SetSubState(SubStates.Attacking);
                 isAttacking = true;
@@ -541,7 +539,7 @@ public class PlayerManger : MonoBehaviour
             }
 
             //Moving and Attacking 
-            if (playerInput.attack && playerInput.movementInput != Vector3.zero && isAttacking == false)
+            if (playerInput.attack && playerInput.movementInput != Vector3.zero && !isAttacking && distancefromGround > 4)
             {
                 stopMovementEvent = true;
                 isAttacking = true;
@@ -573,27 +571,31 @@ public class PlayerManger : MonoBehaviour
         SetSuperState(SuperStates.Dying);
     }
 
-
-
     #region Ground Check
-        public bool IsGrounded()
+    public bool IsGrounded()
+    {
+        bool isHit;
+        Vector3 direction = Vector3.down;
+        RaycastHit hit;
+        float length = 10;
+        Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * length);
+        if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, length, Ground, QueryTriggerInteraction.Ignore))
         {
-            bool isHit;
-            Vector3 direction = Vector3.down;
-            RaycastHit hit;
-            float distanceCheck = sphereCollider.bounds.extents.y + distanceToGround;
-            Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
-            if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
+
+            Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+            //distance vector from ground to player
+            distancefromGround = (transform.position - hitPos).magnitude;
+
+            if (distancefromGround < 1.7)
             {
-                isHit = true;
-                Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
-                Ray ray2 = new Ray(hitPos, hit.normal * distanceToGround);
+                Ray ray2 = new Ray(hitPos, hit.normal * length);
                 float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
-                if (angle > 0 && angle <= 25)
+                if (angle > 0 && angle <= 45)
                 {
                     if (isDashing == true)
-                        dashForceApplied = true;
+                    dashForceApplied = true;
                 }
+                isHit = true;
                 return isHit;
             }
             else
@@ -601,10 +603,18 @@ public class PlayerManger : MonoBehaviour
                 isHit = false;
                 return isHit;
             }
-        }
 
-        //Checking the change in the position of the player 
-        public SuperStates checkYVelocity(SuperStates currentState)
+           
+        }
+        else
+        {
+            isHit = false;
+            return isHit;
+        }
+    }
+
+    //Checking the change in the position of the player 
+    public SuperStates checkYVelocity(SuperStates currentState)
         {
             if (transform.hasChanged)
             {
@@ -882,40 +892,30 @@ public class PlayerManger : MonoBehaviour
     {
 
         /*
-         float ydirection = playerBody.velocity.y;
-         if(ydirection > 0)
-         {
-             Gizmos.color = Color.red;
-         }
-         else if(ydirection < 0)
-         {
-             Gizmos.color = Color.green;
-         }
-         Gizmos.DrawRay(sphereCollider.bounds.center, new Vector3(0, ydirection, 0).normalized * 10f);
+       float ydirection = playerBody.velocity.y;
+       if(ydirection > 0)
+       {
+           Gizmos.color = Color.red;
+       }
+       else if(ydirection < 0)
+       {
+           Gizmos.color = Color.green;
+       }
+       Gizmos.DrawRay(sphereCollider.bounds.center, new Vector3(0, ydirection, 0).normalized * 10f);*/
 
-
-
-
-
-
-
-
-
-
-
-
+        float length = 10;
         // Set the color of the gizmo
-         Gizmos.color = Color.yellow;
+        Gizmos.color = Color.yellow;
 
          // Draw the box cast using Gizmos.DrawWireCube and Gizmos.DrawRay
          Gizmos.DrawWireCube(sphereCollider.bounds.center, sphereCollider.bounds.size);
-         Gizmos.DrawRay(sphereCollider.bounds.center, Vector3.down * distanceToGround);
+         Gizmos.DrawRay(sphereCollider.bounds.center, Vector3.down * length);
 
-         Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * distanceToGround);
+         Ray ray = new Ray(sphereCollider.bounds.center, Vector3.down * length);
 
          // Check if the box cast hits anything
          RaycastHit hit;
-         if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, distanceToGround, Ground, QueryTriggerInteraction.Ignore))
+         if (Physics.Raycast(sphereCollider.bounds.center, Vector3.down, out hit, length, Ground, QueryTriggerInteraction.Ignore))
          {
              Vector3 hitPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
              // Set the color of the gizmo to red if there is a hit
@@ -925,8 +925,8 @@ public class PlayerManger : MonoBehaviour
 
 
              Gizmos.color = Color.green;
-             Gizmos.DrawRay(hitPos, hit.normal * distanceToGround);
-             Ray ray2 = new Ray(hitPos, hit.normal * distanceToGround);
+             Gizmos.DrawRay(hitPos, hit.normal * length);
+             Ray ray2 = new Ray(hitPos, hit.normal * length);
 
              float angle = Mathf.Asin(Vector3.Cross(ray.direction, ray2.direction).magnitude) * Mathf.Rad2Deg;
 
@@ -937,12 +937,12 @@ public class PlayerManger : MonoBehaviour
              Quaternion rotation = Quaternion.AngleAxis(angle, rotationAxis);
 
              Vector3 rotatedDirection = rotation * Vector3.forward;
-             Gizmos.DrawRay(hitPos, rotatedDirection * distanceToGround);
+             Gizmos.DrawRay(hitPos, rotatedDirection * length);
          }
 
 
 
-
+         /*
          // Draw a ray to visualize the player's movement direction
          Gizmos.color = Color.white;
          Gizmos.DrawRay(transform.position, MovementVector);
