@@ -96,8 +96,9 @@ public class CamCollisionDetection : MonoBehaviour
     {
         if (collider?.Count > 0)
         {
-            foreach (Collider obj in collider)
+            for (int i = collider.Count - 1; i >= 0; i--)
             {
+                Collider obj = collider[i];
                 if (groundLayer == (groundLayer & (1 << obj.gameObject.layer)))
                 {
                     if (!ground.Contains(obj))
@@ -206,14 +207,16 @@ public class CamCollisionDetection : MonoBehaviour
         if (groundLayer == (groundLayer & (1 << collision.gameObject.layer)))
         {
             camControl.minVerticalAngle = defaultMinVerticalAngle;
-        //    print("Default min vertical: " + camControl.minVerticalAngle);
+            print("Default min vertical: " + camControl.minVerticalAngle);
             isGroundCollisionDetected = false;
         }
-        collider.Remove(collision);
-
         if (ceilingLayer == (ceilingLayer & (1 << collision.gameObject.layer)))
         {
             isCeilingCollisionDetected = false;
+        }
+        if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
+        {
+            isWallCollisionDetected = false;
         }
         collider.Remove(collision);
     }

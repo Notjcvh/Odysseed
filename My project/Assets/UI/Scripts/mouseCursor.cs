@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class mouseCursor : MonoBehaviour
 {
@@ -25,7 +26,18 @@ public class mouseCursor : MonoBehaviour
         gameManager = GetComponentInParent<GameManager>();
         spriteRenderer.sortingLayerName = "UI";
         spriteRenderer.sortingOrder = 5;
-     
+
+
+        int index = SceneManager.GetActiveScene().buildIndex;
+        if(index == 9)
+        {
+            this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            this.gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        }
+        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
     }
