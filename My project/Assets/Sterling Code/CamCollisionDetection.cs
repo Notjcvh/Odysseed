@@ -191,7 +191,6 @@ public class CamCollisionDetection : MonoBehaviour
                         {
                             isCoroutineRunning = true;
                             alterCamDistance = StartCoroutine(AlterCameraDistance(1f));
-
                         }
                     }
                     Debug.DrawRay(this.transform.position, direction.normalized * horizontaldistance, Color.red);
@@ -215,13 +214,6 @@ public class CamCollisionDetection : MonoBehaviour
         if (ceilingLayer == (ceilingLayer & (1 << collision.gameObject.layer)))
         {
             isCeilingCollisionDetected = false;
-        }
-
-        if (wallLayer == (wallLayer & (1 << collision.gameObject.layer)))
-        {
-            isWallCollisionDetected = false;
-          
-            returnCamDistance =  StartCoroutine(ReturnCamToNormal());
         }
         collider.Remove(collision);
     }
@@ -268,19 +260,22 @@ public class CamCollisionDetection : MonoBehaviour
         float timeElapsed = 0;
         while (timeElapsed < 1)
         {
-            // Calculate the interpolation factor based on the current distance of the camera
+            //// Calculate the interpolation factor based on the current distance of the camera
             float interpolationFactor = Mathf.InverseLerp(camControl.defeaultDistance, newCamDist, time);
 
-            // Use the interpolation factor to adjust the time for interpolation
+            //// Use the interpolation factor to adjust the time for interpolation
             float adjustedTime = interpolationFactor;
 
-            if (newCamDist > 4)
+            if (camControl.defeaultDistance > 5.5f)
+            {
                 camControl.defeaultDistance = Mathf.Lerp(camControl.defeaultDistance, newCamDist, timeElapsed);
-            else
-                StopCoroutine(alterCamDistance);
+                Debug.Log("Cam Control Dist" + camControl.defeaultDistance + " New Cam Dist" + newCamDist);
+            }
             timeElapsed += Time.deltaTime * adjustedTime;
             yield return null;
         }
+        yield return new WaitForSeconds(5);
+        returnCamDistance = StartCoroutine(ReturnCamToNormal());
         isCoroutineRunning = false;
     }
 
